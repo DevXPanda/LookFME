@@ -30,13 +30,13 @@ export default function TermsAndConditions() {
     </p>
     <h2 className="text-xl font-semibold mt-6 mb-2">Exactness of the Product</h2>
     <p>
-      The images of the items on the website are for illustrative purposes only. The actual color combination of the products may slightly vary as per the customer’s respective screen resolution. All sizes and measurements of items are approximate; however, we do make every effort to ensure they are as accurate as possible. We take all reasonable care to ensure that all details, descriptions, and prices of items are as accurate as possible.
+      The images of the items on the website are for illustrative purposes only. The actual color combination of the products may slightly vary as per the customer&apos;s respective screen resolution. All sizes and measurements of items are approximate; however, we do make every effort to ensure they are as accurate as possible. We take all reasonable care to ensure that all details, descriptions, and prices of items are as accurate as possible.
     </p>
     <h2 className="text-xl font-semibold mt-6 mb-2">Customization</h2>
     <ul className="list-disc ml-6">
       <li>In case of any size issues in custom products, there will be no replacement or refund under any circumstances. However, if the product is faulty or damaged from our end, then the customer can proceed with the return request.</li>
       <li>The shoppers are requested to check the size guide before placing the order.</li>
-      <li>The color of the custom product may slightly vary as per the customer's screen resolution.</li>
+      <li>The color of the custom product may slightly vary as per the customer&apos;s screen resolution.</li>
     </ul>
     <h2 className="text-xl font-semibold mt-6 mb-2">Pricing</h2>
     <p>
