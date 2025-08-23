@@ -52,8 +52,8 @@ const menu_data = [
         link: '/product-details',
         mega_menus: [
           { title: 'Tshirts', link: '/shop' },
-          { title: 'OverSized Tshirts', link: 'shop?category=oversized-tshirts' },
-          { title: 'Trousers', link: '/shop?category=trousers' },
+          { title: 'OverSized Tshirts', link: 'shop' },
+          { title: 'Trousers', link: '/shop' },
           { title: 'Combos', link: '/shop' },
         ]
       },
