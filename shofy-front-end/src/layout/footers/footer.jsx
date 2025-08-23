@@ -38,10 +38,10 @@ const Footer = ({ style_2 = false, style_3 = false,primary_style=false }) => {
                   <h4 className="tp-footer-widget-title">My Account</h4>
                   <div className="tp-footer-widget-content">
                     <ul>
-                      <li><a href="#">Track Orders</a></li>
+                      {/* <li><a href="#">Track Orders</a></li> */}
                       <li><a href="#">Shipping</a></li>
-                      <li><a href="#">Wishlist</a></li>
-                      <li><a href="#">My Account</a></li>
+                      <li><a href="/wishlist">Wishlist</a></li>
+                      <li><a href="/profile">My Account</a></li>
                       <li><a href="#">Order History</a></li>
                       <li><a href="#">Returns</a></li>
                     </ul>
@@ -55,9 +55,12 @@ const Footer = ({ style_2 = false, style_3 = false,primary_style=false }) => {
                     <ul>
                       {/* <li><a href="#">Our Story</a></li>
                       <li><a href="#">Careers</a></li> */}
-                      <li><a href="#">Privacy Policy</a></li>
-                      <li><a href="#">Terms & Conditions</a></li>
-                      <li><a href="#">Latest News</a></li>
+                      <li> 
+                        <Link href="/privacy-policy">Privacy Policy</Link>
+                      </li>
+                      <li><a href="/terms">Terms & Conditions</a></li>
+                      <li><a href="/shipping-policy">Shipping Policies</a></li>
+                        <li><a href="/return-policy">Return Policies</a></li>
                       <li><a href="/contact">Contact Us</a></li>
                     </ul>
                   </div>
