@@ -7,7 +7,7 @@ import { ArrowRightLong, TextShapeLine } from '@/svg';
 import { useGetProductTypeQuery } from '@/redux/features/productApi';
 import ProductItem from './product-item';
 import ErrorMsg from '@/components/common/error-msg';
-// import trending_banner from '@assets/img/product/trending/banner/trending-banner.jpg';
+import trending_banner from '@assets/img/product/trending/banner/trending-banner.jpg';
 import { HomeTwoNewPrdPrdLoader } from '@/components/loader';
 import Link from 'next/link';
 
@@ -86,9 +86,9 @@ const TrendingProducts = () => {
                 </div>
               </div>
             </div>
-            {/* <div className="col-xl-4 col-lg-5 col-md-8 col-sm-10">
+            <div className="col-xl-4 col-lg-5 col-md-8 col-sm-10">
               <div className="tp-trending-banner p-relative ml-35">
-                <div className="tp-trending-banner-thumb w-img include-bg" style={{backgroundImage:`url(${trending_banner.src})`}}></div>
+                <div className="tp-trending-banner-thumb w-img include-bg" style={{backgroundImage:`url(${trending_banner.src})` }}></div>
                 <div className="tp-trending-banner-content">
                   <h3 className="tp-trending-banner-title">
                     <Link href="/shop">Short Sleeve Tunic <br /> Tops Casual Swing</Link>
@@ -101,7 +101,7 @@ const TrendingProducts = () => {
                   </div>
                 </div>
               </div>
-            </div> */}
+            </div>
           </div>
         </div>
       </section>
