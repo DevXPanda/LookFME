@@ -35,7 +35,7 @@ const menu_data = [
   {
     id: 2,
     products: true,
-    title: 'Products',
+    title: 'Mens',
     link: '/shop',
     product_pages: [
       // {
@@ -58,7 +58,7 @@ const menu_data = [
         ]
       },
       // {
-      //   title: 'eCommerce',
+      //   title: 'Women',
       //   link: '/shop',
       //   mega_menus: [
       //     { title: 'Shopping Cart', link: '/cart' },
@@ -83,24 +83,62 @@ const menu_data = [
   {
     id: 3,
     sub_menu: true,
-    title: 'Shop',
+    title: 'Women',
     link: '/shop',
     sub_menus: [
-      { title: 'Shop', link: '/shop' },
+      { title: 'Tshirts', link: '/shop' },
       { title: 'Printed Tshirts', link: '/shop' },
       { title: 'OverSized Tshirts', link: '/shop' },
+      { title: 'Tops', link: '/shop' },
+      { title: 'Boxer', link: '/shop' },
+      { title: 'Activewear', link: '/shop' },
+      { title: 'Shorts', link: '/shop' },
     ],
   },
   {
     id: 4,
-    single_link: true,
-    title: 'Coupons',
+    sub_menu: true,
+    title: 'Kids',
     link: '/coupon',
+    sub_menus: [
+      { title: 'Tshirts', link: '/shop' },
+      { title: 'Printed Tshirts', link: '/shop' },
+      { title: 'OverSized Tshirts', link: '/shop' },
+      { title: 'Tops', link: '/shop' },
+      { title: 'Boxer', link: '/shop' },
+      { title: 'Activewear', link: '/shop' },
+      { title: 'Shorts', link: '/shop' },
+    ],
+  },
+  {
+    id: 5,
+    sub_menu: true,
+    title: 'Accessories',
+    link: '/blog',
+    sub_menus: [
+      { title: 'Blog Standard', link: '/blog' },
+      { title: 'Blog Grid', link: '/blog-grid' },
+      { title: 'Blog List', link: '/blog-list' },
+      { title: 'Blog Details', link: '/blog-details' },
+      { title: 'Blog Details Full Width', link: '/blog-details-2' },
+    ]
+  },
+  {
+    id: 6,
+    single_link: true,
+    title: 'Cosmetics',
+    link: '/contact',
   },
   // {
-  //   id: 5,
+  //   id: 7,
+  //   single_link: true,
+  //   title: 'Shop',
+  //   link: '/shop',
+  // },
+  // {
+  //   id: 7,
   //   sub_menu: true,
-  //   title: 'Blog',
+  //   title: 'blog',
   //   link: '/blog',
   //   sub_menus: [
   //     { title: 'Blog Standard', link: '/blog' },
@@ -110,12 +148,6 @@ const menu_data = [
   //     { title: 'Blog Details Full Width', link: '/blog-details-2' },
   //   ]
   // },
-  {
-    id: 6,
-    single_link: true,
-    title: 'Contact',
-    link: '/contact',
-  },
 ]
 
 export default menu_data;

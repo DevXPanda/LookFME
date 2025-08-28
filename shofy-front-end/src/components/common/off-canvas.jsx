@@ -77,6 +77,7 @@ const OffCanvas = ({ isOffCanvasOpen, setIsCanvasOpen,categoryType = "electronic
               <div className="offcanvas__currency-wrapper currency">
                 <span onClick={handleCurrencyActive} className="offcanvas__currency-selected-currency tp-currency-toggle" id="tp-offcanvas-currency-toggle">Currency : USD</span>
                 <ul className={`offcanvas__currency-list tp-currency-list ${isCurrencyActive ? 'tp-currency-list-open' : ''}`}>
+                   <li>INR</li>
                   <li>USD</li>
                   <li>ERU</li>
                   <li>BDT </li>
@@ -92,9 +93,9 @@ const OffCanvas = ({ isOffCanvasOpen, setIsCanvasOpen,categoryType = "electronic
                     <span onClick={handleLanguageActive} className="offcanvas__lang-selected-lang tp-lang-toggle" id="tp-offcanvas-lang-toggle">English</span>
                     <ul className={`offcanvas__lang-list tp-lang-list ${isLanguageActive ? 'tp-lang-list-open' : ''}`}>
                       <li>Hindi</li>
-                      {/* <li>Portugese</li>
+                      <li>Portugese</li>
                       <li>American</li>
-                      <li>Canada</li> */}
+                      <li>Canada</li>
                     </ul>
                   </div>
                 </div>

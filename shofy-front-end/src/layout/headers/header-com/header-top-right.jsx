@@ -17,6 +17,9 @@ function Language({active,handleActive}) {
         English
       </span>
       <ul className={active === 'lang' ? "tp-lang-list-open" : ""}>
+         <li>
+          <a href="#">Hindi</a>
+        </li>
         <li>
           <a href="#">Spanish</a>
         </li>
@@ -44,6 +47,9 @@ function Currency({active,handleActive}) {
       </span>
       <ul className={active === 'currency' ? "tp-currency-list-open" : ""}>
         <li>
+          <a href="#">INR</a>
+        </li>
+        <li>
           <a href="#">EUR</a>
         </li>
         <li>
@@ -55,6 +61,7 @@ function Currency({active,handleActive}) {
         <li>
           <a href="#">KWD</a>
         </li>
+        
       </ul>
     </div>
   );
