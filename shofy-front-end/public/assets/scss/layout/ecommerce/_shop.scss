@@ -114,3 +114,20 @@
         background-color: var(--tp-theme-primary);
     }
 }
+
+// 5-column grid utility for product cards at >= xl screens
+@media #{$xl} {
+  .col-xl-5th { flex: 0 0 20%; max-width: 20%; }
+}
+@media #{$xxl} {
+  .col-xl-5th { flex: 0 0 20%; max-width: 20%; }
+  .col-xxl-5th { flex: 0 0 20%; max-width: 20%; }
+}
+@media #{$x3l} {
+  .col-xl-5th { flex: 0 0 20%; max-width: 20%; }
+  .col-xxl-5th { flex: 0 0 20%; max-width: 20%; }
+}
+@media #{$x4l} {
+  .col-xl-5th { flex: 0 0 20%; max-width: 20%; }
+  .col-xxl-5th { flex: 0 0 20%; max-width: 20%; }
+}

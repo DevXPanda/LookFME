@@ -1,0 +1,43 @@
+// BEYOUNG Categories Component Styles
+.tp-beyoung-categories-area {
+  .category-item {
+    // Removed hover effects
+  }
+  
+  .display-4 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    
+    @media (max-width: 768px) {
+      font-size: 2rem;
+    }
+  }
+  
+  // Custom column class for 5 items per row
+  .col-lg-2-4 {
+    @media (min-width: 992px) {
+      flex: 0 0 20%;
+      max-width: 20%;
+    }
+    
+    @media (max-width: 991px) {
+      flex: 0 0 33.333333%;
+      max-width: 33.333333%;
+    }
+    
+    @media (max-width: 767px) {
+      flex: 0 0 50%;
+      max-width: 50%;
+    }
+  }
+  
+  // Ensure text is white
+  .text-white {
+    color: #ffffff !important;
+  }
+  
+  // Add margin bottom
+  .mb-5 {
+    margin-bottom: 3rem !important;
+  }
+}

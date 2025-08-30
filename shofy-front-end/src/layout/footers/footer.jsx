@@ -38,12 +38,14 @@ const Footer = ({ style_2 = false, style_3 = false,primary_style=false }) => {
                   <h4 className="tp-footer-widget-title">My Account</h4>
                   <div className="tp-footer-widget-content">
                     <ul>
-                      {/* <li><a href="#">Track Orders</a></li> */}
-                      <li><a href="#">Shipping</a></li>
+                      <li><a href="track-orders">Track Orders</a></li>
+                      {/* <li><a href="shipping">Shipping</a></li> */}
                       <li><a href="/wishlist">Wishlist</a></li>
                       <li><a href="/profile">My Account</a></li>
-                      <li><a href="#">Order History</a></li>
-                      <li><a href="#">Returns</a></li>
+                      <li><a href="/order-history">Order History</a></li>
+                      <li><a href="/return-policy">Returns And Exchange</a></li>
+                      <li><a href="cookies">Cookie Policy</a></li>
+                      <li><a href="faqs">FAQ</a></li>
                     </ul>
                   </div>
                 </div>
@@ -53,14 +55,15 @@ const Footer = ({ style_2 = false, style_3 = false,primary_style=false }) => {
                   <h4 className="tp-footer-widget-title">Information</h4>
                   <div className="tp-footer-widget-content">
                     <ul>
-                      {/* <li><a href="#">Our Story</a></li>
-                      <li><a href="#">Careers</a></li> */}
+                      <li><a href="about-us">About Us</a></li>
+                  
                       <li> 
                         <Link href="/privacy-policy">Privacy Policy</Link>
                       </li>
                       <li><a href="/terms">Terms & Conditions</a></li>
                       <li><a href="/shipping-policy">Shipping Policies</a></li>
                         <li><a href="/return-policy">Return Policies</a></li>
+                        <li><a href="careers">Careers</a></li>
                       <li><a href="/contact">Contact Us</a></li>
                     </ul>
                   </div>
@@ -82,7 +85,7 @@ const Footer = ({ style_2 = false, style_3 = false,primary_style=false }) => {
                           </span>
                         </div>
                         <div className="tp-footer-contact-content">
-                          <p><a href="mailto:shofy@support.com">lookFame.com</a></p>
+                          <p><a href="mailto:support@lookfame.in">support@lookfame.in</a></p>
                         </div>
                       </div>
                       <div className="tp-footer-contact-item d-flex align-items-start">

@@ -19,34 +19,34 @@ const ProductGridItem = ({ product }: { product: IProduct }) => {
           <Image
             className="w-full"
             src={img}
-            width={279}
-            height={297}
+            width={220}
+            height={235}
             alt="product img"
           />
         </a>
-        <div className="absolute top-5 right-5 z-10">
+        <div className="absolute top-3 right-3 z-10">
           <ProductGridAction id={_id}/>
         </div>
       </div>
-      <div className="px-5 py-5">
+      <div className="px-3 py-3">
         <a
           href="#"
-          className="text-lg font-normal text-heading text-hover-primary mb-2 inline-block leading-none"
+          className="text-base font-normal text-heading text-hover-primary mb-2 inline-block leading-none"
         >
           {title}
         </a>
-        <div className="flex items-center space-x-1 text-tiny mb-5">
+        <div className="flex items-center space-x-1 text-tiny mb-3">
           <span className="text-yellow flex items-center space-x-1">
             <Rating
               allowFraction
-              size={18}
+              size={16}
               initialValue={averageRating}
               readonly={true}
             />
           </span>
         </div>
         <div className="leading-none mb-2">
-          <span className="text-base font-medium text-black">
+          <span className="text-sm font-medium text-black">
             ${price.toFixed(2)}
           </span>
         </div>

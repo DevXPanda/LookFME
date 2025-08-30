@@ -37,17 +37,26 @@ const ProductArea = () => {
     if (activeTab === 'All Collection') {
       product_items = products.data
     }
-    else if (activeTab === 'Shoes') {
-      product_items = products.data.filter(p => p.category.name === 'Shoes')
-    } else if (activeTab === 'Clothing') {
-      product_items = products.data.filter(p => p.category.name === 'Clothing')
-    } else if (activeTab === 'Bags') {
-      product_items = products.data.filter(p => p.category.name === 'Bags')
+    else if (activeTab === 'Tshirts') {
+      product_items = products.data.filter(p => p.category.name === 'Tshirts')
+    } else if (activeTab === 'OverSized Tshirts') {
+      product_items = products.data.filter(p => p.category.name === 'OverSized Tshirts')
+    } else if (activeTab === 'Trousers') {
+      product_items = products.data.filter(p => p.category.name === 'Trousers')
     } else {
       product_items = products.data;
     }
+
+    let display_items = product_items;
+    if (product_items.length > 0 && product_items.length < 5) {
+      const times = Math.ceil(5 / product_items.length);
+      display_items = Array(times).fill(product_items).flat().slice(0, 5);
+    } else {
+      display_items = product_items.slice(0, 5);
+    }
+
     content = <>
-      <div className="row">
+      <div className="row justify-center m-50">
         <div className="col-xl-12">
           <div className="tp-product-tab-2 tp-tab mb-50 text-center">
             <nav>
@@ -67,9 +76,9 @@ const ProductArea = () => {
           </div>
         </div>
       </div>
-      <div className="row">
-        {product_items.map((prd) => (
-          <div key={prd._id} className="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+      <div className="row justify-center">
+        {display_items.map((prd) => (
+          <div key={prd._id} className="col-xl-2-4 col-lg-4 col-md-6 col-sm-6">
             <ProductItem product={prd} />
           </div>
         ))}
@@ -78,18 +87,14 @@ const ProductArea = () => {
   }
   return (
     <>
-      <section className="tp-product-area pb-90">
-        <div className="container">
-          <div className="row">
-            <div className="col-xl-12">
-              <div className="tp-section-title-wrapper-2 text-center mb-35">
-                <span className="tp-section-title-pre-2">
-                  All Product Shop
-                  <TextShapeLine />
-                </span>
-                <h3 className="tp-section-title-2">Customer Favorite Style Product</h3>
-              </div>
-            </div>
+      <section className="tp-product-area pb-90 bg-white">
+        <div className="w-full max-w-none px-4">
+          <div className="tp-section-title-wrapper-2 text-center mb-35">
+            <span className="tp-section-title-pre-2">
+              All Product Shop
+              <TextShapeLine />
+            </span>
+            <h3 className="tp-section-title-2">Customer Favorite Style Product</h3>
           </div>
           {content}
         </div>

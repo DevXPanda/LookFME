@@ -37,7 +37,7 @@ const ShopRightArea = ({
   return (
     <>
       <section className="tp-shop-area pb-120">
-        <div className="container">
+        <div className="container px-4 md:px-6 lg:px-8">
           <div className="row">
             <div className="col-xl-9 col-lg-8">
               <div className="tp-shop-main-wrapper">
@@ -74,7 +74,7 @@ const ShopRightArea = ({
                             .map((item) => (
                               <div
                                 key={item._id}
-                                className="col-xl-4 col-md-6 col-sm-6"
+                                className="col-xl-5th col-lg-3 col-md-4 col-sm-6"
                               >
                                 <ProductItem product={item} />
                               </div>

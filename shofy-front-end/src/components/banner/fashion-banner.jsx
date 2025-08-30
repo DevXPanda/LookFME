@@ -23,7 +23,7 @@ const slider_data = [
   {
     id: 2,
     subtitle: 'Best Selling 2025',
-    title: 'The Summer Collection',
+    title: 'Juniour Collection',
     img: slider_img_2,
   },
   {
@@ -58,7 +58,7 @@ const FashionBanner = () => {
             <SwiperSlide key={item.id}>
               <div className="tp-slider-item-2 tp-slider-height-2 p-relative grey-bg-5 d-flex align-items-end">
                 <div className="tp-slider-2-shape">
-                  <Image className="tp-slider-2-shape-1" src={slider_shape} alt="slider_shape" />
+                  <Image className="tp-slider-2-shape-1" src={slider_shape} alt="slider_shape"  />
                 </div>
                 <div className="container">
                   <div className="row align-items-center">

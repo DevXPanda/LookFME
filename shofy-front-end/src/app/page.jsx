@@ -42,8 +42,9 @@
 import Wrapper from "@/layout/wrapper";
 import HeaderTwo from '@/layout/headers/header-2';
 import FashionBanner from '@/components/banner/fashion-banner';
-import FashionCategory from '@/components/categories/fashion-category';
+import BeyoungCategories from '@/components/categories/beyoung-categories';
 import PopularProducts from '@/components/products/fashion/popular-products';
+import CouponBanner from '@/components/coupon/coupon-banner';
 import ProductArea from '@/components/products/fashion/product-area';
 import WeeksFeatured from '@/components/products/fashion/weeks-featured';
 import TrendingProducts from '@/components/products/fashion/trending-products';
@@ -65,8 +66,9 @@ export default function HomePageTwo() {
     <Wrapper>
       <HeaderTwo/>
       <FashionBanner/>
-      <FashionCategory/>
+      <BeyoungCategories/>
       <PopularProducts/>
+      <CouponBanner/>
       <ProductArea/>
       <WeeksFeatured/>
       <TrendingProducts/>

@@ -55,7 +55,7 @@ const ContactArea = () => {
                           href="https://www.google.com/maps/place/New+York,+NY,+USA/@40.6976637,-74.1197638,11z/data=!3m1!4b1!4m6!3m5!1s0x89c24fa5d33f083b:0xc80b8f06e177fe62!8m2!3d40.7127753!4d-74.0059728!16zL20vMDJfMjg2"
                           target="_blank"
                         >
-                          D140, Sector 7 Noida 201301
+                          0
                         </a>
                       </p>
                     </div>

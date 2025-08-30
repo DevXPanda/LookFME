@@ -33,7 +33,7 @@ const ShopContent = ({all_products,products,otherProps,shop_right,hidden_sidebar
   return (
     <>
      <section className="tp-shop-area pb-120">
-        <div className="container">
+        <div className="container px-4 md:px-6 lg:px-8">
           <div className="row">
             {!shop_right && !hidden_sidebar && (
               <div className="col-xl-3 col-lg-4">
@@ -98,7 +98,7 @@ const ShopContent = ({all_products,products,otherProps,shop_right,hidden_sidebar
                             .map((item,i) => (
                               <div
                                 key={i}
-                                className="col-xl-4 col-md-6 col-sm-6"
+                                className="col-xl-5th col-lg-3 col-md-4 col-sm-6"
                               >
                                 <ProductItem product={item} />
                               </div>

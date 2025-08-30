@@ -73,12 +73,13 @@ const FooterTwo = () => {
                     <h4 className="tp-footer-widget-title">Infomation</h4>
                     <div className="tp-footer-widget-content">
                       <ul>
-                        {/* <li><a href="#">Our Story</a></li>
-                        <li><a href="#">Careers</a></li> */}
+                        <li><a href="#story">Our Story</a></li>
+                        <li><a href="#">Careers</a></li>
                         <li><a href="#">Privacy Policy</a></li>
                         <li><a href="#">Terms & Conditions</a></li>
                         <li><a href="#">Latest News</a></li>
                         <li><a href="/contact">Contact Us</a></li>
+                         <li><a href="/faq">FAQ</a></li>
                       </ul>
                     </div>
                   </div>

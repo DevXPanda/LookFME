@@ -1,0 +1,71 @@
+// Popular Products Component Styles
+.tp-category-area {
+  .popular-product-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      
+      .popular-product-overlay {
+        opacity: 1;
+        visibility: visible;
+      }
+      
+      .popular-product-image {
+        transform: scale(1.1);
+      }
+    }
+  }
+  
+  .popular-product-image {
+    transition: transform 0.3s ease;
+    border-radius: 8px;
+  }
+  
+  .popular-product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+  }
+  
+  .popular-product-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .popular-action-btn {
+    background: #e91e63;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    
+    &:hover {
+      background: #c2185b;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
+    }
+  }
+}

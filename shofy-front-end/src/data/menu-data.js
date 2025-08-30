@@ -38,23 +38,40 @@ const menu_data = [
     title: 'Mens',
     link: '/shop',
     product_pages: [
-      // {
-      //   title: 'Shop Page',
-      //   link: '/shop',
-      //   mega_menus: [
-      //     { title: 'Only Categories', link: '/shop-category' },
-      //     { title: 'Shop Grid with Sideber', link: '/shop' },
-      //     { title: 'Product Details', link: '/product-details' },
-      //   ]
-      // },
       {
-        title: 'Products',
+        title: 'Tshirts',
+        link: '/shop',
+        mega_menus: [
+          { title: 'Plain T-shirts', link: '/shop-category' },
+          { title: 'Printed T-shirts', link: '/shop' },
+          { title: 'Regular Fit T-shirt', link: '/product-details' },
+          { title: 'Polo T-shirts', link: '/shop' },
+          { title: 'Full Sleeve Tshirts', link: '/shop' },
+          { title: 'OverSized Tshirts', link: 'shop' },
+        ]
+      },
+      {
+        title: 'Shirts',
         link: '/product-details',
         mega_menus: [
-          { title: 'Tshirts', link: '/shop' },
-          { title: 'OverSized Tshirts', link: 'shop' },
-          { title: 'Trousers', link: '/shop' },
-          { title: 'Combos', link: '/shop' },
+          { title: 'Formal Shirts', link: '/shop' },
+          { title: 'Casual Shirts', link: '/shop' },
+          { title: 'Polo Shirts', link: '/shop' },
+          { title: 'Full Sleeve Tshirts', link: '/shop' },
+          { title: 'Checked Formal Shirts', link: 'shop' },
+          { title: 'Floral Shirts', link: '/shop' },
+    ],
+  },
+  {
+        title: 'Bottom Wear',
+        link: '/shop',
+        mega_menus: [
+          { title: 'Cargo Joggers', link: '/shop-category' },
+          { title: 'Cargo Pants', link: '/shop' },
+          { title: 'Trousers', link: '/product-details' },
+          { title: 'Jeans', link: '/shop' },
+          { title: 'Boxers', link: '/shop' },
+          { title: 'Shorts', link: 'shop' },
         ]
       },
       // {
@@ -82,38 +99,157 @@ const menu_data = [
   },
   {
     id: 3,
-    sub_menu: true,
-    title: 'Women',
+    products: true,
+    title: 'Womens',
     link: '/shop',
-    sub_menus: [
-      { title: 'Tshirts', link: '/shop' },
-      { title: 'Printed Tshirts', link: '/shop' },
-      { title: 'OverSized Tshirts', link: '/shop' },
-      { title: 'Tops', link: '/shop' },
-      { title: 'Boxer', link: '/shop' },
-      { title: 'Activewear', link: '/shop' },
-      { title: 'Shorts', link: '/shop' },
+    product_pages: [
+      {
+        title: 'Tshirts',
+        link: '/shop',
+        mega_menus: [
+          { title: 'Plain T-shirts', link: '/shop-category' },
+          { title: 'Printed T-shirts', link: '/shop' },
+          { title: 'Regular Fit T-shirt', link: '/product-details' },
+          { title: 'Polo T-shirts', link: '/shop' },
+          { title: 'Full Sleeve Tshirts', link: '/shop' },
+          { title: 'OverSized Tshirts', link: 'shop' },
+        ]
+      },
+      {
+        title: 'Shirts',
+        link: '/product-details',
+        mega_menus: [
+          { title: 'Formal Shirts', link: '/shop' },
+          { title: 'Casual Shirts', link: '/shop' },
+          { title: 'Polo Shirts', link: '/shop' },
+          { title: 'Full Sleeve Tshirts', link: '/shop' },
+          { title: 'Checked Formal Shirts', link: 'shop' },
+          { title: 'Floral Shirts', link: '/shop' },
     ],
   },
   {
+        title: 'Bottom Wear',
+        link: '/shop',
+        mega_menus: [
+          { title: 'Cargo Joggers', link: '/shop-category' },
+          { title: 'Cargo Pants', link: '/shop' },
+          { title: 'Trousers', link: '/product-details' },
+          { title: 'Jeans', link: '/shop' },
+          { title: 'Boxers', link: '/shop' },
+          { title: 'Shorts', link: 'shop' },
+        ]
+      },
+      {
+        title: 'Athleisure Mode',
+        link: '/shop',
+        mega_menus: [
+          { title: 'Track Pants', link: '/shop-category' },
+          { title: 'Track Suits', link: '/shop' },
+          { title: 'Joggers', link: '/product-details' },
+          { title: 'Sweatshirts', link: '/shop' },
+          { title: 'Yoga Pants', link: '/shop' },
+          { title: 'Zip-Up Jackets ', link: 'shop' },
+        ]
+      }
+      // {
+      //   title: 'Women',
+      //   link: '/shop',
+      //   mega_menus: [
+      //     { title: 'Shopping Cart', link: '/cart' },
+      //     { title: 'Compare', link: '/compare' },
+      //     { title: 'Wishlist', link: '/wishlist' },
+      //     { title: 'Checkout', link: '/checkout' },
+      //     { title: 'My account', link: '/profile' },
+      //   ]
+      // },
+      // {
+      //   title: 'More Pages',
+      //   link: '/shop',
+      //   mega_menus: [
+      //     { title: 'Login', link: '/login' },
+      //     { title: 'Register', link: '/register' },
+      //     { title: 'Forgot Password', link: '/forgot' },
+      //     { title: '404 Error', link: '/404' },
+      //   ]
+      // },
+    ]
+  },
+    ,
+  {
     id: 4,
-    sub_menu: true,
-    title: 'Kids',
-    link: '/coupon',
-    sub_menus: [
-      { title: 'Tshirts', link: '/shop' },
-      { title: 'Printed Tshirts', link: '/shop' },
-      { title: 'OverSized Tshirts', link: '/shop' },
-      { title: 'Tops', link: '/shop' },
-      { title: 'Boxer', link: '/shop' },
-      { title: 'Activewear', link: '/shop' },
-      { title: 'Shorts', link: '/shop' },
+    products: true,
+    title: 'Junior',
+    link: '/junior',
+    product_pages: [
+      {
+        title: 'Boys',
+        link: '/shop',
+        mega_menus: [
+          { title: 'T-shirts', link: '/shop-category' },
+          { title: 'Shirts', link: '/shop' },
+          { title: 'Jeans & Trousers', link: '/product-details' },
+          { title: 'Sweatshirts & Hoodies', link: '/shop' },
+          { title: 'Ethnic Wear (Kurta, Sherwani)', link: '/shop' },
+          { title: 'Shorts', link: 'shop' },
+        ]
+      },
+      {
+        title: 'Girls',
+        link: '/product-details',
+        mega_menus: [
+          { title: 'Tops & T-Shirts', link: '/shop' },
+          { title: 'Dresses & Frocks', link: '/shop' },
+          { title: 'Skirts & Shorts', link: '/shop' },
+          { title: 'Jeans & Leggings', link: '/shop' },
+          { title: 'Sweatshirts & Hoodies', link: 'shop' },
+          { title: 'Ethnic Wear (Lehenga, Kurti)', link: '/shop' },
     ],
+  },
+  ]
   },
   {
     id: 5,
-    sub_menu: true,
+    products: true,
     title: 'Accessories',
+    link: '/shop',
+    product_pages: [
+      {
+        title: 'Headwear',
+        link: '/shop',
+        mega_menus: [
+          { title: 'Caps & Hats', link: '/shop-category' },
+          { title: 'Bandanas', link: '/shop' },
+          { title: 'Regular Fit T-shirt', link: '/product-details' },
+          { title: 'Headbands', link: '/shop' },
+        ]
+      },
+      {
+        title: 'Fashion Accessories',
+        link: '/product-details',
+        mega_menus: [
+          { title: 'Belts', link: '/shop' },
+          { title: 'Cufflinks & Brooches', link: '/shop' },
+          { title: 'Wallets & Card Holders', link: '/shop' },
+          { title: 'Ties & Bow Ties', link: '/shop' },
+    ],
+  },
+  {
+        title: 'Bags & Carriers',
+        link: '/shop',
+        mega_menus: [
+          { title: 'Backpacks', link: '/shop-category' },
+          { title: 'Sling Bags', link: '/shop' },
+          { title: 'Laptop Bags', link: '/product-details' },
+          { title: 'Tote Bags', link: '/shop' },
+        ]
+      },
+
+    ]
+  },
+  {
+    id: 6,
+    sub_menu: true,
+    title: 'Blog',
     link: '/blog',
     sub_menus: [
       { title: 'Blog Standard', link: '/blog' },
@@ -123,31 +259,7 @@ const menu_data = [
       { title: 'Blog Details Full Width', link: '/blog-details-2' },
     ]
   },
-  {
-    id: 6,
-    single_link: true,
-    title: 'Cosmetics',
-    link: '/contact',
-  },
-  // {
-  //   id: 7,
-  //   single_link: true,
-  //   title: 'Shop',
-  //   link: '/shop',
-  // },
-  // {
-  //   id: 7,
-  //   sub_menu: true,
-  //   title: 'blog',
-  //   link: '/blog',
-  //   sub_menus: [
-  //     { title: 'Blog Standard', link: '/blog' },
-  //     { title: 'Blog Grid', link: '/blog-grid' },
-  //     { title: 'Blog List', link: '/blog-list' },
-  //     { title: 'Blog Details', link: '/blog-details' },
-  //     { title: 'Blog Details Full Width', link: '/blog-details-2' },
-  //   ]
-  // },
+ 
 ]
 
 export default menu_data;
@@ -159,28 +271,6 @@ export const mobile_menu = [
     homes: true,
     title: 'Home',
     link: '/',
-    // home_pages: [
-    //   {
-    //     img: home_1,
-    //     title: 'Electronics',
-    //     link: '/'
-    //   },
-    //   {
-    //     img: home_2,
-    //     title: 'Fashion',
-    //     link: '/home-2'
-    //   },
-    //   {
-    //     img: home_3,
-    //     title: 'Beauty',
-    //     link: '/home-3'
-    //   },
-    //   {
-    //     img: home_4,
-    //     title: 'Jewelry',
-    //     link: '/home-4'
-    //   }
-    // ]
   },
   {
     id: 2,
@@ -188,14 +278,14 @@ export const mobile_menu = [
     title: 'Products',
     link: '/shop',
     sub_menus: [
-      { title: 'Shop', link: '/shop' },
-      { title: 'Right Sidebar', link: '/shop-right-sidebar' },
-      { title: 'Hidden Sidebar', link: '/shop-hidden-sidebar' },
-      { title: 'Only Categories', link: '/shop-category' },
-      { title: 'Product Simple', link: '/product-details' },
-      { title: 'With Video', link: '/product-details-video' },
-      { title: 'With Countdown Timer', link: '/product-details-countdown' },
-      { title: 'Variations Swatches', link: '/product-details-swatches' },
+      { title: 'Mens', link: '/shop' },
+      { title: 'Womens', link: '/shop-right-sidebar' },
+      { title: 'Lookfame Juniors', link: '/shop-hidden-sidebar' },
+      { title: 'Accessories', link: '/shop-category' },
+      // { title: 'Product Simple', link: '/product-details' },
+      // { title: 'With Video', link: '/product-details-video' },
+      // { title: 'With Countdown Timer', link: '/product-details-countdown' },
+      // { title: 'Variations Swatches', link: '/product-details-swatches' },
     ],
   },
   // {
@@ -229,19 +319,19 @@ export const mobile_menu = [
   //   title: 'Coupons',
   //   link: '/coupon',
   // },
-  // {
-  //   id: 5,
-  //   sub_menu: true,
-  //   title: 'Blog',
-  //   link: '/blog',
-  //   sub_menus: [
-  //     { title: 'Blog Standard', link: '/blog' },
-  //     { title: 'Blog Grid', link: '/blog-grid' },
-  //     { title: 'Blog List', link: '/blog-list' },
-  //     { title: 'Blog Details', link: '/blog-details' },
-  //     { title: 'Blog Details Full Width', link: '/blog-details-2' },
-  //   ]
-  // },
+  {
+    id: 5,
+    sub_menu: true,
+    title: 'Blog',
+    link: '/blog',
+    sub_menus: [
+      { title: 'Blog Standard', link: '/blog' },
+      { title: 'Blog Grid', link: '/blog-grid' },
+      { title: 'Blog List', link: '/blog-list' },
+      { title: 'Blog Details', link: '/blog-details' },
+      { title: 'Blog Details Full Width', link: '/blog-details-2' },
+    ]
+  },
   {
     id: 6,
     single_link: true,

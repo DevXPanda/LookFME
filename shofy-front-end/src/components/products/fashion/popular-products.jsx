@@ -85,13 +85,38 @@ const PopularProducts = () => {
             key={item._id}
             className="tp-category-item-2 p-relative z-index-1 text-center"
           >
-            <div className="tp-category-thumb-2">
+            <div className="tp-category-thumb-2 popular-product-item">
               <Link href={`/product-details/${item._id}`}>
-                <Image src={item.img} alt="product-img" width={224} height={260} />
+                <Image 
+                  src={item.img} 
+                  alt="product-img" 
+                  width={224} 
+                  height={260}
+                  className="popular-product-image"
+                />
               </Link>
+              {/* Hover overlay with action buttons */}
+              <div className="popular-product-overlay">
+                <div className="popular-product-actions">
+                  {cart_products.some((prd) => prd._id === item._id) ? (
+                    <Link
+                      href="/cart"
+                      className="popular-action-btn"
+                    >
+                      View Cart
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => handleAddProduct(item)}
+                      className="popular-action-btn"
+                    >
+                      Add to Cart
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
             <div className="tp-category-content-2">
-              <span>From ${item.price}</span>
               <h3 className="tp-category-title-2">
                 <Link href={`/product-details/${item._id}`}>{item.title.substring(0, 15)}</Link>
               </h3>

@@ -183,6 +183,57 @@
     }
 }
 
+/* Category cards styled like product images */
+.tp-banner-item-2 {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    margin: 15px 15px 25px 15px;
+    padding: 0;
+    
+    .tp-banner-thumb-2 {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1;
+        border-radius: 0;
+        margin: 0 0 15px 0;
+        background-size: cover;
+        background-position: center;
+        background-color: transparent;
+    }
+    
+    .tp-banner-title-2 {
+        margin-bottom: 12px;
+        text-align: left;
+        
+        a {
+            font-size: 16px;
+            color: #000000;
+            font-weight: 500;
+            line-height: 1.3;
+        }
+    }
+    
+    .tp-banner-btn-2 {
+        text-align: left;
+        
+        .tp-btn-border-sm {
+            font-size: 12px;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-weight: 500;
+            border: 1px solid #ff6b9d;
+            color: #ff6b9d;
+            background: transparent;
+            
+            &:hover {
+                background: #ff6b9d;
+                color: white;
+            }
+        }
+    }
+}
+
 
 /* home beauty */
 .#{$theme-prifix}-category{
@@ -537,4 +588,5 @@
             }
         }
     }
+
 }
