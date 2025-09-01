@@ -1,9 +1,9 @@
 'use client';
-import React from "react";
+import React, { useRef } from "react";
 import { useRouter } from "next/navigation";
 // internal
 import ErrorMsg from "../common/error-msg";
-import { ArrowRightLong } from "@/svg";
+import { ArrowRightLong, TextShapeLine, NextLongArr, PrevLongArr } from "@/svg";
 import { HomeTwoCateLoader } from "../loader";
 import { useGetProductTypeCategoryQuery } from "@/redux/features/categoryApi";
 
@@ -13,7 +13,8 @@ const FashionCategory = () => {
     isLoading,
     isError,
   } = useGetProductTypeCategoryQuery("fashion");
-  const router = useRouter()
+  const router = useRouter();
+  const scrollContainerRef = useRef(null);
 
   // handle category route
   const handleCategoryRoute = (title) => {
@@ -25,6 +26,21 @@ const FashionCategory = () => {
         .join("-")}`
     );
   };
+
+  // handle scroll navigation
+  const handleScroll = (direction) => {
+    if (scrollContainerRef.current) {
+      const container = scrollContainerRef.current;
+      const scrollAmount = 300; // Scroll by 300px each time
+      
+      if (direction === 'left') {
+        container.scrollLeft -= scrollAmount;
+      } else {
+        container.scrollLeft += scrollAmount;
+      }
+    }
+  };
+
   // decide what to render
   let content = null;
 
@@ -40,34 +56,63 @@ const FashionCategory = () => {
   if (!isLoading && !isError && categories?.result?.length > 0) {
     const category_items = categories.result;
     content = category_items.map((item) => (
-      <div key={item._id} className="col-xxl-5th col-xl-5th col-lg-4 col-md-6 col-sm-6">
+      <div 
+        key={item._id} 
+        className="category-scroll-item"
+        style={{ 
+          flexShrink: 0,
+          width: '224px',
+          margin: '0 10px'
+        }}
+      >
         <div 
-          className="tp-banner-item-2 p-relative z-index-1 grey-bg-2 mb-20 fix mx-2"
+          className="tp-banner-item-2 p-relative z-index-1 grey-bg-2 mb-20 fix"
           style={{
             borderRadius: '8px',
             overflow: 'hidden',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+            height: '100%',
+            backgroundColor: '#fff'
           }}
         >
           <div
             className="tp-banner-thumb-2 include-bg transition-3"
-            style={{ backgroundImage: `url(${item.img})` }}
+            style={{ 
+              backgroundImage: `url(${item.img})`,
+              height: '200px',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              borderRadius: '8px 8px 0 0'
+            }}
           ></div>
-          <h3 className="tp-banner-title-2">
+          <div style={{ padding: '15px' }}>
+            <h3 className="tp-banner-title-2" style={{ marginBottom: '15px' }}>
             <a
-              className="cursor-pointer text-xs font-medium text-center block"
+                className="cursor-pointer text-sm font-medium text-center block text-dark"
               onClick={() => handleCategoryRoute(item.parent)}
+                style={{ fontSize: '16px', fontWeight: '500' }}
             >
               {item.parent}
             </a>
           </h3>
-          <div className="tp-banner-btn-2 mb-auto">
+            <div className="tp-banner-btn-2">
             <a
               onClick={() => handleCategoryRoute(item.parent)}
               className="cursor-pointer tp-btn tp-btn-border tp-btn-border-sm text-xs px-3 py-2 font-medium"
+                style={{
+                  backgroundColor: '#BE5985',
+                  color: 'white',
+                  border: '1px solid #BE5985',
+                  borderRadius: '4px',
+                  fontSize: '12px',
+                  fontWeight: '500',
+                  display: 'inline-block',
+                  textDecoration: 'none'
+                }}
             >
               Shop Now <ArrowRightLong />
             </a>
+            </div>
           </div>
         </div>
       </div>
@@ -75,11 +120,132 @@ const FashionCategory = () => {
   }
   return (
     <>
-      <section className="tp-banner-area mt-20">
-        <div className="w-full max-w-none px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16">
-          <div className="row tp-gx-20 justify-center">{content}</div>
+      <section className="tp-category-area pb-95 pt-95">
+        <div className="container">
+     <div className="row">
+              <div className="col-xl-12">
+              <div className="tp-section-title-wrapper-2 text-center mb-50">
+                <span className="tp-section-title-pre-2 mb-5 ">
+                    Shop by Categories
+                  <TextShapeLine />
+                  </span>
+                <h3 className="tp-section-title-2">
+                  LookFame Edition
+                </h3>
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-xl-12">
+              <div className="tp-category-slider-2 p-relative">
+                {/* Left Navigation Arrow - Overlaid */}
+                <button 
+                  className="tp-category-slider-button-prev-overlay"
+                  onClick={() => handleScroll('left')}
+                  style={{
+                    position: 'absolute',
+                    left: '10px',
+                    top: '130px', // Center on the category cards (260px height / 2)
+                    width: '50px',
+                    height: '50px',
+                    borderRadius: '50%',
+                    border: 'none',
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    color: '#BE5985',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    zIndex: 10,
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 1)';
+                    e.target.style.transform = 'scale(1.1)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                    e.target.style.transform = 'scale(1)';
+                  }}
+                >
+                  <PrevLongArr />
+                </button>
+
+                {/* Right Navigation Arrow - Overlaid */}
+                <button 
+                  className="tp-category-slider-button-next-overlay"
+                  onClick={() => handleScroll('right')}
+                  style={{
+                    position: 'absolute',
+                    right: '10px',
+                    top: '130px', // Center on the category cards (260px height / 2)
+                    width: '50px',
+                    height: '50px',
+                    borderRadius: '50%',
+                    border: 'none',
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    color: '#BE5985',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    zIndex: 10,
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 1)';
+                    e.target.style.transform = 'scale(1.1)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                    e.target.style.transform = 'scale(1)';
+                  }}
+                >
+                  <NextLongArr />
+                </button>
+
+                {/* Scrollable Categories Container */}
+                <div 
+                  ref={scrollContainerRef}
+                  className="categories-scroll-container" 
+                  style={{
+                    overflowX: 'auto',
+                    overflowY: 'hidden',
+                    whiteSpace: 'nowrap',
+                    padding: '0 60px', // Add padding for arrow space
+                    scrollbarWidth: 'none', // Hide scrollbar for Firefox
+                    msOverflowStyle: 'none' // Hide scrollbar for IE/Edge
+                  }}
+                >
+                  <div className="categories-scroll-wrapper" style={{
+                    display: 'inline-flex',
+                    gap: '20px',
+                    padding: '0 20px',
+                    minWidth: '100%'
+                  }}>
+                    {content}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
+        {/* Hide scrollbar for webkit browsers */}
+        <style jsx>{`
+          .categories-scroll-container::-webkit-scrollbar {
+            display: none;
+          }
+          .category-scroll-item:hover {
+            transform: scale(1.02);
+            transition: transform 0.3s ease;
+          }
+        `}</style>
       </section>
+      {/* Highlight images row */}
+        
     </>
   );
 };

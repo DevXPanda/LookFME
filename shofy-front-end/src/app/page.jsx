@@ -42,7 +42,7 @@
 import Wrapper from "@/layout/wrapper";
 import HeaderTwo from '@/layout/headers/header-2';
 import FashionBanner from '@/components/banner/fashion-banner';
-import BeyoungCategories from '@/components/categories/beyoung-categories';
+// import BeyoungCategories from '@/components/categories/beyoung-categories';
 import PopularProducts from '@/components/products/fashion/popular-products';
 import CouponBanner from '@/components/coupon/coupon-banner';
 import ProductArea from '@/components/products/fashion/product-area';
@@ -54,6 +54,7 @@ import FashionTestimonial from '@/components/testimonial/fashion-testimonial';
 import FeatureAreaTwo from '@/components/features/feature-area-2';
 import InstagramAreaTwo from '@/components/instagram/instagram-area-2';
 import Footer from '@/layout/footers/footer';
+import FashionCategory from "@/components/categories/fashion-category";
 
 
 export const metadata = {
@@ -66,7 +67,8 @@ export default function HomePageTwo() {
     <Wrapper>
       <HeaderTwo/>
       <FashionBanner/>
-      <BeyoungCategories/>
+      <FashionCategory/>
+      {/* <BeyoungCategories/> */}
       <PopularProducts/>
       <CouponBanner/>
       <ProductArea/>

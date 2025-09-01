@@ -76,9 +76,9 @@ const ProductArea = () => {
           </div>
         </div>
       </div>
-      <div className="row justify-center">
+      <div className="row justify-center tp-gx-20">
         {display_items.map((prd) => (
-          <div key={prd._id} className="col-xl-2-4 col-lg-4 col-md-6 col-sm-6">
+          <div key={prd._id} className="col-xl-2-4 col-lg-4 col-md-6 col-sm-6 mb-4">
             <ProductItem product={prd} />
           </div>
         ))}
@@ -87,14 +87,18 @@ const ProductArea = () => {
   }
   return (
     <>
-      <section className="tp-product-area pb-90 bg-white">
-        <div className="w-full max-w-none px-4">
-          <div className="tp-section-title-wrapper-2 text-center mb-35">
-            <span className="tp-section-title-pre-2">
-              All Product Shop
-              <TextShapeLine />
-            </span>
-            <h3 className="tp-section-title-2">Customer Favorite Style Product</h3>
+      <section className="tp-product-area pb-50 bg-white">
+        <div className="container">
+          <div className="row">
+            <div className="col-xl-12">
+              <div className="tp-section-title-wrapper-2 text-center mb-30">
+                <span className="tp-section-title-pre-2">
+                  All Product Shop
+                  <TextShapeLine />
+                </span>
+                <h3 className="tp-section-title-2">Customer Favorite Style Product</h3>
+              </div>
+            </div>
           </div>
           {content}
         </div>

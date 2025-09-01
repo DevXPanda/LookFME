@@ -36,7 +36,7 @@ const BestSellerProducts = () => {
   return (
     <>
       <section className="tp-seller-area pb-140">
-        <div className="container">
+        <div className="container text-center">
           <div className="row">
             <div className="col-xl-12">
               <div className="tp-section-title-wrapper-2 mb-50">

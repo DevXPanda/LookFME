@@ -71,7 +71,7 @@ const TrendingProducts = () => {
       <section className="tp-trending-area pt-140 pb-150">
         <div className="container">
           <div className="row justify-content-center">
-            <div className="col-xl-6 col-lg-6">
+            <div className="col-xl-6 col-lg-4">
               <div className="tp-trending-wrapper">
                 <div className="tp-section-title-wrapper-2 mb-50">
                   <span className="tp-section-title-pre-2">

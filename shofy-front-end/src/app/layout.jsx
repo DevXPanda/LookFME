@@ -1,5 +1,5 @@
 import './globals.scss';
-import {Jost, Roboto,Charm,Oregano} from 'next/font/google';
+import {Jost, Roboto,Charm,Oregano, Poppins} from 'next/font/google';
 import Providers from '@/components/provider';
 import { ToastContainer } from "../utils/toast";
 import { Icons } from 'react-toastify';
@@ -53,11 +53,16 @@ const charm = Charm({
   subsets: ["latin"],
   variable: "--tp-ff-charm",
 });
+const poppins = Poppins({
+  weight: ["300","400", "500", "600", "700", "800","900"],
+  subsets: ["latin"],
+  variable: "--tp-ff-poppins",
+});
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${body.variable} ${heading.variable} ${p.variable} ${jost.variable} ${roboto.variable} ${oregano.variable} ${charm.variable}`}>
+      <body className={`${body.variable} ${heading.variable} ${p.variable} ${jost.variable} ${roboto.variable} ${oregano.variable} ${charm.variable} ${poppins.variable}`}>
         <Providers>
           {children}
           <ToastContainer

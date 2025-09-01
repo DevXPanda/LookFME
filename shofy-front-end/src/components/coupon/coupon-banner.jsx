@@ -71,16 +71,16 @@ const CouponBanner = () => {
   return (
     <>
       {/* Special Coupon Corner Banner - Static */}
-      <section className="tp-coupon-banner-area py-4 bg-dark">
+      <section className="tp-coupon-banner-area py-4 bg-white">
         <div className="container">
           {/* Banner Header */}
           <div className="row">
             <div className="col-12">
               <div className="d-flex align-items-center justify-content-center mb-4">
                 <div className="d-flex align-items-center">
-                  <span className="text-pink fs-1 me-2">%</span>
-                  <h2 className="text-white fs-1 fw-bold mb-0">SPECIAL COUPON CORNER</h2>
-                  <span className="text-pink fs-1 ms-2">%</span>
+                  {/* <span className="text-pink fs-1 me-2">%</span> */}
+                  <h2 className="text-pink fs-1 fw-bold mb-0">Special Coupon Corner</h2>
+                  {/* <span className="text-pink fs-1 ms-2">%</span> */}
                 </div>
               </div>
             </div>
@@ -126,28 +126,40 @@ const CouponBanner = () => {
       </section>
 
       {/* Making Global Fashion Accessible - Floating Animation */}
-      <section className="tp-slogan-area py-4 bg-pink">
-        <div className="container">
-          <div className="row">
-            <div className="col-12">
-              <div className="position-relative overflow-hidden">
-                <div 
-                  className="text-center"
-                  style={{ 
-                    transform: `translateX(${textPosition}%)`,
-                    transition: 'transform 0.1s linear'
-                  }}
-                >
-                  <h2 className="display-5 fw-bold text-dark mb-0">
-                    Making Global Fashion Accessible
-                  </h2>
-                </div>
-              </div>
-            </div>
-          </div>
+      {/* Right-to-Left Looping Animated Text Banner */}
+      <div style={{
+        width: '1200px',
+        margin: '0 auto',
+        overflow: 'hidden',
+        background: '#BE5985',
+        borderTop: '1px solid #eee',
+        marginTop: '32px',
+        position: 'relative',
+        height: '80px',
+        display: 'flex',
+        alignItems: 'center',
+        zIndex: 1
+      }}>
+        <div className="global-fashion-marquee" style={{
+          whiteSpace: 'nowrap',
+          display: 'inline-block',
+          position: 'absolute',
+          right: 0,
+          animation: 'marquee-right-left 12s linear infinite'
+        }}>
+          <span style={{ fontWeight: 700, fontSize: '3.1rem', color: '#222' }}>
+            Making Global Fashion Accessible
+          </span>
         </div>
-      </section>
-    </>
+        <style>{`
+          @keyframes marquee-right-left {
+            0% { right: -100%; }
+            100% { right: 100%; }
+          }
+        `}</style>
+      </div>
+    </>
+   
   );
 };
 
