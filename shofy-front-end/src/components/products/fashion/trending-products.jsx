@@ -13,7 +13,7 @@ import Link from 'next/link';
 
 // slider setting 
 const slider_setting = {
-  slidesPerView: 2,
+  slidesPerView: 3,
   spaceBetween: 24,
   pagination: {
     el: ".tp-trending-slider-dot",
@@ -21,13 +21,16 @@ const slider_setting = {
   },
   breakpoints: {
     '1200': {
-      slidesPerView: 2,
+      slidesPerView: 3,
+    },
+    '992': {
+      slidesPerView: 3,
     },
     '768': {
       slidesPerView: 2,
     },
     '576': {
-      slidesPerView: 2,
+      slidesPerView: 1,
     },
     '0': {
       slidesPerView: 1,
@@ -71,7 +74,7 @@ const TrendingProducts = () => {
       <section className="tp-trending-area pt-140 pb-150">
         <div className="container">
           <div className="row justify-content-center">
-            <div className="col-xl-6 col-lg-4">
+            <div className="col-xl-8 col-lg-7">
               <div className="tp-trending-wrapper">
                 <div className="tp-section-title-wrapper-2 mb-50">
                   <span className="tp-section-title-pre-2">
@@ -87,7 +90,7 @@ const TrendingProducts = () => {
               </div>
             </div>
             <div className="col-xl-4 col-lg-5 col-md-8 col-sm-10">
-              <div className="tp-trending-banner p-relative ml-35">
+              <div className="tp-trending-banner p-relative ml-20">
                 <div className="tp-trending-banner-thumb w-img include-bg" style={{backgroundImage:`url(${trending_banner.src})` }}></div>
                 <div className="tp-trending-banner-content">
                   <h3 className="tp-trending-banner-title">

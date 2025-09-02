@@ -316,7 +316,7 @@ const FashionCategory = () => {
           flexShrink: 0,
           width: '240px',
           height: '340px',
-          margin: '0 14px',
+          margin: '0 8px',
           borderRadius: '18px',
           overflow: 'hidden',
           boxShadow: '0 4px 16px rgba(0,0,0,0.10)',
@@ -351,7 +351,7 @@ const FashionCategory = () => {
               textTransform: 'uppercase',
               letterSpacing: '0.5px',
               background: 'none',
-              display: 'inline',
+              display: 'block',
               padding: 0,
             }}
           >
@@ -368,29 +368,21 @@ const FashionCategory = () => {
               {item.parent}
             </a>
           </h3>
-          <button
+          <a
+            className="tp-btn tp-btn-border"
             onClick={() => handleCategoryRoute(item.parent)}
             style={{
-              background: '#E75480',
-              color: '#fff',
-              fontWeight: 700,
-              fontSize: '15px',
-              border: 'none',
-              borderRadius: '8px',
-              padding: '10px 0',
-              width: '100%',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-              cursor: 'pointer',
-              letterSpacing: '0.5px',
-              transition: 'background 0.2s',
-              marginTop: '0',
-              display: 'block',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 'auto',
+              paddingLeft: '22px',
+              paddingRight: '22px',
+              marginTop: '10px',
             }}
-            onMouseOver={(e) => (e.target.style.background = '#d9436b')}
-            onMouseOut={(e) => (e.target.style.background = '#E75480')}
           >
-            Shop Now <ArrowRightLong />
-          </button>
+            Shop Now <span style={{marginLeft: 6}}><ArrowRightLong /></span>
+          </a>
         </div>
       </div>
     ));
@@ -419,7 +411,7 @@ const FashionCategory = () => {
                   onClick={() => handleScroll('left')}
                   style={{
                     position: 'absolute',
-                    left: '10px',
+                    left: '20px',
                     top: '130px',
                     width: '50px',
                     height: '50px',
@@ -453,7 +445,7 @@ const FashionCategory = () => {
                   onClick={() => handleScroll('right')}
                   style={{
                     position: 'absolute',
-                    right: '10px',
+                    right: '20px',
                     top: '130px',
                     width: '50px',
                     height: '50px',
@@ -489,7 +481,7 @@ const FashionCategory = () => {
                     overflowX: 'auto',
                     overflowY: 'hidden',
                     whiteSpace: 'nowrap',
-                    padding: '0 60px',
+                    padding: '0 15px',
                     scrollbarWidth: 'none',
                     msOverflowStyle: 'none',
                   }}
@@ -498,8 +490,8 @@ const FashionCategory = () => {
                     className="categories-scroll-wrapper"
                     style={{
                       display: 'inline-flex',
-                      gap: '20px',
-                      padding: '0 20px',
+                      gap: '12px',
+                      padding: '0 12px',
                       minWidth: '100%',
                     }}
                   >

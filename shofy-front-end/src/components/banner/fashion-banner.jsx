@@ -29,7 +29,7 @@ const slider_data = [
   {
     id: 3,
     subtitle: 'Designs That Stand Out',
-    title: 'Amazing New designs',
+    title: 'Amazing New Designs',
     img: slider_img_3,
   },
 ]

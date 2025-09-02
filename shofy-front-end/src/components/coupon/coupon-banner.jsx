@@ -1,4 +1,5 @@
 'use client';
+import { TextShapeLine } from "@/svg";
 import React from "react";
 import { useEffect, useState, useRef } from "react";
 
@@ -32,7 +33,7 @@ const CouponBanner = () => {
   const coupons = [
     {
       id: 1,
-      logo: "B FINSERV",
+      logo: "PayTm",
       logoColor: "bg-pink",
       title: "Get Cashback Up To",
       amount: "₹600",
@@ -59,7 +60,7 @@ const CouponBanner = () => {
     },
     {
       id: 4,
-      logo: "B FINSERV",
+      logo: "PayTm",
       logoColor: "bg-pink",
       title: "Get Cashback Up To",
       amount: "₹500",
@@ -75,13 +76,15 @@ const CouponBanner = () => {
         <div className="container">
           {/* Banner Header */}
           <div className="row">
-            <div className="col-12">
-              <div className="d-flex align-items-center justify-content-center mb-4">
-                <div className="d-flex align-items-center">
-                  {/* <span className="text-pink fs-1 me-2">%</span> */}
-                  <h2 className="text-pink fs-1 fw-bold mb-0">Special Coupon Corner</h2>
-                  {/* <span className="text-pink fs-1 ms-2">%</span> */}
-                </div>
+            <div className="col-xl-12">
+              <div className="tp-section-title-wrapper-2 text-center mb-50">
+                <span className="tp-section-title-pre-2">
+                  Coupon
+                  <TextShapeLine/>
+                </span>
+                <h3 className="tp-section-title-2">
+                  Special Coupon
+                </h3>
               </div>
             </div>
           </div>
@@ -92,10 +95,10 @@ const CouponBanner = () => {
               <div className="d-flex justify-content-center gap-4 flex-wrap">
                 {coupons.map((coupon) => (
                   <div key={coupon.id} className="flex-shrink-0">
-                    <div className="bg-pink text-white p-3 rounded shadow-lg border border-light-pink coupon-card" style={{ minWidth: '280px' }}>
+                    <div className="bg-gray-400 text-white p-3 rounded shadow-lg border border-light-pink coupon-card" style={{ minWidth: '280px' }}>
                       {/* Left Logo Section */}
                       <div className="d-flex align-items-start gap-3">
-                        <div className={`${coupon.logoColor} rounded d-flex align-items-center justify-content-center flex-shrink-0`} style={{ width: '48px', height: '48px' }}>
+                        <div className={`${coupon.logoColor} rounded d-flex align-items-center justify-content-center flex-shrink-0`} style={{ width: '68px', height: '38px' }}>
                           <span className="text-white fw-bold fs-5">{coupon.logo}</span>
                         </div>
                         
@@ -128,11 +131,11 @@ const CouponBanner = () => {
       {/* Making Global Fashion Accessible - Floating Animation */}
       {/* Right-to-Left Looping Animated Text Banner */}
       <div style={{
-        width: '1200px',
+        width: '100%',
         margin: '0 auto',
         overflow: 'hidden',
-        background: '#BE5985',
-        borderTop: '1px solid #eee',
+        background: 'whitesmoke',
+        // borderTop: '1px solid #eee',
         marginTop: '32px',
         position: 'relative',
         height: '80px',
@@ -148,7 +151,10 @@ const CouponBanner = () => {
           animation: 'marquee-right-left 12s linear infinite'
         }}>
           <span style={{ fontWeight: 700, fontSize: '3.1rem', color: '#222' }}>
-            Making Global Fashion Accessible
+          <h3 className="tp-section-title-2">
+          Making Global Fashion Accessible
+                </h3>
+           
           </span>
         </div>
         <style>{`

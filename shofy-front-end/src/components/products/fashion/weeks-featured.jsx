@@ -13,7 +13,7 @@ import { HomeTwoFeaturedPrdLoader } from '@/components/loader';
 // slider setting 
 const slider_setting = {
   slidesPerView: 3,
-  spaceBetween: 10,
+  spaceBetween: 12,
   navigation: {
     nextEl: ".tp-featured-slider-button-next",
     prevEl: ".tp-featured-slider-button-prev",
@@ -61,9 +61,9 @@ const WeeksFeatured = () => {
         {product_items.map((item) => {
           const {_id, img, title, price, discount, reviews } = item || {};
           return (
-            <SwiperSlide key={item._id} className="tp-featured-item white-bg p-relative z-index-1">
-              <div className="tp-featured-thumb include-bg" style={{ backgroundImage: `url(${img})` }} data-background="assets/img/product/slider/product-slider-1.jpg"></div>
-              <div className="tp-featured-content">
+            <SwiperSlide key={item._id} className="tp-featured-item white-bg p-relative z-index-1" style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap: 12, padding: '24px 12px'}}>
+              <div className="tp-featured-thumb include-bg" style={{ backgroundImage: `url(${img})`, backgroundSize: 'cover', backgroundPosition: 'center' }} data-background="assets/img/product/slider/product-slider-1.jpg"></div>
+              <div className="tp-featured-content" style={{padding: 0}}>
                 <h3 className="tp-featured-title">
                   <Link href={`/product-details/${_id}`}>{title}</Link>
                 </h3>
@@ -96,8 +96,8 @@ const WeeksFeatured = () => {
   }
   return (
     <section className="tp-featured-slider-area grey-bg-6 fix pt-95 pb-120">
-      <div className="container">
-        <div className="row">
+      <div className="container-fluid" style={{paddingLeft: 0}}>
+        <div className="row gx-0">
           <div className="col-xl-12">
             <div className="tp-section-title-wrapper-2 mb-50 text-center">
               <span className="tp-section-title-pre-2">
@@ -108,11 +108,11 @@ const WeeksFeatured = () => {
             </div>
           </div>
         </div>
-        <div className="row">
+        <div className="row gx-0">
           <div className="col-xl-12">
-            <div className="tp-featured-slider">
+            <div className="tp-featured-slider" style={{paddingLeft: 24, paddingRight: 0}}>
               {content}
-              <div className="tp-featured-slider-arrow mt-45">
+              <div className="tp-featured-slider-arrow mt-45" style={{paddingLeft: 24}}>
                 <button className="tp-featured-slider-button-prev">
                   <PrevLongArr />
                 </button>
