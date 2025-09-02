@@ -1,39 +1,5 @@
-// Popular Products Component Styles
-.tp-category-area {
-  // Slider styling
-  .tp-category-slider-2 {
-    position: relative;
-    
-    .swiper-container {
-      overflow: hidden;
-    }
-    
-      .popular-product-slide {
-    padding: 0 15px;
-  }
-  }
-  
-  // Scrollbar styling
-  .swiper-scrollbar {
-    position: relative;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    height: 4px;
-    margin-top: 20px;
-    
-    .tp-swiper-scrollbar-drag {
-      background: #e91e63;
-      border-radius: 10px;
-      height: 100%;
-      position: relative;
-      cursor: grab;
-      
-      &:active {
-        cursor: grabbing;
-      }
-    }
-  }
-  
+// Best Seller Products Component Styles
+.tp-seller-area {
   // Custom column class for 5 items per row
   .col-xl-2-4 {
     @media (min-width: 1200px) {

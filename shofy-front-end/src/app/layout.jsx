@@ -1,4 +1,5 @@
 import './globals.scss';
+import './header-fix.css';
 import {Jost, Roboto,Charm,Oregano, Poppins} from 'next/font/google';
 import Providers from '@/components/provider';
 import { ToastContainer } from "../utils/toast";

@@ -48,10 +48,12 @@ const ProductArea = () => {
     }
 
     let display_items = product_items;
-    if (product_items.length > 0 && product_items.length < 5) {
+    // Only duplicate products to fill 5 slots for "All Collection" tab
+    if (activeTab === 'All Collection' && product_items.length > 0 && product_items.length < 5) {
       const times = Math.ceil(5 / product_items.length);
       display_items = Array(times).fill(product_items).flat().slice(0, 5);
     } else {
+      // For filtered categories, show all available products (up to 5)
       display_items = product_items.slice(0, 5);
     }
 

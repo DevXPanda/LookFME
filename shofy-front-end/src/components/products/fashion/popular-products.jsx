@@ -3,16 +3,15 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Scrollbar } from "swiper/modules";
-import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 // internal
 import { TextShapeLine } from "@/svg";
+import ProductItem from './product-item';
 import ErrorMsg from "@/components/common/error-msg";
 import { useGetPopularProductByTypeQuery } from "@/redux/features/productApi";
-import { add_cart_product } from "@/redux/features/cartSlice";
 import { HomeTwoPopularPrdLoader } from "@/components/loader";
-import { notifyError } from "@/utils/toast";
+
 
 // slider setting
 const slider_setting = {
@@ -47,18 +46,7 @@ const slider_setting = {
 
 const PopularProducts = () => {
   const {data: products,isError,isLoading} = useGetPopularProductByTypeQuery("fashion");
-  const { cart_products } = useSelector((state) => state.cart);
-  const dispatch = useDispatch();
-
-  // handle add product
-  const handleAddProduct = (prd) => {
-    if(prd.status === 'out-of-stock'){
-      notifyError(`This product out-of-stock`)
-    }
-    else {
-      dispatch(add_cart_product(prd));
-    }
-  };
+  
   // decide what to render
   let content = null;
 
@@ -80,63 +68,10 @@ const PopularProducts = () => {
         modules={[Scrollbar]}
         className="tp-category-slider-active-2 swiper-container mb-50"
       >
-        {product_items.map((item) => (
-          <SwiperSlide
-            key={item._id}
-            className="tp-category-item-2 p-relative z-index-1 text-center"
-          >
-            <div className="tp-category-thumb-2 popular-product-item">
-              <Link href={`/product-details/${item._id}`}>
-                <Image 
-                  src={item.img} 
-                  alt="product-img" 
-                  width={224} 
-                  height={260}
-                  className="popular-product-image"
-                />
-              </Link>
-              {/* Hover overlay with action buttons */}
-              <div className="popular-product-overlay">
-                <div className="popular-product-actions">
-                  {cart_products.some((prd) => prd._id === item._id) ? (
-                    <Link
-                      href="/cart"
-                      className="popular-action-btn"
-                    >
-                      View Cart
-                    </Link>
-                  ) : (
-                    <button
-                      onClick={() => handleAddProduct(item)}
-                      className="popular-action-btn"
-                    >
-                      Add to Cart
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="tp-category-content-2">
-              <h3 className="tp-category-title-2">
-                <Link href={`/product-details/${item._id}`}>{item.title.substring(0, 15)}</Link>
-              </h3>
-              <div className="tp-category-btn-2">
-                {cart_products.some((prd) => prd._id === item._id) ? (
-                  <Link
-                    href="/cart"
-                    className="tp-btn tp-btn-border cursor-pointer"
-                  >
-                    View Cart
-                  </Link>
-                ) : (
-                  <a
-                    onClick={() => handleAddProduct(item)}
-                    className="tp-btn tp-btn-border cursor-pointer"
-                  >
-                    Add to Cart
-                  </a>
-                )}
-              </div>
+        {product_items.map((prd) => (
+          <SwiperSlide key={prd._id}>
+            <div className="popular-product-slide">
+              <ProductItem product={prd} />
             </div>
           </SwiperSlide>
         ))}
@@ -145,7 +80,7 @@ const PopularProducts = () => {
   }
   return (
     <>
-      <section className="tp-category-area pb-95 ">
+      <section className="tp-category-area pb-95">
         <div className="container">
           <div className="row">
             <div className="col-xl-12">

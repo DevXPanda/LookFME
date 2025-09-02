@@ -54,7 +54,7 @@ const ProductItem = ({ product, style_2 = false }) => {
             alt="product img"
             width={160}
             height={200} 
-            className="w-[160px] h-[200px] object-cover rounded-lg mx-auto m-2"
+            className="w-full h-full object-cover rounded-lg"
           />
         </Link>
         <div className="tp-product-badge">

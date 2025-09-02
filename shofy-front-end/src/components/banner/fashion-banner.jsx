@@ -23,12 +23,12 @@ const slider_data = [
   {
     id: 2,
     subtitle: 'Best Selling 2025',
-    title: 'Juniour Collection',
+    title: 'Kids Collection',
     img: slider_img_2,
   },
   {
     id: 3,
-    subtitle: 'Winter Has Arrived',
+    subtitle: 'Designs That Stand Out',
     title: 'Amazing New designs',
     img: slider_img_3,
   },

@@ -35,7 +35,7 @@ const menu_data = [
   {
     id: 2,
     products: true,
-    title: 'Mens',
+    title: 'Men',
     link: '/shop',
     product_pages: [
       {
@@ -100,7 +100,7 @@ const menu_data = [
   {
     id: 3,
     products: true,
-    title: 'Womens',
+    title: 'Women',
     link: '/shop',
     product_pages: [
       {
@@ -249,14 +249,14 @@ const menu_data = [
   {
     id: 6,
     sub_menu: true,
-    title: 'Blog',
+    title: 'Beauty',
     link: '/blog',
     sub_menus: [
-      { title: 'Blog Standard', link: '/blog' },
-      { title: 'Blog Grid', link: '/blog-grid' },
-      { title: 'Blog List', link: '/blog-list' },
-      { title: 'Blog Details', link: '/blog-details' },
-      { title: 'Blog Details Full Width', link: '/blog-details-2' },
+      { title: 'Skincare ', link: '/blog' },
+      { title: 'Hair Care', link: '/blog-grid' },
+      { title: 'Fragrances', link: '/blog-list' },
+      { title: 'Body Care', link: '/blog-details' },
+      { title: 'Mens Grooming', link: '/blog-details-2' },
     ]
   },
  
@@ -322,14 +322,16 @@ export const mobile_menu = [
   {
     id: 5,
     sub_menu: true,
-    title: 'Blog',
+    title: 'Beauty',
     link: '/blog',
     sub_menus: [
-      { title: 'Blog Standard', link: '/blog' },
-      { title: 'Blog Grid', link: '/blog-grid' },
-      { title: 'Blog List', link: '/blog-list' },
-      { title: 'Blog Details', link: '/blog-details' },
-      { title: 'Blog Details Full Width', link: '/blog-details-2' },
+      { title: 'Skincare', link: '/blog' },
+      { title: 'Hair Care', link: '/blog-grid' },
+      { title: 'Fragrances', link: '/blog-list' },
+      { title: 'Body Care', link: '/blog-details' },
+      { title: 'Mens Grooming', link: '/blog-details-2' },
+      // { title: 'Blog Details', link: '/blog-details' },
+      // { title: 'Blog Details Full Width', link: '/blog-details-2' },
     ]
   },
   {

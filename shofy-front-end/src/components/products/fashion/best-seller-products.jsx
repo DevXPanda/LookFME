@@ -26,29 +26,33 @@ const BestSellerProducts = () => {
     content = <ErrorMsg msg="No Products found!" />;
   }
   if (!isLoading && !isError && products?.data?.length > 0) {
-    const product_items = products.data.slice(0, 4);
-    content = product_items.map((prd) => (
-      <div key={prd._id} className="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+    let product_items = products.data;
+    
+    // Show up to 5 best seller products without duplication
+    let display_items = product_items.slice(0, 5);
+    
+    content = display_items.map((prd, index) => (
+      <div key={`${prd._id}-${index}`} className="col-xl-2-4 col-lg-4 col-md-6 col-sm-6 mb-4">
         <ProductItem product={prd} />
       </div>
     ))
   }
   return (
     <>
-      <section className="tp-seller-area pb-140">
+      <section className="tp-seller-area pb-140 bg-white">
         <div className="container text-center">
           <div className="row">
             <div className="col-xl-12">
               <div className="tp-section-title-wrapper-2 mb-50">
                 <span className="tp-section-title-pre-2">
-                  Best Seller This Week’s
+                  Best Seller This Week's
                   <TextShapeLine />
                 </span>
                 <h3 className="tp-section-title-2">This {"Week's"} Featured</h3>
               </div>
             </div>
           </div>
-          <div className="row">
+          <div className="row justify-center tp-gx-20">
             {content}
           </div>
           <div className="row">
