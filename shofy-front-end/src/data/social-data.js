@@ -21,8 +21,8 @@ const social_data = [
   {
     id:4,
     link:'https://vimeo.com/',
-    icon:'fa-brands fa-vimeo-v',
-    title:'Vimeo'
+    icon:'fa-brands fa-instagram-square',
+    title:'Instagram'
   },
 ]
 
