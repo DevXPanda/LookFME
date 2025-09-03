@@ -150,7 +150,7 @@ const menu_data = [
           { title: 'Yoga Pants', link: '/shop' },
           { title: 'Zip-Up Jackets ', link: 'shop' },
         ]
-      }
+      },
       // {
       //   title: 'Women',
       //   link: '/shop',
@@ -174,7 +174,6 @@ const menu_data = [
       // },
     ]
   },
-    ,
   {
     id: 4,
     products: true,
@@ -249,7 +248,7 @@ const menu_data = [
   {
     id: 6,
     sub_menu: true,
-    title: 'Beauty',
+    title: 'Cosmetic',
     link: '/blog',
     sub_menus: [
       { title: 'Skincare ', link: '/blog' },
@@ -322,7 +321,7 @@ export const mobile_menu = [
   {
     id: 5,
     sub_menu: true,
-    title: 'Beauty',
+    title: 'Cosmetic',
     link: '/blog',
     sub_menus: [
       { title: 'Skincare', link: '/blog' },

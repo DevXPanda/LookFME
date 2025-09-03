@@ -187,13 +187,22 @@
                     }
                 }
 			}
+            
+            // Ensure dropdown works for all submenu types
+            &.has-dropdown:hover > .tp-submenu{
+                top: 100%;
+                visibility: visible;
+                opacity: 1;
+            }
         }
     }
     &.menu-style-1{
-        padding-left: 7px;
+        padding-left: 0;
+        margin-left: -20px;
         @media #{$lg, $md, $sm, $xs}{
             padding-left: 0;
             margin-right: -40px;
+            margin-left: 0;
         }
         & > nav > ul{
             & > li{

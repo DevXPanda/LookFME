@@ -1,0 +1,329 @@
+@use '../../utils' as *;
+
+// /----------------------------------------/
+//  Jockey Style Mega Menu
+// /----------------------------------------/
+
+.jockey-style-mega {
+  .jockey-mega-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: var(--tp-common-white);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    padding: 0;
+    z-index: 999;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    min-height: 500px;
+  }
+
+  &:hover .jockey-mega-menu {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .jockey-mega-wrapper {
+    display: flex;
+    min-height: 500px;
+  }
+
+  /* Left Section - Categories */
+  .jockey-categories-section {
+    flex: 1;
+    background: #fafafa;
+    border-right: 1px solid #e5e5e5;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    padding: 30px 20px;
+  }
+
+  .jockey-category-column {
+    padding: 0 15px;
+    position: relative;
+
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background-color: #e5e5e5;
+    }
+  }
+
+  .jockey-category-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--tp-common-black);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--tp-theme-primary);
+    display: inline-block;
+  }
+
+  .jockey-category-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 8px;
+
+      a {
+        font-size: 13px;
+        color: #666;
+        text-decoration: none;
+        transition: color 0.3s ease;
+        display: block;
+        padding: 2px 0;
+
+        &:hover {
+          color: var(--tp-theme-primary);
+          padding-left: 5px;
+        }
+      }
+    }
+  }
+
+  /* Right Section - Images */
+  .jockey-images-section {
+    flex: 0 0 500px;
+    padding: 30px;
+    background: var(--tp-common-white);
+    display: flex;
+    gap: 20px;
+  }
+
+  /* Column 1 - Banner */
+  .jockey-banner-column {
+    flex: 0 0 200px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Column 2 - Other Images */
+  .jockey-other-images-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Main Banner */
+  .jockey-main-banner {
+    text-align: center;
+    height: 100%;
+
+    a {
+      text-decoration: none;
+      display: block;
+      height: 100%;
+    }
+  }
+
+  .jockey-banner-image {
+    margin-bottom: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 320px;
+
+    .banner-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    &:hover .banner-img {
+      transform: scale(1.05);
+    }
+  }
+
+  .jockey-banner-text {
+    h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--tp-common-black);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .jockey-explore-btn {
+    background: var(--tp-theme-primary);
+    color: var(--tp-common-white);
+    border: none;
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #e6a700;
+      transform: translateY(-2px);
+    }
+  }
+
+  /* Section Titles */
+  .jockey-section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--tp-common-black);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e5e5e5;
+  }
+
+  /* Special Offerings */
+  .jockey-special-offerings {
+    .jockey-offerings-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+  }
+
+  .jockey-offering-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #f8f9fa;
+      transform: translateX(5px);
+    }
+  }
+
+  .jockey-offering-image {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    overflow: hidden;
+
+    .offering-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .jockey-offering-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--tp-common-black);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  /* Trending Collections */
+  .jockey-trending-collections {
+    .jockey-trending-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+  }
+
+  .jockey-trending-item {
+    text-decoration: none;
+    text-align: center;
+    padding: 10px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #f8f9fa;
+      transform: translateY(-2px);
+    }
+  }
+
+  .jockey-trending-image {
+    width: 100%;
+    height: 80px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 8px;
+
+    .trending-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .jockey-trending-text {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--tp-common-black);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    line-height: 1.2;
+  }
+
+  /* Responsive Design */
+  @media #{$lg, $md, $sm, $xs} {
+    .jockey-mega-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 100vh;
+      overflow-y: auto;
+      border-radius: 0;
+    }
+
+    .jockey-mega-wrapper {
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .jockey-categories-section {
+      grid-template-columns: repeat(2, 1fr);
+      padding: 20px 15px;
+    }
+
+    .jockey-images-section {
+      flex: none;
+      padding: 20px 15px;
+      flex-direction: column;
+    }
+
+    .jockey-banner-column {
+      flex: none;
+      margin-bottom: 20px;
+    }
+
+    .jockey-other-images-column {
+      flex: none;
+    }
+
+    .jockey-trending-grid {
+      grid-template-columns: repeat(2, 1fr);
+}
+}
+}
