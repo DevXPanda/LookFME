@@ -94,16 +94,7 @@ const ShopListItem = ({ product }) => {
             <Rating allowFraction size={16} initialValue={ratingVal} readonly={true} />
           </div>
           <div className="tp-product-price-wrapper-2">
-            {discount > 0 ? (
-              <>
-                <span className="tp-product-price-2 new-price">${price}</span>
-                <span className="tp-product-price-2 old-price">
-                  {" "} ${(Number(price) - (Number(price) * Number(discount)) / 100).toFixed(2)}
-                </span>
-              </>
-            ) : (
-              <span className="tp-product-price-2 new-price">${price}</span>
-            )}
+            <span className="tp-product-price-2 new-price">₹{price}</span>
           </div>
           <p>
             {description.substring(0, 100)}

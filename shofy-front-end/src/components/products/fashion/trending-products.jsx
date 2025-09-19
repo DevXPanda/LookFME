@@ -13,7 +13,7 @@ import Link from 'next/link';
 
 // slider setting 
 const slider_setting = {
-  slidesPerView: 3,
+  slidesPerView: 4,
   spaceBetween: 24,
   pagination: {
     el: ".tp-trending-slider-dot",
@@ -21,7 +21,7 @@ const slider_setting = {
   },
   breakpoints: {
     '1200': {
-      slidesPerView: 3,
+      slidesPerView: 4,
     },
     '992': {
       slidesPerView: 3,
@@ -30,7 +30,7 @@ const slider_setting = {
       slidesPerView: 2,
     },
     '576': {
-      slidesPerView: 1,
+      slidesPerView: 2,
     },
     '0': {
       slidesPerView: 1,
@@ -56,7 +56,7 @@ const TrendingProducts = () => {
     content = <ErrorMsg msg="No Products found!" />;
   }
   if (!isLoading && !isError && products?.data?.length > 0) {
-    const product_items = products.data.slice(0,5);
+    const product_items = products.data.slice(0,4);
     content = (
       <Swiper {...slider_setting} modules={[Pagination]} className="tp-trending-slider-active swiper-container">
         {product_items.map((item) => {

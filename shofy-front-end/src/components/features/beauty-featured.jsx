@@ -52,7 +52,7 @@ const BeautyFeatured = () => {
                     </h3>
                     <p>{item.subtitle}</p>
                     <div className="tp-featured-price-3">
-                      <span>Save ${item.save}</span>
+                      <span>Save ₹{item.save}</span>
                     </div>
                   </div>
                 </div>

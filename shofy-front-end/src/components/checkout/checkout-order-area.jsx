@@ -61,7 +61,7 @@ const CheckoutOrderArea = ({ checkoutData }) => {
                   onClick={() => handleShippingCost(60)}
                   htmlFor="flat_shipping"
                 >
-                  Delivery: Today Cost :<span>$60.00</span>
+                  Delivery: Today Cost :<span>₹60.00</span>
                 </label>
                 <ErrorMsg msg={errors?.shippingOption?.message} />
               </span>
@@ -78,7 +78,7 @@ const CheckoutOrderArea = ({ checkoutData }) => {
                   onClick={() => handleShippingCost(20)}
                   htmlFor="flat_rate"
                 >
-                  Delivery: 7 Days Cost: <span>$20.00</span>
+                  Delivery: 7 Days Cost: <span>₹20.00</span>
                 </label>
                 <ErrorMsg msg={errors?.shippingOption?.message} />
               </span>
@@ -88,25 +88,25 @@ const CheckoutOrderArea = ({ checkoutData }) => {
            {/*  subtotal */}
            <li className="tp-order-info-list-subtotal">
             <span>Subtotal</span>
-            <span>${total.toFixed(2)}</span>
+            <span>₹{total.toFixed(2)}</span>
           </li>
 
            {/*  shipping cost */}
            <li className="tp-order-info-list-subtotal">
             <span>Shipping Cost</span>
-            <span>${shippingCost.toFixed(2)}</span>
+            <span>₹{shippingCost.toFixed(2)}</span>
           </li>
 
            {/* discount */}
            <li className="tp-order-info-list-subtotal">
             <span>Discount</span>
-            <span>${discountAmount.toFixed(2)}</span>
+            <span>₹{discountAmount.toFixed(2)}</span>
           </li>
 
           {/* total */}
           <li className="tp-order-info-list-total">
             <span>Total</span>
-            <span>${parseFloat(cartTotal).toFixed(2)}</span>
+            <span>₹{parseFloat(cartTotal).toFixed(2)}</span>
           </li>
         </ul>
       </div>

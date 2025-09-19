@@ -7,11 +7,14 @@
 .#{$theme-prifix}-product{
     $self: &;
     &-item-5{
+        background-color: var(--tp-common-white);
+        @extend %tp-transition;
         &:hover{
+            box-shadow: 0px -8px 25px rgba(1, 15, 28, 0.15), 0px 0px 0px rgba(1, 15, 28, 0.15);
             #{$self}{
                 &-thumb-5{
                     & img{
-                        @include transform(scale(1.1));
+                        @include transform(scale(1.2));
                     }
                 }
                 &-action-5{
@@ -129,9 +132,6 @@
 
                 #{$sm}{
                     &-thumb-5{
-                        & img{
-                            @include transform(scale(1.1));
-                        }
                     }
                 }
             }
@@ -261,7 +261,6 @@
                 &:hover{
                     background-color: var(--tp-theme-green);
                     color: var(--tp-common-white);
-                    border-color: var(--tp-common-white);
                 }
 
                 &.tp-best-slider-5-button-next{

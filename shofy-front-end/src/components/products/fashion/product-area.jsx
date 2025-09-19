@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import ErrorMsg from '@/components/common/error-msg';
 import { useGetProductTypeQuery } from '@/redux/features/productApi';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Scrollbar } from "swiper/modules";
 import { TextShapeLine } from '@/svg';
 import ProductItem from './product-item';
 import { HomeTwoPrdLoader } from '@/components/loader';
@@ -103,6 +105,7 @@ const ProductArea = () => {
             </div>
           </div>
           {content}
+          <div className="swiper-scrollbar tp-swiper-scrollbar tp-swiper-scrollbar-drag"></div>
         </div>
       </section>
     </>

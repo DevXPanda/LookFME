@@ -8,11 +8,14 @@
 .#{$theme-prifix}-product{
     $self: &;
     &-item-3{
+        background-color: var(--tp-common-white);
+        @extend %tp-transition;
         &:hover{
+            box-shadow: 0px -8px 25px rgba(1, 15, 28, 0.15), 0px 0px 0px rgba(1, 15, 28, 0.15);
             #{$self}{
                 &-thumb-3{
                     & img{
-                        @include transform(scale(1.1));
+                        @include transform(scale(1.2));
                     }
                 }
                 &-action-3{
@@ -217,7 +220,6 @@
                 padding: 6px 19px;
                 color: var(--tp-common-black);
                 background-color: var(--tp-common-white);
-                border-color: var(--tp-common-white);
                 &:hover{
                     background-color: var(--tp-common-black);
                     border-color: var(--tp-common-black);

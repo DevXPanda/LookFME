@@ -32,13 +32,14 @@
 
   .jockey-mega-wrapper {
     display: flex;
-    min-height: 500px;
+    min-height: 600px; /* Increased height to accommodate the new layout */
+    background: #f8f6f3; /* Light beige background like in the image */
   }
 
   /* Left Section - Categories */
   .jockey-categories-section {
     flex: 1;
-    background: #fafafa;
+    background: #f8f6f3;
     border-right: 1px solid #e5e5e5;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -97,7 +98,227 @@
     }
   }
 
-  /* Right Section - Images */
+  /* Middle Section - Banner */
+  .jockey-banner-section {
+    flex: 1.2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 20px;
+    background: #f8f6f3;
+    height: 100%; /* Full height */
+  }
+
+  .jockey-banner-container {
+    text-align: center;
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .jockey-banner-image {
+    position: relative;
+    margin-bottom: 20px;
+    height: 70%; /* Main image takes 70% of container height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .jockey-banner-image img {
+    height: 100%;
+    width: auto;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .jockey-discount-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #ff6b6b;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 14px;
+    z-index: 2;
+  }
+
+  .jockey-banner-content {
+    text-align: center;
+  }
+
+  .jockey-banner-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+  }
+
+  .jockey-banner-contact {
+    margin-bottom: 15px;
+    font-size: 12px;
+    color: #666;
+  }
+
+  .jockey-banner-contact p {
+    margin: 2px 0;
+  }
+
+  .jockey-banner-subtitle {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+  }
+
+  .jockey-explore-btn {
+    display: inline-block;
+    background: #ff6b6b;
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+    transition: background 0.3s ease;
+  }
+
+  .jockey-explore-btn:hover {
+    background: #ff5252;
+    color: white;
+  }
+
+  /* Right Section - Special Offers & Trending */
+  .jockey-offers-section {
+    flex: 1;
+    padding: 30px 20px;
+    background: #f8f6f3;
+    border-left: 1px solid #e5e5e5;
+    height: 100%; /* Full height */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .jockey-section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--tp-common-black);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--tp-theme-primary);
+    display: inline-block;
+  }
+
+  .jockey-special-offerings {
+    margin-bottom: 30px;
+    flex: 0 0 70%; /* Takes 70% of the right section height */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .jockey-offerings-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex: 1;
+  }
+
+  .jockey-offering-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #333;
+    transition: color 0.3s ease;
+  }
+
+  .jockey-offering-item:hover {
+    color: var(--tp-theme-primary);
+  }
+
+  .jockey-offering-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .jockey-offering-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .jockey-offering-text {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .jockey-trending-collections {
+    margin-bottom: 20px;
+    flex: 0 0 30%; /* Takes 30% of the right section height */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .jockey-trending-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    flex: 1;
+  }
+
+  .jockey-trending-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    transition: color 0.3s ease;
+  }
+
+  .jockey-trending-item:hover {
+    color: var(--tp-theme-primary);
+  }
+
+  .jockey-trending-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+  }
+
+  .jockey-trending-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .jockey-trending-text {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--tp-common-black);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  /* Right Section - Images (Legacy) */
   .jockey-images-section {
     flex: 0 0 500px;
     padding: 30px;

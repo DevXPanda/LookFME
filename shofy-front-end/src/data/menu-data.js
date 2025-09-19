@@ -39,7 +39,7 @@ const menu_data = [
     link: '/shop',
     product_pages: [
       {
-        title: 'Tshirts',
+        title: 'TSHIRTS',
         link: '/shop',
         mega_menus: [
           { title: 'Plain T-shirts', link: '/shop-category' },
@@ -51,7 +51,7 @@ const menu_data = [
         ]
       },
       {
-        title: 'Shirts',
+        title: 'SHIRTS',
         link: '/product-details',
         mega_menus: [
           { title: 'Formal Shirts', link: '/shop' },
@@ -63,7 +63,7 @@ const menu_data = [
     ],
   },
   {
-        title: 'Bottom Wear',
+        title: 'BOTTOM WEAR',
         link: '/shop',
         mega_menus: [
           { title: 'Cargo Joggers', link: '/shop-category' },
@@ -74,28 +74,29 @@ const menu_data = [
           { title: 'Shorts', link: 'shop' },
         ]
       },
-      // {
-      //   title: 'Women',
-      //   link: '/shop',
-      //   mega_menus: [
-      //     { title: 'Shopping Cart', link: '/cart' },
-      //     { title: 'Compare', link: '/compare' },
-      //     { title: 'Wishlist', link: '/wishlist' },
-      //     { title: 'Checkout', link: '/checkout' },
-      //     { title: 'My account', link: '/profile' },
-      //   ]
-      // },
-      // {
-      //   title: 'More Pages',
-      //   link: '/shop',
-      //   mega_menus: [
-      //     { title: 'Login', link: '/login' },
-      //     { title: 'Register', link: '/register' },
-      //     { title: 'Forgot Password', link: '/forgot' },
-      //     { title: '404 Error', link: '/404' },
-      //   ]
-      // },
-    ]
+    ],
+    // Special sections for the new layout
+    special_offerings: [
+      { title: 'ANYWHERE SHORTS', image: '/assets/img/navbar/men/men-1.png', link: '/shop/anywhere-shorts' },
+      { title: 'TANK TOPS', image: '/assets/img/navbar/men/men-2.png', link: '/shop/tank-tops' },
+      { title: 'ALL DAY PANTS', image: '/assets/img/navbar/men/men-3.png', link: '/shop/all-day-pants' }
+    ],
+    trending_collections: [
+      { title: 'MOYE ATHLEISURE', image: '/assets/img/navbar/men/men1.png', link: '/shop/moye-athleisure' },
+      { title: 'INTERNATIONAL COLLECTION', image: '/assets/img/navbar/men/men2.png', link: '/shop/international' },
+      { title: 'MOVE INTERNATIONAL COLLECTION', image: '/assets/img/navbar/men/men3.png', link: '/shop/move-international' }
+    ],
+    banner: {
+      title: 'MENS FASHION',
+      subtitle: 'EVERYTHING FOR MEN',
+      discount: '50% OFF',
+      image: '/assets/img/navbar/men/men-banner.png',
+      contact: {
+        website: 'www.craftyart.com',
+        social: '@craftyfashionsite',
+        phone: '123-456-789'
+      }
+    }
   },
   {
     id: 3,

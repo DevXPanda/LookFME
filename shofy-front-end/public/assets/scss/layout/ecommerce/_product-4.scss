@@ -7,8 +7,16 @@
 .#{$theme-prifix}-product{
     $self : &;
     &-item-4{
+        background-color: var(--tp-common-white);
+        @extend %tp-transition;
         &:hover{
+            box-shadow: 0px -8px 25px rgba(1, 15, 28, 0.15), 0px 0px 0px rgba(1, 15, 28, 0.15);
             #{$self}{
+                &-thumb-4{
+                    & img{
+                        @include transform(scale(1.2));
+                    }
+                }
                 &-price-4{
                     visibility: hidden;
                     opacity: 0;
@@ -23,11 +31,6 @@
                     visibility: visible;
                     opacity: 1;
                     right: 20px;
-                }
-                &-thumb-4{
-                    & img{
-                        @include transform(scale(1.1));
-                    }
                 }
             }
         }

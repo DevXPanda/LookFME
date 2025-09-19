@@ -170,20 +170,32 @@
         &-item{
             position: relative;
             display: flex;
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(129,129,129,.2);
-
-            &:last-child{
-                border-bottom: 0;
+            padding: 20px;
+            margin-bottom: 15px;
+            background-color: var(--tp-common-white);
+            box-shadow: 0px 2px 8px rgba(1, 15, 28, 0.08);
+            @extend %tp-transition;
+            
+            &:hover{
+                box-shadow: 0px -8px 25px rgba(1, 15, 28, 0.15), 0px 0px 0px rgba(1, 15, 28, 0.15);
             }
         }
     }
     &__thumb{
-        border: 1px solid var(--tp-border-primary);
         margin-right: 15px;
+        overflow: hidden;
+        @extend %tp-transition;
+        
+        &:hover{
+            & img{
+                @include transform(scale(1.2));
+            }
+        }
+        
         & img{
             width: 70px;
             height: auto;
+            @extend %tp-transition;
         }
     }
     &__title{

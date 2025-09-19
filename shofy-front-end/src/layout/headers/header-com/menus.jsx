@@ -33,117 +33,85 @@ const Menus = () => {
                     ))}
                   </div>
 
-                  {/* Right Section - Images */}
-                  <div className="jockey-images-section">
-                    {/* Column 1 - Main Banner */}
-                    <div className="jockey-banner-column">
-                      <div className="jockey-main-banner">
-                        <Link href="/shop/men">
-                          <div className="jockey-banner-image">
-                            <Image 
-                              src="/assets/img/navbar/men/men-banner.png" 
-                              alt="Everything for Men"
-                              width={150}
-                              height={320}
-                              className="banner-img"
-                            />
+                  {/* Middle Section - Banner */}
+                  <div className="jockey-banner-section">
+                    {menu.banner && (
+                      <div className="jockey-banner-container">
+                        <div className="jockey-banner-image">
+                          <Image 
+                            src={menu.banner.image} 
+                            alt={menu.banner.title}
+                            width={250}
+                            height={500}
+                            className="banner-img"
+                          />
+                          <div className="jockey-discount-badge">
+                            {menu.banner.discount}
                           </div>
-                          <div className="jockey-banner-text">
-                            <h3>EVERYTHING FOR MEN</h3>
-                            <button className="jockey-explore-btn">EXPLORE &gt;</button>
+                        </div>
+                        <div className="jockey-banner-content">
+                          <h3 className="jockey-banner-title">{menu.banner.title}</h3>
+                          <div className="jockey-banner-contact">
+                            <p>{menu.banner.contact.website}</p>
+                            <p>{menu.banner.contact.social}</p>
+                            <p>{menu.banner.contact.phone}</p>
                           </div>
-                        </Link>
+                          <h4 className="jockey-banner-subtitle">{menu.banner.subtitle}</h4>
+                          <Link href={menu.link} className="jockey-explore-btn">
+                            EXPLORE &gt;
+                          </Link>
+                        </div>
                       </div>
-                    </div>
+                    )}
+                  </div>
 
-                    {/* Column 2 - Other Images */}
-                    <div className="jockey-other-images-column">
-                      {/* Special Offerings */}
+                  {/* Right Section - Special Offers & Trending */}
+                  <div className="jockey-offers-section">
+                    {/* Special Offerings */}
+                    {menu.special_offerings && (
                       <div className="jockey-special-offerings">
-                        <h4 className="jockey-section-title">Our Special Offerings</h4>
+                        <h4 className="jockey-section-title">OUR SPECIAL OFFERINGS</h4>
                         <div className="jockey-offerings-grid">
-                          <Link href="/shop/men/shorts" className="jockey-offering-item">
-                            <div className="jockey-offering-image">
-                              <Image 
-                                src="/assets/img/navbar/men/men-1.png" 
-                                alt="Anywhere Shorts"
-                                width={80}
-                                height={120}
-                                className="offering-img"
-                              />
-                            </div>
-                            <span className="jockey-offering-text">ANYWHERE SHORTS</span>
-                          </Link>
-                          <Link href="/shop/men/tank-tops" className="jockey-offering-item">
-                            <div className="jockey-offering-image">
-                              <Image 
-                                src="/assets/img/navbar/men/men-2.png" 
-                                alt="Tank Tops"
-                                width={80}
-                                height={120}
-                                className="offering-img"
-                              />
-                            </div>
-                            <span className="jockey-offering-text">TANK TOPS</span>
-                          </Link>
-                          <Link href="/shop/men/pants" className="jockey-offering-item">
-                            <div className="jockey-offering-image">
-                              <Image 
-                                src="/assets/img/navbar/men/men-3.png" 
-                                alt="All Day Pants"
-                                width={80}
-                                height={120}
-                                className="offering-img"
-                              />
-                            </div>
-                            <span className="jockey-offering-text">ALL DAY PANTS</span>
-                          </Link>
+                          {menu.special_offerings.map((offering, i) => (
+                            <Link key={i} href={offering.link} className="jockey-offering-item">
+                              <div className="jockey-offering-image">
+                                <Image 
+                                  src={offering.image} 
+                                  alt={offering.title}
+                                  width={80}
+                                  height={80}
+                                  className="offering-img"
+                                />
+                              </div>
+                              <span className="jockey-offering-text">{offering.title}</span>
+                            </Link>
+                          ))}
                         </div>
                       </div>
+                    )}
 
-                      {/* Trending Collections */}
+                    {/* Trending Collections */}
+                    {menu.trending_collections && (
                       <div className="jockey-trending-collections">
-                        <h4 className="jockey-section-title">Trending Collections</h4>
+                        <h4 className="jockey-section-title">TRENDING COLLECTIONS</h4>
                         <div className="jockey-trending-grid">
-                          <Link href="/shop/men/move" className="jockey-trending-item">
-                            <div className="jockey-trending-image">
-                              <Image 
-                                src="/assets/img/navbar/men/men1.png" 
-                                alt="Move"
-                                width={80}
-                                height={80}
-                                className="trending-img"
-                              />
-                            </div>
-                            <span className="jockey-trending-text">MOVE</span>
-                          </Link>
-                          <Link href="/shop/men/athleisure" className="jockey-trending-item">
-                            <div className="jockey-trending-image">
-                              <Image 
-                                src="/assets/img/navbar/men/men2.png" 
-                                alt="Athleisure"
-                                width={80}
-                                height={80}
-                                className="trending-img"
-                              />
-                            </div>
-                            <span className="jockey-trending-text">ATHLEISURE</span>
-                          </Link>
-                          <Link href="/shop/men/international" className="jockey-trending-item">
-                            <div className="jockey-trending-image">
-                              <Image 
-                                src="/assets/img/navbar/men/men3.png" 
-                                alt="International Collection"
-                                width={80}
-                                height={80}
-                                className="trending-img"
-                              />
-                            </div>
-                            <span className="jockey-trending-text">INTERNATIONAL COLLECTION</span>
-                          </Link>
+                          {menu.trending_collections.map((trend, i) => (
+                            <Link key={i} href={trend.link} className="jockey-trending-item">
+                              <div className="jockey-trending-image">
+                                <Image 
+                                  src={trend.image} 
+                                  alt={trend.title}
+                                  width={60}
+                                  height={60}
+                                  className="trending-img"
+                                />
+                              </div>
+                              <span className="jockey-trending-text">{trend.title}</span>
+                            </Link>
+                          ))}
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>

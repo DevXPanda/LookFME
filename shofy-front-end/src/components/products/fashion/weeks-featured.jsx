@@ -68,16 +68,7 @@ const WeeksFeatured = () => {
                   <Link href={`/product-details/${_id}`}>{title}</Link>
                 </h3>
                 <div className="tp-featured-price-wrapper">
-                  {discount > 0 ? (
-                    <>
-                      <span className="tp-featured-price new-price">${price}</span>
-                      <span className="tp-featured-price old-price">
-                        {" "} $ {(Number(price) - (Number(price) * Number(discount)) / 100).toFixed(2)}
-                      </span>
-                    </>
-                  ) : (
-                    <span className="tp-featured-price new-price">${price}</span>
-                  )}
+                  <span className="tp-featured-price new-price">₹{price}</span>
                 </div>
                 <div className="tp-product-rating-icon tp-product-rating-icon-2">
                   <Rating allowFraction size={16} initialValue={reviews && reviews.length > 0 ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length : 0} readonly={true} />
