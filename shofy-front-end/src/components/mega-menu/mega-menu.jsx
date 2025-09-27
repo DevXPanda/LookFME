@@ -32,7 +32,7 @@ export default function MegaMenu() {
               <div className="vertical-banner">
                 <Link href={section.bannerLink}>
                   <a>
-                    <Image src={section.banner} alt={section.bannerText} width={180} height={400} />
+                    <Image src={section.banner} alt={section.bannerText} width={180} height={600} />
                     <div className="banner-text">{section.bannerText}</div>
                   </a>
                 </Link>
@@ -41,7 +41,7 @@ export default function MegaMenu() {
                 {section.mainImages.map((img) => (
                   <Link href={img.link} key={img.text}>
                     <a className="main-img-link">
-                      <Image src={img.src} alt={img.text} width={140} height={140} />
+                      <Image src={img.src} alt={img.text} width={140} height={600} />
                       <div className="img-text">{img.text}</div>
                     </a>
                   </Link>

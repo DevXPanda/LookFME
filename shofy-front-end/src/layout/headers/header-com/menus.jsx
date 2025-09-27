@@ -15,8 +15,9 @@ const Menus = () => {
           return (
             <li key={menu.id} className="has-dropdown has-mega-menu jockey-style-mega">
               <Link href={menu.link}>{menu.title}</Link>
-              <div className="tp-submenu tp-mega-menu jockey-mega-menu">
+              <div className="tp-submenu tp-mega-menu jockey-mega-menu ">
                 <div className="jockey-mega-wrapper">
+
                   {/* Left Section - Categories */}
                   <div className="jockey-categories-section">
                     {menu.product_pages.map((category, i) => (
@@ -41,26 +42,27 @@ const Menus = () => {
                           <Image 
                             src={menu.banner.image} 
                             alt={menu.banner.title}
+                            layout="responsive"
                             width={250}
                             height={500}
                             className="banner-img"
                           />
-                          <div className="jockey-discount-badge">
+                          {/* <div className="jockey-discount-badge">
                             {menu.banner.discount}
-                          </div>
+                          </div> */}
                         </div>
-                        <div className="jockey-banner-content">
-                          <h3 className="jockey-banner-title">{menu.banner.title}</h3>
-                          <div className="jockey-banner-contact">
-                            <p>{menu.banner.contact.website}</p>
-                            <p>{menu.banner.contact.social}</p>
-                            <p>{menu.banner.contact.phone}</p>
-                          </div>
-                          <h4 className="jockey-banner-subtitle">{menu.banner.subtitle}</h4>
-                          <Link href={menu.link} className="jockey-explore-btn">
-                            EXPLORE &gt;
-                          </Link>
-                        </div>
+                        {/* <div className="jockey-banner-content"> */}
+                          {/* <h3 className="jockey-banner-title">{menu.banner.title}</h3> */}
+                          {/* <div className="jockey-banner-contact"> */}
+                            {/* <p>{menu.banner.contact.website}</p> */}
+                            {/* <p>{menu.banner.contact.social}</p> */}
+                            {/* <p>{menu.banner.contact.phone}</p> */}
+                          {/* </div> */}
+                          {/* <h4 className="jockey-banner-subtitle">{menu.banner.subtitle}</h4> */}
+                          {/* <Link href={menu.link} className="jockey-explore-btn"> */}
+                            {/* EXPLORE &gt; */}
+                          {/* </Link> */}
+                        {/* </div> */}
                       </div>
                     )}
                   </div>

@@ -77,20 +77,20 @@ const menu_data = [
     ],
     // Special sections for the new layout
     special_offerings: [
-      { title: 'ANYWHERE SHORTS', image: '/assets/img/navbar/men/men-1.png', link: '/shop/anywhere-shorts' },
-      { title: 'TANK TOPS', image: '/assets/img/navbar/men/men-2.png', link: '/shop/tank-tops' },
-      { title: 'ALL DAY PANTS', image: '/assets/img/navbar/men/men-3.png', link: '/shop/all-day-pants' }
+      { title: '', image: '/assets/img/navbar/men/men-1.png', link: '/shop/anywhere-shorts' },
+      { title: '', image: '/assets/img/navbar/men/men-2.png', link: '/shop/tank-tops' },
+      { title: '', image: '/assets/img/navbar/men/men-3.png', link: '/shop/all-day-pants' }
     ],
     trending_collections: [
-      { title: 'MOYE ATHLEISURE', image: '/assets/img/navbar/men/men1.png', link: '/shop/moye-athleisure' },
-      { title: 'INTERNATIONAL COLLECTION', image: '/assets/img/navbar/men/men2.png', link: '/shop/international' },
-      { title: 'MOVE INTERNATIONAL COLLECTION', image: '/assets/img/navbar/men/men3.png', link: '/shop/move-international' }
+      { title: '', image: '/assets/img/navbar/men/men1.png', link: '/shop/moye-athleisure' },
+      { title: '', image: '/assets/img/navbar/men/men2.png', link: '/shop/international' },
+      { title: '', image: '/assets/img/navbar/men/men3.png', link: '/shop/move-international' }
     ],
     banner: {
       title: 'MENS FASHION',
       subtitle: 'EVERYTHING FOR MEN',
       discount: '50% OFF',
-      image: '/assets/img/navbar/men/men-banner.png',
+      image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
       contact: {
         website: 'www.craftyart.com',
         social: '@craftyfashionsite',
@@ -152,6 +152,7 @@ const menu_data = [
           { title: 'Zip-Up Jackets ', link: 'shop' },
         ]
       },
+
       // {
       //   title: 'Women',
       //   link: '/shop',
@@ -173,7 +174,31 @@ const menu_data = [
       //     { title: '404 Error', link: '/404' },
       //   ]
       // },
-    ]
+    ],
+     // Special sections for Women layout
+  special_offerings: [
+    { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/summer-dresses' },
+    { title: '', image: '/assets/img/navbar/women/women-2.png', link: '/shop/casual-tops' },
+    { title: '', image: '/assets/img/navbar/women/women-2.png', link: '/shop/work-wear' }
+  ],
+
+  trending_collections: [
+    { title: '', image: '/assets/img/navbar/women/women1.png', link: '/shop/evening-gowns' },
+    { title: '', image: '/assets/img/navbar/women/women2.png', link: '/shop/festive' },
+    { title: '', image: '/assets/img/navbar/women/women2.png', link: '/shop/active' }
+  ],
+
+  banner: {
+    title: 'WOMEN’S FASHION',
+    subtitle: 'STYLE FOR EVERY OCCASION',
+    discount: '40% OFF',
+    image: '/assets/img/navbar/men/men-banner.png',
+    contact: {
+      website: 'www.craftyart.com',
+      social: '@craftywomensite',
+      phone: '987-654-321'
+    }
+  }
   },
   {
     id: 4,
@@ -205,7 +230,33 @@ const menu_data = [
           { title: 'Ethnic Wear (Lehenga, Kurti)', link: '/shop' },
     ],
   },
-  ]
+  ],
+
+  special_offerings: [
+    { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/summer-dresses' },
+    { title: '', image: '/assets/img/navbar/women/women-2.png', link: '/shop/casual-tops' },
+    { title: '', image: '/assets/img/navbar/women/women-2.png', link: '/shop/work-wear' }
+  ],
+
+  // Trending Collections
+  trending_collections: [
+    { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/winter' },
+    { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/summer' },
+    { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/sportswear' }
+  ],
+
+  // Banner
+  banner: {
+    title: 'KIDS FASHION',
+    subtitle: 'TRENDY & COMFY FOR LITTLE ONES',
+    discount: '30% OFF',
+    image: '/assets/img/navbar/men/men-banner.png',
+    contact: {
+      website: 'www.craftyart.com',
+      social: '@craftykidssite',
+      phone: '555-123-456'
+    }
+  }
   },
   {
     id: 5,
@@ -244,7 +295,34 @@ const menu_data = [
         ]
       },
 
-    ]
+    ],
+    // Special Offerings
+  special_offerings: [
+    { title: 'TRENDY CAPS', image: '/assets/img/navbar/accessories/accessory-1.png', link: '/shop/caps' },
+    { title: 'STYLISH BELTS', image: '/assets/img/navbar/accessories/accessory-2.png', link: '/shop/belts' },
+    { title: 'CLASSY WALLETS', image: '/assets/img/navbar/accessories/accessory-3.png', link: '/shop/wallets' }
+  ],
+
+  // Trending Collections
+  trending_collections: [
+    { title: 'PREMIUM BAGS', image: '/assets/img/navbar/accessories/accessory1.png', link: '/shop/premium-bags' },
+    { title: 'FORMAL TIES', image: '/assets/img/navbar/accessories/accessory2.png', link: '/shop/formal-ties' },
+    { title: 'URBAN HEADWEAR', image: '/assets/img/navbar/accessories/accessory3.png', link: '/shop/urban-headwear' }
+  ],
+
+  // Banner
+  banner: {
+    title: 'ACCESSORIES',
+    subtitle: 'STYLE THAT COMPLETES YOU',
+    discount: '25% OFF',
+    image: '/assets/img/navbar/accessories/accessories-banner.png',
+    contact: {
+      website: 'www.craftyart.com',
+      social: '@craftyaccessories',
+      phone: '111-222-333'
+    }
+  }
+
   },
   {
     id: 6,
