@@ -192,7 +192,7 @@ const menu_data = [
     title: 'WOMEN’S FASHION',
     subtitle: 'STYLE FOR EVERY OCCASION',
     discount: '40% OFF',
-    image: '/assets/img/navbar/men/men-banner.png',
+    image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
     contact: {
       website: 'www.craftyart.com',
       social: '@craftywomensite',
@@ -249,13 +249,13 @@ const menu_data = [
   banner: {
     title: 'KIDS FASHION',
     subtitle: 'TRENDY & COMFY FOR LITTLE ONES',
-    discount: '30% OFF',
-    image: '/assets/img/navbar/men/men-banner.png',
-    contact: {
-      website: 'www.craftyart.com',
-      social: '@craftykidssite',
-      phone: '555-123-456'
-    }
+    // discount: '30% OFF',
+    image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
+    // contact: {
+    //   website: 'www.craftyart.com',
+    //   social: '@craftykidssite',
+    //   phone: '555-123-456'
+    // }
   }
   },
   {
@@ -278,7 +278,7 @@ const menu_data = [
         title: 'Fashion Accessories',
         link: '/product-details',
         mega_menus: [
-          { title: 'Belts', link: '/shop' },
+          { title: 'Belts',  link: '/shop' },
           { title: 'Cufflinks & Brooches', link: '/shop' },
           { title: 'Wallets & Card Holders', link: '/shop' },
           { title: 'Ties & Bow Ties', link: '/shop' },
@@ -298,29 +298,29 @@ const menu_data = [
     ],
     // Special Offerings
   special_offerings: [
-    { title: 'TRENDY CAPS', image: '/assets/img/navbar/accessories/accessory-1.png', link: '/shop/caps' },
-    { title: 'STYLISH BELTS', image: '/assets/img/navbar/accessories/accessory-2.png', link: '/shop/belts' },
-    { title: 'CLASSY WALLETS', image: '/assets/img/navbar/accessories/accessory-3.png', link: '/shop/wallets' }
+    { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/caps' },
+    { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/belts' },
+    { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/wallets' }
   ],
 
   // Trending Collections
-  trending_collections: [
-    { title: 'PREMIUM BAGS', image: '/assets/img/navbar/accessories/accessory1.png', link: '/shop/premium-bags' },
-    { title: 'FORMAL TIES', image: '/assets/img/navbar/accessories/accessory2.png', link: '/shop/formal-ties' },
-    { title: 'URBAN HEADWEAR', image: '/assets/img/navbar/accessories/accessory3.png', link: '/shop/urban-headwear' }
-  ],
+  // trending_collections: [
+  //   { title: '', image: '/assets/img/navbar/accessories/accessory1.png', link: '/shop/premium-bags' },
+  //   { title: '', image: '/assets/img/navbar/accessories/accessory2.png', link: '/shop/formal-ties' },
+  //   { title: '', image: '/assets/img/navbar/accessories/accessory3.png', link: '/shop/urban-headwear' }
+  // ],
 
   // Banner
   banner: {
     title: 'ACCESSORIES',
     subtitle: 'STYLE THAT COMPLETES YOU',
     discount: '25% OFF',
-    image: '/assets/img/navbar/accessories/accessories-banner.png',
-    contact: {
-      website: 'www.craftyart.com',
-      social: '@craftyaccessories',
-      phone: '111-222-333'
-    }
+    image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
+    // contact: {
+    //   website: 'www.craftyart.com',
+    //   social: '@craftyaccessories',
+    //   phone: '111-222-333'
+    // }
   }
 
   },
@@ -337,8 +337,8 @@ const menu_data = [
       { title: 'Mens Grooming', link: '/blog-details-2' },
     ]
   },
- 
 ]
+
 
 export default menu_data;
 
