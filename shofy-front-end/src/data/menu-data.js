@@ -60,9 +60,9 @@ const menu_data = [
           { title: 'Full Sleeve Tshirts', link: '/shop' },
           { title: 'Checked Formal Shirts', link: 'shop' },
           { title: 'Floral Shirts', link: '/shop' },
-    ],
-  },
-  {
+        ],
+      },
+      {
         title: 'BOTTOM WEAR',
         link: '/shop',
         mega_menus: [
@@ -126,9 +126,9 @@ const menu_data = [
           { title: 'Full Sleeve Tshirts', link: '/shop' },
           { title: 'Checked Formal Shirts', link: 'shop' },
           { title: 'Floral Shirts', link: '/shop' },
-    ],
-  },
-  {
+        ],
+      },
+      {
         title: 'Bottom Wear',
         link: '/shop',
         mega_menus: [
@@ -175,30 +175,30 @@ const menu_data = [
       //   ]
       // },
     ],
-     // Special sections for Women layout
-  special_offerings: [
-    { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/summer-dresses' },
-    { title: '', image: '/assets/img/navbar/women/women-2.png', link: '/shop/casual-tops' },
-    { title: '', image: '/assets/img/navbar/women/women-2.png', link: '/shop/work-wear' }
-  ],
+    // Special sections for Women layout
+    special_offerings: [
+      { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/summer-dresses' },
+      { title: '', image: '/assets/img/navbar/women/women-2.png', link: '/shop/casual-tops' },
+      { title: '', image: '/assets/img/navbar/women/women-2.png', link: '/shop/work-wear' }
+    ],
 
-  trending_collections: [
-    { title: '', image: '/assets/img/navbar/women/women1.png', link: '/shop/evening-gowns' },
-    { title: '', image: '/assets/img/navbar/women/women2.png', link: '/shop/festive' },
-    { title: '', image: '/assets/img/navbar/women/women2.png', link: '/shop/active' }
-  ],
+    trending_collections: [
+      { title: '', image: '/assets/img/navbar/women/women1.png', link: '/shop/evening-gowns' },
+      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/shop/festive' },
+      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/shop/active' }
+    ],
 
-  banner: {
-    title: 'WOMEN’S FASHION',
-    subtitle: 'STYLE FOR EVERY OCCASION',
-    discount: '40% OFF',
-    image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
-    contact: {
-      website: 'www.craftyart.com',
-      social: '@craftywomensite',
-      phone: '987-654-321'
+    banner: {
+      title: 'WOMEN’S FASHION',
+      subtitle: 'STYLE FOR EVERY OCCASION',
+      discount: '40% OFF',
+      image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
+      contact: {
+        website: 'www.craftyart.com',
+        social: '@craftywomensite',
+        phone: '987-654-321'
+      }
     }
-  }
   },
   {
     id: 4,
@@ -228,35 +228,35 @@ const menu_data = [
           { title: 'Jeans & Leggings', link: '/shop' },
           { title: 'Sweatshirts & Hoodies', link: 'shop' },
           { title: 'Ethnic Wear (Lehenga, Kurti)', link: '/shop' },
+        ],
+      },
     ],
-  },
-  ],
 
-  special_offerings: [
-    { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/summer-dresses' },
-    { title: '', image: '/assets/img/navbar/women/women-2.png', link: '/shop/casual-tops' },
-    { title: '', image: '/assets/img/navbar/women/women-2.png', link: '/shop/work-wear' }
-  ],
+    special_offerings: [
+      { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/summer-dresses' },
+      { title: '', image: '/assets/img/navbar/women/women-2.png', link: '/shop/casual-tops' },
+      { title: '', image: '/assets/img/navbar/women/women-2.png', link: '/shop/work-wear' }
+    ],
 
-  // Trending Collections
-  trending_collections: [
-    { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/winter' },
-    { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/summer' },
-    { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/sportswear' }
-  ],
+    // Trending Collections
+    trending_collections: [
+      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/winter' },
+      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/summer' },
+      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/sportswear' }
+    ],
 
-  // Banner
-  banner: {
-    title: 'KIDS FASHION',
-    subtitle: 'TRENDY & COMFY FOR LITTLE ONES',
-    // discount: '30% OFF',
-    image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
-    // contact: {
-    //   website: 'www.craftyart.com',
-    //   social: '@craftykidssite',
-    //   phone: '555-123-456'
-    // }
-  }
+    // Banner
+    banner: {
+      title: 'KIDS FASHION',
+      subtitle: 'TRENDY & COMFY FOR LITTLE ONES',
+      // discount: '30% OFF',
+      image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
+      // contact: {
+      //   website: 'www.craftyart.com',
+      //   social: '@craftykidssite',
+      //   phone: '555-123-456'
+      // }
+    }
   },
   {
     id: 5,
@@ -278,13 +278,14 @@ const menu_data = [
         title: 'Fashion Accessories',
         link: '/product-details',
         mega_menus: [
-          { title: 'Belts',  link: '/shop' },
+          { title: 'Belts', link: '/shop' },
           { title: 'Cufflinks & Brooches', link: '/shop' },
           { title: 'Wallets & Card Holders', link: '/shop' },
           { title: 'Ties & Bow Ties', link: '/shop' },
-    ],
-  },
-  {
+          { title: 'Socks', link: '/shop' },
+        ],
+      },
+      {
         title: 'Bags & Carriers',
         link: '/shop',
         mega_menus: [
@@ -297,46 +298,115 @@ const menu_data = [
 
     ],
     // Special Offerings
-  special_offerings: [
-    { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/caps' },
-    { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/belts' },
-    { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/wallets' }
-  ],
+    special_offerings: [
+      { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/caps' },
+      { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/belts' },
+      { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/wallets' }
+    ],
 
-  // Trending Collections
-  // trending_collections: [
-  //   { title: '', image: '/assets/img/navbar/accessories/accessory1.png', link: '/shop/premium-bags' },
-  //   { title: '', image: '/assets/img/navbar/accessories/accessory2.png', link: '/shop/formal-ties' },
-  //   { title: '', image: '/assets/img/navbar/accessories/accessory3.png', link: '/shop/urban-headwear' }
-  // ],
+    // Trending Collections
+    trending_collections: [
+      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/winter' },
+      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/summer' },
+      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/sportswear' }
+    ],
 
-  // Banner
-  banner: {
-    title: 'ACCESSORIES',
-    subtitle: 'STYLE THAT COMPLETES YOU',
-    discount: '25% OFF',
-    image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
-    // contact: {
-    //   website: 'www.craftyart.com',
-    //   social: '@craftyaccessories',
-    //   phone: '111-222-333'
-    // }
-  }
+    // Banner
+    banner: {
+      title: 'ACCESSORIES',
+      subtitle: 'STYLE THAT COMPLETES YOU',
+      discount: '25% OFF',
+      image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
+      // contact: {
+      //   website: 'www.craftyart.com',
+      //   social: '@craftyaccessories',
+      //   phone: '111-222-333'
+      // }
+    }
 
   },
   {
     id: 6,
-    sub_menu: true,
+    products: true,
+    // sub_menu: true,
     title: 'Cosmetic',
-    link: '/blog',
-    sub_menus: [
-      { title: 'Skincare ', link: '/blog' },
-      { title: 'Hair Care', link: '/blog-grid' },
-      { title: 'Fragrances', link: '/blog-list' },
-      { title: 'Body Care', link: '/blog-details' },
-      { title: 'Mens Grooming', link: '/blog-details-2' },
-    ]
-  },
+    link: '/shop',
+    product_pages: [
+      {
+        title: 'Skincare',
+        link: '/shop',
+        mega_menus: [
+          { title: 'Primer', link: '/shop-category/cleansers' },
+          { title: 'Sunscreen', link: '/shop-category/toners' },
+          { title: 'Moisturizers', link: '/shop-category/moisturizers' },
+          { title: 'Day Cream', link: '/shop-category/serums' },
+          { title: 'Night Cream', link: '/shop-category/face-masks' },
+          { title: 'Face Wash/Cleanser', link: '/shop-category/eye-creams' },
+          { title: 'Face Mask', link: '/shop-category/sunscreens' },
+          { title: 'Sheet Mask', link: '/shop-category/sunscreens' },
+          { title: 'Face Pack', link: '/shop-category/sunscreens' },
+          { title: 'Lip Balm', link: '/shop-category/sunscreens' },
+          { title: 'Wet Tissue', link: '/shop-category/sunscreens' },
+          { title: 'Makeup Remover', link: '/shop-category/sunscreens' },
+        ]
+      },
+      {
+        title: 'Color Cosmetic',
+        link: '/shop',
+        mega_menus: [
+          { title: 'Concealer/Foundation', link: '/shop-category/foundations' },
+          { title: 'Compact', link: '/shop-category/concealers' },
+          { title: 'Face Powder', link: '/shop-category/blush-bronzer' },
+          { title: 'Blush', link: '/shop-category/highlighters' },
+          { title: 'Highlighter', link: '/shop-category/eyeshadows' },
+          { title: 'Contour', link: '/shop-category/lipsticks' },
+          { title: 'Bronzer', link: '/shop-category/mascaras' },
+          { title: 'Eye Shadow', link: '/shop-category/mascaras' },
+          { title: 'Eyeliner', link: '/shop-category/mascaras' },
+          { title: 'Kajal', link: '/shop-category/mascaras' },
+          { title: 'Mascara', link: '/shop-category/mascaras' },
+          { title: 'Eyebrow Pencil', link: '/shop-category/mascaras' },
+          { title: 'Lipstick/Lip Color', link: '/shop-category/mascaras' },
+          { title: 'Lip Liner', link: '/shop-category/mascaras' },
+          { title: 'Nail Polish', link: '/shop-category/mascaras' },
+          { title: 'Nail Paint Remover', link: '/shop-category/mascaras' },
+          { title: 'Bindi', link: '/shop-category/mascaras' },
+          { title: 'Sindur', link: '/shop-category/mascaras' },
+          { title: 'Perfume', link: '/shop-category/mascaras' },
+        ]
+      }
+    ],
+
+    // special offering
+    special_offerings: [
+      { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/caps' },
+      { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/belts' },
+      { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/wallets' }
+    ],
+
+
+    // Trending Collections
+    trending_collections: [
+      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/winter' },
+      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/summer' },
+      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/sportswear' }
+    ],
+
+    // Banner
+    banner: {
+      title: 'ACCESSORIES',
+      subtitle: 'STYLE THAT COMPLETES YOU',
+      link: '/cosmetic',
+      // discount: '25% OFF',
+      image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
+      // contact: {
+      //   website: 'www.craftyart.com',
+      //   social: '@craftyaccessories',
+      //   phone: '111-222-333'
+      // }
+    }
+  }
+
 ]
 
 
@@ -398,22 +468,17 @@ export const mobile_menu = [
   //   link: '/coupon',
   // },
   {
-    id: 5,
+    id: 6,
     sub_menu: true,
     title: 'Cosmetic',
-    link: '/blog',
+    link: '/cosmetic',
     sub_menus: [
-      { title: 'Skincare', link: '/blog' },
-      { title: 'Hair Care', link: '/blog-grid' },
-      { title: 'Fragrances', link: '/blog-list' },
-      { title: 'Body Care', link: '/blog-details' },
-      { title: 'Mens Grooming', link: '/blog-details-2' },
-      // { title: 'Blog Details', link: '/blog-details' },
-      // { title: 'Blog Details Full Width', link: '/blog-details-2' },
+      { title: 'Skincare', link: '/shop' },
+      { title: 'Color cosmetic', link: '/blog-grid' },
     ]
   },
   {
-    id: 6,
+    id: 7,
     single_link: true,
     title: 'Contact',
     link: '/contact',

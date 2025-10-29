@@ -39,7 +39,7 @@ const BestSellerProducts = () => {
   }
   return (
     <>
-      <section className="tp-seller-area pb-140 bg-white">
+      <section className="tp-seller-area pt-60 pb-140 bg-white">
         <div className="container text-center">
           <div className="row">
             <div className="col-xl-12">

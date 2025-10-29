@@ -1,5 +1,6 @@
 import React from "react";
 // import bg from '@assets/img/breadcrumb/breadcrumb-bg-1.jpg';
+import bg from '@assets/img/footer/footer-pay-2.png';
 
 const BlogBreadcrumb = () => {
   return (

@@ -3,8 +3,18 @@ import React from "react";
 import menu_data from "@/data/menu-data";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const Menus = () => {
+
+  const router = useRouter()
+
+  const handleMenuItemClick = (menu) => {
+    if(menu?.link){
+      router.push(menu.link)
+    }
+  }
+
   return (
     <ul>
       {menu_data.map((menu) => {
@@ -38,19 +48,21 @@ const Menus = () => {
 
                     {/* Banner Image (aligned right inside left section) */}
                     {menu.banner && (
-                      <div className="jockey-banner-right">
+                        <div className="jockey-banner-right">
                         <div className="jockey-banner-container">
                           <div className="jockey-banner-image">
-                            <Image
+                          <button onClick={() => handleMenuItemClick(menu)}>
+                              <Image
                               src={menu.banner.image}
                               alt={menu.banner.title}
                               width={400}
                               height={600}
                               className="banner-img"
                             />
+                          </button>
                           </div>
                         </div>
-                      </div>
+                      </div>                      
                     )}
                   </div>
 

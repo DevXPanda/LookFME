@@ -121,6 +121,7 @@ const HeaderTopRight = () => {
       <Language active={active} handleActive={handleActive} />
       <Currency active={active} handleActive={handleActive} />
       <ProfileSetting active={active} handleActive={handleActive} />
+      <span>Bulk Order</span>
     </div>
   );
 };
