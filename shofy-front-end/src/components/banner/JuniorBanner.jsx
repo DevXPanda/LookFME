@@ -13,7 +13,7 @@ const JuniorBanner = () => {
           style={{ cursor: "pointer" }}
         >
           <Image
-            src="/assets/img/juniorBanner/Kids_Banner_Home.webp"
+            src="/assets/img/juniorBanner/juniorbanner.png"
             alt="Junior Banner"
             width={1500}
             height={500}
