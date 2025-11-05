@@ -32,7 +32,7 @@
 //     if (scrollContainerRef.current) {
 //       const container = scrollContainerRef.current;
 //       const scrollAmount = 300; // Scroll by 300px each time
-      
+
 //       if (direction === 'left') {
 //         container.scrollLeft -= scrollAmount;
 //       } else {
@@ -56,16 +56,16 @@
 //   if (!isLoading && !isError && categories?.result?.length > 0) {
 //     const category_items = categories.result;
 //     content = category_items.map((item) => (
-//       <div 
-//         key={item._id} 
+//       <div
+//         key={item._id}
 //         className="category-scroll-item"
-//         style={{ 
+//         style={{
 //           flexShrink: 0,
 //           width: '224px',
 //           margin: '0 10px'
 //         }}
 //       >
-//         <div 
+//         <div
 //           className="tp-banner-item-2 p-relative z-index-1 grey-bg-2 mb-20 fix"
 //           style={{
 //             borderRadius: '8px',
@@ -77,7 +77,7 @@
 //         >
 //           <div
 //             className="tp-banner-thumb-2 include-bg transition-3"
-//             style={{ 
+//             style={{
 //               backgroundImage: `url(${item.img})`,
 //               height: '200px',
 //               backgroundSize: 'cover',
@@ -139,7 +139,7 @@
 //             <div className="col-xl-12">
 //               <div className="tp-category-slider-2 p-relative">
 //                 {/* Left Navigation Arrow - Overlaid */}
-//                 <button 
+//                 <button
 //                   className="tp-category-slider-button-prev-overlay"
 //                   onClick={() => handleScroll('left')}
 //                   style={{
@@ -173,7 +173,7 @@
 //                 </button>
 
 //                 {/* Right Navigation Arrow - Overlaid */}
-//                 <button 
+//                 <button
 //                   className="tp-category-slider-button-next-overlay"
 //                   onClick={() => handleScroll('right')}
 //                   style={{
@@ -207,9 +207,9 @@
 //                 </button>
 
 //                 {/* Scrollable Categories Container */}
-//                 <div 
+//                 <div
 //                   ref={scrollContainerRef}
-//                   className="categories-scroll-container" 
+//                   className="categories-scroll-container"
 //                   style={{
 //                     overflowX: 'auto',
 //                     overflowY: 'hidden',
@@ -245,15 +245,14 @@
 //         `}</style>
 //       </section>
 //       {/* Highlight images row */}
-        
+
 //     </>
 //   );
 // };
 
 // export default FashionCategory;
 
-
-'use client';
+"use client";
 import React, { useRef } from "react";
 import { useRouter } from "next/navigation";
 // internal
@@ -287,7 +286,7 @@ const FashionCategory = () => {
     if (scrollContainerRef.current) {
       const container = scrollContainerRef.current;
       const scrollAmount = 300; // Scroll by 300px each time
-      if (direction === 'left') {
+      if (direction === "left") {
         container.scrollLeft -= scrollAmount;
       } else {
         container.scrollLeft += scrollAmount;
@@ -314,44 +313,44 @@ const FashionCategory = () => {
         className="category-scroll-item"
         style={{
           flexShrink: 0,
-          width: '240px',
-          height: '340px',
-          margin: '0 8px',
-          borderRadius: '18px',
-          overflow: 'hidden',
-          boxShadow: '0 4px 16px rgba(0,0,0,0.10)',
-          position: 'relative',
+          width: "240px",
+          height: "340px",
+          margin: "0 8px",
+          borderRadius: "18px",
+          overflow: "hidden",
+          boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
+          position: "relative",
           backgroundImage: `url(${item.img})`,
-          backgroundPosition: 'center',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-end',
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
         }}
       >
         <div
           style={{
-            width: '100%',
-            background: 'none',
-            padding: '18px 12px 16px 12px',
-            boxSizing: 'border-box',
-            borderBottomLeftRadius: '18px',
-            borderBottomRightRadius: '18px',
-            textAlign: 'center',
+            width: "100%",
+            background: "none",
+            padding: "18px 12px 16px 12px",
+            boxSizing: "border-box",
+            borderBottomLeftRadius: "18px",
+            borderBottomRightRadius: "18px",
+            textAlign: "center",
           }}
         >
           <h3
             style={{
               fontWeight: 700,
-              fontSize: '18px',
-              color: '#222',
+              fontSize: "18px",
+              color: "#222",
               margin: 0,
-              marginBottom: '10px',
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px',
-              background: 'none',
-              display: 'block',
+              marginBottom: "10px",
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+              background: "none",
+              display: "block",
               padding: 0,
             }}
           >
@@ -359,9 +358,9 @@ const FashionCategory = () => {
               className="cursor-pointer"
               onClick={() => handleCategoryRoute(item.parent)}
               style={{
-                textDecoration: 'none',
-                color: '#222',
-                background: 'none',
+                textDecoration: "none",
+                color: "#222",
+                background: "none",
                 padding: 0,
               }}
             >
@@ -372,16 +371,19 @@ const FashionCategory = () => {
             className="tp-btn tp-btn-border"
             onClick={() => handleCategoryRoute(item.parent)}
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 'auto',
-              paddingLeft: '22px',
-              paddingRight: '22px',
-              marginTop: '10px',
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "auto",
+              paddingLeft: "22px",
+              paddingRight: "22px",
+              marginTop: "10px",
             }}
           >
-            Shop Now <span style={{marginLeft: 6}}><ArrowRightLong /></span>
+            Shop Now{" "}
+            <span style={{ marginLeft: 6 }}>
+              <ArrowRightLong />
+            </span>
           </a>
         </div>
       </div>
@@ -406,93 +408,93 @@ const FashionCategory = () => {
             <div className="col-xl-12">
               <div className="tp-category-slider-2 p-relative">
                 {/* Left Navigation Arrow - Overlaid */}
-                {/* <button
+                <button
                   className="tp-category-slider-button-prev-overlay"
-                  onClick={() => handleScroll('left')}
+                  onClick={() => handleScroll("left")}
                   style={{
-                    position: 'absolute',
-                    left: '20px',
-                    top: '130px',
-                    width: '50px',
-                    height: '50px',
-                    borderRadius: '50%',
-                    border: 'none',
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    color: '#BE5985',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
+                    position: "absolute",
+                    left: "20px",
+                    top: "130px",
+                    width: "50px",
+                    height: "50px",
+                    borderRadius: "50%",
+                    border: "none",
+                    backgroundColor: "rgba(255, 255, 255, 0.9)",
+                    color: "#BE5985",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
                     zIndex: 10,
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 1)';
-                    e.target.style.transform = 'scale(1.1)';
+                    e.target.style.backgroundColor = "rgba(255, 255, 255, 1)";
+                    e.target.style.transform = "scale(1.1)";
                   }}
                   onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                    e.target.style.transform = 'scale(1)';
+                    e.target.style.backgroundColor = "rgba(255, 255, 255, 0.9)";
+                    e.target.style.transform = "scale(1)";
                   }}
                 >
                   <PrevLongArr />
-                </button> */}
+                </button>
 
                 {/* Right Navigation Arrow - Overlaid */}
-                {/* <button
+                <button
                   className="tp-category-slider-button-next-overlay"
-                  onClick={() => handleScroll('right')}
+                  onClick={() => handleScroll("right")}
                   style={{
-                    position: 'absolute',
-                    right: '20px',
-                    top: '130px',
-                    width: '50px',
-                    height: '50px',
-                    borderRadius: '50%',
-                    border: 'none',
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    color: '#BE5985',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
+                    position: "absolute",
+                    right: "20px",
+                    top: "130px",
+                    width: "50px",
+                    height: "50px",
+                    borderRadius: "50%",
+                    border: "none",
+                    backgroundColor: "rgba(255, 255, 255, 0.9)",
+                    color: "#BE5985",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
                     zIndex: 10,
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 1)';
-                    e.target.style.transform = 'scale(1.1)';
+                    e.target.style.backgroundColor = "rgba(255, 255, 255, 1)";
+                    e.target.style.transform = "scale(1.1)";
                   }}
                   onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                    e.target.style.transform = 'scale(1)';
+                    e.target.style.backgroundColor = "rgba(255, 255, 255, 0.9)";
+                    e.target.style.transform = "scale(1)";
                   }}
                 >
                   <NextLongArr />
-                </button> */}
+                </button>
 
                 {/* Scrollable Categories Container */}
                 <div
                   ref={scrollContainerRef}
                   className="categories-scroll-container"
                   style={{
-                    overflowX: 'auto',
-                    overflowY: 'hidden',
-                    whiteSpace: 'nowrap',
-                    padding: '0 15px',
-                    scrollbarWidth: 'none',
-                    msOverflowStyle: 'none',
+                    overflowX: "auto",
+                    overflowY: "hidden",
+                    whiteSpace: "nowrap",
+                    padding: "0 15px",
+                    scrollbarWidth: "none",
+                    msOverflowStyle: "none",
                   }}
                 >
                   <div
                     className="categories-scroll-wrapper"
                     style={{
-                      display: 'inline-flex',
-                      gap: '12px',
-                      padding: '0 12px',
-                      minWidth: '100%',
+                      display: "inline-flex",
+                      gap: "12px",
+                      padding: "0 12px",
+                      minWidth: "100%",
                     }}
                   >
                     {content}
@@ -512,6 +514,14 @@ const FashionCategory = () => {
             transform: scale(1.02);
             transition: transform 0.3s ease;
           }
+
+            /* Hide navigation arrows on mobile screens */
+          @media (max-width: 767px) {
+            .tp-category-slider-button-prev-overlay,
+            .tp-category-slider-button-next-overlay {
+            display: none !important;
+           }
+         }
         `}</style>
       </section>
     </>
