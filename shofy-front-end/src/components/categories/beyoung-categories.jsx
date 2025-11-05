@@ -8,11 +8,11 @@ const BeyoungCategories = () => {
 
   // BEYOUNG categories data - ready for admin panel updates
   const categories = [
-    {
-      id: 1,
-      name: "SHIRTS",
-      description: "SHIRTS"
-    },
+      {
+        id: 1,
+        name: "SHIRTS",
+        description: "SHIRTS"
+      },
     {
       id: 2,
       name: "TROUSERS",
@@ -104,7 +104,7 @@ const BeyoungCategories = () => {
               padding: '0 20px',
               minWidth: '100%'
             }}>
-              {categories.map((category) => (
+              {categories?.map((category) => (
                 <div 
                   key={category.id} 
                   className="category-scroll-item"

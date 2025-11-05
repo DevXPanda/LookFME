@@ -406,7 +406,7 @@ const FashionCategory = () => {
             <div className="col-xl-12">
               <div className="tp-category-slider-2 p-relative">
                 {/* Left Navigation Arrow - Overlaid */}
-                <button
+                {/* <button
                   className="tp-category-slider-button-prev-overlay"
                   onClick={() => handleScroll('left')}
                   style={{
@@ -437,10 +437,10 @@ const FashionCategory = () => {
                   }}
                 >
                   <PrevLongArr />
-                </button>
+                </button> */}
 
                 {/* Right Navigation Arrow - Overlaid */}
-                <button
+                {/* <button
                   className="tp-category-slider-button-next-overlay"
                   onClick={() => handleScroll('right')}
                   style={{
@@ -471,7 +471,7 @@ const FashionCategory = () => {
                   }}
                 >
                   <NextLongArr />
-                </button>
+                </button> */}
 
                 {/* Scrollable Categories Container */}
                 <div
