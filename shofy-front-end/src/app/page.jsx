@@ -56,6 +56,9 @@ import InstagramAreaTwo from '@/components/instagram/instagram-area-2';
 import Footer from '@/layout/footers/footer';
 import FashionCategory from "@/components/categories/fashion-category";
 import JuniorBanner from "@/components/banner/JuniorBanner";
+import AdBanner from '@/components/banner/ad-Banner';
+import SuperSavingCombos from "@/components/categories/superSavingCombos";
+import AutoSlider from "@/components/autoslider/autoslider";
 
 export const metadata = {
   title: 'LookFame',
@@ -68,9 +71,12 @@ export default function HomePageTwo() {
       <HeaderTwo/>
       <FashionBanner/>
       <FashionCategory/>
+      <SuperSavingCombos/>
+       <AdBanner />
       {/* <BeyoungCategories/> */}
       <PopularProducts/>
-      <CouponBanner/>
+      <AutoSlider/>
+      {/* <CouponBanner/> */}
       <ProductArea/>
       <WeeksFeatured/>
       <TrendingProducts/>

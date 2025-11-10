@@ -91,19 +91,19 @@ const ProductArea = () => {
   }
 
   return (
-    <section className="tp-product-area pb-50 bg-white">
+    <section className="tp-product-area bg-white">
       <div className="container">
         <div className="row">
           <div className="col-xl-12">
             <div className="tp-section-title-wrapper-2 text-center mb-30">
-              <span className="tp-section-title-pre-2">
+              <span className="tp-section-title-pre-2 pt-40">
                 All Product Shop
                 <TextShapeLine />
               </span>
               <h3 className="tp-section-title-2">Customer Favorite Style Product</h3>
             </div>
           </div>
-        </div>
+        </div>  
 
         {content}
 

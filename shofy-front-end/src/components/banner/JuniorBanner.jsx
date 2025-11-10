@@ -1,27 +1,38 @@
 "use client";
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 
 const JuniorBanner = () => {
   return (
-    <section className="junior-banner-area">
-      <div className="container">
-        <Link
-          href="/junior"
-          className="d-block position-relative rounded-4 overflow-hidden shadow-sm"
-          style={{ cursor: "pointer" }}
-        >
-          <Image
+    <section
+      className="junior-banner-area"
+      style={{
+        marginLeft: "calc(50% - 50vw)",
+        marginRight: "calc(50% - 50vw)",
+        width: "100vw",
+      }}
+    >
+      <Link
+        href="/junior"
+        className="d-block position-relative rounded-4 overflow-hidden shadow-sm"
+        style={{ cursor: "pointer", display: "block" }}
+      >
+        <div style={{ position: "relative", width: "100%", height: "auto" }}>
+          <img
             src="/assets/img/juniorBanner/juniorbanner.png"
             alt="Junior Banner"
-            width={1500}
-            height={500}
-            className="w-100 rounded-4"
+            fill
             priority
+            sizes="100vw"
+            style={{
+              objectFit: "cover",
+              width: "100%",
+              height: "auto",
+            }}
           />
-        </Link>
-      </div>
+        </div>
+      </Link>
     </section>
   );
 };

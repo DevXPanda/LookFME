@@ -345,7 +345,7 @@ const PopularProducts = () => {
         }
       `}</style>
 
-      <section className="tp-category-area pb-95">
+      <section className="tp-category-area">
         <div className="container">
           <div className="tp-section-title-wrapper-2 text-center mb-50">
             <span className="tp-section-title-pre-2">

@@ -63,7 +63,10 @@ const HeaderTwo = ({ style_2 = false }) => {
                   <div className="col-xl-2 col-lg-5 col-md-5 col-sm-4 col-6">
                     <div className="logo">
                       <Link href="/">
-                        <Image src={logo} alt="logo" priority />
+                        <Image src={logo} alt="logo" priority className="h-10 w-auto" />
+                      </Link>
+                      <Link href="/" className="text-2xl font-bold text-black">
+                        LookFame
                       </Link>
                     </div>
                   </div>
