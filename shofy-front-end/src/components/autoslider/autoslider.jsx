@@ -1,34 +1,33 @@
 "use client";
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useMemo } from "react";
 
 const AutoSlider = () => {
   const scrollContainerRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Image list
-  const images = [
-    "/assets/img/autoslider/360_F_120368458_jM1rSc1O5k58W6KM4aaexJnVpTaD768g.jpg",
-    "/assets/img/autoslider/Mens_collection-D_6efd9307-7897-4732-818a-bf75ee012da1.webp",
-    "/assets/img/autoslider/Types_of_Fashion_Styles_2_1920x.webp",
-  ];
+  // ✅ Memoized image list
+  const images = useMemo(
+    () => [
+      "/assets/img/autoslider/360_F_120368458_jM1rSc1O5k58W6KM4aaexJnVpTaD768g.jpg",
+      "/assets/img/autoslider/Mens_collection-D_6efd9307-7897-4732-818a-bf75ee012da1.webp",
+      "/assets/img/autoslider/Types_of_Fashion_Styles_2_1920x.webp",
+    ],
+    []
+  );
 
-  // Infinite auto-scroll (loop + pause on hover)
+  // ✅ Auto slide
   useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-    const total = images.length;
-    const intervalTime = 4000; // 4 seconds per slide
-
     if (isHovered) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % total);
-    }, intervalTime);
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, 4000);
+
     return () => clearInterval(interval);
   }, [isHovered, images.length]);
 
-  // Sync scroll position with current index
+  // ✅ Scroll to active image
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
@@ -39,7 +38,7 @@ const AutoSlider = () => {
     });
   }, [currentIndex]);
 
-  // Update index on user scroll (e.g., swipe)
+  // ✅ Detect manual scroll
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
@@ -48,27 +47,25 @@ const AutoSlider = () => {
       const newIndex = Math.round(
         container.scrollLeft / container.offsetWidth
       );
-      setCurrentIndex((prev) => (prev === newIndex ? prev : newIndex));
+      if (newIndex !== currentIndex) setCurrentIndex(newIndex);
     };
 
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [currentIndex]);
 
-  const handleIndicatorClick = (index) => {
-    setCurrentIndex(index);
-  };
-
-  // Keep slide aligned on resize and enable proper width calculations
+  // ✅ Keep alignment on resize
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
+
     const handleResize = () => {
       container.scrollTo({
         left: currentIndex * container.offsetWidth,
         behavior: "auto",
       });
     };
+
     window.addEventListener("resize", handleResize);
     handleResize();
     return () => window.removeEventListener("resize", handleResize);
@@ -80,9 +77,8 @@ const AutoSlider = () => {
       style={{
         position: "relative",
         overflow: "hidden",
-        marginLeft: "calc(50% - 50vw)",
-        marginRight: "calc(50% - 50vw)",
-        width: "100vw",
+        width: "100%",
+        margin: "0 auto",
       }}
     >
       {/* Slider container */}
@@ -112,14 +108,12 @@ const AutoSlider = () => {
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
               scrollSnapAlign: "start",
-              transition: "transform 0.5s ease",
-              cursor: "pointer",
             }}
           />
         ))}
       </div>
 
-      {/* Bottom Indicators */}
+      {/* Indicators */}
       <div
         style={{
           position: "absolute",
@@ -134,7 +128,7 @@ const AutoSlider = () => {
         {images.map((_, index) => (
           <button
             key={index}
-            onClick={() => handleIndicatorClick(index)}
+            onClick={() => setCurrentIndex(index)}
             aria-label={`Go to slide ${index + 1}`}
             style={{
               width: currentIndex === index ? "28px" : "14px",
@@ -158,9 +152,8 @@ const AutoSlider = () => {
 
       <style jsx>{`
         @media (max-width: 767px) {
-          .tp-category-slider-button-prev-overlay,
-          .tp-category-slider-button-next-overlay {
-            display: none !important;
+          .categories-scroll-container {
+            height: 240px;
           }
         }
         .categories-scroll-container {

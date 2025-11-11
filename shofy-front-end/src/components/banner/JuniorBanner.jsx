@@ -1,37 +1,69 @@
 "use client";
-import React from "react";
-import Link from "next/link";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const JuniorBanner = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  // ✅ Detect device width on mount and resize
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize(); // initial check
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <section
       className="junior-banner-area"
       style={{
-        marginLeft: "calc(50% - 50vw)",
-        marginRight: "calc(50% - 50vw)",
-        width: "100vw",
+        width: "100%",
+        overflow: "hidden",
       }}
     >
       <Link
         href="/junior"
-        className="d-block position-relative rounded-4 overflow-hidden shadow-sm"
-        style={{ cursor: "pointer", display: "block" }}
+        className="block relative"
+        style={{
+          cursor: "pointer",
+          display: "block",
+          width: "100%",
+          height: "auto",
+        }}
       >
-        <div style={{ position: "relative", width: "100%", height: "auto" }}>
-          <img
-            src="/assets/img/juniorBanner/juniorbanner.png"
-            alt="Junior Banner"
-            fill
+        {/* ✅ Conditional rendering: only one image visible */}
+        {isMobile ? (
+          <Image
+            src="/assets/img/juniorBanner/banner.jpg"
+            alt="Junior Banner Mobile"
+            width={800}
+            height={300}
             priority
-            sizes="100vw"
+            className="junior-banner-img"
             style={{
-              objectFit: "cover",
               width: "100%",
-              height: "auto",
+              height: "160px", // 🔧 mobile height adjustable
+              objectFit: "cover",
+              objectPosition: "center",
             }}
           />
-        </div>
+        ) : (
+          <Image
+            src="/assets/img/juniorBanner/juniorbanner.png"
+            alt="Junior Banner Desktop"
+            width={1920}
+            height={540}
+            priority
+            className="junior-banner-img"
+            style={{
+              width: "100%",
+              height: "500px", 
+              objectFit: "cover",
+              objectPosition: "center",
+            }}
+          />
+        )}
       </Link>
     </section>
   );

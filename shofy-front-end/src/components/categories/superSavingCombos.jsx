@@ -135,7 +135,7 @@ const SuperSavingCombos = () => {
                     minWidth: "100%",
                   }}
                 >
-                  {images?.map((img, index) => (
+                  {images.map((img, index) => (
                     <div
                       key={index}
                       className="category-scroll-item cursor-pointer"
