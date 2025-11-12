@@ -106,7 +106,7 @@ const TrendingProducts = () => {
       className="tp-trending-area bg-white"
       style={{
         width: "100%",
-        overflowX: "hidden", // ✅ prevents horizontal scroll
+        overflowX: "hidden",
         padding: "80px 0 100px",
       }}
     >
@@ -128,7 +128,7 @@ const TrendingProducts = () => {
             display: flex;
             justify-content: center;
             gap: 12px;
-            flex-wrap: wrap;
+            flex-wrap: wrap; /* desktop: wrap */
             margin-top: 24px;
             margin-bottom: 8px;
           }
@@ -142,12 +142,28 @@ const TrendingProducts = () => {
             font-size: 16px;
             line-height: 1;
             transition: all 200ms ease;
+            white-space: nowrap;
+            flex-shrink: 0;
           }
           .filter-btn--active {
             background: #000000;
             color: #ffff00;
             border-color: #000000;
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+          }
+
+          @media (max-width: 768px) {
+            .filter-pills {
+              overflow-x: auto;
+              flex-wrap: nowrap; /* no wrap */
+              justify-content: flex-start;
+              padding: 0 16px;
+              -webkit-overflow-scrolling: touch;
+            }
+            /* Optional: hide scroll bar */
+            .filter-pills::-webkit-scrollbar {
+              display: none;
+            }
           }
         `}</style>
 

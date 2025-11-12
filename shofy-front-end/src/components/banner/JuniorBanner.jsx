@@ -6,10 +6,9 @@ import Link from "next/link";
 const JuniorBanner = () => {
   const [isMobile, setIsMobile] = useState(false);
 
-  // ✅ Detect device width on mount and resize
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    handleResize(); // initial check
+    handleResize(); 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -32,7 +31,7 @@ const JuniorBanner = () => {
           height: "auto",
         }}
       >
-        {/* ✅ Conditional rendering: only one image visible */}
+        {/* Conditional rendering: only one image visible */}
         {isMobile ? (
           <Image
             src="/assets/img/juniorBanner/banner.jpg"
@@ -43,7 +42,7 @@ const JuniorBanner = () => {
             className="junior-banner-img"
             style={{
               width: "100%",
-              height: "160px", // 🔧 mobile height adjustable
+              height: "160px",
               objectFit: "cover",
               objectPosition: "center",
             }}
