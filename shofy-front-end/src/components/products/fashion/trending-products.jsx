@@ -5,7 +5,13 @@ import ProductItem from "./product-item";
 import ErrorMsg from "@/components/common/error-msg";
 import { HomeTwoNewPrdPrdLoader } from "@/components/loader";
 
-const baseCategories = ["View All", "Shirts", "Trousers", "T-shirts", "Polo T-shirts"];
+const baseCategories = [
+  "View All",
+  "Shirts",
+  "Trousers",
+  "T-shirts",
+  "Polo T-shirts",
+];
 
 const categoryLimits = {
   Shirts: 4,
@@ -18,14 +24,19 @@ const matchesCategory = (productCategory = "", target = "") => {
   const cat = productCategory.toLowerCase();
   const tar = target.toLowerCase();
   if (tar === "shirts") return cat.includes("shirt");
-  if (tar === "trousers") return cat.includes("trouser") || cat.includes("pant");
+  if (tar === "trousers")
+    return cat.includes("trouser") || cat.includes("pant");
   if (tar === "t-shirts") return cat.includes("t-shirt") || cat.includes("tee");
   if (tar === "polo t-shirts") return cat.includes("polo");
   return cat.includes(tar);
 };
 
 const TrendingProducts = () => {
-  const { data: products, isError, isLoading } = useGetProductTypeQuery({
+  const {
+    data: products,
+    isError,
+    isLoading,
+  } = useGetProductTypeQuery({
     type: "fashion",
     query: `new=true`,
   });
@@ -37,7 +48,10 @@ const TrendingProducts = () => {
     if (!products?.data) return;
     const dynamicSet = new Set(baseCategories);
     products.data.forEach((item) => {
-      if (typeof item.category === "string" && item.category.trim().length > 0) {
+      if (
+        typeof item.category === "string" &&
+        item.category.trim().length > 0
+      ) {
         dynamicSet.add(item.category.trim());
       }
     });
@@ -118,9 +132,12 @@ const TrendingProducts = () => {
           padding: "0 16px",
         }}
       >
-        <h2 className="text-4xl font-bold tracking-wide uppercase">
-          New Arrivals
-        </h2>
+        <h2
+          className="text-4xl tracking-wide"
+          style={{ fontFamily: "var(--tp-ff-poppins)" }}
+        >
+           New Arrivals
+          </h2>
         <p className="text-gray-500 mt-3">Get them before everyone else does</p>
 
         <style>{`
@@ -146,16 +163,16 @@ const TrendingProducts = () => {
             flex-shrink: 0;
           }
           .filter-btn--active {
-            background: #000000;
-            color: #ffff00;
-            border-color: #000000;
+            background: #FF8FB7;
+            color: white;
+            border-color: #FF8FB7;
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
           }
 
           @media (max-width: 768px) {
             .filter-pills {
               overflow-x: auto;
-              flex-wrap: nowrap; /* no wrap */
+              flex-wrap: nowrap; 
               justify-content: flex-start;
               padding: 0 16px;
               -webkit-overflow-scrolling: touch;

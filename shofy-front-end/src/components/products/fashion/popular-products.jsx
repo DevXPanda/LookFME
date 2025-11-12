@@ -192,7 +192,7 @@ const PopularProducts = () => {
               Shop by Popular
               <TextShapeLine />
             </span>
-            <h3 className="tp-section-title-2">Popular on LookFame.</h3>
+            <h3 className="tp-section-title-2">Popular on LookFame</h3>
           </div>
 
           <div className="tp-popular-slider-wrapper">

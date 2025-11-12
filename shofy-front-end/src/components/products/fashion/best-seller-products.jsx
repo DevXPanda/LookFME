@@ -44,11 +44,11 @@ const BestSellerProducts = () => {
           <div className="row">
             <div className="col-xl-12">
               <div className="tp-section-title-wrapper-2 mb-50">
-                <span className="tp-section-title-pre-2">
+                <span className="tp-section-title-pre-2 ">
                   Best Seller This{" Week's"}
                   <TextShapeLine />
                 </span>
-                <h3 className="tp-section-title-2">This {"Week's"} Featured</h3>
+                <h3 className="tp-section-title-2 ">This {"Week's"} Featured</h3>
               </div>
             </div>
           </div>
