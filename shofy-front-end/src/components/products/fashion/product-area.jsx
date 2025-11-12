@@ -19,7 +19,7 @@ const ProductArea = () => {
 
   const handleActiveTab = (tab) => setActiveTab(tab);
 
-  // Slider settings
+  // Slider settings (updated mobile view)
   const slider_setting = {
     slidesPerView: 5,
     spaceBetween: 20,
@@ -35,8 +35,8 @@ const ProductArea = () => {
       1200: { slidesPerView: 5 },
       992: { slidesPerView: 4 },
       768: { slidesPerView: 3 },
-      576: { slidesPerView: 2 },
-      0: { slidesPerView: 1 },
+      576: { slidesPerView: 2 }, // ✅ mobile will now show 2 per view
+      0: { slidesPerView: 2 },   // ✅ ensures even smallest screen shows 2 per view
     },
   };
 
@@ -46,14 +46,18 @@ const ProductArea = () => {
 
   if (isLoading) content = <HomeTwoPrdLoader loading={isLoading} />;
   else if (!isLoading && isError) content = <ErrorMsg msg="There was an error" />;
-  else if (!isLoading && !isError && products?.data?.length === 0) content = <ErrorMsg msg="No Products found!" />;
+  else if (!isLoading && !isError && products?.data?.length === 0)
+    content = <ErrorMsg msg="No Products found!" />;
   else if (!isLoading && !isError && products?.data?.length > 0) {
     let product_items = products.data;
 
     // Filter products based on active tab
-    if (activeTab === 'Tshirts') product_items = products.data.filter(p => p.category.name === 'Tshirts');
-    else if (activeTab === 'OverSized Tshirts') product_items = products.data.filter(p => p.category.name === 'OverSized Tshirts');
-    else if (activeTab === 'Trousers') product_items = products.data.filter(p => p.category.name === 'Trousers');
+    if (activeTab === 'Tshirts')
+      product_items = products.data.filter(p => p.category.name === 'Tshirts');
+    else if (activeTab === 'OverSized Tshirts')
+      product_items = products.data.filter(p => p.category.name === 'OverSized Tshirts');
+    else if (activeTab === 'Trousers')
+      product_items = products.data.filter(p => p.category.name === 'Trousers');
 
     // Duplicate products for "All Collection" if less than 5
     if (activeTab === 'All Collection' && product_items.length > 0 && product_items.length < 5) {
@@ -65,33 +69,31 @@ const ProductArea = () => {
 
     // Tabs navigation
     content = (
-      <>
-        <div className="row justify-center m-50">
-          <div className="col-xl-12">
-            <div className="tp-product-tab-2 tp-tab mb-50 text-center">
-              <nav>
-                <div className="nav nav-tabs justify-content-center">
-                  {tabs.map((tab, i) => (
-                    <button
-                      key={i}
-                      onClick={() => handleActiveTab(tab)}
-                      className={`nav-link text-capitalize ${activeTab === tab ? "active" : ""}`}
-                    >
-                      {tab.split("-").join(" ")}
-                      <span className="tp-product-tab-tooltip">{product_items.length}</span>
-                    </button>
-                  ))}
-                </div>
-              </nav>
-            </div>
+      <div className="row justify-center m-50">
+        <div className="col-xl-12">
+          <div className="tp-product-tab-2 tp-tab mb-50 text-center">
+            <nav>
+              <div className="nav nav-tabs justify-content-center">
+                {tabs.map((tab, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleActiveTab(tab)}
+                    className={`nav-link text-capitalize ${activeTab === tab ? "active" : ""}`}
+                  >
+                    {tab.split("-").join(" ")}
+                    <span className="tp-product-tab-tooltip">{product_items.length}</span>
+                  </button>
+                ))}
+              </div>
+            </nav>
           </div>
         </div>
-      </>
+      </div>
     );
   }
 
   return (
-    <section className="tp-product-area bg-white">
+    <section className="tp-product-area pb-50 bg-white">
       <div className="container">
         <div className="row">
           <div className="col-xl-12">
@@ -103,22 +105,40 @@ const ProductArea = () => {
               <h3 className="tp-section-title-2">Customer Favorite Style Product</h3>
             </div>
           </div>
-        </div>  
+        </div>
 
         {content}
 
-        {/* Render Swiper only if display_items has products */}
+        {/* Swiper only if products exist */}
         {display_items.length > 0 && (
-          <Swiper {...slider_setting} modules={[Scrollbar]} className="tp-category-slider-active-2 swiper-container mb-50">
-            {display_items.map((prd) => (
-              <SwiperSlide key={prd._id}>
-                <div className="popular-product-slide">
-                  <ProductItem product={prd} />
-                </div>
-              </SwiperSlide>
-            ))}
-            <div className="swiper-scrollbar tp-swiper-scrollbar tp-swiper-scrollbar-drag"></div>
-          </Swiper>
+          <>
+            <style>{`
+              /* Adjust slides on mobile for proper spacing */
+              @media (max-width: 768px) {
+                .popular-product-slide {
+                  padding: 0 6px;
+                }
+                .tp-category-slider-active-2 {
+                  padding: 0 4px;
+                }
+              }
+            `}</style>
+
+            <Swiper
+              {...slider_setting}
+              modules={[Scrollbar]}
+              className="tp-category-slider-active-2 swiper-container mb-50"
+            >
+              {display_items.map((prd) => (
+                <SwiperSlide key={prd._id}>
+                  <div className="popular-product-slide">
+                    <ProductItem product={prd} />
+                  </div>
+                </SwiperSlide>
+              ))}
+              <div className="swiper-scrollbar tp-swiper-scrollbar tp-swiper-scrollbar-drag"></div>
+            </Swiper>
+          </>
         )}
       </div>
     </section>
