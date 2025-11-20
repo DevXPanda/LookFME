@@ -9,28 +9,6 @@ const menu_data = [
     homes: true,
     title: 'Home',
     link: '/',
-    // home_pages: [
-    //   {
-    //     img: home_1,
-    //     title: 'Electronics',
-    //     link: '/'
-    //   },
-    //   {
-    //     img: home_2,
-    //     title: 'Fashion',
-    //     link: '/home-2'
-    //   },
-    //   {
-    //     img: home_3,
-    //     title: 'Beauty',
-    //     link: '/home-3'
-    //   },
-    //   {
-    //     img: home_4,
-    //     title: 'Jewelry',
-    //     link: '/home-4'
-    //   }
-    // ]
   },
   {
     id: 2,
@@ -42,9 +20,9 @@ const menu_data = [
         title: 'TSHIRTS',
         link: '/shop',
         mega_menus: [
-          { title: 'Plain T-shirts', link: '/shop-category' },
+          { title: 'Plain T-shirts', link: '/shop' },
           { title: 'Printed T-shirts', link: '/shop' },
-          { title: 'Regular Fit T-shirt', link: '/product-details' },
+          { title: 'Regular Fit T-shirt', link: '/shop' },
           { title: 'Polo T-shirts', link: '/shop' },
           { title: 'Full Sleeve Tshirts', link: '/shop' },
           { title: 'OverSized Tshirts', link: 'shop' },
@@ -66,9 +44,9 @@ const menu_data = [
         title: 'BOTTOM WEAR',
         link: '/shop',
         mega_menus: [
-          { title: 'Cargo Joggers', link: '/shop-category' },
+          { title: 'Cargo Joggers', link: '/shop' },
           { title: 'Cargo Pants', link: '/shop' },
-          { title: 'Trousers', link: '/product-details' },
+          { title: 'Trousers', link: '/shop' },
           { title: 'Jeans', link: '/shop' },
           { title: 'Boxers', link: '/shop' },
           { title: 'Shorts', link: 'shop' },
@@ -108,9 +86,9 @@ const menu_data = [
         title: 'Tshirts',
         link: '/shop',
         mega_menus: [
-          { title: 'Plain T-shirts', link: '/shop-category' },
+          { title: 'Plain T-shirts', link: '/shop' },
           { title: 'Printed T-shirts', link: '/shop' },
-          { title: 'Regular Fit T-shirt', link: '/product-details' },
+          { title: 'Regular Fit T-shirt', link: '/shop' },
           { title: 'Polo T-shirts', link: '/shop' },
           { title: 'Full Sleeve Tshirts', link: '/shop' },
           { title: 'OverSized Tshirts', link: 'shop' },
@@ -132,9 +110,9 @@ const menu_data = [
         title: 'Bottom Wear',
         link: '/shop',
         mega_menus: [
-          { title: 'Cargo Joggers', link: '/shop-category' },
+          { title: 'Cargo Joggers', link: '/shop' },
           { title: 'Cargo Pants', link: '/shop' },
-          { title: 'Trousers', link: '/product-details' },
+          { title: 'Trousers', link: '/shop' },
           { title: 'Jeans', link: '/shop' },
           { title: 'Boxers', link: '/shop' },
           { title: 'Shorts', link: 'shop' },
@@ -144,36 +122,14 @@ const menu_data = [
         title: 'Athleisure Mode',
         link: '/shop',
         mega_menus: [
-          { title: 'Track Pants', link: '/shop-category' },
+          { title: 'Track Pants', link: '/shop' },
           { title: 'Track Suits', link: '/shop' },
-          { title: 'Joggers', link: '/product-details' },
+          { title: 'Joggers', link: '/shop' },
           { title: 'Sweatshirts', link: '/shop' },
           { title: 'Yoga Pants', link: '/shop' },
           { title: 'Zip-Up Jackets ', link: 'shop' },
         ]
       },
-
-      // {
-      //   title: 'Women',
-      //   link: '/shop',
-      //   mega_menus: [
-      //     { title: 'Shopping Cart', link: '/cart' },
-      //     { title: 'Compare', link: '/compare' },
-      //     { title: 'Wishlist', link: '/wishlist' },
-      //     { title: 'Checkout', link: '/checkout' },
-      //     { title: 'My account', link: '/profile' },
-      //   ]
-      // },
-      // {
-      //   title: 'More Pages',
-      //   link: '/shop',
-      //   mega_menus: [
-      //     { title: 'Login', link: '/login' },
-      //     { title: 'Register', link: '/register' },
-      //     { title: 'Forgot Password', link: '/forgot' },
-      //     { title: '404 Error', link: '/404' },
-      //   ]
-      // },
     ],
     // Special sections for Women layout
     special_offerings: [
@@ -204,15 +160,15 @@ const menu_data = [
     id: 4,
     products: true,
     title: 'Junior',
-    link: '/junior',
+    link: '/shop',
     product_pages: [
       {
         title: 'Boys',
         link: '/shop',
         mega_menus: [
-          { title: 'T-shirts', link: '/shop-category' },
+          { title: 'T-shirts', link: '/shop' },
           { title: 'Shirts', link: '/shop' },
-          { title: 'Jeans & Trousers', link: '/product-details' },
+          { title: 'Jeans & Trousers', link: '/shop' },
           { title: 'Sweatshirts & Hoodies', link: '/shop' },
           { title: 'Ethnic Wear (Kurta, Sherwani)', link: '/shop' },
           { title: 'Shorts', link: 'shop' },
@@ -249,13 +205,8 @@ const menu_data = [
     banner: {
       title: 'KIDS FASHION',
       subtitle: 'TRENDY & COMFY FOR LITTLE ONES',
-      // discount: '30% OFF',
       image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
-      // contact: {
-      //   website: 'www.craftyart.com',
-      //   social: '@craftykidssite',
-      //   phone: '555-123-456'
-      // }
+     
     }
   },
   {
@@ -268,9 +219,9 @@ const menu_data = [
         title: 'Headwear',
         link: '/shop',
         mega_menus: [
-          { title: 'Caps & Hats', link: '/shop-category' },
+          { title: 'Caps & Hats', link: '/shop' },
           { title: 'Bandanas', link: '/shop' },
-          { title: 'Regular Fit T-shirt', link: '/product-details' },
+          { title: 'Regular Fit T-shirt', link: '/shop' },
           { title: 'Headbands', link: '/shop' },
         ]
       },
@@ -289,9 +240,9 @@ const menu_data = [
         title: 'Bags & Carriers',
         link: '/shop',
         mega_menus: [
-          { title: 'Backpacks', link: '/shop-category' },
+          { title: 'Backpacks', link: '/shop' },
           { title: 'Sling Bags', link: '/shop' },
-          { title: 'Laptop Bags', link: '/product-details' },
+          { title: 'Laptop Bags', link: '/shop' },
           { title: 'Tote Bags', link: '/shop' },
         ]
       },
@@ -317,11 +268,6 @@ const menu_data = [
       subtitle: 'STYLE THAT COMPLETES YOU',
       discount: '25% OFF',
       image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
-      // contact: {
-      //   website: 'www.craftyart.com',
-      //   social: '@craftyaccessories',
-      //   phone: '111-222-333'
-      // }
     }
 
   },
@@ -336,18 +282,18 @@ const menu_data = [
         title: 'Skincare',
         link: '/shop',
         mega_menus: [
-          { title: 'Primer', link: '/shop-category/cleansers' },
-          { title: 'Sunscreen', link: '/shop-category/toners' },
-          { title: 'Moisturizers', link: '/shop-category/moisturizers' },
-          { title: 'Day Cream', link: '/shop-category/serums' },
-          { title: 'Night Cream', link: '/shop-category/face-masks' },
-          { title: 'Face Wash/Cleanser', link: '/shop-category/eye-creams' },
-          { title: 'Face Mask', link: '/shop-category/sunscreens' },
-          { title: 'Sheet Mask', link: '/shop-category/sunscreens' },
-          { title: 'Face Pack', link: '/shop-category/sunscreens' },
-          { title: 'Lip Balm', link: '/shop-category/sunscreens' },
-          { title: 'Wet Tissue', link: '/shop-category/sunscreens' },
-          { title: 'Makeup Remover', link: '/shop-category/sunscreens' },
+          { title: 'Primer', link: '/shop' },
+          { title: 'Sunscreen', link: '/shop' },
+          { title: 'Moisturizers', link: '/shop' },
+          { title: 'Day Cream', link: '/shop' },
+          { title: 'Night Cream', link: '/shop' },
+          { title: 'Face Wash/Cleanser', link: '/shop' },
+          { title: 'Face Mask', link: '/shop' },
+          { title: 'Sheet Mask', link: '/shop' },
+          { title: 'Face Pack', link: '/shoP' },
+          { title: 'Lip Balm', link: '/shop' },
+          { title: 'Wet Tissue', link: '/shop' },
+          { title: 'Makeup Remover', link: '/shop' },
         ]
       },
       {
@@ -397,13 +343,7 @@ const menu_data = [
       title: 'ACCESSORIES',
       subtitle: 'STYLE THAT COMPLETES YOU',
       link: '/cosmetic',
-      // discount: '25% OFF',
       image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
-      // contact: {
-      //   website: 'www.craftyart.com',
-      //   social: '@craftyaccessories',
-      //   phone: '111-222-333'
-      // }
     }
   }
 

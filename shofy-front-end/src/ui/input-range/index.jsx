@@ -20,7 +20,7 @@ const InputRange = ({ STEP, MIN, MAX, values, handleChanges }) => {
               width: '100%',
               background: getTrackBackground({
                 values: values,
-                colors: ["#EDEDED", "#0989FF", "#EDEDED"],
+                colors: ["#EDEDED", "#F875AA", "#EDEDED"],
                 min: MIN,
                 max: MAX
               }),
@@ -38,7 +38,7 @@ const InputRange = ({ STEP, MIN, MAX, values, handleChanges }) => {
               height: '17px',
               width: '5px',
               backgroundColor: '#0989FF',
-              backgroundColor: isDragged ? "#0989FF" : "#0989FF"
+              backgroundColor: isDragged ? "#F875AA" : "#F875AA"
             }}
           />
         )}
