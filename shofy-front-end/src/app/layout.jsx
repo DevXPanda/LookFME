@@ -10,13 +10,10 @@ export const metadata = {
   title: 'LookFame',
   description: 'LookFame – Discover, shop, and stay in style with the latest fashion trends online.',
   icons: {
-    icon: '/favicon.svg', // or '/favicon.png' if you use PNG
+    icon: '/favicon.svg', 
   },
 }
 
-
-console.log("Providers:", Providers);
-console.log("ToastContainer:", ToastContainer);
 
 
 const body = Jost({

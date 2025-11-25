@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { Heart, ChevronRight } from "lucide-react";
-import Image from "next/image";
 import payment_option_img from '@assets/img/product/icons/payment-option.png';
 
 
@@ -298,7 +297,7 @@ const ComboDetailsArea = () => {
               <p>
                 Guaranteed safe <br /> & secure checkout
               </p>
-              <Image src={payment_option_img} alt="payment_option_img" />
+              <img src={payment_option_img} alt="payment_option_img" />
             </div>
           </div>
         </div>

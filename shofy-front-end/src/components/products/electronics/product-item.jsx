@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Rating } from "react-simple-star-rating";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
+import '@/styles/rating-fix.css';
 // internal
 import { Cart, QuickView, Wishlist } from "@/svg";
 import Timer from "@/components/common/timer";

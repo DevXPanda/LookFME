@@ -2,6 +2,8 @@ import React from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
+import '@/styles/rating-fix.css';
+import '@/styles/action-btn-center.css';
 // internal
 import { AddCart, Cart, QuickView, Wishlist } from "@/svg";
 import { handleProductModal } from "@/redux/features/productModalSlice";

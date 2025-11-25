@@ -52,7 +52,7 @@ const HeaderTwo = ({ style_2 = false }) => {
                         7500k Followers
                       </a>
                     </div>
-                    <div className="tp-header-info-item">
+                    <div className="tp-header-info-item flex">
                       <a href="tel:402-763-282-46">
                         <span>
                           <PhoneTwo />
@@ -80,8 +80,8 @@ const HeaderTwo = ({ style_2 = false }) => {
             <div className="container">
               <div className="tp-mega-menu-wrapper p-relative">
                 <div className="row align-items-center">
-                  <div className="col-xl-2 col-lg-5 col-md-5 col-sm-4 col-6">
-                    <div className="logo">
+                  <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6">
+                    <div className="logo d-flex align-items-center">
                       <Link href="/">
                         <Image
                           src={logo}
@@ -90,7 +90,7 @@ const HeaderTwo = ({ style_2 = false }) => {
                           className="h-10 w-auto"
                         />
                       </Link>
-                      <Link href="/" className="text-2xl font-bold text-black">
+                      <Link href="/" className="text-2xl font-bold text-black d-none d-md-inline-block ms-3">
                         LookFame
                       </Link>
                     </div>
@@ -102,7 +102,7 @@ const HeaderTwo = ({ style_2 = false }) => {
                       </nav>
                     </div>
                   </div>
-                  <div className="col-xl-4 col-lg-7 col-md-7 col-sm-8 col-6">
+                  <div className="col-xl-4 col-lg-6 col-md-4 col-sm-6 col-6">
                     <div className="tp-header-bottom-right d-flex align-items-center justify-content-end pl-30">
                       <div className="tp-header-search-2 d-none d-sm-block">
                         <form onSubmit={handleSubmit}>
