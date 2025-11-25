@@ -30,7 +30,8 @@ const SuperSavingCombos = () => {
 
   // Navigate to shop page
   const handleCategoryRoute = () => {
-    router.push(`/shop?category=super-saving-combos`);
+    // router.push(`/shop?category=super-saving-combos`);
+    router.push(`/combo-details`);
   };
 
   // Handle button scroll
