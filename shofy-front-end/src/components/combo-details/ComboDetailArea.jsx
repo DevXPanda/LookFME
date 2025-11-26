@@ -2,8 +2,6 @@
 
 import React, { useState } from "react";
 import { Heart, ChevronRight } from "lucide-react";
-import payment_option_img from '@assets/img/product/icons/payment-option.png';
-
 
 const ComboDetailsArea = () => {
   const [selectedColor1, setSelectedColor1] = useState("");
@@ -71,7 +69,10 @@ const ComboDetailsArea = () => {
             <h1 className="text-xl md:text-4xl  text-gray-900 leading-tight font-[var(--tp-ff-roboto)]">
               Pick Any 3 - Plain T-shirt Combo 3.0
             </h1>
-            <p>This is comabo tshirt, in this combo you can choose any three color of tshirt with diffrent color and diffrent size.</p>
+            <p>
+              This is comabo tshirt, in this combo you can choose any three
+              color of tshirt with diffrent color and diffrent size.
+            </p>
 
             {/* Pricing */}
             <div>
@@ -297,7 +298,10 @@ const ComboDetailsArea = () => {
               <p>
                 Guaranteed safe <br /> & secure checkout
               </p>
-              <img src={payment_option_img} alt="payment_option_img" />
+              <img
+                src="/assets/img/product/icons/payment-option.png"
+                alt="payment_option_img"
+              />
             </div>
           </div>
         </div>

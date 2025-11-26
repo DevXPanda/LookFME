@@ -8,5 +8,8 @@ module.exports = {
   theme: {
     extend: {},
   },
+  corePlugins: {
+    preflight: false,   //stop conflict between Tailwind and Bootstrap
+  },
   plugins: [],
 }
