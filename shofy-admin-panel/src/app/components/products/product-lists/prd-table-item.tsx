@@ -33,7 +33,7 @@ const ProductTableItem = ({ product }: { product: IProduct }) => {
         {quantity}
       </td>
       <td className="px-3 py-3 font-normal text-[#55585B] text-end">
-        ${price}
+        ₹{price}
       </td>
       <td className="px-3 py-3 font-normal text-heading text-end">
         <div className="flex justify-end items-center space-x-1 text-tiny">

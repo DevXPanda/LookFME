@@ -86,7 +86,7 @@ const InvoicePrint = ({ orderData }: IPropType) => {
                       Subtotal
                     </td>
                     <td className="px-3 py-3 pt-6 font-normal text-[#55585B] text-end">
-                      ${total.toFixed(2)}
+                      ₹{total.toFixed(2)}
                     </td>
                   </tr>
                   <tr className="bg-white border-b border-gray6 last:border-0 text-start mx-9">
@@ -94,7 +94,7 @@ const InvoicePrint = ({ orderData }: IPropType) => {
                       Shipping cost:
                     </td>
                     <td className="px-3 py-3 font-normal text-[#55585B] text-end">
-                      ${orderData.shippingCost.toFixed(2)}
+                      ₹{orderData.shippingCost.toFixed(2)}
                     </td>
                   </tr>
                   <tr className="bg-white border-b border-gray6 last:border-0 text-start mx-9">
@@ -102,7 +102,7 @@ const InvoicePrint = ({ orderData }: IPropType) => {
                       Grand total:
                     </td>
                     <td className="px-3 py-3 text-[#55585B] text-end text-lg font-semibold">
-                      ${grand_total.toFixed(2)}
+                      ₹{grand_total.toFixed(2)}
                     </td>
                   </tr>
                 </tbody>

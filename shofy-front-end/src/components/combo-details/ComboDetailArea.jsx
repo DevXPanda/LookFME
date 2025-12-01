@@ -311,6 +311,7 @@ const ComboDetailsArea = () => {
                 />
               </div>
             </div>
+            
           </div>
         </div>
 
