@@ -29,9 +29,13 @@ const SuperSavingCombos = () => {
   ].map(name => `/assets/img/supersaving/${name}`);
 
   // Navigate to shop page
-  const handleCategoryRoute = () => {
-    // router.push(`/shop?category=super-saving-combos`);
-    router.push(`/combo-details`);
+  // const handleCategoryRoute = () => {
+  //   // router.push(`/shop?category=super-saving-combos`);
+  //   router.push(`/combo-details`);
+  // };
+
+    const handleImageClick = (img) => {
+    router.push(`/combo-details?image=${encodeURIComponent(img)}`);
   };
 
   // Handle button scroll
@@ -139,6 +143,7 @@ const SuperSavingCombos = () => {
                   {images.map((img, index) => (
                     <div
                       key={index}
+                      src= {img}
                       className="category-scroll-item cursor-pointer"
                       style={{
                         flexShrink: 0,
@@ -153,10 +158,7 @@ const SuperSavingCombos = () => {
                         backgroundColor: "#f0f0f0",
                         transition: "transform 0.3s ease",
                       }}
-                      onClick={() => {
-                        if (hasMoved) return;
-                        handleCategoryRoute();
-                      }}
+                     onClick={() => handleImageClick(img)}
                     />
                   ))}
                 </div>

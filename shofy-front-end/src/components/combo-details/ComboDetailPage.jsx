@@ -6,8 +6,9 @@ import { CompareTwo } from "@/svg";
 import Wishlist from "@/svg/wishlist";
 import RelatedComboProduct from "./RelatedComboProduct";
 import ColorDropdown from "./Colordropdown";
+import { useSearchParams } from "next/navigation";
 
-const ComboDetailsArea = () => {
+const ComboDetailsPage = () => {
   const [selectedColor1, setSelectedColor1] = useState("");
   const [selectedSize1, setSelectedSize1] = useState("");
   const [selectedColor2, setSelectedColor2] = useState("");
@@ -16,6 +17,9 @@ const ComboDetailsArea = () => {
   const [selectedSize3, setSelectedSize3] = useState("");
 
   const [activeTab, setActiveTab] = useState("description");
+
+  const searchParams = useSearchParams();
+  const mainImage = searchParams?.get("image") || "/placeholder.jpg"; //This image is not images on assests
 
   const tabStyle = (tab) =>
     `px-6 py-3 text-xl font-medium cursor-pointer 
@@ -51,7 +55,7 @@ const ComboDetailsArea = () => {
             <div className="space-y-4 lg:sticky lg:top-4 lg:self-start">
               <div className="bg-white rounded-2xl overflow-hidden relative shadow-xl group">
                 <img
-                  src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop"
+                  src={mainImage || "/placeholder.jpg"}
                   alt="T-shirts collection"
                   className="w-full h-auto transform group-hover:scale-105 transition-transform duration-500"
                 />
@@ -114,7 +118,7 @@ const ComboDetailsArea = () => {
                 </div>
 
                 {/* Combo 1 */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold mb-2 text-gray-700">
                       Color 1
@@ -145,18 +149,16 @@ const ComboDetailsArea = () => {
                           key={size}
                           className="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-[#F875AA] transition-colors"
                           value={size}
-                          
                         >
                           {size}
                         </option>
                       ))}
-                     
                     </select>
                   </div>
                 </div>
 
                 {/* Combo 2 */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold mb-2 text-gray-700">
                       Color 2
@@ -191,7 +193,7 @@ const ComboDetailsArea = () => {
                 </div>
 
                 {/* Combo 3 */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold mb-2 text-gray-700">
                       Color 3
@@ -311,7 +313,6 @@ const ComboDetailsArea = () => {
                 />
               </div>
             </div>
-            
           </div>
         </div>
 
@@ -390,4 +391,4 @@ const ComboDetailsArea = () => {
   );
 };
 
-export default ComboDetailsArea;
+export default ComboDetailsPage;
