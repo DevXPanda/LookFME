@@ -9,7 +9,7 @@ export default function PrivacyPolicy() {
       <HeaderTwo style_2={true} />
       <div className="container mx-auto px-4 py-8 max-w-3xl">
         <h2 className="text-3xl font-bold mb-6">Shipping Policy</h2>
-        <p className="text-sm text-gray-500 mb-8">Last Updated: August 23, 2025</p>
+        <p className="text-sm text-gray-500 mb-8">Last Updated: Decenber 3, 2025</p>
 
         <section className="mb-6">
           <h6 className="text-xl font-semibold mb-2">Processing Time</h6>
@@ -56,7 +56,7 @@ export default function PrivacyPolicy() {
             LookFame is not liable for products damaged or lost during shipping.
             If your package is damaged, please contact the shipping carrier directly.
             For lost packages, contact us at{" "}
-            <a href="mailto:support@lookfamef.com" className="text-blue-600 underline">
+            <a href="mailto:support@lookfamef.com" className="text-[#F875AA] font-bold underline">
               support@lookfamef.com
             </a>{" "}
             with your order ID.
@@ -66,8 +66,8 @@ export default function PrivacyPolicy() {
         <section className="mb-6">
           <h6 className="text-xl font-semibold mb-2"> Returns & Exchanges</h6>
           <p>
-            Please refer to our <a href="/return-policy" className="text-blue-600 underline">Return Policy</a> 
-            for details on returning or exchanging items.
+            Please refer to our <a href="/return-policy" className="text-[#F875AA] font-bold underline">Return Policy </a> 
+             for details on returning or exchanging items.
           </p>
         </section>
 
@@ -75,7 +75,7 @@ export default function PrivacyPolicy() {
           <h6 className="text-xl font-semibold mb-2"> Contact Us</h6>
           <p>
             If you have any questions about this Shipping Policy, reach us at{" "}
-            <a href="mailto:support@lookfamef.com" className="text-blue-600 underline">
+            <a href="mailto:support@lookfamef.com" className="text-[#F875AA] font-bold underline">
               support@lookfame.com
             </a>.
           </p>

@@ -103,7 +103,7 @@ export default function TermsAndConditions() {
 
         <p className="mt-8">
           If you have any questions, comments, or requests regarding our Terms of Service or the website, please contact us at{" "}
-          <a href="mailto:support@lookfame.com" className="text-blue-600 underline">support@lookfame.com</a>.
+          <a href="mailto:support@lookfame.com" className="text-[#F875AA] font-bold underline">support@lookfame.com</a>.
         </p>
       </div>
       <Footer />

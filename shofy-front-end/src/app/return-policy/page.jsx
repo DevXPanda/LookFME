@@ -9,7 +9,7 @@ export default function PrivacyPolicy() {
       <HeaderTwo style_2={true} />
       <div className="container mx-auto px-4 py-8 max-w-3xl">
         <h2 className="text-3xl font-bold mb-6">Return & Refund Policy</h2>
-        <p className="text-sm text-gray-500 mb-8">Last Updated: August 23, 2025</p>
+        <p className="text-sm text-gray-500 mb-8">Last Updated: December 3, 2025</p>
 
         <section className="mb-6">
           <h6 className="text-xl font-semibold mb-2">Eligibility for Returns</h6>
@@ -34,7 +34,7 @@ export default function PrivacyPolicy() {
           <h6 className="text-xl font-semibold mb-2"> Return Process</h6>
           <p>
             To initiate a return, contact us at{" "}
-            <a href="mailto:support@lookfamef.com" className="text-blue-600 underline">
+            <a href="mailto:support@lookfamef.com" className="text-[#F875AA] font-bold underline">
               support@lookfamef.com
             </a>{" "}
             with your order ID and reason for return. Our team will guide you through the steps.
@@ -62,7 +62,7 @@ export default function PrivacyPolicy() {
           <p>
             We only replace items if they are defective or damaged. If you need an exchange for the
             same item, email us at{" "}
-            <a href="mailto:support@lookfamef.com" className="text-blue-600 underline">
+            <a href="mailto:support@lookfamef.com" className="text-[#F875AA] font-bold underline">
               support@lookfamef.com
             </a>.
           </p>
@@ -72,7 +72,7 @@ export default function PrivacyPolicy() {
           <h6 className="text-xl font-semibold mb-2">Contact Us</h6>
           <p>
             For more information about our Return & Refund Policy, reach us at{" "}
-            <a href="mailto:support@lookfamef.com" className="text-blue-600 underline">
+            <a href="mailto:support@lookfamef.com" className="text-[#F875AA] font-bold underline">
               support@lookfame.com
             </a>.
           </p>

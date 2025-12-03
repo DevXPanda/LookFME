@@ -302,6 +302,7 @@ const handleDecrement = (e) => {
                 <div className="flex items-center gap-4">
                   {/* Quantity */}
                   <div className="flex items-center justify-between bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 w-32 select-none">
+                    
                     <button 
                     className="text-gray-500 font-bold text-xl"
                     onClick={handleDecrement}
@@ -315,6 +316,7 @@ const handleDecrement = (e) => {
                     >
                       +
                     </button>
+
                   </div>
 
                   {/* Add to Cart Button */}

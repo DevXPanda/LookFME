@@ -42,7 +42,7 @@ const Career = () => {
           <p className="text-gray-600 max-w-2xl">
             If you’re interested in joining Lookfame, send your resume and
             portfolio (if applicable) to{" "}
-            <span className="font-semibold">careers@lookfame.com</span>.  
+            <span className="text-[#F875AA] font-semibold">careers@lookfame.com</span>.  
             We’ll get in touch with you if your profile matches an open role.
           </p>
         </div>
