@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 import { CompareTwo } from "@/svg";
 import Wishlist from "@/svg/wishlist";
 import RelatedComboProduct from "./RelatedComboProduct";
 import ColorDropdown from "./Colordropdown";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 
-const ComboDetailsPage = () => {
+const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
   const [selectedColor1, setSelectedColor1] = useState("");
   const [selectedSize1, setSelectedSize1] = useState("");
   const [selectedColor2, setSelectedColor2] = useState("");
@@ -16,10 +16,10 @@ const ComboDetailsPage = () => {
   const [selectedColor3, setSelectedColor3] = useState("");
   const [selectedSize3, setSelectedSize3] = useState("");
 
+  const [quantity, setQuantity ] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
 
-  const searchParams = useSearchParams();
-  const mainImage = searchParams?.get("image") || "/placeholder.jpg"; //This image is not images on assests
+  const [mainImageState, setMainImageState] = useState(mainImage);
 
   const tabStyle = (tab) =>
     `px-6 py-3 text-xl font-medium cursor-pointer 
@@ -28,6 +28,10 @@ const ComboDetailsPage = () => {
        ? "border-pink-500 text-pink-600"
        : "border-transparent text-gray-500 hover:text-gray-700"
    }`;
+
+  useEffect(() => {
+    setMainImageState(mainImage);
+  }, [mainImage]);
 
   const colors = [
     "Charcoal Grey",
@@ -44,6 +48,17 @@ const ComboDetailsPage = () => {
     "Navy Blue",
   ];
 
+const handleIncrement = (e) => {
+   e.preventDefault()
+   setQuantity(prev => prev + 1 )
+};
+
+const handleDecrement = (e) => {
+  e.preventDefault()
+  setQuantity(prev => (prev > 1 ? prev - 1 : 1))
+};
+
+
   const sizes = ["S", "M", "L", "XL", "XXL"];
 
   return (
@@ -53,28 +68,52 @@ const ComboDetailsPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             {/* Product Images */}
             <div className="space-y-4 lg:sticky lg:top-4 lg:self-start">
+              {/* Main Image */}
               <div className="bg-white rounded-2xl overflow-hidden relative shadow-xl group">
                 <img
-                  src={mainImage || "/placeholder.jpg"}
+                  src={mainImageState || "/placeholder.jpg"}
                   alt="T-shirts collection"
                   className="w-full h-auto transform group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
 
-              {/* Thumbnail Images */}
-              <div className="grid grid-cols-4 gap-3">
-                {[1, 2, 3, 4].map((i) => (
-                  <div
-                    key={i}
-                    className="bg-white rounded-xl overflow-hidden border-2 border-gray-200 cursor-pointer hover:border-yellow-400 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
-                  >
-                    <img
-                      src={`https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=200&h=200&fit=crop&q=${i}`}
-                      alt={`Thumbnail ${i}`}
-                      className="w-full h-auto"
-                    />
-                  </div>
-                ))}
+              {/* Thumbnails Section */}
+              <div className="mt-4">
+                {/* Desktop & Tablet Grid */}
+                <div className="hidden sm:grid grid-cols-3 md:grid-cols-4 gap-3">
+                  {thumbnails.length > 0 ? (
+                    thumbnails.map((thumb, idx) => (
+                      <div
+                        key={idx}
+                        onClick={() => setMainImageState(thumb)}
+                        className="bg-white rounded-xl overflow-hidden 
+          border-2 border-gray-200 cursor-pointer 
+          hover:border-yellow-400 hover:shadow-lg 
+          transition-all duration-300 transform hover:-translate-y-1"
+                      >
+                        <img src={thumb} className="w-full h-24 object-cover" />
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-gray-400">No thumbnails available</p>
+                  )}
+                </div>
+
+                {/* Mobile Scrollable Row */}
+                <div className="sm:hidden flex gap-3 overflow-x-auto mt-2 pb-2">
+                  {thumbnails.map((thumb, idx) => (
+                    <div
+                      key={idx}
+                      onClick={() => setMainImageState(thumb)}
+                      className="min-w-[80px] h-20 bg-white rounded-xl overflow-hidden 
+        border-2 border-gray-200 cursor-pointer 
+        hover:border-yellow-400 hover:shadow-lg 
+        transition-all duration-300"
+                    >
+                      <img src={thumb} className="w-full h-full object-cover" />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -263,11 +302,17 @@ const ComboDetailsPage = () => {
                 <div className="flex items-center gap-4">
                   {/* Quantity */}
                   <div className="flex items-center justify-between bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 w-32 select-none">
-                    <button className="text-gray-500 font-bold text-xl">
+                    <button 
+                    className="text-gray-500 font-bold text-xl"
+                    onClick={handleDecrement}
+                    >
                       -
                     </button>
-                    <span className="text-gray-700 font-semibold">1</span>
-                    <button className="text-gray-500 font-bold text-xl">
+                    <span className="text-gray-700 font-semibold">{quantity}</span>
+                    <button 
+                    className="text-gray-500 font-bold text-xl"
+                    onClick={handleIncrement}
+                    >
                       +
                     </button>
                   </div>

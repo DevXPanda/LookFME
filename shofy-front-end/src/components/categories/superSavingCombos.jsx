@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { TextShapeLine, NextLongArr, PrevLongArr } from "@/svg";
@@ -25,8 +25,52 @@ const SuperSavingCombos = () => {
     "Cargo_min_web_cards_cd0d845a89.jpg",
     "festive_shirts_min_web_cards_4405e2002a.jpg",
     "replay_rewind_min_web_cards_3efb4c20bc.jpg",
-    "shirts_reimagined_min_web_cards_76d02fae86.jpg"
-  ].map(name => `/assets/img/supersaving/${name}`);
+    "shirts_reimagined_min_web_cards_76d02fae86.jpg",
+  ].map((name) => `/assets/img/supersaving/${name}`);
+
+  const comboThumbnails = {
+    "/assets/img/supersaving/trousers_min_web_cards_e04b5301f2.jpg": [
+      "https://peplosjeans.in/cdn/shop/files/56A1612_96f4075c-8c1b-4bd4-b089-6403482fa33f.jpg?v=1709536250&width=1080",
+      "https://pluss.in/cdn/shop/products/IMG_0234_98f1fcf3-a268-4254-b1d5-8295917ccdfd.jpg?v=1756190302",
+      "https://assets.sheinindia.in/medias/shein_sys_master/root/20250703/Eu21/68666bd2e590ff066e1ed88f/-473Wx593H-443328616-beige-MODEL.jpg",
+      "https://media-us.landmarkshops.in/cdn-cgi/image/h=831,w=615,q=85,fit=cover/max-new/1000013705376-Beige-BEIGE-1000013705376_01-2100.jpg",
+    ],
+
+    "/assets/img/supersaving/back_2_college_min_web_cards_d5640d9806.jpg": [
+      "https://freedesignfile.com/upload/2017/11/Happy-college-girl-Stock-Photo.jpg",
+      "https://images.stockcake.com/public/a/d/5/ad53849e-b2bc-4fe9-aaa0-0cde6af33339_large/studying-late-night-stockcake.jpg",
+      "https://i.pinimg.com/236x/13/7f/7d/137f7d9479efb8a7ff338d782239893f.jpg",
+      "https://w0.peakpx.com/wallpaper/865/443/HD-wallpaper-books-reading-tea-aesthetics-thumbnail.jpg",
+    ],
+
+    "/assets/img/supersaving/Cargo_min_web_cards_cd0d845a89.jpg": [
+      "https://nobero.com/cdn/shop/files/JoggersWebImages-0006.webp?v=1744108689",
+      "https://saintjones.in/cdn/shop/files/HUNTER_GREEN_BAGGY_CARGO_-_St.Jones-3833127.jpg?v=1742145759",
+      "https://assets.ajio.com/medias/sys_master/root/20240828/HuZi/66cf4f186f60443f313822d3/-1117Wx1400H-700259722-grey-MODEL4.png",
+      "https://media.kohlsimg.com/is/image/kohls/7001940_Moonless_Night?wid=620&hei=620&op_sharpen=1",
+    ],
+
+    "/assets/img/supersaving/festive_shirts_min_web_cards_4405e2002a.jpg": [
+      "https://www.beyours.in/cdn/shop/files/mocha-flatlay.jpg?v=1760292479",
+      "https://m.media-amazon.com/images/I/81nJjvAuwQL._AC_UY1100_.jpg",
+      "https://images-static.nykaa.com/media/catalog/product/8/b/8b57f79Heptagon-1777_Brown_3.jpg?tr=w-500",
+      "https://assets.myntassets.com/w_412,q_30,dpr_3,fl_progressive,f_webp/assets/images/2024/OCTOBER/24/UXngTNmj_6f4da347c910429f90c99e38d8f053a6.jpg",
+    ],
+
+    "/assets/img/supersaving/replay_rewind_min_web_cards_3efb4c20bc.jpg": [
+      "https://m.media-amazon.com/images/I/31gDeu6Rj2L._AC_UY1100_.jpg",
+      "https://m.media-amazon.com/images/I/61rBpmh5hpL._AC_UY1000_.jpg",
+      "https://www.trrendo.com/cdn/shop/files/PATP1084.jpg?v=1735541529&width=1080",
+      "https://i.pinimg.com/736x/12/0e/02/120e02a58fb4abde72b1be9353d0b22a.jpg",
+    ],
+
+    "/assets/img/supersaving/shirts_reimagined_min_web_cards_76d02fae86.jpg": [
+      "https://myraymond.com/cdn/shop/files/CMSS29971-F3-1.jpg?v=1725608419",
+      "https://www.andamen.com/cdn/shop/files/01_a63d8703-846a-4fdb-b87d-be0bdf0fe994_1140x.jpg?v=1750852055",
+      "https://www.creaturesofhabit.in/cdn/shop/files/DSCF8170_1080x.jpg?v=1717750138",
+      "https://mrsimple.com.au/cdn/shop/files/linen-ls-natural_0004_DSCF7812_1600x.jpg?v=1762840150",
+    ],
+  };
 
   // Navigate to shop page
   // const handleCategoryRoute = () => {
@@ -34,9 +78,17 @@ const SuperSavingCombos = () => {
   //   router.push(`/combo-details`);
   // };
 
-    const handleImageClick = (img) => {
-    router.push(`/combo-details?image=${encodeURIComponent(img)}`);
-  };
+  // only for main images
+  // const handleImageClick = (img) => {
+  //   router.push(`/combo-details?image=${encodeURIComponent(img)}`);
+  // };
+
+  // both thumbnail and main images
+  const handleImageClick = (img) => {
+  const thumbs = comboThumbnails[img] || [];
+  router.push(`/combo-details?image=${encodeURIComponent(img)}&thumbs=${encodeURIComponent(JSON.stringify(thumbs))}`);
+};
+
 
   // Handle button scroll
   const handleScroll = (direction) => {
@@ -100,7 +152,9 @@ const SuperSavingCombos = () => {
               <div
                 ref={scrollRef}
                 className="categories-scroll-container"
-                onMouseDown={(e) => beginDrag(e.clientX, scrollRef.current.scrollLeft)}
+                onMouseDown={(e) =>
+                  beginDrag(e.clientX, scrollRef.current.scrollLeft)
+                }
                 onMouseMove={(e) => {
                   if (isDragging) {
                     e.preventDefault();
@@ -110,10 +164,7 @@ const SuperSavingCombos = () => {
                 onMouseUp={stopDragging}
                 onMouseLeave={stopDragging}
                 onTouchStart={(e) =>
-                  beginDrag(
-                    e.touches[0].clientX,
-                    scrollRef.current.scrollLeft
-                  )
+                  beginDrag(e.touches[0].clientX, scrollRef.current.scrollLeft)
                 }
                 onTouchMove={(e) => {
                   dragMove(e.touches[0].clientX);
@@ -143,7 +194,7 @@ const SuperSavingCombos = () => {
                   {images.map((img, index) => (
                     <div
                       key={index}
-                      src= {img}
+                      src={img}
                       className="category-scroll-item cursor-pointer"
                       style={{
                         flexShrink: 0,
@@ -158,7 +209,7 @@ const SuperSavingCombos = () => {
                         backgroundColor: "#f0f0f0",
                         transition: "transform 0.3s ease",
                       }}
-                     onClick={() => handleImageClick(img)}
+                      onClick={() => handleImageClick(img)}
                     />
                   ))}
                 </div>
