@@ -31,15 +31,15 @@ export default function MobileNavbar() {
           flex-wrap: nowrap;
           overflow-x: auto;
           overflow-y: hidden;
-          gap: 1.5rem;
-          padding: 0 1.5rem;
+          gap: 0.25rem;
+          // padding: 0 0.75rem;
           white-space: nowrap;
-          scrollbar-width: none; /* Firefox */
-          -ms-overflow-style: none; /* IE and Edge */
+          scrollbar-width: none; 
+          -ms-overflow-style: none; 
         }
 
         .horizontal-scroll::-webkit-scrollbar {
-          display: none; /* Chrome, Safari */
+          display: none; 
         }
 
         .category-item {

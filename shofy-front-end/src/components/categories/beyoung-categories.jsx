@@ -243,7 +243,7 @@
 
 
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { TextShapeLine } from "@/svg";
 
@@ -253,6 +253,10 @@ const BeyoungCategories = () => {
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
+  const velocity = useRef(0);
+  const momentumFrame = useRef(null);
+  const lastTime = useRef(0);
+
   const [dragged, setDragged] = useState(false);
 
   const categories = [
@@ -281,31 +285,48 @@ const BeyoungCategories = () => {
     isDragging.current = true;
     startX.current = pageX - scrollRef.current.offsetLeft;
     scrollLeft.current = scrollRef.current.scrollLeft;
+    velocity.current = 0;
     setDragged(false);
 
-    // Disable text selection on the scroll container and its children
     scrollRef.current.style.userSelect = "none";
-    scrollRef.current.style.webkitUserSelect = "none";
-    scrollRef.current.style.msUserSelect = "none";
     scrollRef.current.style.cursor = "grabbing";
+
+    // Stop any ongoing momentum
+    if (momentumFrame.current) cancelAnimationFrame(momentumFrame.current);
   };
 
   const dragMove = (pageX) => {
     if (!isDragging.current) return;
     const walk = pageX - startX.current;
     if (Math.abs(walk) > dragThreshold) setDragged(true);
+
+    // calculate velocity
+    const now = performance.now();
+    const dt = now - lastTime.current || 16; // fallback
+    velocity.current = (scrollLeft.current - (scrollRef.current.scrollLeft = scrollLeft.current - walk)) / dt;
+    lastTime.current = now;
+
     scrollRef.current.scrollLeft = scrollLeft.current - walk;
   };
 
   const endDrag = () => {
     isDragging.current = false;
     scrollRef.current.style.userSelect = "auto";
-    scrollRef.current.style.webkitUserSelect = "auto";
-    scrollRef.current.style.msUserSelect = "auto";
     scrollRef.current.style.cursor = "grab";
+
+    // momentum scrolling
+    let v = velocity.current * 15; // multiplier for inertia
+    const decay = 0.95;
+
+    const momentum = () => {
+      if (Math.abs(v) < 0.5) return;
+      scrollRef.current.scrollLeft += v;
+      v *= decay;
+      momentumFrame.current = requestAnimationFrame(momentum);
+    };
+    momentum();
   };
 
-  // Mouse handlers
   const onMouseDown = (e) => {
     e.preventDefault();
     startDrag(e.pageX);
@@ -313,13 +334,18 @@ const BeyoungCategories = () => {
   const onMouseMove = (e) => dragMove(e.pageX);
   const onMouseUp = () => endDrag();
 
-  // Touch handlers
   const onTouchStart = (e) => {
     e.preventDefault();
     startDrag(e.touches[0].pageX);
   };
   const onTouchMove = (e) => dragMove(e.touches[0].pageX);
   const onTouchEnd = () => endDrag();
+
+  const onWheel = (e) => {
+    if (!scrollRef.current) return;
+    scrollRef.current.scrollLeft += e.deltaY;
+    e.preventDefault();
+  };
 
   return (
     <section className="tp-beyoung-categories-area py-5 mb-5">
@@ -346,6 +372,7 @@ const BeyoungCategories = () => {
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
           onTouchEnd={onTouchEnd}
+          onWheel={onWheel}
           style={{
             display: "flex",
             overflowX: "auto",
@@ -370,7 +397,7 @@ const BeyoungCategories = () => {
                 borderRadius: "12px",
                 textAlign: "center",
                 cursor: "pointer",
-                userSelect: "none", // prevent selection in the div itself
+                userSelect: "none",
               }}
             >
               <h3 style={{ userSelect: "none" }}>{category.description}</h3>

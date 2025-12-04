@@ -23,6 +23,7 @@ import {
 import useSearchFormSubmit from "@/hooks/use-search-form-submit";
 import OffCanvas from "@/components/common/off-canvas";
 import MobileNavbar from "./header-com/mobile_navbar";
+import { useLocation } from "react-use";
 
 const HeaderTwo = ({ style_2 = false }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -31,6 +32,7 @@ const HeaderTwo = ({ style_2 = false }) => {
   const { quantity } = useCartInfo();
   const { sticky } = useSticky();
   const dispatch = useDispatch();
+  const location = useLocation();
   return (
     <>
       <header>
@@ -90,7 +92,10 @@ const HeaderTwo = ({ style_2 = false }) => {
                           className="h-10 w-auto"
                         />
                       </Link>
-                      <Link href="/" className="text-2xl font-bold text-black d-none d-md-inline-block ms-3">
+                      <Link
+                        href="/"
+                        className="text-2xl font-bold text-black d-none d-md-inline-block ms-3"
+                      >
                         LookFame
                       </Link>
                     </div>
@@ -166,9 +171,12 @@ const HeaderTwo = ({ style_2 = false }) => {
           </div>
         </div>
         {/* show only on mobile screens */}
-        <div className="d-xl-none">
-          <MobileNavbar />
-        </div>
+        
+        {location.pathname === "/" && (
+          <div className="d-xl-none">
+            <MobileNavbar />
+          </div>
+        )}
       </header>
 
       {/* cart mini sidebar start */}
