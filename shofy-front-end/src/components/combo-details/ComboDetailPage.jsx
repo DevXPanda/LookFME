@@ -73,7 +73,8 @@ const handleDecrement = (e) => {
                 <img
                   src={mainImageState || "/placeholder.jpg"}
                   alt="T-shirts collection"
-                  className="w-full h-auto transform group-hover:scale-105 transition-transform duration-500"
+                  className="w-full max-w-[1000px] h-auto max-h-[1200px] object-cover mx-auto 
+             transform group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
 
