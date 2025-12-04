@@ -5,15 +5,28 @@ const useSticky = () => {
     const [sticky,setSticky] = useState(false);
 
     const stickyHeader = () => {
-        if(window.scrollY > 80){
-            setSticky(true)
-        }
-        else{
-            setSticky(false)
+        const sc = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        if (sc > 80) {
+            setSticky(true);
+        } else {
+            setSticky(false);
         }
     }
     useEffect(() => {
-        window.addEventListener('scroll',stickyHeader)
+        // run once to set initial state
+        stickyHeader();
+
+        // use passive listener for better performance
+        window.addEventListener('scroll', stickyHeader, { passive: true });
+
+        // cleanup
+        return () => {
+            try {
+                window.removeEventListener('scroll', stickyHeader);
+            } catch (e) {
+                // ignore
+            }
+        };
     },[]);
 
     return {
