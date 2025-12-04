@@ -240,8 +240,10 @@
 // export default BeyoungCategories;
 
 
+
+
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { TextShapeLine } from "@/svg";
 
@@ -267,55 +269,57 @@ const BeyoungCategories = () => {
   ];
 
   const handleCategoryClick = (name) => {
-    if (dragged) return; // prevent click if dragging
-    router.push(`/shop?category=${name.toLowerCase().replace("&", "").split(" ").join("-")}`);
+    if (dragged) return;
+    router.push(
+      `/shop?category=${name.toLowerCase().replace("&", "").split(" ").join("-")}`
+    );
   };
 
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
+  const dragThreshold = 2;
 
-    const onPointerDown = (e) => {
-      isDragging.current = true;
-      startX.current = e.clientX;
-      scrollLeft.current = el.scrollLeft;
-      setDragged(false);
+  const startDrag = (pageX) => {
+    isDragging.current = true;
+    startX.current = pageX - scrollRef.current.offsetLeft;
+    scrollLeft.current = scrollRef.current.scrollLeft;
+    setDragged(false);
 
-      document.body.style.userSelect = "none"; // prevent selection
-      el.style.cursor = "grabbing";
+    // Disable text selection on the scroll container and its children
+    scrollRef.current.style.userSelect = "none";
+    scrollRef.current.style.webkitUserSelect = "none";
+    scrollRef.current.style.msUserSelect = "none";
+    scrollRef.current.style.cursor = "grabbing";
+  };
 
-      // stop default drag behavior for images
-      el.querySelectorAll("img").forEach((img) => (img.draggable = false));
+  const dragMove = (pageX) => {
+    if (!isDragging.current) return;
+    const walk = pageX - startX.current;
+    if (Math.abs(walk) > dragThreshold) setDragged(true);
+    scrollRef.current.scrollLeft = scrollLeft.current - walk;
+  };
 
-      el.setPointerCapture(e.pointerId);
-    };
+  const endDrag = () => {
+    isDragging.current = false;
+    scrollRef.current.style.userSelect = "auto";
+    scrollRef.current.style.webkitUserSelect = "auto";
+    scrollRef.current.style.msUserSelect = "auto";
+    scrollRef.current.style.cursor = "grab";
+  };
 
-    const onPointerMove = (e) => {
-      if (!isDragging.current) return;
-      const walk = e.clientX - startX.current;
-      if (Math.abs(walk) > 5) setDragged(true);
-      el.scrollLeft = scrollLeft.current - walk;
-    };
+  // Mouse handlers
+  const onMouseDown = (e) => {
+    e.preventDefault();
+    startDrag(e.pageX);
+  };
+  const onMouseMove = (e) => dragMove(e.pageX);
+  const onMouseUp = () => endDrag();
 
-    const onPointerUp = (e) => {
-      isDragging.current = false;
-      document.body.style.userSelect = "auto";
-      el.style.cursor = "grab";
-      el.releasePointerCapture?.(e.pointerId);
-    };
-
-    el.addEventListener("pointerdown", onPointerDown);
-    el.addEventListener("pointermove", onPointerMove);
-    el.addEventListener("pointerup", onPointerUp);
-    el.addEventListener("pointerleave", onPointerUp);
-
-    return () => {
-      el.removeEventListener("pointerdown", onPointerDown);
-      el.removeEventListener("pointermove", onPointerMove);
-      el.removeEventListener("pointerup", onPointerUp);
-      el.removeEventListener("pointerleave", onPointerUp);
-    };
-  }, []);
+  // Touch handlers
+  const onTouchStart = (e) => {
+    e.preventDefault();
+    startDrag(e.touches[0].pageX);
+  };
+  const onTouchMove = (e) => dragMove(e.touches[0].pageX);
+  const onTouchEnd = () => endDrag();
 
   return (
     <section className="tp-beyoung-categories-area py-5 mb-5">
@@ -335,13 +339,20 @@ const BeyoungCategories = () => {
         <div
           ref={scrollRef}
           className="categories-scroll-container"
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          onMouseLeave={onMouseUp}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
           style={{
             display: "flex",
             overflowX: "auto",
             gap: "20px",
             padding: "20px 0",
             cursor: "grab",
-            touchAction: "pan-x", // allows natural trackpad scroll
+            touchAction: "pan-x",
           }}
         >
           {categories.map((category) => (
@@ -359,10 +370,10 @@ const BeyoungCategories = () => {
                 borderRadius: "12px",
                 textAlign: "center",
                 cursor: "pointer",
-                userSelect: "none", // prevent selection
+                userSelect: "none", // prevent selection in the div itself
               }}
             >
-              <h3 style={{ userSelect: "auto" }}>{category.description}</h3>
+              <h3 style={{ userSelect: "none" }}>{category.description}</h3>
             </div>
           ))}
         </div>
