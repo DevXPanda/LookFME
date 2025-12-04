@@ -21,10 +21,11 @@ const SuperSavingCombos = () => {
   // Local images
   const images = [
     // first combo
-    "trousers_min_web_cards_e04b5301f2.jpg",
-    "back_2_college_min_web_cards_d5640d9806.jpg",
-    "Cargo_min_web_cards_cd0d845a89.jpg",
-    "festive_shirts_min_web_cards_4405e2002a.jpg",
+    "PlainT-Shirts.jpg",
+    "PrintedT-Shirts.jpg",
+    "PoloT-Shirts.jpg",
+    "RegularT-Shirts.jpg",
+    "OversizedT-Shirts.jpg",
     "replay_rewind_min_web_cards_3efb4c20bc.jpg",
     "shirts_reimagined_min_web_cards_76d02fae86.jpg",
     // second combo
