@@ -7,6 +7,7 @@ import Wishlist from "@/svg/wishlist";
 import RelatedComboProduct from "./RelatedComboProduct";
 import ColorDropdown from "./Colordropdown";
 // import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
   const [selectedColor1, setSelectedColor1] = useState("");
@@ -16,7 +17,7 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
   const [selectedColor3, setSelectedColor3] = useState("");
   const [selectedSize3, setSelectedSize3] = useState("");
 
-  const [quantity, setQuantity ] = useState(1);
+  const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
 
   const [mainImageState, setMainImageState] = useState(mainImage);
@@ -48,16 +49,15 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
     "Navy Blue",
   ];
 
-const handleIncrement = (e) => {
-   e.preventDefault()
-   setQuantity(prev => prev + 1 )
-};
+  const handleIncrement = (e) => {
+    e.preventDefault();
+    setQuantity((prev) => prev + 1);
+  };
 
-const handleDecrement = (e) => {
-  e.preventDefault()
-  setQuantity(prev => (prev > 1 ? prev - 1 : 1))
-};
-
+  const handleDecrement = (e) => {
+    e.preventDefault();
+    setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+  };
 
   const sizes = ["S", "M", "L", "XL", "XXL"];
 
@@ -303,33 +303,37 @@ const handleDecrement = (e) => {
                 <div className="flex items-center gap-4">
                   {/* Quantity */}
                   <div className="flex items-center justify-between bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 w-32 select-none">
-                    
-                    <button 
-                    className="text-gray-500 font-bold text-xl"
-                    onClick={handleDecrement}
+                    <button
+                      className="text-gray-500 font-bold text-xl"
+                      onClick={handleDecrement}
                     >
                       -
                     </button>
-                    <span className="text-gray-700 font-semibold">{quantity}</span>
-                    <button 
-                    className="text-gray-500 font-bold text-xl"
-                    onClick={handleIncrement}
+                    <span className="text-gray-700 font-semibold">
+                      {quantity}
+                    </span>
+                    <button
+                      className="text-gray-500 font-bold text-xl"
+                      onClick={handleIncrement}
                     >
                       +
                     </button>
-
                   </div>
 
                   {/* Add to Cart Button */}
-                  <button className="flex-1 bg-white border border-[#F875AA] text-[#F875AA] font-bold py-2 rounded-lg text-lg transition-all">
-                    Add To Cart
-                  </button>
+                  {/* <Link href="/cart"> */}
+                    <button className="flex-1 bg-white border border-[#F875AA] text-[#F875AA] font-bold py-2 rounded-lg text-lg transition-all">
+                      Add To Cart
+                    </button>
+                  {/* </Link> */}
                 </div>
 
                 {/* Buy Now Button */}
-                <button className="w-full bg-[#F875AA] text-white font-bold py-2 rounded-lg text-lg transition-all hover:bg-[#e6669a]">
-                  Buy Now
-                </button>
+                <Link href = "/checkout">
+                  <button className="w-full bg-[#F875AA] text-white font-bold py-2 rounded-lg text-lg transition-all hover:bg-[#e6669a]">
+                    Buy Now
+                  </button>
+                </Link>
               </div>
 
               {/* compare  wishlist and ask question*/}

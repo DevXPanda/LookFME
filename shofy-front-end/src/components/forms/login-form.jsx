@@ -1,16 +1,15 @@
-'use client';
-import React, { useState } from 'react';
+"use client";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { useRouter,redirect } from 'next/navigation';
-import Link from 'next/link';
+import { useRouter, redirect } from "next/navigation";
+import Link from "next/link";
 // internal
-import { CloseEye, OpenEye } from '@/svg';
-import ErrorMsg from '../common/error-msg';
-import { useLoginUserMutation } from '@/redux/features/auth/authApi';
-import { notifyError, notifySuccess } from '@/utils/toast';
-
+import { CloseEye, OpenEye } from "@/svg";
+import ErrorMsg from "../common/error-msg";
+import { useLoginUserMutation } from "@/redux/features/auth/authApi";
+import { notifyError, notifySuccess } from "@/utils/toast";
 
 // schema
 const schema = Yup.object().shape({
@@ -19,7 +18,7 @@ const schema = Yup.object().shape({
 });
 const LoginForm = () => {
   const [showPass, setShowPass] = useState(false);
-  const [loginUser, { }] = useLoginUserMutation();
+  const [loginUser, {}] = useLoginUserMutation();
   const router = useRouter();
   // react hook form
   const {
@@ -35,24 +34,43 @@ const LoginForm = () => {
     loginUser({
       email: data.email,
       password: data.password,
-    })
-      .then((data) => {
-        if (data?.data) {
-          notifySuccess("Login successfully");
-          router.push('/checkout' || "/");
-        }
-        else {
-          notifyError(data?.error?.data?.error)
-        }
-      })
+    }).then((data) => {
+      // if (data?.data) {
+      //   notifySuccess("Login successfully");
+      //   router.push('/checkout' || "/");
+      // }
+      // else {
+      //   notifyError(data?.error?.data?.error)
+      // }
+
+      // SUCCESS ONLY IF STATUS = "success"
+      if (data?.data?.status === "success") {
+        notifySuccess("Login successfully");
+        router.push("/checkout"); // your redirect
+      }
+
+      // ERROR HANDLING
+      else {
+        notifyError(
+          data?.error?.data?.error || data?.data?.error || "Login failed"
+        );
+      }
+    });
     reset();
   };
+  
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="tp-login-input-wrapper">
         <div className="tp-login-input-box">
           <div className="tp-login-input">
-            <input {...register("email", { required: `Email is required!` })} name="email" id="email" type="email" placeholder="shofy@mail.com" />
+            <input
+              {...register("email", { required: `Email is required!` })}
+              name="email"
+              id="email"
+              type="email"
+              placeholder="shofy@mail.com"
+            />
           </div>
           <div className="tp-login-input-title">
             <label htmlFor="email">Your Email</label>
@@ -78,7 +96,7 @@ const LoginForm = () => {
               <label htmlFor="password">Password</label>
             </div>
           </div>
-          <ErrorMsg msg={errors.password?.message}/>
+          <ErrorMsg msg={errors.password?.message} />
         </div>
       </div>
       <div className="tp-login-suggetions d-sm-flex align-items-center justify-content-between mb-20">
@@ -91,7 +109,9 @@ const LoginForm = () => {
         </div>
       </div>
       <div className="tp-login-bottom">
-        <button type='submit' className="tp-login-btn w-100">Login</button>
+        <button type="submit" className="tp-login-btn w-100">
+          Login
+        </button>
       </div>
     </form>
   );

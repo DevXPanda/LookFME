@@ -84,7 +84,7 @@ const ProductSubmit = () => {
                 errors={errors}
               />
               <FormField
-                title="discount percentage"
+                title="discount_percentage"
                 type="number"
                 isRequired={false}
                 placeHolder="Discount"
@@ -98,7 +98,7 @@ const ProductSubmit = () => {
           <div className="bg-white px-8 py-8 rounded-md mb-6">
             <div className="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2 gap-x-6">
               <FormField
-                title="youtube video Id"
+                title="youtube_video_Id"
                 isRequired={false}
                 placeHolder="video id"
                 bottomTitle="Set the video id of product."

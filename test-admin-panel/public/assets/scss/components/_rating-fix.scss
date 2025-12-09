@@ -1,0 +1,12 @@
+// Fix for vertical star icons in product cards
+.tp-product-rating-icon,
+.tp-product-rating-icon-2 {
+  display: flex !important;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.tp-product-rating-icon svg,
+.tp-product-rating-icon-2 svg {
+  display: inline-block !important;
+}

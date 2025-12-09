@@ -1,0 +1,206 @@
+/* Header Navigation Fix - Ensure all menu items fit in one row */
+
+/* Reduce margins between menu items */
+.main-menu.menu-style-2 > nav > ul > li {
+  margin-right: 18px !important; /* Further reduced for better fit */
+}
+
+/* Make menu items more compact */
+.main-menu.menu-style-2 > nav > ul > li > a {
+  padding: 18px 0 !important; /* Further reduced padding */
+  font-size: 14px !important; /* Smaller font for better fit */
+  white-space: nowrap; /* Prevent text wrapping */
+  font-weight: 500; /* Medium weight for better readability */
+}
+
+/* Ensure the menu container has enough width */
+.tp-mega-menu-wrapper .col-xl-6 {
+  min-width: 0; /* Allow flexbox to work properly */
+  padding-right: 0; /* Remove right padding */
+}
+
+/* Make the main menu container flexbox */
+.main-menu.menu-style-2 > nav > ul {
+  display: flex !important;
+  flex-wrap: nowrap !important; /* Prevent wrapping */
+  justify-content: space-between !important; /* Distribute items evenly */
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden; /* Prevent horizontal scroll */
+}
+
+/* Ensure menu items don't shrink */
+.main-menu.menu-style-2 > nav > ul > li {
+  flex-shrink: 0;
+  flex: 1; /* Give each item equal space */
+  text-align: center; /* Center the text */
+  min-width: 0; /* Allow text to shrink if needed */
+}
+
+/* Specific spacing for each menu item */
+.main-menu.menu-style-2 > nav > ul > li:nth-child(1) { /* Home */
+  flex: 0.8;
+}
+.main-menu.menu-style-2 > nav > ul > li:nth-child(2) { /* Men */
+  flex: 0.8;
+}
+.main-menu.menu-style-2 > nav > ul > li:nth-child(3) { /* Women */
+  flex: 0.8;
+}
+.main-menu.menu-style-2 > nav > ul > li:nth-child(4) { /* Junior */
+  flex: 0.8;
+}
+.main-menu.menu-style-2 > nav > ul > li:nth-child(5) { /* Accessories */
+  flex: 1.2;
+}
+.main-menu.menu-style-2 > nav > ul > li:nth-child(6) { /* Beauty */
+  flex: 0.8;
+}
+
+/* Responsive adjustments */
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .main-menu.menu-style-2 > nav > ul > li {
+    margin-right: 18px !important;
+  }
+  
+  .main-menu.menu-style-2 > nav > ul > li > a {
+    font-size: 14px !important;
+    padding: 18px 0 !important;
+  }
+}
+
+@media (min-width: 1400px) {
+  .main-menu.menu-style-2 > nav > ul > li {
+    margin-right: 22px !important;
+  }
+}
+
+/* Ensure the header doesn't increase in height */
+.tp-header-bottom-2 {
+  min-height: auto !important;
+}
+
+/* Optimize the logo column */
+.tp-header-bottom-2 .col-xl-2 {
+  flex: 0 0 auto;
+}
+
+/* Make the search bar more compact */
+.tp-header-search-2 input {
+  max-width: 200px;
+}
+
+/* Ensure proper spacing in the right section */
+.tp-header-bottom-right {
+  gap: 15px;
+}
+
+/* Fix for very small screens */
+@media (max-width: 1199px) {
+  .main-menu.menu-style-2 {
+    display: none;
+  }
+}
+
+/* Beauty dropdown specific styling using custom classes */
+.beauty-dropdown {
+  position: relative !important;
+}
+
+.beauty-submenu {
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  background: white !important;
+  min-width: 180px !important;
+  padding: 15px 0 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+  z-index: 9999 !important;
+  transition: all 0.3s ease !important;
+  
+  /* Initial state */
+  visibility: hidden !important;
+  opacity: 0 !important;
+  transform: translateY(-10px) !important;
+}
+
+/* Show Beauty submenu on hover */
+.beauty-dropdown:hover .beauty-submenu {
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Beauty submenu item styling */
+.beauty-submenu li {
+  padding: 0 20px !important;
+  margin: 0 !important;
+  list-style: none !important;
+}
+
+.beauty-submenu li a {
+  padding: 8px 0 !important;
+  display: block !important;
+  color: #333 !important;
+  font-size: 14px !important;
+  text-decoration: none !important;
+  transition: color 0.3s ease !important;
+}
+
+.beauty-submenu li a:hover {
+  color: #8b5cf6 !important;
+}
+
+/* Additional isolation for Beauty dropdown */
+.beauty-dropdown {
+  /* Ensure it's above other elements */
+  z-index: 1000 !important;
+}
+
+.beauty-submenu {
+  /* Force display and positioning */
+  display: block !important;
+  pointer-events: auto !important;
+  
+  /* Override any conflicting CSS variables */
+  --tp-common-white: white !important;
+  --tp-common-black: #333 !important;
+  
+  /* Ensure proper stacking context */
+  isolation: isolate !important;
+}
+
+/* Force Beauty dropdown to work on all screen sizes */
+@media (min-width: 1200px) {
+  .beauty-dropdown:hover .beauty-submenu {
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+}
+
+/* Debug: Force Beauty dropdown to be visible for testing */
+.beauty-dropdown:hover .beauty-submenu,
+.beauty-dropdown .beauty-submenu:hover {
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Additional debugging - show Beauty dropdown on focus as well */
+.beauty-dropdown:focus-within .beauty-submenu {
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* TEMPORARY: Force Beauty dropdown to always be visible for debugging */
+.beauty-dropdown .beauty-submenu {
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  background: red !important; /* Make it obvious */
+  border: 3px solid blue !important;
+}

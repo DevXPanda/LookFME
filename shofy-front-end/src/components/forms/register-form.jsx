@@ -32,13 +32,17 @@ const RegisterForm = () => {
   const onSubmit = (data) => {
     registerUser({
       name: data.name,
-      email: data.email,
+      email: data.email,  
       password: data.password,
     }).then((result) => {
+      console.log(result)
       if (result?.error) {
+        console.log(result.error)
         notifyError("Register Failed");
+        
       } else {
         notifySuccess(result?.data?.message);
+        reset()
         router.push('/checkout');
       }
     });
@@ -54,7 +58,7 @@ const RegisterForm = () => {
               id="name"
               name="name"
               type="text"
-              placeholder="Shahnewaz Sakil"
+              placeholder="look fame"
             />
           </div>
           <div className="tp-login-input-title">

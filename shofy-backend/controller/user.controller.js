@@ -7,7 +7,7 @@ const { secret } = require("../config/secret");
 
 // register user
 // sign up
-exports.signup = async (req, res,next) => {
+exports.signup = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
@@ -57,47 +57,123 @@ exports.signup = async (req, res,next) => {
  * 8. generate token
  * 9. send user and token
  */
-module.exports.login = async (req, res,next) => {
+// module.exports.login = async (req, res, next) => {
+//   try {
+//     const { email, password } = req.body;
+
+//     if (!email || !password) {
+//       return res.status(401).json({
+//         status: "fail",
+//         error: "Please provide your credentials",
+//       });
+//     }
+
+//     const user = await User.findOne({ email });
+
+//     // if (!user) {
+//     //   return res.status(401).json({
+//     //     status: "fail",
+//     //     error: "No user found. Please create an account",
+//     //   });
+//     // }
+
+//     if (!user) {
+//       const saved_user = await User.create(req.body);
+//       const token = saved_user.generateConfirmationToken();
+//       await saved_user.save({ validateBeforeSave: false });
+
+//       try {
+//         await sendEmail(mailData); 
+//         res.status(201).json({ status: "success", message: "Please check your email to verify!" });
+//       } catch (emailErr) {
+//         res.status(500).json({ status: "failed", message: "User created but failed to send verification email" });
+//       }
+//     } else {
+//       res.status(400).json({ status: "failed", message: "Email already exists" });
+//     }
+
+
+//     const isPasswordValid = user.comparePassword(password, user.password);
+
+//     if (!isPasswordValid) {
+//       return res.status(403).json({
+//         status: "fail",
+//         error: "Password is not correct",
+//       });
+//     }
+
+//     if (user.status != "active") {
+//       return res.status(401).json({
+//         status: "fail",
+//         error: "Your account is not active yet.",
+//       });
+//     }
+
+//     const token = generateToken(user);
+
+//     const { password: pwd, ...others } = user.toObject();
+
+//     res.status(200).json({
+//       status: "success",
+//       message: "Successfully logged in",
+//       data: {
+//         user: others,
+//         token,
+//       },
+//     });
+//   } catch (error) {
+//     next(error)
+//   }
+// };
+
+
+
+
+
+
+// confirmEmail
+
+module.exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(401).json({
-        status: "fail",
-        error: "Please provide your credentials",
-      });
+      return res.status(400).json({ status: "fail", error: "Email & password are required" });
     }
 
     const user = await User.findOne({ email });
 
+    // If user not found → show error (DO NOT CREATE A USER)
     if (!user) {
-      return res.status(401).json({
+      return res.status(404).json({
         status: "fail",
-        error: "No user found. Please create an account",
+        error: "No user found. Please register first.",
       });
     }
 
+    // Check password
     const isPasswordValid = user.comparePassword(password, user.password);
 
     if (!isPasswordValid) {
       return res.status(403).json({
         status: "fail",
-        error: "Password is not correct",
+        error: "Incorrect password",
       });
     }
 
-    if (user.status != "active") {
+    // Check active
+    if (user.status !== "active") {
       return res.status(401).json({
         status: "fail",
         error: "Your account is not active yet.",
       });
     }
 
+    // Create token
     const token = generateToken(user);
-
     const { password: pwd, ...others } = user.toObject();
 
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       message: "Successfully logged in",
       data: {
@@ -106,12 +182,13 @@ module.exports.login = async (req, res,next) => {
       },
     });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
-// confirmEmail
-exports.confirmEmail = async (req, res,next) => {
+
+
+exports.confirmEmail = async (req, res, next) => {
   try {
     const { token } = req.params;
     const user = await User.findOne({ confirmationToken: token });
@@ -156,7 +233,7 @@ exports.confirmEmail = async (req, res,next) => {
 };
 
 // forgetPassword
-exports.forgetPassword = async (req, res,next) => {
+exports.forgetPassword = async (req, res, next) => {
   try {
     const { verifyEmail } = req.body;
     const user = await User.findOne({ email: verifyEmail });
@@ -199,7 +276,7 @@ exports.forgetPassword = async (req, res,next) => {
 };
 
 // confirm-forget-password
-exports.confirmForgetPassword = async (req, res,next) => {
+exports.confirmForgetPassword = async (req, res, next) => {
   try {
     const { token, password } = req.body;
     const user = await User.findOne({ confirmationToken: token });
@@ -241,25 +318,25 @@ exports.confirmForgetPassword = async (req, res,next) => {
 };
 
 // change password
-exports.changePassword = async (req, res,next) => {
+exports.changePassword = async (req, res, next) => {
   try {
-    const {email,password,googleSignIn,newPassword} = req.body || {};
+    const { email, password, googleSignIn, newPassword } = req.body || {};
     const user = await User.findOne({ email: email });
     // Check if the user exists
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    if(googleSignIn){
+    if (googleSignIn) {
       const hashedPassword = bcrypt.hashSync(newPassword);
-      await User.updateOne({email:email},{password:hashedPassword})
+      await User.updateOne({ email: email }, { password: hashedPassword })
       return res.status(200).json({ message: "Password changed successfully" });
     }
-    if(!bcrypt.compareSync(password, user?.password)){
+    if (!bcrypt.compareSync(password, user?.password)) {
       return res.status(401).json({ message: "Incorrect current password" });
     }
     else {
       const hashedPassword = bcrypt.hashSync(newPassword);
-      await User.updateOne({email:email},{password:hashedPassword})
+      await User.updateOne({ email: email }, { password: hashedPassword })
       res.status(200).json({ message: "Password changed successfully" });
     }
   } catch (error) {
@@ -268,7 +345,7 @@ exports.changePassword = async (req, res,next) => {
 };
 
 // update a profile
-exports.updateUser = async (req, res,next) => {
+exports.updateUser = async (req, res, next) => {
   try {
     const userId = req.params.id
     const user = await User.findById(userId);
@@ -277,7 +354,7 @@ exports.updateUser = async (req, res,next) => {
       user.email = req.body.email;
       user.phone = req.body.phone;
       user.address = req.body.address;
-      user.bio = req.body.bio; 
+      user.bio = req.body.bio;
       const updatedUser = await user.save();
       const token = generateToken(updatedUser);
       res.status(200).json({
@@ -295,7 +372,7 @@ exports.updateUser = async (req, res,next) => {
 };
 
 // signUpWithProvider
-exports.signUpWithProvider = async (req, res,next) => {
+exports.signUpWithProvider = async (req, res, next) => {
   try {
     const user = jwt.decode(req.params.token);
     const isAdded = await User.findOne({ email: user.email });
@@ -312,7 +389,7 @@ exports.signUpWithProvider = async (req, res,next) => {
             address: isAdded.address,
             phone: isAdded.phone,
             imageURL: isAdded.imageURL,
-            googleSignIn:true,
+            googleSignIn: true,
           },
         },
       });
@@ -336,7 +413,7 @@ exports.signUpWithProvider = async (req, res,next) => {
             name: signUpUser.name,
             email: signUpUser.email,
             imageURL: signUpUser.imageURL,
-            googleSignIn:true,
+            googleSignIn: true,
           }
         },
       });

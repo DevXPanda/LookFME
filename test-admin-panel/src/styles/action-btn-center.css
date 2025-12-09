@@ -1,0 +1,23 @@
+/* Center product action buttons */
+.tp-product-action-item-3 {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.75rem !important;
+}
+
+.tp-product-action-3 {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.tp-product-action-btn-3 {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 50% !important;
+}
