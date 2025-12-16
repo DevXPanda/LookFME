@@ -100,7 +100,8 @@ const allowedOrigins = [
   // "http://localhost:3002",
   "http://localhost:3001",            
   "http://localhost:3000",              
-  "https://look-fame-f.vercel.app"      
+  "https://look-fame-f.vercel.app",
+  "https://lookfame.in/"
 ];
 
 app.use(cors({
