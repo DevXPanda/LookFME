@@ -23,6 +23,7 @@
     "dayjs": "^1.11.7",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
+    "fix-react2shell-next": "^1.1.4",
     "fs": "^0.0.1-security",
     "js-cookie": "^3.0.5",
     "next": "14.2.35",
