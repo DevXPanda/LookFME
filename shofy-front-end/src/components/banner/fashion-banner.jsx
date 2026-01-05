@@ -176,7 +176,7 @@ const FashionBanner = () => {
     <section
       className="tp-slider-area relative overflow-hidden"
       style={{
-        height: isMobile ? '520px' : '800px',   // ✅ ONLY SIZE INCREASE
+        height: isMobile ? '500px' : '800px',   // ✅ ONLY SIZE INCREASE
       }}
     >
       <Swiper
@@ -184,14 +184,14 @@ const FashionBanner = () => {
         modules={[Pagination, EffectFade, Autoplay]}
         className="tp-slider-active-2"
         style={{
-          height: isMobile ? '520px' : '800px', // ✅ SAME HERE
+          height: isMobile ? '500px' : '800px', // ✅ SAME HERE
         }}
       >
         {slider_data.map((item) => (
           <SwiperSlide
             key={item.id}
             style={{
-              height: isMobile ? '520px' : '800px', // ✅ SAME HERE
+              height: isMobile ? '500px' : '800px', // ✅ SAME HERE
             }}
           >
             <div
