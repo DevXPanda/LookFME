@@ -70,20 +70,107 @@
 
 
 
+// require("dotenv").config();
+// const express = require("express");
+// const app = express();
+// const path = require('path');
+// const cors = require("cors");
+// const connectDB = require("./config/db");
+// const { secret } = require("./config/secret");
+// const PORT = secret.port;
+// const morgan = require('morgan');
+
+// // error handler
+// const globalErrorHandler = require("./middleware/global-error-handler");
+
+// // routes
+// const userRoutes = require("./routes/user.routes");
+// const categoryRoutes = require("./routes/category.routes");
+// const brandRoutes = require("./routes/brand.routes");
+// const userOrderRoutes = require("./routes/user.order.routes");
+// const productRoutes = require("./routes/product.routes");
+// const orderRoutes = require("./routes/order.routes");
+// const couponRoutes = require("./routes/coupon.routes");
+// const reviewRoutes = require("./routes/review.routes");
+// const adminRoutes = require("./routes/admin.routes");
+// // const uploadRouter = require('./routes/uploadFile.route');
+// const cloudinaryRoutes = require("./routes/cloudinary.routes");
+
+// const allowedOrigins = [
+//   // "http://localhost:3002",
+//   "http://localhost:3001",            
+//   "http://localhost:3000",              
+//   "https://look-fame-f.vercel.app",
+//   "https://lookfame.in"
+// ];
+
+// app.use(cors({
+//   origin: allowedOrigins,
+//   credentials: true
+// }));
+
+// app.use(express.json());
+// app.use(morgan('dev'));
+// app.use(express.static(path.join(__dirname, 'public')));
+
+// connectDB();
+
+// // ROUTES
+
+// app.use("/api/user", userRoutes);
+// app.use("/api/category", categoryRoutes);
+// app.use("/api/brand", brandRoutes);
+// app.use("/api/product", productRoutes);
+// // app.use('/api/upload', uploadRouter);
+// app.use("/api/order", orderRoutes);
+// app.use("/api/coupon", couponRoutes);
+// app.use("/api/user-order", userOrderRoutes);
+// app.use("/api/review", reviewRoutes);
+// app.use("/api/cloudinary", cloudinaryRoutes);
+// app.use("/api/admin", adminRoutes);
+
+// // root route
+// app.get("/", (req, res) => res.send("Apps worked successfully"));
+
+
+// app.use(globalErrorHandler);
+
+// // 404 handler
+// app.use((req, res, next) => {
+//   res.status(404).json({
+//     success: false,
+//     message: 'Not Found',
+//     errorMessages: [
+//       {
+//         path: req.originalUrl,
+//         message: 'API Not Found',
+//       },
+//     ],
+//   });
+//   next();
+// });
+
+
+// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// module.exports = app;
+
+
 require("dotenv").config();
+
 const express = require("express");
 const app = express();
-const path = require('path');
+const path = require("path");
 const cors = require("cors");
-const connectDB = require("./config/db");
-const { secret } = require("./config/secret");
-const PORT = secret.port;
-const morgan = require('morgan');
+const morgan = require("morgan");
 
-// error handler
+// DB
+const connectDB = require("./config/db");
+
+// Global error handler
 const globalErrorHandler = require("./middleware/global-error-handler");
 
-// routes
+// Routes
 const userRoutes = require("./routes/user.routes");
 const categoryRoutes = require("./routes/category.routes");
 const brandRoutes = require("./routes/brand.routes");
@@ -93,35 +180,53 @@ const orderRoutes = require("./routes/order.routes");
 const couponRoutes = require("./routes/coupon.routes");
 const reviewRoutes = require("./routes/review.routes");
 const adminRoutes = require("./routes/admin.routes");
-// const uploadRouter = require('./routes/uploadFile.route');
 const cloudinaryRoutes = require("./routes/cloudinary.routes");
 
-const allowedOrigins = [
-  // "http://localhost:3002",
-  "http://localhost:3001",            
-  "http://localhost:3000",              
-  "https://look-fame-f.vercel.app",
-  "https://lookfame.in"
-];
+// PORT
+const PORT = process.env.PORT || 7000;
 
+// CORS (FIXED)
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://look-fme.vercel.app",
+      "https://lookfame.in"
+    ];
+
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-app.use(express.json());
-app.use(morgan('dev'));
-app.use(express.static(path.join(__dirname, 'public')));
+app.options("*", cors());
 
+// Middlewares
+app.use(express.json());
+
+if (process.env.NODE_ENV !== "production") {
+  app.use(morgan("dev"));
+}
+
+app.use(express.static(path.join(__dirname, "public")));
+
+// DB connect
 connectDB();
 
-// ROUTES
-
+// Routes
 app.use("/api/user", userRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/brand", brandRoutes);
 app.use("/api/product", productRoutes);
-// app.use('/api/upload', uploadRouter);
 app.use("/api/order", orderRoutes);
 app.use("/api/coupon", couponRoutes);
 app.use("/api/user-order", userOrderRoutes);
@@ -129,28 +234,31 @@ app.use("/api/review", reviewRoutes);
 app.use("/api/cloudinary", cloudinaryRoutes);
 app.use("/api/admin", adminRoutes);
 
-// root route
-app.get("/", (req, res) => res.send("Apps worked successfully"));
+// Root
+app.get("/", (req, res) => {
+  res.send("App working successfully 🚀");
+});
 
-
+// Error handlers
 app.use(globalErrorHandler);
 
-// 404 handler
-app.use((req, res, next) => {
+app.use((req, res) => {
   res.status(404).json({
     success: false,
-    message: 'Not Found',
+    message: "Not Found",
     errorMessages: [
       {
         path: req.originalUrl,
-        message: 'API Not Found',
-      },
-    ],
+        message: "API Not Found"
+      }
+    ]
   });
-  next();
 });
 
-
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 module.exports = app;
+
