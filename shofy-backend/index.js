@@ -189,7 +189,7 @@ const PORT = process.env.PORT || 7000;
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
-  "https://look-fame-f.vercel.app",
+  "https://look-fme.vercel.app",
   "https://lookfame.in"
 ];
 
