@@ -123,47 +123,32 @@
 
 
 'use client';
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 const JuniorBanner = () => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const resize = () => setIsMobile(window.innerWidth <= 768);
-    resize();
-    window.addEventListener("resize", resize);
-    return () => window.removeEventListener("resize", resize);
-  }, []);
-
   return (
-    <section
-      className="junior-banner-area"
-      style={{
-        width: "100%",
-        margin: 0,
-        padding: 0,
-        overflow: "hidden",
-      }}
-    >
-      <Link
-        href="/junior"
-        className="block relative w-full"
-        style={{
-          height: isMobile ? "360px" : "800px",
-        }}
-      >
+    <section className="junior-banner-area">
+      <Link href="/junior" className="banner-image-container block w-full h-full">
+        {/* Desktop image */}
         <Image
           src="/assets/img/juniorBanner/junior.jpg"
           alt="Junior Banner"
           fill
           priority
           sizes="100vw"
-          style={{
-            objectFit: "cover",
-            objectPosition: isMobile ? "top center" : "center",
-          }}
+          className="object-cover hidden md:block"
+        />
+        {/* Mobile image - ensure proper display */}
+        <Image
+          src="/assets/img/juniorBanner/junior.jpg"
+          alt="Junior Banner Mobile"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover block md:hidden"
+          style={{ objectPosition: 'top center' }}
         />
       </Link>
     </section>

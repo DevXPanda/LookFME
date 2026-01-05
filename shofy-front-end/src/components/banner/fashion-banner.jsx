@@ -109,7 +109,7 @@
 
 // export default FashionBanner;
 'use client';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -126,7 +126,8 @@ import slider_img_4 from '@assets/img/slider/2/4.jpg';
 import slider_img_5 from '@assets/img/slider/2/5.jpg';
 
 // Mobile images
-import mobile_img_1 from '@assets/img/slider/2/slider-1.png';
+// Note: Files with spaces must use string paths, not imports
+const mobile_img_1 = '/assets/img/slider/2/slider 1.jpeg';
 import mobile_img_2 from '@assets/img/slider/2/slider-2.png';
 import mobile_img_3 from '@assets/img/slider/2/slider-3.png';
 const mobile_img_4 = '/assets/img/slider/2/slider 4.jpg';
@@ -157,15 +158,7 @@ const slider_setting = {
 };
 
 const FashionBanner = () => {
-  const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    const resize = () => setIsMobile(window.innerWidth <= 768);
-    resize();
-    window.addEventListener('resize', resize);
-    return () => window.removeEventListener('resize', resize);
-  }, []);
 
   const handleBannerClick = (category) => {
     const normalized = category.toLowerCase().replace('&', '').split(' ').join('-');
@@ -173,48 +166,35 @@ const FashionBanner = () => {
   };
 
   return (
-    <section
-      className="tp-slider-area relative overflow-hidden mt-0 pt-0"
-      style={{
-        height: isMobile ? '520px' : '800px',   // ✅ ONLY SIZE INCREASE
-        marginTop: 0,
-        paddingTop: 0,
-      }}
-    >
+    <section className="tp-slider-area">
       <Swiper
         {...slider_setting}
         modules={[Pagination, EffectFade, Autoplay]}
         className="tp-slider-active-2"
-        style={{
-          height: isMobile ? '500px' : '800px', // ✅ SAME HERE
-        }}
       >
         {slider_data.map((item) => (
-          <SwiperSlide
-            key={item.id}
-            style={{
-              height: isMobile ? '500px' : '800px', // ✅ SAME HERE
-            }}
-          >
+          <SwiperSlide key={item.id}>
             <div
               onClick={() => handleBannerClick(item.category)}
-              className="relative w-full h-full cursor-pointer"
+              className="tp-slider-item-2 banner-image-container cursor-pointer"
             >
-              {/* <Image
-                src={isMobile ? item.imgMobile : item.imgDesktop}
-                alt={`banner-${item.id}`}
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover"
-              /> */}
+              {/* Desktop image */}
               <Image
-                src={isMobile ? item.imgMobile : item.imgDesktop}
+                src={item.imgDesktop}
                 alt={`banner-${item.id}`}
                 fill
                 priority
                 sizes="100vw"
-                className="object-contain"
+                className="object-cover hidden md:block"
+              />
+              {/* Mobile image */}
+              <Image
+                src={item.imgMobile}
+                alt={`banner-${item.id}`}
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover block md:hidden"
               />
             </div>
           </SwiperSlide>

@@ -346,6 +346,9 @@ input[type="color"] {
 }
 
 .tp-slider-item-2 {
-	height: 500px !important;
-	min-height: 200px !important;
+	// Height now controlled by parent container via CSS classes
+	// Removed !important to allow proper responsive behavior
+	position: relative;
+	width: 100%;
+	height: 100%;
 }

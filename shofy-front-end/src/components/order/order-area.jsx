@@ -15,13 +15,13 @@ const OrderArea = ({ orderId }) => {
   const { data: order, isError, isLoading } = useGetUserOrderByIdQuery(orderId);
   let content = null;
   if (isLoading) {
-    content = <PrdDetailsLoader loading={isLoading}/>
+    content = <PrdDetailsLoader loading={isLoading} />
   }
   if (isError) {
     content = <ErrorMsg msg="There was an error" />;
   }
   if (!isLoading && !isError) {
-    const { name, country, city, contact, invoice, createdAt, cart, shippingCost, discount, totalAmount,paymentMethod} = order.order;
+    const { name, country, city, contact, invoice, createdAt, cart, shippingCost, discount, totalAmount, paymentMethod } = order.order;
     content = (
       <>
         <section className="invoice__area pt-120 pb-120">
@@ -44,7 +44,7 @@ const OrderArea = ({ orderId }) => {
                         <div className="col-md-4 col-sm-6">
                           <div className="invoice__left">
                             <Image src={logo} alt="logo" />
-                            <p>2879 Elk Creek Road <br /> Stone Mountain, Georgia </p>
+                            <p>D140, Sector 7 <br /> Noida 201301 </p>
                           </div>
                         </div>
                         <div className="col-md-8 col-sm-6">
@@ -161,7 +161,7 @@ const OrderArea = ({ orderId }) => {
       </>
     );
   }
-  
+
   return (
     <>
       {content}

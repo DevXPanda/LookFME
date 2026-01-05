@@ -100,9 +100,9 @@ const SuperSavingCombos = () => {
 
   // both thumbnail and main images
   const handleImageClick = (img) => {
-  const thumbs = comboThumbnails[img] || [];
-  router.push(`/combo-details?image=${encodeURIComponent(img)}&thumbs=${encodeURIComponent(JSON.stringify(thumbs))}`);
-};
+    const thumbs = comboThumbnails[img] || [];
+    router.push(`/combo-details?image=${encodeURIComponent(img)}&thumbs=${encodeURIComponent(JSON.stringify(thumbs))}`);
+  };
 
 
   // Handle button scroll
@@ -213,7 +213,7 @@ const SuperSavingCombos = () => {
                       className="category-scroll-item cursor-pointer"
                       style={{
                         flexShrink: 0,
-                        width: "240px", 
+                        width: "240px",
                         height: "340px",
                         borderRadius: "18px",
                         overflow: "hidden",

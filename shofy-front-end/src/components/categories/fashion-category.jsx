@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 // internal
 import ErrorMsg from "../common/error-msg";
@@ -15,6 +15,17 @@ const FashionCategory = () => {
   } = useGetProductTypeCategoryQuery("fashion");
   const router = useRouter();
   const scrollContainerRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const [hasMoved, setHasMoved] = useState(false);
+
+  useEffect(() => {
+    if (!isDragging && hasMoved) {
+      const timeout = setTimeout(() => setHasMoved(false), 120);
+      return () => clearTimeout(timeout);
+    }
+  }, [isDragging, hasMoved]);
 
   // handle category route
   const handleCategoryRoute = (title) => {
@@ -30,13 +41,40 @@ const FashionCategory = () => {
   // handle scroll navigation
   const handleScroll = (direction) => {
     if (scrollContainerRef.current) {
-      const container = scrollContainerRef.current;
-      const scrollAmount = 300; 
-      if (direction === "left") {
-        container.scrollLeft -= scrollAmount;
-      } else {
-        container.scrollLeft += scrollAmount;
-      }
+      scrollContainerRef.current.scrollBy({
+        left: direction === "left" ? -300 : 300,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  // Drag handlers (same as Super Saving Combos)
+  const beginDrag = (clientX, currentScroll) => {
+    setIsDragging(true);
+    setStartX(clientX);
+    setScrollLeft(currentScroll);
+    setHasMoved(false);
+  };
+
+  const dragMove = (clientX) => {
+    if (!isDragging || !scrollContainerRef.current) return;
+    const delta = clientX - startX;
+    if (Math.abs(delta) > 4 && !hasMoved) {
+      setHasMoved(true);
+    }
+    const walk = delta * 1.5;
+    scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const stopDragging = () => setIsDragging(false);
+
+  // Handle wheel event for mouse wheel scrolling
+  const handleWheel = (e) => {
+    if (!scrollContainerRef.current) return;
+    // Convert vertical wheel scrolling to horizontal
+    if (e.deltaY !== 0) {
+      e.preventDefault();
+      scrollContainerRef.current.scrollLeft += e.deltaY;
     }
   };
 
@@ -233,13 +271,36 @@ const FashionCategory = () => {
                 <div
                   ref={scrollContainerRef}
                   className="categories-scroll-container"
+                  onMouseDown={(e) =>
+                    beginDrag(e.clientX, scrollContainerRef.current.scrollLeft)
+                  }
+                  onMouseMove={(e) => {
+                    if (isDragging) {
+                      e.preventDefault();
+                      dragMove(e.clientX);
+                    }
+                  }}
+                  onMouseUp={stopDragging}
+                  onMouseLeave={stopDragging}
+                  onTouchStart={(e) =>
+                    beginDrag(e.touches[0].clientX, scrollContainerRef.current.scrollLeft)
+                  }
+                  onTouchMove={(e) => {
+                    dragMove(e.touches[0].clientX);
+                  }}
+                  onTouchEnd={stopDragging}
+                  onTouchCancel={stopDragging}
+                  onWheel={handleWheel}
                   style={{
                     overflowX: "auto",
                     overflowY: "hidden",
                     whiteSpace: "nowrap",
+                    cursor: isDragging ? "grabbing" : "grab",
                     padding: "0 15px",
                     scrollbarWidth: "none",
                     msOverflowStyle: "none",
+                    userSelect: "none",
+                    WebkitUserSelect: "none",
                   }}
                 >
                   <div

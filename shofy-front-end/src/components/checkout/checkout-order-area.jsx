@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { CardElement } from "@stripe/react-stripe-js";
 import { useSelector } from "react-redux";
+import { useWatch } from "react-hook-form";
 // internal
 import useCartInfo from "@/hooks/use-cart-info";
 import ErrorMsg from "../common/error-msg";
@@ -18,8 +19,12 @@ const CheckoutOrderArea = ({ checkoutData }) => {
     showCard,
     setShowCard,
     shippingCost,
-    discountAmount
+    discountAmount,
+    control
   } = checkoutData;
+  
+  // Watch payment method to determine if Stripe is required
+  const paymentMethod = useWatch({ control, name: 'payment' });
   const { cart_products } = useSelector((state) => state.cart);
   const { total } = useCartInfo();
   return (
@@ -167,7 +172,7 @@ const CheckoutOrderArea = ({ checkoutData }) => {
       <div className="tp-checkout-btn-wrapper">
         <button
           type="submit"
-          disabled={!stripe || isCheckoutSubmit}
+          disabled={isCheckoutSubmit || (paymentMethod === 'Card' && !stripe)}
           className="tp-checkout-btn w-100"
         >
           Place Order

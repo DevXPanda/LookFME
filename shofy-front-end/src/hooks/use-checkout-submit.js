@@ -59,7 +59,7 @@ const useCheckoutSubmit = () => {
   const stripe = useStripe();
   const elements = useElements();
 
-  const {register,handleSubmit,setValue,formState: { errors }} = useForm();
+  const {register,handleSubmit,setValue,control,formState: { errors }} = useForm();
 
   let couponRef = useRef("");
 
@@ -321,10 +321,10 @@ const useCheckoutSubmit = () => {
     clientSecret,
     setClientSecret,
     cartTotal,
-    isCheckoutSubmit,
     couponApplyMsg,
     showCard,
     setShowCard,
+    control,
   };
 };
 

@@ -124,9 +124,7 @@
 
 'use client';
 
-import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Mousewheel } from 'swiper/modules';
+import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Rating } from 'react-simple-star-rating';
@@ -136,27 +134,65 @@ import { PrevLongArr, NextLongArr, ArrowRightLong, TextShapeLine } from '@/svg';
 import ErrorMsg from '@/components/common/error-msg';
 import { HomeTwoFeaturedPrdLoader } from '@/components/loader';
 
-import 'swiper/css';
-import 'swiper/css/navigation';
-
-const slider_setting = {
-  slidesPerView: 2,
-  spaceBetween: 32,
-  speed: 600,
-  mousewheel: true,
-  navigation: {
-    nextEl: '.featured-next',
-    prevEl: '.featured-prev',
-  },
-  breakpoints: {
-    0: { slidesPerView: 1 },
-    992: { slidesPerView: 2 },
-  },
-};
-
 const WeeksFeatured = () => {
   const { data, isLoading, isError } =
     useGetProductTypeQuery({ type: 'fashion', query: 'featured=true' });
+
+  const scrollRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const [hasMoved, setHasMoved] = useState(false);
+
+  useEffect(() => {
+    if (!isDragging && hasMoved) {
+      const timeout = setTimeout(() => setHasMoved(false), 120);
+      return () => clearTimeout(timeout);
+    }
+  }, [isDragging, hasMoved]);
+
+  // Handle button scroll
+  const handleScroll = (direction) => {
+    if (!scrollRef.current) return;
+    // Calculate scroll amount based on card width + gap
+    const containerWidth = scrollRef.current.offsetWidth;
+    const cardWidth = containerWidth / 2 - 12; // Account for gap
+    const scrollAmount = cardWidth + 24; // Card width + gap
+    scrollRef.current.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
+
+  // Drag handlers (same as Super Saving Combos)
+  const beginDrag = (clientX, currentScroll) => {
+    setIsDragging(true);
+    setStartX(clientX);
+    setScrollLeft(currentScroll);
+    setHasMoved(false);
+  };
+
+  const dragMove = (clientX) => {
+    if (!isDragging || !scrollRef.current) return;
+    const delta = clientX - startX;
+    if (Math.abs(delta) > 2 && !hasMoved) {
+      setHasMoved(true);
+    }
+    const walk = delta * 1.5;
+    scrollRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const stopDragging = () => setIsDragging(false);
+
+  // Handle wheel event for mouse wheel scrolling
+  const handleWheel = (e) => {
+    if (!scrollRef.current) return;
+    // Convert vertical wheel scrolling to horizontal
+    if (e.deltaY !== 0) {
+      e.preventDefault();
+      scrollRef.current.scrollLeft += e.deltaY;
+    }
+  };
 
   if (isLoading) return <HomeTwoFeaturedPrdLoader loading />;
   if (isError) return <ErrorMsg msg="Something went wrong" />;
@@ -174,53 +210,115 @@ const WeeksFeatured = () => {
         </div>
 
         <div className="featured-wrapper">
-          <Swiper {...slider_setting} modules={[Navigation, Mousewheel]}>
-            {data?.data?.map((item) => (
-              <SwiperSlide key={item._id}>
-                <div className="featured-card">
+          <div className="featured-scroll-container-wrapper p-relative">
+            {/* Scroll Buttons */}
+            <button
+              className="featured-prev"
+              onClick={() => handleScroll("left")}
+            >
+              <PrevLongArr />
+            </button>
+            <button
+              className="featured-next"
+              onClick={() => handleScroll("right")}
+            >
+              <NextLongArr />
+            </button>
 
-                  {/* IMAGE */}
-                  <div className="featured-image">
-                    <Image
-                      src={item.img}
-                      alt={item.title}
-                      fill
-                      priority
-                    />
+            {/* Scrollable Container */}
+            <div
+              ref={scrollRef}
+              className="featured-scroll-container"
+              onMouseDown={(e) =>
+                beginDrag(e.clientX, scrollRef.current.scrollLeft)
+              }
+              onMouseMove={(e) => {
+                if (isDragging) {
+                  e.preventDefault();
+                  dragMove(e.clientX);
+                }
+              }}
+              onMouseUp={stopDragging}
+              onMouseLeave={stopDragging}
+              onTouchStart={(e) =>
+                beginDrag(e.touches[0].clientX, scrollRef.current.scrollLeft)
+              }
+              onTouchMove={(e) => {
+                dragMove(e.touches[0].clientX);
+              }}
+              onTouchEnd={stopDragging}
+              onTouchCancel={stopDragging}
+              onWheel={handleWheel}
+              style={{
+                overflowX: "auto",
+                overflowY: "hidden",
+                whiteSpace: "nowrap",
+                cursor: isDragging ? "grabbing" : "grab",
+                padding: "0 20px",
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+                userSelect: "none",
+                WebkitUserSelect: "none",
+              }}
+            >
+              <div
+                style={{
+                  display: "inline-flex",
+                  gap: "24px",
+                  padding: "0 12px",
+                  minWidth: "100%",
+                }}
+              >
+                {data?.data?.map((item) => (
+                  <div
+                    key={item._id}
+                    className="featured-card"
+                    style={{
+                      flexShrink: 0,
+                      width: "calc((100% - 48px) / 2)",
+                      minWidth: "calc((100% - 48px) / 2)",
+                      maxWidth: "calc((100% - 48px) / 2)",
+                    }}
+                  >
+                    {/* IMAGE */}
+                    <div className="featured-image">
+                      <Image
+                        src={item.img}
+                        alt={item.title}
+                        fill
+                        priority
+                      />
+                    </div>
+
+                    {/* CONTENT */}
+                    <div className="featured-content">
+                      <h3>{item.title}</h3>
+                      <span className="price">₹{item.price}</span>
+
+                      <Rating
+                        allowFraction
+                        size={16}
+                        readonly
+                        initialValue={
+                          item.reviews?.length
+                            ? item.reviews.reduce((a, b) => a + b.rating, 0) /
+                            item.reviews.length
+                            : 0
+                        }
+                      />
+
+                      <Link
+                        href={`/product-details/${item._id}`}
+                        className="tp-btn tp-btn-border"
+                      >
+                        Shop Now <ArrowRightLong />
+                      </Link>
+                    </div>
                   </div>
-
-                  {/* CONTENT */}
-                  <div className="featured-content">
-                    <h3>{item.title}</h3>
-                    <span className="price">₹{item.price}</span>
-
-                    <Rating
-                      allowFraction
-                      size={16}
-                      readonly
-                      initialValue={
-                        item.reviews?.length
-                          ? item.reviews.reduce((a, b) => a + b.rating, 0) /
-                          item.reviews.length
-                          : 0
-                      }
-                    />
-
-                    <Link
-                      href={`/product-details/${item._id}`}
-                      className="tp-btn tp-btn-border"
-                    >
-                      Shop Now <ArrowRightLong />
-                    </Link>
-                  </div>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-
-          {/* Arrows */}
-          <button className="featured-prev"><PrevLongArr /></button>
-          <button className="featured-next"><NextLongArr /></button>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -233,7 +331,15 @@ const WeeksFeatured = () => {
 
         .featured-wrapper {
           position: relative;
-          padding: 0 60px;
+          padding: 0 80px;
+        }
+
+        .featured-scroll-container-wrapper {
+          position: relative;
+        }
+
+        .featured-scroll-container::-webkit-scrollbar {
+          display: none;
         }
 
         .featured-card {
@@ -241,8 +347,10 @@ const WeeksFeatured = () => {
           display: flex;
           align-items: center;
           gap: 32px;
-          padding: 32px;
-          height: 320px;
+          padding: 40px;
+          height: 360px;
+          box-sizing: border-box;
+          overflow: hidden;
         }
 
         .featured-image {
@@ -257,17 +365,33 @@ const WeeksFeatured = () => {
 
         .featured-content {
           width: 45%;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          height: 100%;
+          box-sizing: border-box;
         }
 
         .featured-content h3 {
           font-size: 22px;
           margin-bottom: 8px;
+          line-height: 1.3;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
         }
 
         .price {
           font-weight: 600;
           margin-bottom: 8px;
           display: block;
+        }
+
+        .featured-content :global(.tp-btn) {
+          margin-top: auto;
+          align-self: flex-start;
         }
 
         .featured-prev,
@@ -285,15 +409,49 @@ const WeeksFeatured = () => {
           justify-content: center;
           cursor: pointer;
           z-index: 10;
+          border: none;
+          transition: all 0.3s ease;
+        }
+
+        .featured-prev:hover,
+        .featured-next:hover {
+          transform: translateY(-50%) scale(1.1);
+          background: rgba(255, 255, 255, 1);
         }
 
         .featured-prev { left: 16px; }
         .featured-next { right: 16px; }
 
+        @media (max-width: 1199px) {
+          .featured-wrapper {
+            padding: 0 60px;
+          }
+        }
+
+        @media (max-width: 991px) {
+          .featured-wrapper {
+            padding: 0 40px;
+          }
+          .featured-card {
+            width: calc((100% - 24px) / 2) !important;
+            min-width: calc((100% - 24px) / 2) !important;
+            max-width: calc((100% - 24px) / 2) !important;
+            padding: 32px;
+            height: 340px;
+          }
+        }
+
         @media (max-width: 767px) {
+          .featured-wrapper {
+            padding: 0 20px;
+          }
           .featured-card {
             flex-direction: column;
             height: auto;
+            width: 300px !important;
+            min-width: 300px !important;
+            max-width: 300px !important;
+            padding: 24px;
           }
           .featured-image,
           .featured-content {
@@ -301,6 +459,13 @@ const WeeksFeatured = () => {
           }
           .featured-image {
             height: 240px;
+          }
+          .featured-content {
+            height: auto;
+          }
+          .featured-prev,
+          .featured-next {
+            display: none;
           }
         }
       `}</style>
