@@ -129,7 +129,7 @@ import Link from "next/link";
 
 const JuniorBanner = () => {
   return (
-    <section className="junior-banner-area" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden', position: 'relative' }}>
+    <section className="junior-banner-area" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden', position: 'relative', minHeight: '800px' }}>
       <Link 
         href="/junior" 
         className="banner-image-container block w-full h-full"

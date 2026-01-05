@@ -168,12 +168,12 @@ const FashionBanner = () => {
   };
 
   return (
-    <section className="tp-slider-area" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden', position: 'relative' }}>
+    <section className="tp-slider-area" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden', position: 'relative', minHeight: '800px' }}>
       <Swiper
         {...slider_setting}
         modules={[Pagination, EffectFade, Autoplay]}
         className="tp-slider-active-2"
-        style={{ width: '100%', maxWidth: '100%', height: '100%' }}
+        style={{ width: '100%', maxWidth: '100%', height: '100%', minHeight: '100%' }}
       >
         {slider_data.map((item) => (
           <SwiperSlide key={item.id} style={{ width: '100%', maxWidth: '100%', height: '100%' }}>

@@ -27,19 +27,20 @@ section[class*="banner"] {
 
 // Fashion Banner (Slider) - Fixed heights using CSS media queries
 .tp-slider-area {
-  position: relative;
-  width: 100%;
-  max-width: 100vw; // Prevent overflow
-  margin: 0;
-  padding: 0;
-  overflow: hidden; // Keep banner contained
+  position: relative !important;
+  width: 100% !important;
+  max-width: 100vw !important; // Prevent overflow
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important; // Keep banner contained
 
   // Prevent margin collapse
-  display: block;
+  display: block !important;
 
   // Explicit heights for desktop and mobile - increased for full detail display
-  height: 800px;
-  max-height: 90vh; // Responsive to viewport height
+  height: 800px !important;
+  min-height: 800px !important;
+  max-height: 90vh !important; // Responsive to viewport height
 
   @media (max-width: 1200px) {
     height: 750px;
@@ -104,30 +105,33 @@ section[class*="banner"] {
 
 // Junior Banner - Fixed heights
 .junior-banner-area {
-  position: relative;
-  width: 100%;
-  max-width: 100vw; // Prevent overflow
-  margin: 0;
-  padding: 0;
-  overflow: hidden; // Keep banner contained
-  display: block; // Prevent margin collapse
+  position: relative !important;
+  width: 100% !important;
+  max-width: 100vw !important; // Prevent overflow
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important; // Keep banner contained
+  display: block !important; // Prevent margin collapse
 
   // Explicit heights - increased for full detail display
-  height: 800px;
-  max-height: 90vh; // Responsive to viewport height
+  height: 800px !important;
+  min-height: 800px !important;
+  max-height: 90vh !important; // Responsive to viewport height
 
   @media (max-width: 1200px) {
-    height: 750px;
+    height: 750px !important;
+    min-height: 750px !important;
   }
 
   @media (max-width: 992px) {
-    height: 700px;
+    height: 700px !important;
+    min-height: 700px !important;
   }
 
   @media (max-width: 768px) {
-    height: 600px;
-    min-height: 600px;
-    max-height: 75vh;
+    height: 600px !important;
+    min-height: 600px !important;
+    max-height: 75vh !important;
 
     // Mobile-specific object positioning
     .banner-image-container {
@@ -145,27 +149,27 @@ section[class*="banner"] {
   }
 
   @media (max-width: 576px) {
-    height: 550px;
-    min-height: 550px;
-    max-height: 70vh;
+    height: 550px !important;
+    min-height: 550px !important;
+    max-height: 70vh !important;
   }
 
   @media (max-width: 425px) {
-    height: 500px;
-    min-height: 500px;
-    max-height: 65vh;
+    height: 500px !important;
+    min-height: 500px !important;
+    max-height: 65vh !important;
   }
 
   @media (max-width: 375px) {
-    height: 450px;
-    min-height: 450px;
-    max-height: 60vh;
+    height: 450px !important;
+    min-height: 450px !important;
+    max-height: 60vh !important;
   }
 
   @media (max-width: 320px) {
-    height: 400px;
-    min-height: 400px;
-    max-height: 55vh;
+    height: 400px !important;
+    min-height: 400px !important;
+    max-height: 55vh !important;
   }
 
   // Link container must fill parent
@@ -181,49 +185,57 @@ section[class*="banner"] {
 
 // Ad Banner - Fixed heights
 .ad-banner-area {
-  position: relative;
-  width: 100%;
-  max-width: 100vw; // Prevent overflow
-  margin: 0;
-  padding: 0;
-  overflow: hidden; // Keep banner contained
-  display: block; // Prevent margin collapse
+  position: relative !important;
+  width: 100% !important;
+  max-width: 100vw !important; // Prevent overflow
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important; // Keep banner contained
+  display: block !important; // Prevent margin collapse
 
   // Explicit heights - increased for full detail display
-  height: 800px;
-  max-height: 90vh; // Responsive to viewport height
+  height: 800px !important;
+  min-height: 800px !important;
+  max-height: 90vh !important; // Responsive to viewport height
 
   @media (max-width: 1200px) {
-    height: 750px;
+    height: 750px !important;
+    min-height: 750px !important;
   }
 
   @media (max-width: 992px) {
-    height: 700px;
+    height: 700px !important;
+    min-height: 700px !important;
   }
 
   @media (max-width: 768px) {
-    height: 600px;
-    max-height: 75vh;
+    height: 600px !important;
+    min-height: 600px !important;
+    max-height: 75vh !important;
   }
 
   @media (max-width: 576px) {
-    height: 550px;
-    max-height: 70vh;
+    height: 550px !important;
+    min-height: 550px !important;
+    max-height: 70vh !important;
   }
 
   @media (max-width: 425px) {
-    height: 500px;
-    max-height: 65vh;
+    height: 500px !important;
+    min-height: 500px !important;
+    max-height: 65vh !important;
   }
 
   @media (max-width: 375px) {
-    height: 450px;
-    max-height: 60vh;
+    height: 450px !important;
+    min-height: 450px !important;
+    max-height: 60vh !important;
   }
 
   @media (max-width: 320px) {
-    height: 400px;
-    max-height: 55vh;
+    height: 400px !important;
+    min-height: 400px !important;
+    max-height: 55vh !important;
   }
 
   // Link container must fill parent

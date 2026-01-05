@@ -64,7 +64,7 @@ const AdBanner = () => {
   const mobileImg = "/assets/img/ad/ad.jpeg";
 
   return (
-    <section className="ad-banner-area" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden', position: 'relative' }}>
+    <section className="ad-banner-area" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden', position: 'relative', minHeight: '800px' }}>
       <Link 
         href="/ad" 
         className="banner-image-container cursor-pointer block w-full h-full"
