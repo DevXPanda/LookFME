@@ -118,18 +118,17 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
 
-// Desktop images
-import slider_img_1 from '@assets/img/slider/2/1.jpg';
-import slider_img_2 from '@assets/img/slider/2/2.jpg';
-import slider_img_3 from '@assets/img/slider/2/3.jpg';
-import slider_img_4 from '@assets/img/slider/2/4.jpg';
-import slider_img_5 from '@assets/img/slider/2/5.jpg';
+// Desktop images - using absolute paths for Vercel compatibility
+const slider_img_1 = '/assets/img/slider/2/1.jpg';
+const slider_img_2 = '/assets/img/slider/2/2.jpg';
+const slider_img_3 = '/assets/img/slider/2/3.jpg';
+const slider_img_4 = '/assets/img/slider/2/4.jpg';
+const slider_img_5 = '/assets/img/slider/2/5.jpg';
 
-// Mobile images
-// Note: Files with spaces must use string paths, not imports
+// Mobile images - using absolute paths for Vercel compatibility
 const mobile_img_1 = '/assets/img/slider/2/slider 1.jpeg';
-import mobile_img_2 from '@assets/img/slider/2/slider-2.png';
-import mobile_img_3 from '@assets/img/slider/2/slider-3.png';
+const mobile_img_2 = '/assets/img/slider/2/slider-2.png';
+const mobile_img_3 = '/assets/img/slider/2/slider-3.png';
 const mobile_img_4 = '/assets/img/slider/2/slider 4.jpg';
 const mobile_img_5 = '/assets/img/slider/2/slider 5.jpg';
 
@@ -155,6 +154,9 @@ const slider_setting = {
     disableOnInteraction: false,
   },
   speed: 1000,
+  // Ensure proper initialization on Vercel
+  observer: true,
+  observeParents: true,
 };
 
 const FashionBanner = () => {
@@ -166,19 +168,19 @@ const FashionBanner = () => {
   };
 
   return (
-    <section className="tp-slider-area" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
+    <section className="tp-slider-area" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden', position: 'relative' }}>
       <Swiper
         {...slider_setting}
         modules={[Pagination, EffectFade, Autoplay]}
         className="tp-slider-active-2"
-        style={{ width: '100%', maxWidth: '100%' }}
+        style={{ width: '100%', maxWidth: '100%', height: '100%' }}
       >
         {slider_data.map((item) => (
-          <SwiperSlide key={item.id} style={{ width: '100%', maxWidth: '100%' }}>
+          <SwiperSlide key={item.id} style={{ width: '100%', maxWidth: '100%', height: '100%' }}>
             <div
               onClick={() => handleBannerClick(item.category)}
               className="tp-slider-item-2 banner-image-container cursor-pointer"
-              style={{ width: '100%', maxWidth: '100%', height: '100%' }}
+              style={{ width: '100%', maxWidth: '100%', height: '100%', position: 'relative' }}
             >
               {/* Desktop image */}
               <Image
@@ -188,7 +190,7 @@ const FashionBanner = () => {
                 priority
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1920px"
                 className="object-cover hidden md:block"
-                style={{ maxWidth: '100%' }}
+                style={{ objectFit: 'cover', objectPosition: 'center' }}
               />
               {/* Mobile image */}
               <Image
@@ -198,7 +200,7 @@ const FashionBanner = () => {
                 priority
                 sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, 800px"
                 className="object-cover block md:hidden"
-                style={{ maxWidth: '100%' }}
+                style={{ objectFit: 'cover', objectPosition: 'center' }}
               />
             </div>
           </SwiperSlide>
