@@ -174,9 +174,11 @@ const FashionBanner = () => {
 
   return (
     <section
-      className="tp-slider-area relative overflow-hidden"
+      className="tp-slider-area relative overflow-hidden mt-0 pt-0"
       style={{
         height: isMobile ? '520px' : '800px',   // ✅ ONLY SIZE INCREASE
+        marginTop: 0,
+        paddingTop: 0,
       }}
     >
       <Swiper
