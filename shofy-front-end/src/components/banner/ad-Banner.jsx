@@ -64,16 +64,21 @@ const AdBanner = () => {
   const mobileImg = "/assets/img/ad/ad.jpeg";
 
   return (
-    <section className="ad-banner-area">
-      <Link href="/ad" className="banner-image-container cursor-pointer block w-full h-full">
+    <section className="ad-banner-area" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
+      <Link 
+        href="/ad" 
+        className="banner-image-container cursor-pointer block w-full h-full"
+        style={{ width: '100%', maxWidth: '100%', height: '100%' }}
+      >
         {/* Desktop image */}
         <Image
           src={desktopImg}
           alt="Ad Banner"
           fill
           priority
-          sizes="100vw"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1920px"
           className="object-cover hidden md:block"
+          style={{ maxWidth: '100%' }}
         />
         {/* Mobile image */}
         <Image
@@ -81,8 +86,9 @@ const AdBanner = () => {
           alt="Ad Banner"
           fill
           priority
-          sizes="100vw"
+          sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, 800px"
           className="object-cover block md:hidden"
+          style={{ maxWidth: '100%' }}
         />
       </Link>
     </section>

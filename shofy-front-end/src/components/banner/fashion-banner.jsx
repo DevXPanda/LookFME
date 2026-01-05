@@ -166,17 +166,19 @@ const FashionBanner = () => {
   };
 
   return (
-    <section className="tp-slider-area">
+    <section className="tp-slider-area" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
       <Swiper
         {...slider_setting}
         modules={[Pagination, EffectFade, Autoplay]}
         className="tp-slider-active-2"
+        style={{ width: '100%', maxWidth: '100%' }}
       >
         {slider_data.map((item) => (
-          <SwiperSlide key={item.id}>
+          <SwiperSlide key={item.id} style={{ width: '100%', maxWidth: '100%' }}>
             <div
               onClick={() => handleBannerClick(item.category)}
               className="tp-slider-item-2 banner-image-container cursor-pointer"
+              style={{ width: '100%', maxWidth: '100%', height: '100%' }}
             >
               {/* Desktop image */}
               <Image
@@ -184,8 +186,9 @@ const FashionBanner = () => {
                 alt={`banner-${item.id}`}
                 fill
                 priority
-                sizes="100vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1920px"
                 className="object-cover hidden md:block"
+                style={{ maxWidth: '100%' }}
               />
               {/* Mobile image */}
               <Image
@@ -193,8 +196,9 @@ const FashionBanner = () => {
                 alt={`banner-${item.id}`}
                 fill
                 priority
-                sizes="100vw"
+                sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, 800px"
                 className="object-cover block md:hidden"
+                style={{ maxWidth: '100%' }}
               />
             </div>
           </SwiperSlide>

@@ -129,16 +129,21 @@ import Link from "next/link";
 
 const JuniorBanner = () => {
   return (
-    <section className="junior-banner-area">
-      <Link href="/junior" className="banner-image-container block w-full h-full">
+    <section className="junior-banner-area" style={{ width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
+      <Link 
+        href="/junior" 
+        className="banner-image-container block w-full h-full"
+        style={{ width: '100%', maxWidth: '100%', height: '100%' }}
+      >
         {/* Desktop image */}
         <Image
           src="/assets/img/juniorBanner/junior.jpg"
           alt="Junior Banner"
           fill
           priority
-          sizes="100vw"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1920px"
           className="object-cover hidden md:block"
+          style={{ maxWidth: '100%' }}
         />
         {/* Mobile image - ensure proper display */}
         <Image
@@ -146,9 +151,9 @@ const JuniorBanner = () => {
           alt="Junior Banner Mobile"
           fill
           priority
-          sizes="100vw"
+          sizes="(max-width: 425px) 100vw, (max-width: 768px) 100vw, 800px"
           className="object-cover block md:hidden"
-          style={{ objectPosition: 'top center' }}
+          style={{ objectPosition: 'top center', maxWidth: '100%' }}
         />
       </Link>
     </section>
