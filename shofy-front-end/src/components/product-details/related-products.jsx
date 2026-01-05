@@ -1,7 +1,7 @@
 'use client';
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Scrollbar, Navigation,Autoplay } from "swiper/modules";
+import { Scrollbar, Navigation, Autoplay } from "swiper/modules";
 // internal
 import { useGetRelatedProductsQuery } from "@/redux/features/productApi";
 import ProductItem from "../products/beauty/product-item";
@@ -38,13 +38,13 @@ const slider_setting = {
   },
 };
 
-const RelatedProducts = ({id}) => {
+const RelatedProducts = ({ id }) => {
   const { data: products, isError, isLoading } = useGetRelatedProductsQuery(id);
   // decide what to render
   let content = null;
 
   if (isLoading) {
-    content = <HomeNewArrivalPrdLoader loading={isLoading}/>;
+    content = <HomeNewArrivalPrdLoader loading={isLoading} />;
   }
   if (!isLoading && isError) {
     content = <ErrorMsg msg="There was an error" />;

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { useRouter,redirect } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 // internal
 import { CloseEye, OpenEye } from "@/svg";
 import ErrorMsg from "../common/error-msg";
@@ -22,24 +22,24 @@ const schema = Yup.object().shape({
 
 const RegisterForm = () => {
   const [showPass, setShowPass] = useState(false);
-  const [registerUser, {}] = useRegisterUserMutation();
+  const [registerUser, { }] = useRegisterUserMutation();
   const router = useRouter();
   // react hook form
-  const {register,handleSubmit,formState: { errors },reset} = useForm({
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: yupResolver(schema),
   });
   // on submit
   const onSubmit = (data) => {
     registerUser({
       name: data.name,
-      email: data.email,  
+      email: data.email,
       password: data.password,
     }).then((result) => {
       console.log(result)
       if (result?.error) {
         console.log(result.error)
         notifyError("Register Failed");
-        
+
       } else {
         notifySuccess(result?.data?.message);
         reset()
@@ -73,7 +73,7 @@ const RegisterForm = () => {
               id="email"
               name="email"
               type="email"
-              placeholder="shofy@mail.com"
+              placeholder="Lookfame@mail.com"
             />
           </div>
           <div className="tp-login-input-title">

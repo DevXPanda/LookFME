@@ -18,7 +18,7 @@ const schema = Yup.object().shape({
 });
 const LoginForm = () => {
   const [showPass, setShowPass] = useState(false);
-  const [loginUser, {}] = useLoginUserMutation();
+  const [loginUser, { }] = useLoginUserMutation();
   const router = useRouter();
   // react hook form
   const {
@@ -58,7 +58,7 @@ const LoginForm = () => {
     });
     reset();
   };
-  
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="tp-login-input-wrapper">
@@ -69,7 +69,7 @@ const LoginForm = () => {
               name="email"
               id="email"
               type="email"
-              placeholder="shofy@mail.com"
+              placeholder="Lookfame@mail.com"
             />
           </div>
           <div className="tp-login-input-title">

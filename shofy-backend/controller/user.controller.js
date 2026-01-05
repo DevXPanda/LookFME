@@ -13,33 +13,23 @@ exports.signup = async (req, res, next) => {
     if (user) {
       res.send({ status: "failed", message: "Email already exists" });
     } else {
-      const saved_user = await User.create(req.body);
-      const token = saved_user.generateConfirmationToken();
+      // Set status to active by default - no activation required
+      const userData = { ...req.body, status: "active" };
+      const saved_user = await User.create(userData);
 
-      await saved_user.save({ validateBeforeSave: false });
+      // Generate token for immediate login
+      const token = generateToken(saved_user);
+      const { password: pwd, ...others } = saved_user.toObject();
 
-      const mailData = {
-        from: secret.email_user,
-        to: `${req.body.email}`,
-        subject: "Email Activation",
-        subject: "Verify Your Email",
-        html: `<h2>Hello ${req.body.name}</h2>
-        <p>Verify your email address to complete the signup and login into your <strong>LookFame</strong> account.</p>
-  
-          <p>This link will expire in <strong> 10 minute</strong>.</p>
-  
-          <p style="margin-bottom:20px;">Click this link for active your account</p>
-  
-          <a href="${secret.client_url}/email-verify/${token}" style="background:#0989FF;color:white;border:1px solid #0989FF; padding: 10px 15px; border-radius: 4px; text-decoration:none;">Verify Account</a>
-  
-          <p style="margin-top: 35px;">If you did not initiate this request, please contact us immediately at  support@lookfame.in</p>
-  
-          <p style="margin-bottom:0px;">Thank you</p>
-          <strong>LookFame Team</strong>
-           `,
-      };
-      const message = "Please check your email to verify!";
-      sendEmail(mailData, res, message);
+      // Return success with token - user can login immediately
+      res.status(200).json({
+        status: "success",
+        message: "Account created successfully. You can login now.",
+        data: {
+          user: others,
+          token,
+        },
+      });
     }
   } catch (error) {
     next(error)
@@ -161,13 +151,7 @@ module.exports.login = async (req, res, next) => {
       });
     }
 
-    // Check active
-    if (user.status !== "active") {
-      return res.status(401).json({
-        status: "fail",
-        error: "Your account is not active yet.",
-      });
-    }
+    // Activation check removed - users can login immediately after registration
 
     // Create token
     const token = generateToken(user);

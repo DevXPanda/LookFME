@@ -43,7 +43,7 @@ function Currency({active,handleActive}) {
         className="tp-header-currency-toggle"
         id="tp-header-currency-toggle"
       >
-        USD
+        INR
       </span>
       <ul className={active === 'currency' ? "tp-currency-list-open" : ""}>
         <li>

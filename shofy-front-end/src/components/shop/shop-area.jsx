@@ -7,6 +7,17 @@ import ShopFilterOffCanvas from "../common/shop-filter-offcanvas";
 import { useGetAllProductsQuery } from "@/redux/features/productApi";
 import ShopContent from "./shop-content";
 
+// Normalize category/subcategory names for consistent comparison (handles case, hyphens, spaces, & symbols)
+// Removes all spaces and hyphens to match variations like "T-shirt" vs "Tshirt" vs "T Shirt"
+const normalizeCategoryName = (name) => {
+  if (!name) return '';
+  return name
+    .toLowerCase()
+    .replace(/&/g, '')
+    .replace(/[-\s]+/g, '')  // Remove all hyphens and spaces
+    .trim();
+};
+
 const ShopArea = ({shop_right=false,hidden_sidebar=false}) => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -103,22 +114,28 @@ const ShopArea = ({shop_right=false,hidden_sidebar=false}) => {
       }
     }
 
-    // category filter
+    // category filter - match by parent, category.name, or children field (data-driven with normalized comparison)
     if (category) {
-      product_items = product_items.filter(
-        (p) =>
-          p.parent.toLowerCase().replace("&", "").split(" ").join("-") ===
-          category
-      );
+      const normalizedFilterCategory = normalizeCategoryName(category);
+      product_items = product_items.filter((p) => {
+        // Normalize all product category fields and compare (check parent, category.name, and children)
+        const normalizedParent = normalizeCategoryName(p.parent);
+        const normalizedCategoryName = normalizeCategoryName(p.category?.name);
+        const normalizedChildren = normalizeCategoryName(p.children);
+        return normalizedParent === normalizedFilterCategory || 
+               normalizedCategoryName === normalizedFilterCategory ||
+               normalizedChildren === normalizedFilterCategory;
+      });
     }
 
-    // category filter
+    // subcategory filter - match by children field (data-driven with normalized comparison)
     if (subCategory) {
-      product_items = product_items.filter(
-        (p) =>
-          p.children.toLowerCase().replace("&", "").split(" ").join("-") ===
-          subCategory
-      );
+      const normalizedFilterSubCategory = normalizeCategoryName(subCategory);
+      product_items = product_items.filter((p) => {
+        // Normalize product children field and compare
+        const normalizedChildren = normalizeCategoryName(p.children);
+        return normalizedChildren === normalizedFilterSubCategory;
+      });
     }
 
     // color filter

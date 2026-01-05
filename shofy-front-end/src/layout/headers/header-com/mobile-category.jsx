@@ -23,24 +23,33 @@ const MobileCategory = ({ isCategoryActive, categoryType }) => {
   }
 
   // handle category route
-  const handleCategoryRoute = (title, route) => {
-    if (route === "parent") {
-      router.push(
-        `/shop?category=${title
-          .toLowerCase()
-          .replace("&", "")
-          .split(" ")
-          .join("-")}`
-      );
-    } else {
-      router.push(
-        `/shop?subCategory=${title
-          .toLowerCase()
-          .replace("&", "")
-          .split(" ")
-          .join("-")}`
-      );
+  const handleCategoryRoute = (title, route, e) => {
+    // Prevent any default behavior
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
     }
+    
+    // Small delay to ensure event is fully processed
+    setTimeout(() => {
+      if (route === "parent") {
+        router.push(
+          `/shop?category=${title
+            .toLowerCase()
+            .replace("&", "")
+            .split(" ")
+            .join("-")}`
+        );
+      } else {
+        router.push(
+          `/shop?subCategory=${title
+            .toLowerCase()
+            .replace("&", "")
+            .split(" ")
+            .join("-")}`
+        );
+      }
+    }, 0);
   };
   // decide what to render
   let content = null;
@@ -62,7 +71,11 @@ const MobileCategory = ({ isCategoryActive, categoryType }) => {
     const category_items = categories.result;
     content = category_items.map((item) => (
       <li className="has-dropdown" key={item._id}>
-        <a className="cursor-pointer">
+        <a 
+          href="#"
+          className="cursor-pointer"
+          onClick={(e) => handleCategoryRoute(item.parent, "parent", e)}
+        >
           {item.img && (
             <span>
               <Image src={item.img} alt="cate img" width={50} height={50} />
@@ -70,7 +83,11 @@ const MobileCategory = ({ isCategoryActive, categoryType }) => {
           )}
           {item.parent}
           {item.children && (
-            <button onClick={()=> handleOpenSubMenu(item.parent)} className="dropdown-toggle-btn">
+            <button onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              handleOpenSubMenu(item.parent);
+            }} className="dropdown-toggle-btn">
               <i className="fa-regular fa-angle-right"></i>
             </button>
           )}
@@ -81,9 +98,18 @@ const MobileCategory = ({ isCategoryActive, categoryType }) => {
             {item.children.map((child, i) => (
               <li
                 key={i}
-                onClick={() => handleCategoryRoute(child, "children")}
+                onClick={(e) => handleCategoryRoute(child, "children", e)}
               >
-                <a className="cursor-pointer">{child}</a>
+                <a 
+                  href="#" 
+                  className="cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                >
+                  {child}
+                </a>
               </li>
             ))}
           </ul>

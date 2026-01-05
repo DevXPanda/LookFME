@@ -23,7 +23,7 @@ import {
 import useSearchFormSubmit from "@/hooks/use-search-form-submit";
 import OffCanvas from "@/components/common/off-canvas";
 import MobileNavbar from "./header-com/mobile_navbar";
-import { useLocation } from "react-use";
+import { usePathname } from "next/navigation";
 
 const HeaderTwo = ({ style_2 = false }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -32,14 +32,13 @@ const HeaderTwo = ({ style_2 = false }) => {
   const { quantity } = useCartInfo();
   const { sticky } = useSticky();
   const dispatch = useDispatch();
-  const location = useLocation();
+  const pathname = usePathname();
   return (
     <>
       <header>
         <div
-          className={`tp-header-area tp-header-style-${
-            style_2 ? "primary" : "darkRed"
-          } tp-header-height`}
+          className={`tp-header-area tp-header-style-${style_2 ? "primary" : "darkRed"
+            } tp-header-height`}
         >
           <div className="tp-header-top-2 p-relative z-index-11 tp-header-top-border d-none d-md-block">
             <div className="container">
@@ -75,9 +74,8 @@ const HeaderTwo = ({ style_2 = false }) => {
 
           <div
             id="header-sticky"
-            className={`tp-header-bottom-2 tp-header-sticky ${
-              sticky ? "header-sticky" : ""
-            }`}
+            className={`tp-header-bottom-2 tp-header-sticky ${sticky ? "header-sticky" : ""
+              }`}
           >
             <div className="container">
               <div className="tp-mega-menu-wrapper p-relative">
@@ -171,8 +169,8 @@ const HeaderTwo = ({ style_2 = false }) => {
           </div>
         </div>
         {/* show only on mobile screens */}
-        
-        {location.pathname === "/" && (
+
+        {pathname === "/" && (
           <div className="d-xl-none">
             <MobileNavbar />
           </div>

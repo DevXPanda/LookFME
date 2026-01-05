@@ -27,24 +27,24 @@ export const metadata = {
 export default function HomePageTwo() {
   return (
     <Wrapper>
-      <HeaderTwo/>
-      <FashionBanner/>
-      <FashionCategory/>
-      <SuperSavingCombos/>
-       <AdBanner />
-      {/* <BeyoungCategories/> */}
-      <PopularProducts/>
-      <AutoSlider/>
-      {/* <CouponBanner/> */}
-      <ProductArea/>
-      <WeeksFeatured/>
-      <TrendingProducts/>
-       <JuniorBanner /> 
-      <BestSellerProducts/>
-      {/* <FashionTestimonial/> */}
-      {/* <BlogArea/> */}
-      <FeatureAreaTwo/>
-      <InstagramAreaTwo/>
+      <HeaderTwo />
+      <FashionBanner />
+      <FashionCategory />
+      <SuperSavingCombos />
+      <AdBanner />
+      {/* <BeyoungCategories /> */}
+      <PopularProducts />
+      <AutoSlider />
+      <CouponBanner />
+      {/* <ProductArea /> */}
+      <WeeksFeatured />
+      <TrendingProducts />
+      <JuniorBanner />
+      {/* <BestSellerProducts /> */}
+      <FashionTestimonial />
+      {/* <BlogArea /> */}
+      {/* <FeatureAreaTwo/> */}
+      <InstagramAreaTwo />
       <Footer style_2={true} />
     </Wrapper>
   )

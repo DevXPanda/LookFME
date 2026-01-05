@@ -1,5 +1,5 @@
 'use client';
-import React from "react";
+import React, { useRef } from "react";
 import menu_data from "@/data/menu-data";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,11 +8,66 @@ import { useRouter } from "next/navigation";
 const Menus = () => {
 
   const router = useRouter()
+  const menuRefs = useRef({});
 
   const handleMenuItemClick = (menu) => {
     if(menu?.link){
       router.push(menu.link)
     }
+  }
+
+  // Close mega menu on link click
+  const handleLinkClick = (menuId, e) => {
+    // Get the parent <li> element and add class to force close menu
+    const menuItem = menuRefs.current[menuId];
+    if (menuItem) {
+      // Add class to force hide the menu immediately
+      menuItem.classList.add('menu-closing');
+      // Also remove hover state by temporarily disabling pointer events
+      const megaMenu = menuItem.querySelector('.jockey-mega-menu, .tp-submenu');
+      if (megaMenu) {
+        megaMenu.style.pointerEvents = 'none';
+        megaMenu.style.opacity = '0';
+        megaMenu.style.visibility = 'hidden';
+      }
+      // Remove class after navigation completes (longer delay for reliability)
+      setTimeout(() => {
+        menuItem.classList.remove('menu-closing');
+        if (megaMenu) {
+          megaMenu.style.pointerEvents = '';
+          megaMenu.style.opacity = '';
+          megaMenu.style.visibility = '';
+        }
+      }, 300);
+    }
+  }
+
+  // Helper function to convert menu links to shop grid format
+  const getShopLink = (link, title) => {
+    // If link starts with /shop-category/, convert to /shop?subCategory=...
+    if (link && link.startsWith('/shop-category/')) {
+      // Use the title as the subcategory name, normalized (same as shop-area.jsx normalization)
+      const normalizedSubCategory = title
+        .toLowerCase()
+        .replace(/&/g, '')
+        .replace(/[-\s\/]+/g, '-')  // Replace spaces, hyphens, and slashes with single hyphen
+        .replace(/-+/g, '-')  // Replace multiple hyphens with single hyphen
+        .replace(/^-|-$/g, '')  // Remove leading/trailing hyphens
+        .trim();
+      return `/shop?subCategory=${normalizedSubCategory}`;
+    }
+    // If link is just '/shop', add category/subcategory if title is provided
+    if (link === '/shop' && title) {
+      const normalizedCategory = title
+        .toLowerCase()
+        .replace(/&/g, '')
+        .replace(/[-\s\/]+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '')
+        .trim();
+      return `/shop?subCategory=${normalizedCategory}`;
+    }
+    return link;
   }
 
   return (
@@ -23,7 +78,11 @@ const Menus = () => {
         // Main Mega Menu (Products)
         if (menu.products && menu.product_pages) {
           return (
-            <li key={menu.id} className="has-dropdown has-mega-menu jockey-style-mega">
+            <li 
+              key={menu.id} 
+              className="has-dropdown has-mega-menu jockey-style-mega"
+              ref={(el) => { if (el) menuRefs.current[menu.id] = el; }}
+            >
               <Link href={menu.link}>{menu.title}</Link>
               <div className="tp-submenu tp-mega-menu jockey-mega-menu">
                 <div className="jockey-mega-wrapper">
@@ -38,7 +97,12 @@ const Menus = () => {
                             {category.mega_menus &&
                               category.mega_menus.map((item, j) => (
                                 <li key={j}>
-                                  <Link href={item.link}>{item.title}</Link>
+                                  <Link 
+                                    href={getShopLink(item.link, item.title)}
+                                    onClick={(e) => handleLinkClick(menu.id, e)}
+                                  >
+                                    {item.title}
+                                  </Link>
                                 </li>
                               ))}
                           </ul>
@@ -73,7 +137,12 @@ const Menus = () => {
                         <h4 className="jockey-section-title">OUR SPECIAL OFFERINGS</h4>
                         <div className="jockey-offerings-grid">
                           {menu.special_offerings.map((offering, i) => (
-                            <Link key={i} href={offering.link} className="jockey-offering-item">
+                            <Link 
+                              key={i} 
+                              href={offering.link} 
+                              className="jockey-offering-item"
+                              onClick={(e) => handleLinkClick(menu.id, e)}
+                            >
                               <div className="jockey-offering-image">
                                 <Image
                                   src={offering.image}
@@ -95,7 +164,12 @@ const Menus = () => {
                         <h4 className="jockey-section-title">TRENDING COLLECTIONS</h4>
                         <div className="jockey-trending-grid">
                           {menu.trending_collections.map((trend, i) => (
-                            <Link key={i} href={trend.link} className="jockey-trending-item">
+                            <Link 
+                              key={i} 
+                              href={trend.link} 
+                              className="jockey-trending-item"
+                              onClick={(e) => handleLinkClick(menu.id, e)}
+                            >
                               <div className="jockey-trending-image">
                                 <Image
                                   src={trend.image}
@@ -121,12 +195,21 @@ const Menus = () => {
         // Sub Menu (non-mega)
         else if (menu.sub_menu && menu.sub_menus) {
           return (
-            <li key={menu.id} className="has-dropdown">
+            <li 
+              key={menu.id} 
+              className="has-dropdown"
+              ref={(el) => { if (el) menuRefs.current[menu.id] = el; }}
+            >
               <Link href={menu.link}>{menu.title}</Link>
               <ul className="tp-submenu">
                 {menu.sub_menus.map((b, i) => (
                   <li key={i}>
-                    <Link href={b.link}>{b.title}</Link>
+                    <Link 
+                      href={b.link}
+                      onClick={(e) => handleLinkClick(menu.id, e)}
+                    >
+                      {b.title}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -143,6 +226,27 @@ const Menus = () => {
           );
         }
       })}
+      <style jsx>{`
+        .jockey-style-mega.menu-closing .jockey-mega-menu {
+          opacity: 0 !important;
+          visibility: hidden !important;
+          pointer-events: none !important;
+          transform: translateY(10px) !important;
+        }
+        .has-dropdown.menu-closing .tp-submenu {
+          opacity: 0 !important;
+          visibility: hidden !important;
+          pointer-events: none !important;
+        }
+        .jockey-style-mega.menu-closing:hover .jockey-mega-menu {
+          opacity: 0 !important;
+          visibility: hidden !important;
+        }
+        .has-dropdown.menu-closing:hover .tp-submenu {
+          opacity: 0 !important;
+          visibility: hidden !important;
+        }
+      `}</style>
     </ul>
   );
 };

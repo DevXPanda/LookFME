@@ -1,30 +1,60 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import ErrorMsg from '@/components/common/error-msg';
 import { useGetProductTypeQuery } from '@/redux/features/productApi';
+import { useGetProductTypeCategoryQuery } from '@/redux/features/categoryApi';
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Scrollbar } from "swiper/modules";
+import { Scrollbar, Mousewheel } from "swiper/modules";
 import { TextShapeLine } from '@/svg';
 import ProductItem from './product-item';
 import { HomeTwoPrdLoader } from '@/components/loader';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
 
-// Tabs
-const tabs = ["All Collection", "Tshirts", "OverSized Tshirts", "Trousers"];
+// Normalize category/subcategory names for consistent comparison (handles case, hyphens, spaces, & symbols)
+// Removes all spaces and hyphens to match variations like "T-shirt" vs "Tshirt" vs "T Shirt"
+const normalizeCategoryName = (name) => {
+  if (!name) return '';
+  return name
+    .toLowerCase()
+    .replace(/&/g, '')
+    .replace(/[-\s]+/g, '')  // Remove all hyphens and spaces
+    .trim();
+};
 
 const ProductArea = () => {
-  const [activeTab, setActiveTab] = useState(tabs[0]);
+  // Fetch categories from backend
+  const { data: categoriesData } = useGetProductTypeCategoryQuery('fashion');
   const { data: products, isError, isLoading } = useGetProductTypeQuery({ type: 'fashion' });
+
+  // Build tabs dynamically from backend categories: "All Collection" + category names
+  const tabs = useMemo(() => {
+    const categoryTabs = ["All Collection"];
+    if (categoriesData?.result?.length > 0) {
+      categoriesData.result.forEach(cat => {
+        if (cat.parent && !categoryTabs.includes(cat.parent)) {
+          categoryTabs.push(cat.parent);
+        }
+      });
+    }
+    return categoryTabs;
+  }, [categoriesData]);
+
+  const [activeTab, setActiveTab] = useState(tabs[0] || "All Collection");
 
   const handleActiveTab = (tab) => setActiveTab(tab);
 
-  // Slider settings (updated mobile view)
+  // Slider settings with horizontal mouse wheel support
   const slider_setting = {
     slidesPerView: 5,
     spaceBetween: 20,
     loop: false,
     centeredSlides: false,
+    mousewheel: {
+      forceToAxis: true,
+      sensitivity: 1,
+      releaseOnEdges: false,
+    },
     scrollbar: {
       el: ".swiper-scrollbar",
       draggable: true,
@@ -35,8 +65,8 @@ const ProductArea = () => {
       1200: { slidesPerView: 5 },
       992: { slidesPerView: 4 },
       768: { slidesPerView: 3 },
-      576: { slidesPerView: 2 }, // ✅ mobile will now show 2 per view
-      0: { slidesPerView: 2 },   // ✅ ensures even smallest screen shows 2 per view
+      576: { slidesPerView: 2 },
+      0: { slidesPerView: 2 },
     },
   };
 
@@ -51,13 +81,19 @@ const ProductArea = () => {
   else if (!isLoading && !isError && products?.data?.length > 0) {
     let product_items = products.data;
 
-    // Filter products based on active tab
-    if (activeTab === 'Tshirts')
-      product_items = products.data.filter(p => p.category.name === 'Tshirts');
-    else if (activeTab === 'OverSized Tshirts')
-      product_items = products.data.filter(p => p.category.name === 'OverSized Tshirts');
-    else if (activeTab === 'Trousers')
-      product_items = products.data.filter(p => p.category.name === 'Trousers');
+    // Filter products based on active tab using backend category data (with normalized comparison)
+    if (activeTab !== 'All Collection') {
+      // Normalize filter value and all product category fields for consistent matching
+      const normalizedFilterCategory = normalizeCategoryName(activeTab);
+      product_items = products.data.filter(p => {
+        const normalizedProductCategory = normalizeCategoryName(p.category?.name);
+        const normalizedProductParent = normalizeCategoryName(p.parent);
+        const normalizedProductChildren = normalizeCategoryName(p.children);
+        return normalizedProductCategory === normalizedFilterCategory || 
+               normalizedProductParent === normalizedFilterCategory ||
+               normalizedProductChildren === normalizedFilterCategory;
+      });
+    }
 
     // Duplicate products for "All Collection" if less than 5
     if (activeTab === 'All Collection' && product_items.length > 0 && product_items.length < 5) {
@@ -66,6 +102,14 @@ const ProductArea = () => {
     } else {
       display_items = product_items;
     }
+
+    // Calculate product count for each tab
+    const getProductCount = (tabName) => {
+      if (tabName === 'All Collection') {
+        return products.data.length;
+      }
+      return products.data.filter(p => p.category?.name === tabName).length;
+    };
 
     // Tabs navigation
     content = (
@@ -81,7 +125,7 @@ const ProductArea = () => {
                     className={`nav-link text-capitalize ${activeTab === tab ? "active" : ""}`}
                   >
                     {tab.split("-").join(" ")}
-                    <span className="tp-product-tab-tooltip">{product_items.length}</span>
+                    <span className="tp-product-tab-tooltip">{getProductCount(tab)}</span>
                   </button>
                 ))}
               </div>
@@ -126,7 +170,7 @@ const ProductArea = () => {
 
             <Swiper
               {...slider_setting}
-              modules={[Scrollbar]}
+              modules={[Scrollbar, Mousewheel]}
               className="tp-category-slider-active-2 swiper-container mb-50"
             >
               {display_items.map((prd) => (

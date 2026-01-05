@@ -57,6 +57,7 @@ const FashionCategory = () => {
       <div
         key={item._id}
         className="category-scroll-item"
+        onClick={() => handleCategoryRoute(item.parent)}
         style={{
           flexShrink: 0,
           width: "240px",
@@ -73,6 +74,7 @@ const FashionCategory = () => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
+          cursor: "pointer",
         }}
       >
         <div
@@ -102,7 +104,10 @@ const FashionCategory = () => {
           >
             <a
               className="cursor-pointer"
-              onClick={() => handleCategoryRoute(item.parent)}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCategoryRoute(item.parent);
+              }}
               style={{
                 textDecoration: "none",
                 color: "#222",
@@ -115,7 +120,10 @@ const FashionCategory = () => {
           </h3>
           <a
             className="tp-btn tp-btn-border"
-            onClick={() => handleCategoryRoute(item.parent)}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleCategoryRoute(item.parent);
+            }}
             style={{
               display: "inline-flex",
               alignItems: "center",

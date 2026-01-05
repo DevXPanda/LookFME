@@ -6,6 +6,9 @@ import { CompareTwo } from "@/svg";
 import Wishlist from "@/svg/wishlist";
 import RelatedComboProduct from "./RelatedComboProduct";
 import ColorDropdown from "./Colordropdown";
+import { useDispatch } from "react-redux";
+import { add_cart_product } from "@/redux/features/cartSlice";
+import { notifyError, notifySuccess } from "@/utils/toast";
 // import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -57,6 +60,56 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
   const handleDecrement = (e) => {
     e.preventDefault();
     setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+  };
+
+  const dispatch = useDispatch();
+
+  // Handle Add to Cart
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    
+    // Validate that all colors and sizes are selected
+    if (!selectedColor1 || !selectedSize1) {
+      notifyError("Please select Color 1 and Size 1");
+      return;
+    }
+    if (!selectedColor2 || !selectedSize2) {
+      notifyError("Please select Color 2 and Size 2");
+      return;
+    }
+    if (!selectedColor3 || !selectedSize3) {
+      notifyError("Please select Color 3 and Size 3");
+      return;
+    }
+
+    // Create combo product object with unique ID based on selections
+    const comboId = `combo-${selectedColor1}-${selectedSize1}-${selectedColor2}-${selectedSize2}-${selectedColor3}-${selectedSize3}`;
+    const comboProduct = {
+      _id: comboId,
+      title: "Pick Any 3 - Plain T-shirt Combo 3.0",
+      price: 1099,
+      img: mainImageState || "/placeholder.jpg",
+      quantity: 100, // Available quantity
+      status: "in-stock",
+      category: { name: "Plain T-shirt" },
+      tags: ["T-shirt", "Combo"],
+      sku: "4786",
+      isCombo: true,
+      comboItems: [
+        { color: selectedColor1, size: selectedSize1 },
+        { color: selectedColor2, size: selectedSize2 },
+        { color: selectedColor3, size: selectedSize3 },
+      ],
+    };
+
+    // Add to cart with the selected quantity
+    // Since cart uses state.orderQuantity, we'll add the product quantity times
+    // Each call will increment if the product already exists
+    for (let i = 0; i < quantity; i++) {
+      dispatch(add_cart_product(comboProduct));
+    }
+    
+    notifySuccess(`${quantity} Combo Pack${quantity > 1 ? 's' : ''} added to cart`);
   };
 
   const sizes = ["S", "M", "L", "XL", "XXL"];
@@ -321,11 +374,12 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
                   </div>
 
                   {/* Add to Cart Button */}
-                  {/* <Link href="/cart"> */}
-                    <button className="flex-1 bg-white border border-[#F875AA] text-[#F875AA] font-bold py-2 rounded-lg text-lg transition-all">
-                      Add To Cart
-                    </button>
-                  {/* </Link> */}
+                  <button 
+                    onClick={handleAddToCart}
+                    className="flex-1 bg-white border border-[#F875AA] text-[#F875AA] font-bold py-2 rounded-lg text-lg transition-all hover:bg-[#F875AA] hover:text-white"
+                  >
+                    Add To Cart
+                  </button>
                 </div>
 
                 {/* Buy Now Button */}
