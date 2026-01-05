@@ -182,26 +182,37 @@ const reviewRoutes = require("./routes/review.routes");
 const adminRoutes = require("./routes/admin.routes");
 const cloudinaryRoutes = require("./routes/cloudinary.routes");
 
-// ✅ PORT FIX (MOST IMPORTANT)
+// PORT
 const PORT = process.env.PORT || 7000;
 
-// Allowed origins
-const allowedOrigins = [
-  "http://localhost:3000",
-  "http://localhost:3001",
-  "https://look-fme.vercel.app",
-  "https://lookfame.in"
-];
-
-// Middlewares
+// CORS (FIXED)
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://look-fme.vercel.app",
+      "https://lookfame.in"
+    ];
+
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
+app.options("*", cors());
+
+// Middlewares
 app.use(express.json());
 
-// Morgan only for non-production
 if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
 }
@@ -228,10 +239,9 @@ app.get("/", (req, res) => {
   res.send("App working successfully 🚀");
 });
 
-// Global error handler
+// Error handlers
 app.use(globalErrorHandler);
 
-// 404 handler (FIXED)
 app.use((req, res) => {
   res.status(404).json({
     success: false,
