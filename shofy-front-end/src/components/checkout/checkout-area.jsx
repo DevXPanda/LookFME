@@ -20,7 +20,7 @@ const CheckoutArea = () => {
     }
   },[router]);
   const checkoutData = useCheckoutSubmit();
-  const {handleSubmit,submitHandler,register,errors,handleCouponCode,couponRef,couponApplyMsg} = checkoutData;
+  const {handleSubmit,submitHandler,register,errors,handleCouponCode,couponRef,couponApplyMsg,setValue} = checkoutData;
   const { cart_products } = useSelector((state) => state.cart);
   return (
     <>
@@ -52,7 +52,7 @@ const CheckoutArea = () => {
               <form onSubmit={handleSubmit(submitHandler)}>
                 <div className="row">
                   <div className="col-lg-7">
-                    <CheckoutBillingArea register={register} errors={errors} />
+                    <CheckoutBillingArea register={register} errors={errors} setValue={setValue} />
                   </div>
                   <div className="col-lg-5">
                     <CheckoutOrderArea checkoutData={checkoutData} />

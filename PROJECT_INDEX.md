@@ -263,16 +263,41 @@ src/
 └── data/                  # Static data
 ```
 
+**Main Pages (20+ pages):**
+- `/` - Root redirect
+- `/dashboard` - Main dashboard with analytics
+- `/login` - Admin login
+- `/register` - Admin registration
+- `/forgot-password` - Forgot password page
+- `/forgot-password/[token]` - Reset password with token
+- `/product-list` - Product list view
+- `/product-grid` - Product grid view
+- `/add-product` - Add new product
+- `/edit-product/[id]` - Edit existing product
+- `/category` - Category management
+- `/category/[id]` - Edit category
+- `/brands` - Brand management
+- `/brands/[id]` - Edit brand
+- `/orders` - Order list
+- `/orders/[id]` - Order details
+- `/order-details/[id]` - Order details view
+- `/coupon` - Coupon management
+- `/coupon/[id]` - Edit coupon
+- `/reviews` - Review moderation
+- `/our-staff` - Staff management
+- `/our-staff/[id]` - Edit staff
+- `/profile` - Admin profile settings
+
 **Main Sections:**
-- Dashboard (analytics, sales reports, recent orders)
-- Products (grid/list views, add/edit)
-- Categories (hierarchical management)
-- Brands
+- Dashboard (analytics, sales reports, recent orders, charts)
+- Products (grid/list views, add/edit with variants, images, tags)
+- Categories (hierarchical management with parent/child relationships)
+- Brands (CRUD operations with status management)
 - Orders (list, details, status management, invoice printing)
-- Coupons (create/edit/manage)
-- Reviews (moderation)
-- Staff Management
-- Profile Settings
+- Coupons (create/edit/manage discount codes)
+- Reviews (moderation, delete reviews)
+- Staff Management (add/edit/delete admin users)
+- Profile Settings (update profile, change password)
 
 ---
 
@@ -385,28 +410,70 @@ shofy-backend/
 - `DELETE /:id` - Delete product
 
 **Category Routes (`/api/category`):**
-- Category CRUD operations
+- `GET /get/:id` - Get single category
+- `POST /add` - Add category
+- `POST /add-all` - Add multiple categories
+- `GET /all` - Get all categories
+- `GET /show/:type` - Get product type categories
+- `GET /show` - Get show categories
+- `DELETE /delete/:id` - Delete category
+- `PATCH /edit/:id` - Update category
 
 **Brand Routes (`/api/brand`):**
-- Brand CRUD operations
+- `POST /add` - Add brand
+- `POST /add-all` - Add multiple brands
+- `GET /active` - Get active brands
+- `GET /all` - Get all brands
+- `GET /get/:id` - Get single brand
+- `DELETE /delete/:id` - Delete brand
+- `PATCH /edit/:id` - Update brand
 
 **Order Routes (`/api/order`):**
-- Admin order management
+- `GET /orders` - Get all orders (admin)
+- `GET /:id` - Get single order
+- `POST /create-payment-intent` - Create Stripe payment intent
+- `POST /saveOrder` - Save order
+- `PATCH /update-status/:id` - Update order status
 
 **User Order Routes (`/api/user-order`):**
-- User-specific order operations
-
-**Coupon Routes (`/api/coupon`):**
-- Coupon CRUD operations
+- `GET /dashboard-amount` - Get dashboard amount statistics
+- `GET /sales-report` - Get sales report data
+- `GET /most-selling-category` - Get most selling categories
+- `GET /dashboard-recent-order` - Get recent orders for dashboard
+- `GET /:id` - Get order by ID
+- `GET /` - Get all orders by user (requires authentication)
 
 **Review Routes (`/api/review`):**
-- Review CRUD operations
+- `POST /add` - Add a review
+- `DELETE /delete/:id` - Delete a review
+
+**Coupon Routes (`/api/coupon`):**
+- `POST /add` - Add coupon
+- `POST /all` - Add multiple coupons
+- `GET /` - Get all coupons
+- `GET /:id` - Get coupon by ID
+- `PATCH /:id` - Update coupon
+- `DELETE /:id` - Delete coupon
+
+**Review Routes (`/api/review`):**
+- Review CRUD operations (add, get, update, delete reviews)
 
 **Admin Routes (`/api/admin`):**
-- Admin user management
+- `POST /register` - Register admin/staff
+- `POST /login` - Admin login
+- `POST /add` - Add staff member
+- `GET /all` - Get all staff
+- `GET /get/:id` - Get staff by ID
+- `PATCH /change-password` - Change admin password
+- `PATCH /forget-password` - Request password reset
+- `PATCH /confirm-forget-password` - Confirm password reset
+- `PATCH /update-stuff/:id` - Update staff member
+- `DELETE /:id` - Delete staff
 
 **Cloudinary Routes (`/api/cloudinary`):**
-- File upload operations
+- `POST /add-img` - Upload single image to Cloudinary
+- `POST /add-multiple-img` - Upload multiple images (up to 5) to Cloudinary
+- `DELETE /img-delete` - Delete image from Cloudinary
 
 **Database Models:**
 - User - Customer accounts
@@ -467,13 +534,20 @@ npm run data:import  # Seed database
 ```
 
 **Backend Configuration:**
-The backend requires environment variables in `config/secret.js`:
-- MongoDB connection URI
-- JWT secret key
-- Port number
-- Cloudinary credentials
-- Stripe API keys
-- Email service credentials
+The backend requires environment variables (configured in `config/secret.js`):
+- `MONGO_URI` - MongoDB connection string
+- `JWT_SECRET` - JWT token secret key
+- `PORT` - Server port (default: 7000, fallback from env)
+- Cloudinary credentials (cloud_name, api_key, api_secret)
+- Stripe API keys (for payment processing)
+- Email service credentials (for Nodemailer)
+
+**CORS Configuration:**
+Allowed origins:
+- `http://localhost:3000` (Frontend)
+- `http://localhost:3001` (Admin Panel)
+- `https://look-fme.vercel.app` (Production frontend)
+- `https://lookfame.in` (Production domain)
 
 ---
 
@@ -520,8 +594,9 @@ The backend requires environment variables in `config/secret.js`:
 - **Database**: MongoDB (MongoDB Atlas or self-hosted)
 
 **Production URLs:**
-- Frontend: `https://look-fame-f.vercel.app`
-- Production domain: `https://lookfame.in`
+- Frontend: `https://look-fme.vercel.app` / `https://lookfame.in`
+- Admin Panel: (configured separately)
+- Backend API: (configured separately, port 7000 default)
 
 ---
 
@@ -713,12 +788,24 @@ Duplicate of the admin panel for testing/development purposes.
 - **Data Files:** 5 static data files
 
 ### Admin Panel (`shofy-admin-panel`)
-- **Total Components:** 83+ TSX files
+- **Total Components:** 83 TSX files
 - **Pages:** 20+ pages
-- **Redux Slices:** 9 API slices
+- **Redux Slices:** 9 API slices (RTK Query)
 - **Hooks:** 9 custom hooks
 - **Type Definitions:** 7 TypeScript type files
 - **SVG Icons:** 33 icon components
+- **Component Categories:**
+  - Products (15 components): Add/edit forms, grid/list views, review management
+  - Category (8 components): Hierarchical category management
+  - Brand (7 components): Brand CRUD operations
+  - Orders (7 components): Order management and invoice
+  - Coupon (5 components): Coupon management
+  - Dashboard (5 components): Analytics and charts
+  - Profile (5 components): Admin profile management
+  - Staff (4 components): Staff/user management
+  - Common (2 components): Loading, error messages
+  - Charts (2 components): Line chart, pie chart
+  - UI (1 component): Pagination
 
 ### Backend (`shofy-backend`)
 - **Controllers:** 11 controller files
@@ -730,7 +817,37 @@ Duplicate of the admin panel for testing/development purposes.
 
 ---
 
-*Last Updated: Enhanced Project Index*
+---
+
+## 📋 Quick Reference
+
+### Component Count Summary
+- **Frontend Components:** 183 JSX files
+- **Admin Panel Components:** 83 TSX files
+- **Backend Controllers:** 11 files
+- **Backend Models:** 8 Mongoose models
+- **Backend Routes:** 11 route files
+- **Redux Slices:** 15 (Frontend) + 9 (Admin Panel)
+- **Custom Hooks:** 5 (Frontend) + 9 (Admin Panel)
+- **Type Definitions:** 7 TypeScript files (Admin Panel)
+
+### Technology Versions
+- **Frontend:** Next.js 15.0.7, React 18
+- **Admin Panel:** Next.js 14.2.35, React 18.2.0, TypeScript 5.0.4
+- **Backend:** Node.js 18.x, Express 4.18.2, Mongoose 7.0.1
+
+### Key Integrations
+- **Payment:** Stripe 12.4.0
+- **File Storage:** Cloudinary
+- **Authentication:** JWT (jsonwebtoken), bcryptjs
+- **Email:** Nodemailer
+- **State Management:** Redux Toolkit (@reduxjs/toolkit)
+- **Forms:** React Hook Form + Yup validation
+
+---
+
+*Last Updated: Comprehensive Project Index*
 *Project: LookFame E-Commerce Platform*
-*Total Files Indexed: 400+ files*
+*Total Files Indexed: 500+ files*
+*Index Version: 2.0*
 

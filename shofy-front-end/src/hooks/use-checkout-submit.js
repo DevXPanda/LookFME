@@ -13,6 +13,7 @@ import { set_coupon } from "@/redux/features/coupon/couponSlice";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import {useCreatePaymentIntentMutation,useSaveOrderMutation} from "@/redux/features/order/orderApi";
 import { useGetOfferCouponsQuery } from "@/redux/features/coupon/couponApi";
+import { useUpdateProfileMutation } from "@/redux/features/auth/authApi";
 
 const useCheckoutSubmit = () => {
   // offerCoupons
@@ -21,6 +22,8 @@ const useCheckoutSubmit = () => {
   const [saveOrder, {}] = useSaveOrderMutation();
   // createPaymentIntent
   const [createPaymentIntent, {}] = useCreatePaymentIntentMutation();
+  // updateProfile
+  const [updateProfile] = useUpdateProfileMutation();
   // cart_products
   const { cart_products } = useSelector((state) => state.cart);
   // user
@@ -154,7 +157,7 @@ const useCheckoutSubmit = () => {
 
     if (total < result[0]?.minimumAmount) {
       notifyError(
-        `Minimum ${result[0].minimumAmount} USD required for Apply this coupon!`
+        `Minimum ₹${result[0].minimumAmount} INR required for Apply this coupon!`
       );
       return;
     } else {
@@ -191,8 +194,55 @@ const useCheckoutSubmit = () => {
     setValue("orderNote", shipping_info.orderNote);
   }, [user, setValue, shipping_info, router]);
 
+
   // submitHandler
   const submitHandler = async (data) => {
+    // Save address to user profile
+    if (user?._id) {
+      // Save to localStorage for multiple addresses
+      const existingAddresses = JSON.parse(
+        localStorage.getItem(`user_addresses_${user._id}`) || "[]"
+      );
+      
+      const addressObj = {
+        id: Date.now().toString(),
+        firstName: data.firstName,
+        lastName: data.lastName,
+        country: data.country,
+        address: data.address,
+        city: data.city,
+        zipCode: data.zipCode,
+        contactNo: data.contactNo,
+        email: data.email,
+      };
+
+      // Check if address already exists
+      const existingIndex = existingAddresses.findIndex(
+        addr => addr.address === addressObj.address && 
+                addr.city === addressObj.city &&
+                addr.zipCode === addressObj.zipCode
+      );
+
+      if (existingIndex >= 0) {
+        existingAddresses[existingIndex] = addressObj;
+      } else {
+        existingAddresses.push(addressObj);
+      }
+
+      localStorage.setItem(`user_addresses_${user._id}`, JSON.stringify(existingAddresses));
+
+      // Also save latest address to user profile via API
+      try {
+        await updateProfile({
+          id: user._id,
+          address: `${data.address}, ${data.city}, ${data.zipCode}`,
+          phone: data.contactNo,
+        }).unwrap();
+      } catch (error) {
+        console.error("Failed to update user profile:", error);
+      }
+    }
+
     dispatch(set_shipping(data));
     setIsCheckoutSubmit(true);
 
@@ -325,6 +375,7 @@ const useCheckoutSubmit = () => {
     showCard,
     setShowCard,
     control,
+    setValue,
   };
 };
 

@@ -206,7 +206,7 @@ const menu_data = [
       title: 'KIDS FASHION',
       subtitle: 'TRENDY & COMFY FOR LITTLE ONES',
       image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
-     
+
     }
   },
   {

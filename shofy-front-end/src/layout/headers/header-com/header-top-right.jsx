@@ -1,12 +1,11 @@
 'use client';
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { userLoggedOut } from "@/redux/features/auth/authSlice";
+import { useSelector } from "react-redux";
+import Cookies from "js-cookie";
 
 // language
-function Language({active,handleActive}) {
+function Language({ active, handleActive }) {
   return (
     <div className="tp-header-top-menu-item tp-header-lang">
       <span
@@ -17,7 +16,7 @@ function Language({active,handleActive}) {
         English
       </span>
       <ul className={active === 'lang' ? "tp-lang-list-open" : ""}>
-         <li>
+        <li>
           <a href="#">Hindi</a>
         </li>
         <li>
@@ -35,7 +34,7 @@ function Language({active,handleActive}) {
 }
 
 // currency
-function Currency({active,handleActive}) {
+function Currency({ active, handleActive }) {
   return (
     <div className="tp-header-top-menu-item tp-header-currency">
       <span
@@ -49,58 +48,40 @@ function Currency({active,handleActive}) {
         <li>
           <a href="#">INR</a>
         </li>
-        <li>
-          <a href="#">EUR</a>
-        </li>
-        <li>
-          <a href="#">CHF</a>
-        </li>
-        <li>
-          <a href="#">GBP</a>
-        </li>
-        <li>
-          <a href="#">KWD</a>
-        </li>
-        
       </ul>
     </div>
   );
 }
 
 // setting
-function ProfileSetting({active,handleActive}) {
+function ProfileSetting() {
   const { user } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
-  const router = useRouter();
-  // handle logout
-  const handleLogout = () => {
-    dispatch(userLoggedOut());
-    router.push('/')
+  // Check authentication from cookie as well
+  const userInfoCookie = Cookies.get('userInfo');
+  let isAuthenticated = false;
+
+  if (userInfoCookie) {
+    try {
+      const userInfo = JSON.parse(userInfoCookie);
+      isAuthenticated = userInfo?.user && (userInfo.user.name || userInfo.user.email);
+    } catch (e) {
+      isAuthenticated = user?.name || user?.email;
+    }
+  } else {
+    isAuthenticated = user?.name || user?.email;
   }
+
   return (
     <div className="tp-header-top-menu-item tp-header-setting">
-      <span
-        onClick={() => handleActive('setting')}
-        className="tp-header-setting-toggle"
-        id="tp-header-setting-toggle"
-      >
-        Setting
-      </span>
-      <ul className={active === 'setting' ? "tp-setting-list-open" : ""}>
-        <li>
-          <Link href="/profile">My Profile</Link>
-        </li>
-        <li>
-          <Link href="/wishlist">Wishlist</Link>
-        </li>
-        <li>
-          <Link href="/cart">Cart</Link>
-        </li>
-        <li>
-          {!user?.name &&<Link href="/login" className="cursor-pointer">Login</Link>}
-          {user?.name &&<a onClick={handleLogout} className="cursor-pointer">Logout</a>}
-        </li>
-      </ul>
+      {isAuthenticated ? (
+        <Link href="/profile" className="tp-header-setting-toggle">
+          My Profile
+        </Link>
+      ) : (
+        <Link href="/login" className="tp-header-setting-toggle">
+          Sign In
+        </Link>
+      )}
     </div>
   );
 }
@@ -109,7 +90,7 @@ const HeaderTopRight = () => {
   const [active, setIsActive] = useState('');
   // handle active
   const handleActive = (type) => {
-    if(type === active){
+    if (type === active) {
       setIsActive('')
     }
     else {
@@ -117,11 +98,11 @@ const HeaderTopRight = () => {
     }
   }
   return (
-    <div className="tp-header-top-menu d-flex align-items-center justify-content-end">
+    <div className="tp-header-top-menu d-flex align-items-center justify-content-end flex-wrap" style={{ gap: '8px' }}>
       <Language active={active} handleActive={handleActive} />
       <Currency active={active} handleActive={handleActive} />
-      <ProfileSetting active={active} handleActive={handleActive} />
-      <span>Bulk Order</span>
+      <ProfileSetting />
+      <span className="d-none d-sm-inline">Bulk Order</span>
     </div>
   );
 };

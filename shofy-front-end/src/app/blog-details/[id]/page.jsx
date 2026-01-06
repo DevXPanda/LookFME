@@ -5,8 +5,9 @@ import Footer from "@/layout/footers/footer";
 import BlogDetailsArea from "@/components/blog-details/blog-details-area";
 import blogData from "@/data/blog-data";
 
-const BlogDetails = ({ params }) => {
-  const blogItem = blogData.find((b) => Number(b.id) === Number(params.id));
+const BlogDetails = async ({ params }) => {
+  const { id } = await params;
+  const blogItem = blogData.find((b) => Number(b.id) === Number(id));
   return (
     <Wrapper>
       <HeaderTwo style_2={true} />

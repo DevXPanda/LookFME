@@ -1,13 +1,16 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Rating } from 'react-simple-star-rating';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Cookies from 'js-cookie';
 // internal
 import { AskQuestion, CompareTwo, WishlistTwo } from '@/svg';
 import DetailsBottomInfo from './details-bottom-info';
 import ProductDetailsCountdown from './product-details-countdown';
 import ProductQuantity from './product-quantity';
+import useAddToCart from '@/hooks/use-add-to-cart';
 import { add_cart_product } from '@/redux/features/cartSlice';
 import { add_to_wishlist } from '@/redux/features/wishlist-slice';
 import { add_to_compare } from '@/redux/features/compareSlice';
@@ -17,7 +20,10 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
   const { sku, img, title, imageURLs, category, description, discount, price, status, reviews, tags, offerDate } = productItem || {};
   const [ratingVal, setRatingVal] = useState(0);
   const [textMore, setTextMore] = useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { handleAddToCart } = useAddToCart();
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (reviews && reviews.length > 0) {
@@ -32,7 +38,71 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
 
   // handle add product
   const handleAddProduct = (prd) => {
-    dispatch(add_cart_product(prd));
+    handleAddToCart(prd);
+  };
+
+  // handle buy now - add to cart and redirect to checkout
+  const [isBuyNowProcessing, setIsBuyNowProcessing] = useState(false);
+
+  const handleBuyNow = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Prevent multiple clicks/touches
+    if (isBuyNowProcessing || status === 'out-of-stock') return;
+
+    // Check authentication first
+    try {
+      const userInfoCookie = Cookies.get('userInfo');
+      let isAuthenticated = false;
+
+      if (userInfoCookie) {
+        try {
+          const userInfo = JSON.parse(userInfoCookie);
+          isAuthenticated = userInfo?.user && (userInfo.user.name || userInfo.user.email);
+        } catch (e) {
+          isAuthenticated = user?.name || user?.email;
+        }
+      } else {
+        isAuthenticated = user?.name || user?.email;
+      }
+
+      if (!isAuthenticated) {
+        // Show auth modal
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('showAuthModal', {
+            detail: { source: 'buyNow', product: productItem }
+          }));
+        }
+        return;
+      }
+    } catch (error) {
+      console.error('Error checking authentication:', error);
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('showAuthModal', {
+          detail: { source: 'buyNow', product: productItem }
+        }));
+      }
+      return;
+    }
+
+    setIsBuyNowProcessing(true);
+
+    try {
+      // Add product to cart
+      dispatch(add_cart_product(productItem));
+      dispatch(handleModalClose());
+
+      // Small delay to ensure cart state is updated before navigation
+      // This is especially important on mobile devices
+      await new Promise(resolve => setTimeout(resolve, 150));
+
+      // Navigate to checkout
+      router.push('/checkout');
+    } catch (error) {
+      console.error('Error in Buy Now:', error);
+      setIsBuyNowProcessing(false);
+    }
   };
 
   // handle wishlist product
@@ -113,9 +183,20 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
             <button onClick={() => handleAddProduct(productItem)} disabled={status === 'out-of-stock'} className="tp-product-details-add-to-cart-btn w-100">Add To Cart</button>
           </div>
         </div>
-        <Link href="/cart" onClick={() => dispatch(handleModalClose())}>
-          <button className="tp-product-details-buy-now-btn w-100">Buy Now</button>
-        </Link>
+        <button
+          onClick={handleBuyNow}
+          disabled={status === 'out-of-stock' || isBuyNowProcessing}
+          className="tp-product-details-buy-now-btn w-100"
+          type="button"
+          style={{
+            touchAction: 'manipulation',
+            WebkitTapHighlightColor: 'transparent',
+            userSelect: 'none',
+            cursor: isBuyNowProcessing ? 'wait' : 'pointer'
+          }}
+        >
+          {isBuyNowProcessing ? 'Processing...' : 'Buy Now'}
+        </button>
       </div>
       {/* product-details-action-sm start */}
       <div className="tp-product-details-action-sm">

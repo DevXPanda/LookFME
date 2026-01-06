@@ -1,6 +1,8 @@
+
 // 'use client';
 // import React, { useRef, useState, useEffect } from "react";
 // import Image from "next/image";
+
 // // internal
 // import insta_1 from "@assets/img/instagram/2/insta-1.jpg";
 // import insta_2 from "@assets/img/instagram/2/insta-2.jpg";
@@ -17,203 +19,120 @@
 //   { id: 5, link: "https://www.instagram.com/lookfameofficial", img: insta_5 },
 // ];
 
+// const BANNER_INDEX = instagram_data.findIndex(i => i.banner);
+
 // const InstagramAreaTwo = () => {
 //   const scrollRef = useRef(null);
-//   const [isDragging, setIsDragging] = useState(false);
-//   const [startX, setStartX] = useState(0);
-//   const [scrollLeft, setScrollLeft] = useState(0);
-//   const [hasMoved, setHasMoved] = useState(false);
+//   const autoBackTimer = useRef(null);
 
-//   useEffect(() => {
-//     if (!isDragging && hasMoved) {
-//       const timeout = setTimeout(() => setHasMoved(false), 120);
-//       return () => clearTimeout(timeout);
-//     }
-//   }, [isDragging, hasMoved]);
-
-//   // Handle button scroll
-//   const handleScroll = (direction) => {
+//   /* 👇 Mobile: auto scroll back to Instagram banner */
+//   const scrollToBanner = () => {
 //     if (!scrollRef.current) return;
-//     scrollRef.current.scrollBy({
-//       left: direction === "left" ? -300 : 300,
+//     const container = scrollRef.current;
+//     const itemWidth = container.offsetWidth / 2;
+//     container.scrollTo({
+//       left: BANNER_INDEX * itemWidth,
 //       behavior: "smooth",
 //     });
 //   };
 
-//   // Drag handlers (same as Super Saving Combos)
-//   const beginDrag = (clientX, currentScroll) => {
-//     setIsDragging(true);
-//     setStartX(clientX);
-//     setScrollLeft(currentScroll);
-//     setHasMoved(false);
-//   };
-
-//   const dragMove = (clientX) => {
-//     if (!isDragging || !scrollRef.current) return;
-//     const delta = clientX - startX;
-//     if (Math.abs(delta) > 4 && !hasMoved) {
-//       setHasMoved(true);
+//   /* 👇 On mount → banner center me */
+//   useEffect(() => {
+//     if (window.innerWidth < 768) {
+//       setTimeout(scrollToBanner, 300);
 //     }
-//     const walk = delta * 1.5;
-//     scrollRef.current.scrollLeft = scrollLeft - walk;
+//   }, []);
+
+//   /* 👇 User scroll ke baad auto return */
+//   const handleUserScroll = () => {
+//     if (autoBackTimer.current) clearTimeout(autoBackTimer.current);
+//     autoBackTimer.current = setTimeout(scrollToBanner, 2500);
 //   };
 
-//   const stopDragging = () => setIsDragging(false);
-
-//   // Handle wheel event for mouse wheel scrolling
-//   const handleWheel = (e) => {
-//     if (!scrollRef.current) return;
-//     // Convert vertical wheel scrolling to horizontal
-//     if (e.deltaY !== 0) {
-//       e.preventDefault();
-//       scrollRef.current.scrollLeft += e.deltaY;
-//     }
-//   };
 //   return (
-//     <>
-//       <section className="tp-instagram-area">
-//         <div className="container-fluid pl-20 pr-20">
-//           {/* Desktop Grid View */}
-//           <div className="d-none d-md-block">
-//             <div className="row row-cols-lg-5 row-cols-sm-2 gx-2 gy-2 gy-lg-0">
-//               {instagram_data.map((item) =>
-//                 item.banner ? (
-//                   <div key={item.id} className="col">
-//                     <div className="tp-instagram-banner text-center">
-//                       <div className="tp-instagram-banner-icon mb-40">
-//                         <a href={item.link} target="_blank">
-//                           <Image
-//                             src={item.img}
-//                             alt="instagram img"
-//                           />
-//                         </a>
-//                       </div>
-//                       <div className="tp-instagram-banner-content">
-//                         <span>Follow Us on</span>
-//                         <a href={item.link} target="_blank">Instagram</a>
-//                       </div>
+//     <section className="tp-instagram-area">
+//       <div className="container-fluid pl-20 pr-20">
+
+//         {/* ================= DESKTOP (UNCHANGED) ================= */}
+//         <div className="d-none d-md-block">
+//           <div className="row row-cols-lg-5 row-cols-sm-2 gx-2 gy-2 gy-lg-0">
+//             {instagram_data.map((item) =>
+//               item.banner ? (
+//                 <div key={item.id} className="col">
+//                   <div className="tp-instagram-banner text-center">
+//                     <div className="tp-instagram-banner-icon mb-40">
+//                       <a href={item.link} target="_blank">
+//                         <Image src={item.img} alt="instagram" />
+//                       </a>
+//                     </div>
+//                     <div className="tp-instagram-banner-content">
+//                       <span>Follow Us on</span>
+//                       <a href={item.link} target="_blank">Instagram</a>
+//                     </div>
+//                   </div>
+//                 </div>
+//               ) : (
+//                 <div key={item.id} className="col">
+//                   <div className="tp-instagram-item-2">
+//                     <Image src={item.img} alt="insta" fill />
+//                   </div>
+//                 </div>
+//               )
+//             )}
+//           </div>
+//         </div>
+
+//         {/* ================= MOBILE (UPDATED) ================= */}
+//         <div className="d-block d-md-none">
+//           <div
+//             ref={scrollRef}
+//             onScroll={handleUserScroll}
+//             className="instagram-scroll-container"
+//             style={{
+//               display: "flex",
+//               overflowX: "auto",
+//               scrollSnapType: "x mandatory",
+//               gap: "8px",
+//               padding: "0 8px",
+//             }}
+//           >
+//             {instagram_data.map((item) => (
+//               <div
+//                 key={item.id}
+//                 style={{
+//                   flex: "0 0 50%",
+//                   scrollSnapAlign: "center",
+//                   aspectRatio: "1 / 1",   // ✅ SAME SIZE
+//                   position: "relative",
+//                 }}
+//               >
+//                 {item.banner ? (
+//                   <div className="tp-instagram-banner text-center h-100">
+//                     <div className="tp-instagram-banner-icon">
+//                       <Image src={item.img} alt="instagram" />
+//                     </div>
+//                     <div className="tp-instagram-banner-content">
+//                       <span>Follow Us on</span>
+//                       <a href={item.link} target="_blank">Instagram</a>
 //                     </div>
 //                   </div>
 //                 ) : (
-//                   <div key={item.id} className="col">
-//                     <div className="tp-instagram-item-2">
-//                       <Image src={item.img} alt="user image" style={{ width: '100%', height: '100%' }} />
-//                       <div className="tp-instagram-icon-2">
-//                         <a href={item.link} target="_blank" className="popup-image">
-//                           <i className="fa-brands fa-instagram"></i>
-//                         </a>
-//                       </div>
-//                     </div>
+//                   <div className="tp-instagram-item-2 h-100">
+//                     <Image src={item.img} alt="insta" fill />
 //                   </div>
-//                 )
-//               )}
-//             </div>
-//           </div>
-
-//           {/* Mobile Slider View */}
-//           <div className="d-block d-md-none">
-//             <div className="instagram-scroll-wrapper p-relative">
-//               {/* Scrollable Container */}
-//               <div
-//                 ref={scrollRef}
-//                 className="instagram-scroll-container"
-//                 onMouseDown={(e) =>
-//                   beginDrag(e.clientX, scrollRef.current.scrollLeft)
-//                 }
-//                 onMouseMove={(e) => {
-//                   if (isDragging) {
-//                     e.preventDefault();
-//                     dragMove(e.clientX);
-//                   }
-//                 }}
-//                 onMouseUp={stopDragging}
-//                 onMouseLeave={stopDragging}
-//                 onTouchStart={(e) =>
-//                   beginDrag(e.touches[0].clientX, scrollRef.current.scrollLeft)
-//                 }
-//                 onTouchMove={(e) => {
-//                   dragMove(e.touches[0].clientX);
-//                 }}
-//                 onTouchEnd={stopDragging}
-//                 onTouchCancel={stopDragging}
-//                 onWheel={handleWheel}
-//                 style={{
-//                   overflowX: "auto",
-//                   overflowY: "hidden",
-//                   whiteSpace: "nowrap",
-//                   cursor: isDragging ? "grabbing" : "grab",
-//                   padding: "0 8px",
-//                   scrollbarWidth: "none",
-//                   msOverflowStyle: "none",
-//                   userSelect: "none",
-//                   WebkitUserSelect: "none",
-//                 }}
-//               >
-//                 <div
-//                   style={{
-//                     display: "inline-flex",
-//                     gap: "8px",
-//                     padding: "0 4px",
-//                     minWidth: "100%",
-//                   }}
-//                 >
-//                   {instagram_data.map((item) =>
-//                     item.banner ? (
-//                       <div
-//                         key={item.id}
-//                         style={{
-//                           flexShrink: 0,
-//                           width: "calc(50% - 4px)",
-//                           minWidth: "calc(50% - 4px)",
-//                         }}
-//                       >
-//                         <div className="tp-instagram-banner text-center">
-//                           <div className="tp-instagram-banner-icon mb-40">
-//                             <a href={item.link} target="_blank">
-//                               <Image
-//                                 src={item.img}
-//                                 alt="instagram img"
-//                               />
-//                             </a>
-//                           </div>
-//                           <div className="tp-instagram-banner-content">
-//                             <span>Follow Us on</span>
-//                             <a href={item.link} target="_blank">Instagram</a>
-//                           </div>
-//                         </div>
-//                       </div>
-//                     ) : (
-//                       <div
-//                         key={item.id}
-//                         style={{
-//                           flexShrink: 0,
-//                           width: "calc(50% - 4px)",
-//                           minWidth: "calc(50% - 4px)",
-//                         }}
-//                       >
-//                         <div className="tp-instagram-item-2">
-//                           <Image src={item.img} alt="user image" style={{ width: '100%', height: '100%' }} />
-//                           <div className="tp-instagram-icon-2">
-//                             <a href={item.link} target="_blank" className="popup-image">
-//                               <i className="fa-brands fa-instagram"></i>
-//                             </a>
-//                           </div>
-//                         </div>
-//                       </div>
-//                     )
-//                   )}
-//                 </div>
+//                 )}
 //               </div>
-//             </div>
+//             ))}
 //           </div>
 //         </div>
-//       </section>
+//       </div>
+
 //       <style jsx>{`
 //         .instagram-scroll-container::-webkit-scrollbar {
 //           display: none;
 //         }
 //       `}</style>
-//     </>
+//     </section>
 //   );
 // };
 
@@ -223,14 +142,14 @@
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 
-// internal
+// assets
 import insta_1 from "@assets/img/instagram/2/insta-1.jpg";
 import insta_2 from "@assets/img/instagram/2/insta-2.jpg";
 import insta_3 from "@assets/img/instagram/2/insta-3.jpg";
 import insta_5 from "@assets/img/instagram/2/insta-5.jpg";
 import insta_icon from "@assets/img/instagram/2/insta-icon.png";
 
-// instagram data
+// data
 const instagram_data = [
   { id: 1, link: "https://www.instagram.com/lookfameofficial", img: insta_1 },
   { id: 2, link: "https://www.instagram.com/lookfameofficial", img: insta_2 },
@@ -239,13 +158,14 @@ const instagram_data = [
   { id: 5, link: "https://www.instagram.com/lookfameofficial", img: insta_5 },
 ];
 
-const BANNER_INDEX = instagram_data.findIndex(i => i.banner);
+const BANNER_INDEX = instagram_data.findIndex((i) => i.banner);
 
 const InstagramAreaTwo = () => {
   const scrollRef = useRef(null);
   const autoBackTimer = useRef(null);
 
-  /* 👇 Mobile: auto scroll back to Instagram banner */
+  /* ================= MOBILE LOGIC ONLY ================= */
+
   const scrollToBanner = () => {
     if (!scrollRef.current) return;
     const container = scrollRef.current;
@@ -256,14 +176,14 @@ const InstagramAreaTwo = () => {
     });
   };
 
-  /* 👇 On mount → banner center me */
+  // On mobile load → Instagram banner center
   useEffect(() => {
-    if (window.innerWidth < 768) {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
       setTimeout(scrollToBanner, 300);
     }
   }, []);
 
-  /* 👇 User scroll ke baad auto return */
+  // After user scroll → auto return
   const handleUserScroll = () => {
     if (autoBackTimer.current) clearTimeout(autoBackTimer.current);
     autoBackTimer.current = setTimeout(scrollToBanner, 2500);
@@ -273,7 +193,7 @@ const InstagramAreaTwo = () => {
     <section className="tp-instagram-area">
       <div className="container-fluid pl-20 pr-20">
 
-        {/* ================= DESKTOP (UNCHANGED) ================= */}
+        {/* ================= DESKTOP (ORIGINAL – UNTOUCHED) ================= */}
         <div className="d-none d-md-block">
           <div className="row row-cols-lg-5 row-cols-sm-2 gx-2 gy-2 gy-lg-0">
             {instagram_data.map((item) =>
@@ -282,7 +202,12 @@ const InstagramAreaTwo = () => {
                   <div className="tp-instagram-banner text-center">
                     <div className="tp-instagram-banner-icon mb-40">
                       <a href={item.link} target="_blank">
-                        <Image src={item.img} alt="instagram" />
+                        <Image
+                          src={item.img}
+                          alt="instagram"
+                          width={80}
+                          height={80}
+                        />
                       </a>
                     </div>
                     <div className="tp-instagram-banner-content">
@@ -294,7 +219,18 @@ const InstagramAreaTwo = () => {
               ) : (
                 <div key={item.id} className="col">
                   <div className="tp-instagram-item-2">
-                    <Image src={item.img} alt="insta" fill />
+                    <Image
+                      src={item.img}
+                      alt="instagram"
+                      width={300}
+                      height={300}
+                      style={{ width: "100%", height: "auto" }}
+                    />
+                    <div className="tp-instagram-icon-2">
+                      <a href={item.link} target="_blank">
+                        <i className="fa-brands fa-instagram"></i>
+                      </a>
+                    </div>
                   </div>
                 </div>
               )
@@ -302,7 +238,7 @@ const InstagramAreaTwo = () => {
           </div>
         </div>
 
-        {/* ================= MOBILE (UPDATED) ================= */}
+        {/* ================= MOBILE (CUSTOM SLIDER) ================= */}
         <div className="d-block d-md-none">
           <div
             ref={scrollRef}
@@ -314,6 +250,7 @@ const InstagramAreaTwo = () => {
               scrollSnapType: "x mandatory",
               gap: "8px",
               padding: "0 8px",
+              scrollbarWidth: "none",
             }}
           >
             {instagram_data.map((item) => (
@@ -322,14 +259,19 @@ const InstagramAreaTwo = () => {
                 style={{
                   flex: "0 0 50%",
                   scrollSnapAlign: "center",
-                  aspectRatio: "1 / 1",   // ✅ SAME SIZE
+                  aspectRatio: "1 / 1",
                   position: "relative",
                 }}
               >
                 {item.banner ? (
                   <div className="tp-instagram-banner text-center h-100">
                     <div className="tp-instagram-banner-icon">
-                      <Image src={item.img} alt="instagram" />
+                      <Image
+                        src={item.img}
+                        alt="instagram"
+                        width={60}
+                        height={60}
+                      />
                     </div>
                     <div className="tp-instagram-banner-content">
                       <span>Follow Us on</span>
@@ -338,13 +280,19 @@ const InstagramAreaTwo = () => {
                   </div>
                 ) : (
                   <div className="tp-instagram-item-2 h-100">
-                    <Image src={item.img} alt="insta" fill />
+                    <Image
+                      src={item.img}
+                      alt="instagram"
+                      fill
+                      style={{ objectFit: "cover" }}
+                    />
                   </div>
                 )}
               </div>
             ))}
           </div>
         </div>
+
       </div>
 
       <style jsx>{`

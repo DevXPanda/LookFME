@@ -34,8 +34,8 @@ export const metadata = {
   title: "Shofy - Product Details Page",
 };
 
-export default function ComboDetailById({ params }) {
-  const { id } = params;
+export default async function ComboDetailById({ params }) {
+  const { id } = await params;
 
   const imagePath = `/assets/img/combos/${id}.jpg`;
 

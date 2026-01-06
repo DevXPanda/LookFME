@@ -5,16 +5,17 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { Rating } from "react-simple-star-rating";
 // internal
-import { add_cart_product } from "@/redux/features/cartSlice";
+import useAddToCart from "@/hooks/use-add-to-cart";
 import { remove_compare_product } from "@/redux/features/compareSlice";
 
 const CompareArea = () => {
   const { compareItems } = useSelector((state) => state.compare);
   const dispatch = useDispatch();
+  const { handleAddToCart } = useAddToCart();
 
   // handle add product
   const handleAddProduct = (prd) => {
-    dispatch(add_cart_product(prd));
+    handleAddToCart(prd);
   };
   // handle add product
   const handleRemoveComparePrd = (prd) => {

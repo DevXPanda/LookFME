@@ -6,7 +6,7 @@ import Link from "next/link";
 // internal
 import { Cart, CompareThree, QuickView, Wishlist } from "@/svg";
 import { handleProductModal } from "@/redux/features/productModalSlice";
-import { add_cart_product } from "@/redux/features/cartSlice";
+import useAddToCart from "@/hooks/use-add-to-cart";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
 
@@ -14,6 +14,8 @@ const ShopListItem = ({ product }) => {
   const { _id, img, category, title, reviews, price, discount, tags, description } = product || {};
   const dispatch = useDispatch()
   const [ratingVal, setRatingVal] = useState(0);
+  const { handleAddToCart } = useAddToCart();
+  
   useEffect(() => {
     if (reviews && reviews.length > 0) {
       const rating =
@@ -27,7 +29,7 @@ const ShopListItem = ({ product }) => {
 
   // handle add product
   const handleAddProduct = (prd) => {
-    dispatch(add_cart_product(prd));
+    handleAddToCart(prd);
   };
   // handle wishlist product
   const handleWishlistProduct = (prd) => {

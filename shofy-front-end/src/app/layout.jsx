@@ -4,6 +4,7 @@ import {Jost, Roboto,Charm,Oregano, Poppins} from 'next/font/google';
 import Providers from '@/components/provider';
 import { ToastContainer } from "../utils/toast";
 import { Icons } from 'react-toastify';
+import AuthModalWrapper from '@/components/common/auth-modal-wrapper';
 
 
 export const metadata = {
@@ -62,6 +63,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${body.variable} ${heading.variable} ${p.variable} ${jost.variable} ${roboto.variable} ${oregano.variable} ${charm.variable} ${poppins.variable}`}>
         <Providers>
+          <AuthModalWrapper />
           {children}
           <ToastContainer
           position="top-center"

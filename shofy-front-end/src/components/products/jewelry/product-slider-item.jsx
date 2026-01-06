@@ -4,7 +4,7 @@ import Link from "next/link";
 // internal
 import { AddCart, Cart, QuickView, Wishlist } from "@/svg";
 import { handleProductModal } from "@/redux/features/productModalSlice";
-import { add_cart_product } from "@/redux/features/cartSlice";
+import useAddToCart from "@/hooks/use-add-to-cart";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { notifyError } from "@/utils/toast";
 
@@ -15,6 +15,7 @@ const ProductSliderItem = ({ product }) => {
   const isAddedToCart = cart_products.some((prd) => prd._id === _id);
   const isAddedToWishlist = wishlist.some((prd) => prd._id === _id);
   const dispatch = useDispatch();
+  const { handleAddToCart } = useAddToCart();
 
   // handle add product
   const handleAddProduct = (prd) => {
@@ -22,7 +23,7 @@ const ProductSliderItem = ({ product }) => {
       notifyError(`This product out-of-stock`)
     }
     else {
-      dispatch(add_cart_product(prd));
+      handleAddToCart(prd);
     }
   };
   // handle wishlist product
@@ -82,7 +83,7 @@ const ProductSliderItem = ({ product }) => {
           <Link href={`/product-details/${_id}`}>{title}</Link>
         </h3>
         <div className="tp-category-price-wrapper-4">
-          <span className="tp-category-price-4">${price.toFixed(2)}</span>
+          <span className="tp-category-price-4">₹{price.toFixed(2)}</span>
           <div className="tp-category-add-to-cart">
             {isAddedToCart ? (
               <Link href="/cart" className="tp-category-add-to-cart-4">

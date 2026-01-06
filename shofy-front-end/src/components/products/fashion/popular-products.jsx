@@ -112,9 +112,7 @@ const PopularProducts = () => {
         >
           {products.data.map((prd) => (
             <SwiperSlide key={prd._id}>
-              <div className="popular-product-slide">
-                <ProductItem product={prd} />
-              </div>
+              <ProductItem product={prd} />
             </SwiperSlide>
           ))}
         </Swiper>

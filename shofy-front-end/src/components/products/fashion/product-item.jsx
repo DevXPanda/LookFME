@@ -7,7 +7,7 @@ import '@/styles/rating-fix.css';
 // internal
 import { Cart, CompareThree, QuickView, Wishlist } from "@/svg";
 import { handleProductModal } from "@/redux/features/productModalSlice";
-import { add_cart_product } from "@/redux/features/cartSlice";
+import useAddToCart from "@/hooks/use-add-to-cart";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
 
@@ -19,6 +19,7 @@ const ProductItem = ({ product, style_2 = false }) => {
   const isAddedToCart = cart_products.some((prd) => prd._id === _id);
   const isAddedToWishlist = wishlist.some((prd) => prd._id === _id);
   const dispatch = useDispatch();
+  const { handleAddToCart: addToCartHook } = useAddToCart(); // Use the hook
 
   useEffect(() => {
     if (reviews && reviews.length > 0) {
@@ -33,7 +34,10 @@ const ProductItem = ({ product, style_2 = false }) => {
 
   // handle add product
   const handleAddProduct = (prd) => {
-    dispatch(add_cart_product(prd));
+    if (prd.status === 'out-of-stock') {
+      return;
+    }
+    addToCartHook(prd); // Use the hook for add to cart
   };
   // handle wishlist product
   const handleWishlistProduct = (prd) => {
@@ -54,7 +58,7 @@ const ProductItem = ({ product, style_2 = false }) => {
             src={img}
             alt="product img"
             width={160}
-            height={200} 
+            height={200}
             className="w-full h-full object-cover rounded-lg"
           />
         </Link>

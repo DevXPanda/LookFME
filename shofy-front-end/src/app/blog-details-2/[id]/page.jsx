@@ -9,8 +9,9 @@ export const metadata = {
   title: "Shofy - Blog Details 2 Page",
 };
 
-export default function BlogDetailsPageTwo({ params }) {
-  const blogItem = blogData.find((b) => Number(b.id) === Number(params.id));
+export default async function BlogDetailsPageTwo({ params }) {
+  const { id } = await params;
+  const blogItem = blogData.find((b) => Number(b.id) === Number(id));
   return (
     <Wrapper>
       <HeaderTwo style_2={true} />

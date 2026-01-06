@@ -9,7 +9,7 @@ import '@/styles/rating-fix.css';
 import { Cart, QuickView, Wishlist } from "@/svg";
 import Timer from "@/components/common/timer";
 import { handleProductModal } from "@/redux/features/productModalSlice";
-import { add_cart_product } from "@/redux/features/cartSlice";
+import useAddToCart from "@/hooks/use-add-to-cart";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 
 const ProductItem = ({ product, offer_style = false }) => {
@@ -21,6 +21,8 @@ const ProductItem = ({ product, offer_style = false }) => {
   const isAddedToWishlist = wishlist.some((prd) => prd._id === _id);
   const dispatch = useDispatch();
   const [ratingVal, setRatingVal] = useState(0);
+  const { handleAddToCart } = useAddToCart();
+  
   useEffect(() => {
     if (reviews && reviews.length > 0) {
       const rating =
@@ -34,7 +36,7 @@ const ProductItem = ({ product, offer_style = false }) => {
 
   // handle add product
   const handleAddProduct = (prd) => {
-    dispatch(add_cart_product(prd));
+    handleAddToCart(prd);
   };
   // handle wishlist product
   const handleWishlistProduct = (prd) => {

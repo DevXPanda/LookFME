@@ -6,11 +6,12 @@ import { CompareTwo } from "@/svg";
 import Wishlist from "@/svg/wishlist";
 import RelatedComboProduct from "./RelatedComboProduct";
 import ColorDropdown from "./Colordropdown";
-import { useDispatch } from "react-redux";
-import { add_cart_product } from "@/redux/features/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import useAddToCart from "@/hooks/use-add-to-cart";
 import { notifyError, notifySuccess } from "@/utils/toast";
-// import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
   const [selectedColor1, setSelectedColor1] = useState("");
@@ -63,28 +64,29 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
   };
 
   const dispatch = useDispatch();
+  const router = useRouter();
+  const { handleAddToCart: addToCartHook } = useAddToCart();
+  const { user } = useSelector((state) => state.auth);
 
-  // Handle Add to Cart
-  const handleAddToCart = (e) => {
-    e.preventDefault();
-    
+  // Create combo product object
+  const createComboProduct = () => {
     // Validate that all colors and sizes are selected
     if (!selectedColor1 || !selectedSize1) {
       notifyError("Please select Color 1 and Size 1");
-      return;
+      return null;
     }
     if (!selectedColor2 || !selectedSize2) {
       notifyError("Please select Color 2 and Size 2");
-      return;
+      return null;
     }
     if (!selectedColor3 || !selectedSize3) {
       notifyError("Please select Color 3 and Size 3");
-      return;
+      return null;
     }
 
     // Create combo product object with unique ID based on selections
     const comboId = `combo-${selectedColor1}-${selectedSize1}-${selectedColor2}-${selectedSize2}-${selectedColor3}-${selectedSize3}`;
-    const comboProduct = {
+    return {
       _id: comboId,
       title: "Pick Any 3 - Plain T-shirt Combo 3.0",
       price: 1099,
@@ -101,15 +103,131 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
         { color: selectedColor3, size: selectedSize3 },
       ],
     };
+  };
+
+  // Handle Add to Cart
+  const handleAddToCartClick = (e) => {
+    e.preventDefault();
+    
+    const comboProduct = createComboProduct();
+    if (!comboProduct) return;
+
+    // Check authentication
+    try {
+      const userInfoCookie = Cookies.get('userInfo');
+      let isAuthenticated = false;
+      
+      if (userInfoCookie) {
+        try {
+          const userInfo = JSON.parse(userInfoCookie);
+          isAuthenticated = userInfo?.user && (userInfo.user.name || userInfo.user.email);
+        } catch (e) {
+          isAuthenticated = user?.name || user?.email;
+        }
+      } else {
+        isAuthenticated = user?.name || user?.email;
+      }
+      
+      if (!isAuthenticated) {
+        // Show auth modal
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('showAuthModal', { 
+            detail: { source: 'addToCart', product: comboProduct } 
+          }));
+        }
+        return;
+      }
+    } catch (error) {
+      console.error('Error checking authentication:', error);
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('showAuthModal', { 
+          detail: { source: 'addToCart', product: comboProduct } 
+        }));
+      }
+      return;
+    }
 
     // Add to cart with the selected quantity
     // Since cart uses state.orderQuantity, we'll add the product quantity times
     // Each call will increment if the product already exists
     for (let i = 0; i < quantity; i++) {
-      dispatch(add_cart_product(comboProduct));
+      addToCartHook(comboProduct);
     }
     
     notifySuccess(`${quantity} Combo Pack${quantity > 1 ? 's' : ''} added to cart`);
+  };
+
+  // Handle Buy Now - add to cart and redirect to checkout
+  const [isBuyNowProcessing, setIsBuyNowProcessing] = useState(false);
+  
+  const handleBuyNow = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Prevent multiple clicks/touches
+    if (isBuyNowProcessing) return;
+    
+    // Check authentication first
+    try {
+      const userInfoCookie = Cookies.get('userInfo');
+      let isAuthenticated = false;
+      
+      if (userInfoCookie) {
+        try {
+          const userInfo = JSON.parse(userInfoCookie);
+          isAuthenticated = userInfo?.user && (userInfo.user.name || userInfo.user.email);
+        } catch (e) {
+          isAuthenticated = user?.name || user?.email;
+        }
+      } else {
+        isAuthenticated = user?.name || user?.email;
+      }
+      
+      if (!isAuthenticated) {
+        // Show auth modal
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('showAuthModal', { 
+            detail: { source: 'buyNow', product: null } 
+          }));
+        }
+        return;
+      }
+    } catch (error) {
+      console.error('Error checking authentication:', error);
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('showAuthModal', { 
+          detail: { source: 'buyNow', product: null } 
+        }));
+      }
+      return;
+    }
+    
+    setIsBuyNowProcessing(true);
+    
+    try {
+      const comboProduct = createComboProduct();
+      if (!comboProduct) {
+        setIsBuyNowProcessing(false);
+        return;
+      }
+
+      // Add to cart with the selected quantity
+      for (let i = 0; i < quantity; i++) {
+        addToCartHook(comboProduct);
+      }
+      
+      notifySuccess(`${quantity} Combo Pack${quantity > 1 ? 's' : ''} added to cart`);
+      
+      // Small delay to ensure cart state is updated before navigation
+      // This is especially important on mobile devices
+      await new Promise(resolve => setTimeout(resolve, 150));
+      
+      // Navigate to checkout
+      router.push('/checkout');
+    } catch (error) {
+      console.error('Error in Buy Now:', error);
+      setIsBuyNowProcessing(false);
+    }
   };
 
   const sizes = ["S", "M", "L", "XL", "XXL"];
@@ -375,7 +493,7 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
 
                   {/* Add to Cart Button */}
                   <button 
-                    onClick={handleAddToCart}
+                    onClick={handleAddToCartClick}
                     className="flex-1 bg-white border border-[#F875AA] text-[#F875AA] font-bold py-2 rounded-lg text-lg transition-all hover:bg-[#F875AA] hover:text-white"
                   >
                     Add To Cart
@@ -383,11 +501,19 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
                 </div>
 
                 {/* Buy Now Button */}
-                <Link href = "/checkout">
-                  <button className="w-full bg-[#F875AA] text-white font-bold py-2 rounded-lg text-lg transition-all hover:bg-[#e6669a]">
-                    Buy Now
-                  </button>
-                </Link>
+                <button 
+                  onClick={handleBuyNow}
+                  disabled={isBuyNowProcessing}
+                  className="w-full bg-[#F875AA] text-white font-bold py-2 rounded-lg text-lg transition-all hover:bg-[#e6669a] disabled:opacity-50 disabled:cursor-wait"
+                  type="button"
+                  style={{ 
+                    touchAction: 'manipulation',
+                    WebkitTapHighlightColor: 'transparent',
+                    userSelect: 'none'
+                  }}
+                >
+                  {isBuyNowProcessing ? 'Processing...' : 'Buy Now'}
+                </button>
               </div>
 
               {/* compare  wishlist and ask question*/}

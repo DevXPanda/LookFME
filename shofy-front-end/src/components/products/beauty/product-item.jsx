@@ -5,7 +5,7 @@ import Link from "next/link";
 // internal
 import { Cart, QuickView, Wishlist } from "@/svg";
 import { handleProductModal } from "@/redux/features/productModalSlice";
-import { add_cart_product } from "@/redux/features/cartSlice";
+import useAddToCart from "@/hooks/use-add-to-cart";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 
 const ProductItem = ({ product, prdCenter = false,primary_style=false }) => {
@@ -15,10 +15,11 @@ const ProductItem = ({ product, prdCenter = false,primary_style=false }) => {
   const isAddedToCart = cart_products.some((prd) => prd._id === _id);
   const isAddedToWishlist = wishlist.some((prd) => prd._id === _id);
   const dispatch = useDispatch();
+  const { handleAddToCart } = useAddToCart();
 
   // handle add product
   const handleAddProduct = (prd) => {
-    dispatch(add_cart_product(prd));
+    handleAddToCart(prd);
   };
    // handle wishlist product
    const handleWishlistProduct = (prd) => {
