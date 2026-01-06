@@ -183,7 +183,7 @@ const FashionCategory = () => {
   }
   return (
     <>
-      <section className="tp-category-area pb-95 pt-95">
+      <section className="tp-category-area pb-95 pt-45">
         <div className="container">
           <div className="row">
             <div className="col-xl-12">

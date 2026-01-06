@@ -175,6 +175,7 @@
 // };
 
 // export default AutoSlider;
+
 "use client";
 import React, { useRef, useEffect, useState, useMemo } from "react";
 
@@ -187,7 +188,7 @@ const AutoSlider = () => {
     () => [
       "/assets/img/autoslider/1.jpg",
       "/assets/img/autoslider/2.jpg",
-      "/assets/img/autoslider/3.jpg",
+      "/assets/img/autoslider/3.png",
     ],
     []
   );
@@ -228,10 +229,9 @@ const AutoSlider = () => {
         onMouseLeave={() => setIsHovered(false)}
         style={{
           display: "flex",
-          overflowX: "hidden",
+          overflow: "hidden",
           scrollSnapType: "x mandatory",
           width: "100%",
-          minHeight: "520px",
         }}
       >
         {images.map((src, i) => (
@@ -240,10 +240,10 @@ const AutoSlider = () => {
             style={{
               flexShrink: 0,
               width: "100%",
-              minWidth: "100%",
-              minHeight: "520px",
+              aspectRatio: "3 / 1", // ✅ SAME AS BANNERS
               position: "relative",
               scrollSnapAlign: "start",
+              overflow: "hidden",
             }}
           >
             <img
@@ -292,14 +292,6 @@ const AutoSlider = () => {
           />
         ))}
       </div>
-
-      <style jsx>{`
-        @media (max-width: 767px) {
-          .tp-category-area div[style*="min-height"] {
-            min-height: 260px !important;
-          }
-        }
-      `}</style>
     </section>
   );
 };
