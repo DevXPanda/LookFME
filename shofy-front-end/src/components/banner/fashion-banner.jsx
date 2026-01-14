@@ -29,7 +29,7 @@ const sliderData = [
   { id: 2, desktop: slider_img_2, mobile: mobile_img_2, category: "Women's" },
   { id: 3, desktop: slider_img_3, mobile: mobile_img_3, category: "Baby" },
   { id: 4, desktop: slider_img_4, mobile: mobile_img_4, category: 'Bags' },
-  { id: 5, desktop: slider_img_5, mobile: mobile_img_5, category: 'Discover Skincare' },
+  { id: 5, desktop: slider_img_5, mobile: mobile_img_5, category: 'Cosmetic' },
 ];
 
 const sliderSettings = {
@@ -60,43 +60,112 @@ export default function FashionBanner() {
   };
 
   return (
-    <section className="tp-slider-area">
-      <Swiper
-        {...sliderSettings}
-        modules={[Pagination, EffectFade, Autoplay]}
-        className="tp-slider-active-2"
-      >
-        {sliderData.map((item) => (
-          <SwiperSlide key={item.id}>
-            <div
-              className="tp-slider-item-2 banner-image-container banner-clickable"
-              onClick={() => handleBannerClick(item.category)}
-            >
-              {/* Desktop Image */}
-              <Image
-                src={item.desktop}
-                alt="banner"
-                fill
-                priority
-                sizes="(max-width: 768px) 0vw, 100vw"
-                className="hidden md:block"
-              />
+    <>
+      <style dangerouslySetInnerHTML={{__html: `
+        .tp-slider-area {
+          position: relative;
+          width: 100%;
+          overflow: hidden;
+        }
+        
+        .tp-slider-active-2 {
+          width: 100%;
+          position: relative;
+        }
+        
+        .tp-slider-active-2 .swiper-wrapper {
+          width: 100%;
+          display: flex;
+        }
+        
+        .tp-slider-active-2 .swiper-slide {
+          width: 100%;
+          height: auto;
+          flex-shrink: 0;
+        }
+        
+        .tp-slider-item-2 {
+          position: relative;
+          width: 100%;
+          overflow: hidden;
+          display: block;
+        }
+        
+        .banner-image-container {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          display: block;
+        }
+        
+        .banner-image-container > span {
+          position: absolute !important;
+          inset: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+        }
+        
+        .banner-image-container img {
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: cover !important;
+          object-position: center !important;
+        }
+        
+        @media (max-width: 768px) {
+          .tp-slider-item-2 {
+            aspect-ratio: 4 / 5 !important;
+            min-height: 0 !important;
+          }
+        }
+        
+        @media (min-width: 769px) {
+          .tp-slider-item-2 {
+            aspect-ratio: 3 / 1 !important;
+            min-height: 0 !important;
+          }
+        }
+      `}} />
+      <section className="tp-slider-area">
+        <Swiper
+          {...sliderSettings}
+          modules={[Pagination, EffectFade, Autoplay]}
+          className="tp-slider-active-2"
+        >
+          {sliderData.map((item) => (
+            <SwiperSlide key={item.id}>
+              <div
+                className="tp-slider-item-2 banner-image-container banner-clickable"
+                onClick={() => handleBannerClick(item.category)}
+              >
+                {/* Desktop Image */}
+                <Image
+                  src={item.desktop}
+                  alt="banner"
+                  fill
+                  priority
+                  sizes="100vw"
+                  className="hidden md:block"
+                  style={{ objectFit: 'cover', objectPosition: 'center' }}
+                />
 
-              {/* Mobile Image */}
-              <Image
-                src={item.mobile}
-                alt="banner"
-                fill
-                priority
-                sizes="100vw"
-                className="block md:hidden"
-              />
-            </div>
-          </SwiperSlide>
-        ))}
+                {/* Mobile Image */}
+                <Image
+                  src={item.mobile}
+                  alt="banner"
+                  fill
+                  priority
+                  sizes="100vw"
+                  className="block md:hidden"
+                  style={{ objectFit: 'cover', objectPosition: 'center' }}
+                />
+              </div>
+            </SwiperSlide>
+          ))}
 
-        <div className="tp-slider-2-dot tp-swiper-dot" />
-      </Swiper>
-    </section>
+          <div className="tp-slider-2-dot tp-swiper-dot" />
+        </Swiper>
+      </section>
+    </>
   );
 }

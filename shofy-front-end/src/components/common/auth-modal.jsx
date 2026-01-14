@@ -215,7 +215,7 @@ const AuthModal = ({ isOpen, onClose, redirectTo }) => {
             <div style={{ textAlign: 'center', marginBottom: '30px' }}>
               <h3 style={{ marginBottom: '10px' }}>Login to LookFame</h3>
               <p style={{ color: '#666' }}>
-                Don't have an account?{" "}
+                {"Don't have an account?"} {" "}
                 <span
                   onClick={() => setActiveTab('register')}
                   style={{ color: '#F875AA', cursor: 'pointer' }}

@@ -36,14 +36,14 @@ export default function HomePageTwo() {
       <PopularProducts />
       <AutoSlider />
       <CouponBanner />
-      {/* <ProductArea /> */}
+      <ProductArea />
       <WeeksFeatured />
       <TrendingProducts />
       <JuniorBanner />
-      {/* <BestSellerProducts /> */}
+      <BestSellerProducts />
       <FashionTestimonial />
       {/* <BlogArea /> */}
-      {/* <FeatureAreaTwo/> */}
+      <FeatureAreaTwo />
       <InstagramAreaTwo />
       <Footer style_2={true} />
     </Wrapper>
