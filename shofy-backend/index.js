@@ -192,7 +192,8 @@ app.use(cors({
       "http://localhost:3000",
       "http://localhost:3001",
       "https://look-fme.vercel.app",
-      "https://lookfame.in"
+      "https://lookfame.in",
+      "https://look-fme-a675.vercel.app"
     ];
 
     if (!origin) return callback(null, true);
