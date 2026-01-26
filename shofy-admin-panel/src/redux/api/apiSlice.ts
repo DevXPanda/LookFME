@@ -32,6 +32,7 @@ export const apiSlice = createApi({
     "AllBrands",
     "getCategory",
     "AllOrders",
+    "SingleOrder",
     "getBrand",
     "ReviewProducts",
     "AllCoupons",
