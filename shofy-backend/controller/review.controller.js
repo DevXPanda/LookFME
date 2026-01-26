@@ -5,48 +5,44 @@ const Review = require("../model/Review");
 const User = require("../model/User");
 
 // add a review
-exports.addReview = async (req, res,next) => {
+exports.addReview = async (req, res, next) => {
   const { userId, productId, rating, comment } = req.body;
   try {
     // Check if the user has already left a review for this product
     const existingReview = await Review.findOne({
-      user: userId,
-      product: productId,
+      userId,
+      productId,
     });
-
     if (existingReview) {
-      return res
-        .status(400)
-        .json({ message: "You have already left a review for this product." });
+      return res.status(400).json({ message: "You have already left a review for this product." });
     }
-    const checkPurchase = await Order.findOne({
+    // Check if the user has a delivered order for this product
+    const deliveredOrder = await Order.findOne({
       user: new mongoose.Types.ObjectId(userId),
+      status: "delivered",
       "cart._id": { $in: [productId] },
     });
-    if (!checkPurchase) {
-      return res
-        .status(400)
-        .json({ message: "Without purchase you can not give here review!" });
+    if (!deliveredOrder) {
+      return res.status(400).json({ message: "You can only review after delivery." });
     }
-
     // Create the new review
-    const review = await Review.create(req.body);
-    // console.log('review-->',review)
-
+    const review = await Review.create({ userId, productId, rating, comment });
     // Add the review to the product's reviews array
     const product = await Products.findById(productId);
-    product.reviews.push(review._id);
-    await product.save();
-
+    if (product) {
+      product.reviews.push(review._id);
+      await product.save();
+    }
     // Add the review to the user's reviews array
     const user = await User.findById(userId);
-    user.reviews.push(review._id);
-    await user.save();
-
+    if (user) {
+      user.reviews.push(review._id);
+      await user.save();
+    }
     return res.status(201).json({ message: "Review added successfully." });
   } catch (error) {
     console.log(error);
-    next(error)
+    next(error);
   }
 };
 

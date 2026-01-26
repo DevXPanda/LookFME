@@ -275,13 +275,13 @@ const CouponBanner = () => {
       {/* Smooth Infinite Loop Marquee */}
       <div className="fashion-marquee">
         <div className="fashion-track">
-          <span>Making Global Fashion Accessible</span>
-          <span>Making Global Fashion Accessible</span>
-          <span>Making Global Fashion Accessible</span>
+          <span>Connecting You to Global Fashion Trends</span>
+          <span>Connecting You to Global Fashion Trends</span>
+          <span>Connecting You to Global Fashion Trends</span>
 
-          <span>Making Global Fashion Accessible</span>
-          <span>Making Global Fashion Accessible</span>
-          <span>Making Global Fashion Accessible</span>
+          <span>Connecting You to Global Fashion Trends</span>
+          <span>Connecting You to Global Fashion Trends</span>
+          <span>Connecting You to Global Fashion Trends</span>
         </div>
       </div>
 

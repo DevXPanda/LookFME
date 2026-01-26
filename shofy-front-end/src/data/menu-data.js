@@ -55,20 +55,21 @@ const menu_data = [
     ],
     // Special sections for the new layout
     special_offerings: [
-      { title: '', image: '/assets/img/navbar/men/men-1.png', link: '/shop/anywhere-shorts' },
-      { title: '', image: '/assets/img/navbar/men/men-2.png', link: '/shop/tank-tops' },
-      { title: '', image: '/assets/img/navbar/men/men-3.png', link: '/shop/all-day-pants' }
+      { title: '', image: '/assets/img/navbar/men/Our Special offering 1.jpg', link: '/shop?category=men' },
+      { title: '', image: '/assets/img/navbar/men/Our Special offering 2.jpg', link: '/shop?category=men' },
+      { title: '', image: '/assets/img/navbar/men/Our Special offering 3.jpg', link: '/shop?category=men' }
     ],
     trending_collections: [
-      { title: '', image: '/assets/img/navbar/men/men1.png', link: '/shop/moye-athleisure' },
-      { title: '', image: '/assets/img/navbar/men/men2.png', link: '/shop/international' },
-      { title: '', image: '/assets/img/navbar/men/men3.png', link: '/shop/move-international' }
+      { title: '', image: '/assets/img/navbar/men/Trending 1.jpg', link: '/shop?category=men' },
+      { title: '', image: '/assets/img/navbar/men/Trending 2.jpg', link: '/shop?category=men' },
+      { title: '', image: '/assets/img/navbar/men/Trending 3.jpg', link: '/shop?category=men' }
     ],
     banner: {
       title: 'MENS FASHION',
       subtitle: 'EVERYTHING FOR MEN',
       discount: '50% OFF',
-      image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
+      image: '/assets/img/navbar/men/Men Banner.jpg',
+      link: '/shop?category=men',
       contact: {
         website: 'www.craftyart.com',
         social: '@craftyfashionsite',
@@ -133,22 +134,23 @@ const menu_data = [
     ],
     // Special sections for Women layout
     special_offerings: [
-      { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/summer-dresses' },
-      { title: '', image: '/assets/img/navbar/women/women-2.png', link: '/shop/casual-tops' },
-      { title: '', image: '/assets/img/navbar/women/women-2.png', link: '/shop/work-wear' }
+      { title: '', image: '/assets/img/navbar/women/Special offering 1.jpg', link: '/shop?category=women' },
+      { title: '', image: '/assets/img/navbar/women/Special offering 2.jpg', link: '/shop?category=women' },
+      { title: '', image: '/assets/img/navbar/women/Special offering 3.jpg', link: '/shop?category=women' }
     ],
 
     trending_collections: [
-      { title: '', image: '/assets/img/navbar/women/women1.png', link: '/shop/evening-gowns' },
-      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/shop/festive' },
-      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/shop/active' }
+      { title: '', image: '/assets/img/navbar/women/Trending 1.jpg', link: '/shop?category=women' },
+      { title: '', image: '/assets/img/navbar/women/Trending 2.jpg', link: '/shop?category=women' },
+      { title: '', image: '/assets/img/navbar/women/Trending 3.jpg', link: '/shop?category=women' }
     ],
 
     banner: {
       title: 'WOMEN’S FASHION',
       subtitle: 'STYLE FOR EVERY OCCASION',
       discount: '40% OFF',
-      image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
+      image: '/assets/img/navbar/women/Women Banner.jpg',
+      link: '/shop?category=women',
       contact: {
         website: 'www.craftyart.com',
         social: '@craftywomensite',
@@ -189,23 +191,24 @@ const menu_data = [
     ],
 
     special_offerings: [
-      { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/summer-dresses' },
-      { title: '', image: '/assets/img/navbar/women/women-2.png', link: '/shop/casual-tops' },
-      { title: '', image: '/assets/img/navbar/women/women-2.png', link: '/shop/work-wear' }
+      { title: '', image: '/assets/img/navbar/kids/Special Offering 1.jpg', link: '/shop?category=junior' },
+      { title: '', image: '/assets/img/navbar/kids/Special Offering 2.jpg', link: '/shop?category=junior' },
+      { title: '', image: '/assets/img/navbar/kids/Special Offering 3.jpg', link: '/shop?category=junior' }
     ],
 
     // Trending Collections
     trending_collections: [
-      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/winter' },
-      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/summer' },
-      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/sportswear' }
+      { title: '', image: '/assets/img/navbar/kids/Trending 1.jpg', link: '/shop?category=junior' },
+      { title: '', image: '/assets/img/navbar/kids/Trending 2.jpg', link: '/shop?category=junior' },
+      { title: '', image: '/assets/img/navbar/kids/Trending 3.jpg', link: '/shop?category=junior' }
     ],
 
     // Banner
     banner: {
       title: 'KIDS FASHION',
       subtitle: 'TRENDY & COMFY FOR LITTLE ONES',
-      image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
+      image: '/assets/img/navbar/kids/Kid banner.jpg',
+      link: '/shop?category=junior',
 
     }
   },
@@ -250,16 +253,16 @@ const menu_data = [
     ],
     // Special Offerings
     special_offerings: [
-      { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/caps' },
-      { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/belts' },
-      { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/wallets' }
+      { title: '', image: '/assets/img/navbar/accessories/Special Offering 1.jpg', link: '/shop?category=accessories' },
+      { title: '', image: '/assets/img/navbar/accessories/Special Offering 2.jpg', link: '/shop?category=accessories' },
+      { title: '', image: '/assets/img/navbar/accessories/Special Offering 3.jpg', link: '/shop?category=accessories' }
     ],
 
     // Trending Collections
     trending_collections: [
-      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/winter' },
-      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/summer' },
-      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/sportswear' }
+      { title: '', image: '/assets/img/navbar/accessories/Trending 1.jpg', link: '/shop?category=accessories' },
+      { title: '', image: '/assets/img/navbar/accessories/Trending 2.jpg', link: '/shop?category=accessories' },
+      { title: '', image: '/assets/img/navbar/accessories/Trending 3.jpg', link: '/shop?category=accessories' }
     ],
 
     // Banner
@@ -267,7 +270,8 @@ const menu_data = [
       title: 'ACCESSORIES',
       subtitle: 'STYLE THAT COMPLETES YOU',
       discount: '25% OFF',
-      image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
+      image: '/assets/img/navbar/accessories/Accessories Banner.jpg',
+      link: '/shop?category=accessories',
     }
 
   },
@@ -325,25 +329,25 @@ const menu_data = [
 
     // special offering
     special_offerings: [
-      { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/caps' },
-      { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/belts' },
-      { title: '', image: '/assets/img/navbar/women/women-1.png', link: '/shop/wallets' }
+      { title: '', image: '/assets/img/navbar/Cosmetics/Special offer 1.jpg', link: '/shop?category=cosmetic' },
+      { title: '', image: '/assets/img/navbar/Cosmetics/Special offer 2.jpg', link: '/shop?category=cosmetic' },
+      { title: '', image: '/assets/img/navbar/Cosmetics/Special offer 3.jpg', link: '/shop?category=cosmetic' }
     ],
 
 
     // Trending Collections
     trending_collections: [
-      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/winter' },
-      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/summer' },
-      { title: '', image: '/assets/img/navbar/women/women2.png', link: '/junior/sportswear' }
+      { title: '', image: '/assets/img/navbar/Cosmetics/Trending 1.jpg', link: '/shop?category=cosmetic' },
+      { title: '', image: '/assets/img/navbar/Cosmetics/Trending 2.jpg', link: '/shop?category=cosmetic' },
+      { title: '', image: '/assets/img/navbar/Cosmetics/Trending 3.jpg', link: '/shop?category=cosmetic' }
     ],
 
     // Banner
     banner: {
       title: 'ACCESSORIES',
       subtitle: 'STYLE THAT COMPLETES YOU',
-      link: '/cosmetic',
-      image: '/assets/img/navbar/men/Accessories_Main_Banner.webp',
+      link: '/shop?category=cosmetic',
+      image: '/assets/img/navbar/Cosmetics/Cosmetics Banner.jpg',
     }
   }
 

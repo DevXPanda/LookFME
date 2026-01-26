@@ -56,6 +56,42 @@ export const authApi = apiSlice.injectEndpoints({
       providesTags: (result, error, arg) => [{ type: "UserOrder", id: arg }],
       keepUnusedDataFor: 600,
     }),
+    // updateOrderAddress
+    updateOrderAddress: builder.mutation({
+      query: ({ id, ...data }) => ({
+        url: `api/order/update-address/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "UserOrder", id: arg.id },
+        "UserOrders",
+      ],
+    }),
+    // cancelOrder
+    cancelOrder: builder.mutation({
+      query: ({ id, reason }) => ({
+        url: `api/order/cancel/${id}`,
+        method: "PATCH",
+        body: { reason },
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "UserOrder", id: arg.id },
+        "UserOrders",
+      ],
+    }),
+    // returnOrExchangeOrder (item-level)
+    returnOrExchangeOrder: builder.mutation({
+      query: ({ id, type, items, reason }) => ({
+        url: `api/order/return-exchange/${id}`,
+        method: "PATCH",
+        body: { type, items, reason },
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "UserOrder", id: arg.id },
+        "UserOrders",
+      ],
+    }),
   }),
 });
 
@@ -64,4 +100,7 @@ export const {
   useSaveOrderMutation,
   useGetUserOrderByIdQuery,
   useGetUserOrdersQuery,
+  useUpdateOrderAddressMutation,
+  useCancelOrderMutation,
+  useReturnOrExchangeOrderMutation,
 } = authApi;

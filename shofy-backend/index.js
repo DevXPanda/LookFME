@@ -234,6 +234,7 @@ app.use("/api/user-order", userOrderRoutes);
 app.use("/api/review", reviewRoutes);
 app.use("/api/cloudinary", cloudinaryRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/inventory", require("./routes/inventory.routes"));
 
 // Root
 app.get("/", (req, res) => {

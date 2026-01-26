@@ -45,6 +45,7 @@ export const authApi = apiSlice.injectEndpoints({
     // get recent orders
     getSingleOrder: builder.query<Order, string>({
       query: (id) => `/api/order/${id}`,
+      providesTags: (result, error, arg) => [{ type: "SingleOrder", id: arg }],
       keepUnusedDataFor: 600,
     }),
     // get recent orders
@@ -56,7 +57,41 @@ export const authApi = apiSlice.injectEndpoints({
           body: status,
         };
       },
-      invalidatesTags: ["AllOrders","DashboardRecentOrders"],
+      invalidatesTags: (result, error, arg) => [
+        "AllOrders",
+        "DashboardRecentOrders",
+        { type: "SingleOrder", id: arg.id },
+      ],
+    }),
+    // process refund
+    processRefund: builder.mutation<any, { id: string, returnItemIndex: number, approve: boolean }>({
+      query({ id, returnItemIndex, approve }) {
+        return {
+          url: `/api/order/process-refund/${id}`,
+          method: "PATCH",
+          body: { returnItemIndex, approve },
+        };
+      },
+      invalidatesTags: (result, error, arg) => [
+        "AllOrders",
+        "DashboardRecentOrders",
+        { type: "SingleOrder", id: arg.id },
+      ],
+    }),
+    // process exchange
+    processExchange: builder.mutation<any, { id: string, exchangeItemIndex: number, approve: boolean }>({
+      query({ id, exchangeItemIndex, approve }) {
+        return {
+          url: `/api/order/process-exchange/${id}`,
+          method: "PATCH",
+          body: { exchangeItemIndex, approve },
+        };
+      },
+      invalidatesTags: (result, error, arg) => [
+        "AllOrders",
+        "DashboardRecentOrders",
+        { type: "SingleOrder", id: arg.id },
+      ],
     }),
   }),
 });
@@ -69,4 +104,6 @@ export const {
   useGetAllOrdersQuery,
   useUpdateStatusMutation,
   useGetSingleOrderQuery,
+  useProcessRefundMutation,
+  useProcessExchangeMutation,
 } = authApi;

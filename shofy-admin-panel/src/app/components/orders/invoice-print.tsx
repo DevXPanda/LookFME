@@ -67,7 +67,7 @@ const InvoicePrint = ({ orderData }: IPropType) => {
                         {p.orderQuantity}
                       </td>
                       <td className="px-3 py-3 font-normal text-[#55585B] text-end">
-                        ${(p.orderQuantity * p.price).toFixed(2)}
+                        ₹{(p.orderQuantity * p.price).toFixed(2)}
                       </td>
                     </tr>
                   ))}

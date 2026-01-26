@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import logo from "@/../public/assets/img/logo/logo.svg";
 import { redirect, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
@@ -58,7 +59,7 @@ const Header = ({ setSideMenu }: IProps) => {
       <header className="relative z-10 bg-white border-b border-gray border-solid py-5 px-8 pr-8">
         <div className="flex justify-between">
           <div className="flex items-center space-x-6 lg:space-x-0">
-            <button
+              <button
               onClick={() => setSideMenu((prev) => !prev)}
               type="button"
               className="block lg:hidden text-2xl text-black"
@@ -144,41 +145,35 @@ const Header = ({ setSideMenu }: IProps) => {
                       />
                     </div>
                     <div>
-                      <h5 className="text-base mb-1 leading-none">
-                        {user?.name}
-                      </h5>
-                      <p className="mb-0 text-tiny leading-none">
-                        {user?.email}
-                      </p>
+                      <ul>
+                        <li>
+                          <Link
+                            href="/dashboard"
+                            className="px-5 py-2 w-full block hover:bg-gray rounded-md hover:text-theme text-base"
+                          >
+                            Dashboard
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            href="/profile"
+                            className="px-5 py-2 w-full block hover:bg-gray rounded-md hover:text-theme text-base"
+                          >
+                            Account Settings
+                          </Link>
+                        </li>
+                        <li>
+                          <a
+                            onClick={handleLogOut}
+                            style={{ cursor: "pointer" }}
+                            className="px-5 py-2 w-full block hover:bg-gray rounded-md hover:text-theme text-base"
+                          >
+                            Logout
+                          </a>
+                        </li>
+                      </ul>
                     </div>
                   </div>
-                  <ul>
-                    <li>
-                      <Link
-                        href="/dashboard"
-                        className="px-5 py-2 w-full block hover:bg-gray rounded-md hover:text-theme text-base"
-                      >
-                        Dashboard
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/profile"
-                        className="px-5 py-2 w-full block hover:bg-gray rounded-md hover:text-theme text-base"
-                      >
-                        Account Settings
-                      </Link>
-                    </li>
-                    <li>
-                      <a
-                        onClick={handleLogOut}
-                        style={{ cursor: "pointer" }}
-                        className="px-5 py-2 w-full block hover:bg-gray rounded-md hover:text-theme text-base"
-                      >
-                        Logout
-                      </a>
-                    </li>
-                  </ul>
                 </div>
               )}
             </div>

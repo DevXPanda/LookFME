@@ -15,6 +15,18 @@ import {
 
 const sidebar_menu: Array<ISidebarMenus> = [
   {
+    id: 100,
+    icon: Setting, // Use appropriate icon
+    link: "/inventory",
+    title: "Inventory",
+    subMenus: [
+      { title: "Category Stock Details", link: "/inventory/category-stock" },
+      { title: "Low Stock Alerts", link: "/inventory/low-stock" },
+      { title: "Stock Valuation Report", link: "/inventory/stock-valuation" },
+      { title: "Sales vs Stock Report", link: "/inventory/sales-vs-stock" },
+    ],
+  },
+  {
     id: 1,
     icon: Dashboard,
     link: "/dashboard",

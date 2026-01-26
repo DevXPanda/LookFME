@@ -43,14 +43,19 @@ export default function Sidebar({ sideMenu, setSideMenu }: IProps) {
 
             <div className="py-4 pb-8 px-8 border-b border-gray h-[78px]">
               <Link href="/dashboard">
-                <Image
-                  className="w-[140px]"
-                  width={140}
-                  height={43}
-                  src="/assets/img/logo/logo.svg"
-                  alt="logo"
-                  priority
-                />
+                <div className="flex items-center gap-2">
+  <Image
+    src="/assets/img/logo/logo.svg"
+    alt="LookFame Logo"
+    width={36}
+    height={36}
+    priority
+    style={{ minWidth: 36 }}
+  />
+  <span style={{ fontWeight: 700, fontSize: 22, color: '#222', letterSpacing: 0.5 }}>
+    LookFame
+  </span>
+</div>
               </Link>
             </div>
             <div className="px-4 py-5">

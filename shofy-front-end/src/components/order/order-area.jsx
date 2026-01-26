@@ -1,18 +1,50 @@
 'use client';
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import dayjs from "dayjs";
 import ReactToPrint from "react-to-print";
+import { useForm } from "react-hook-form";
 // internal
 import logo from "@assets/img/logo/logo.svg";
 import ErrorMsg from "@/components/common/error-msg";
-import { useGetUserOrderByIdQuery } from "@/redux/features/order/orderApi";
+import { useGetUserOrderByIdQuery, useUpdateOrderAddressMutation } from "@/redux/features/order/orderApi";
 import PrdDetailsLoader from "@/components/loader/prd-details-loader";
+import { notifySuccess, notifyError } from "@/utils/toast";
 
 
 const OrderArea = ({ orderId }) => {
   const printRef = useRef();
-  const { data: order, isError, isLoading } = useGetUserOrderByIdQuery(orderId);
+  const { data: order, isError, isLoading, refetch } = useGetUserOrderByIdQuery(orderId);
+  const [updateOrderAddress, { isLoading: isUpdatingAddress }] = useUpdateOrderAddressMutation();
+  const [showAddressModal, setShowAddressModal] = useState(false);
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm();
+  
+  // Initialize form values when order data is available - MUST be at top level
+  useEffect(() => {
+    if (order?.order) {
+      setValue("address", order.order.address || "");
+      setValue("city", order.order.city || "");
+      setValue("country", order.order.country || "");
+      setValue("zipCode", order.order.zipCode || "");
+      setValue("contact", order.order.contact || "");
+    }
+  }, [order, setValue]);
+
+  // Handle address update - MUST be at top level
+  const onSubmitAddress = async (data) => {
+    try {
+      await updateOrderAddress({
+        id: orderId,
+        ...data,
+      }).unwrap();
+      notifySuccess("Address updated successfully!");
+      setShowAddressModal(false);
+      refetch();
+    } catch (error) {
+      notifyError(error?.data?.message || "Failed to update address");
+    }
+  };
+  
   let content = null;
   if (isLoading) {
     content = <PrdDetailsLoader loading={isLoading} />
@@ -20,8 +52,48 @@ const OrderArea = ({ orderId }) => {
   if (isError) {
     content = <ErrorMsg msg="There was an error" />;
   }
-  if (!isLoading && !isError) {
-    const { name, country, city, contact, invoice, createdAt, cart, shippingCost, discount, totalAmount, paymentMethod } = order.order;
+  if (!isLoading && !isError && order?.order) {
+    const { name, country, city, contact, invoice, createdAt, cart, shippingCost, discount, totalAmount, paymentMethod, address, zipCode, status } = order.order;
+
+    const getDisplayStatus = (o) => {
+      const base = (o?.status || '').toLowerCase();
+      const returnItems = Array.isArray(o?.returnItems) ? o.returnItems : [];
+      const exchangeItems = Array.isArray(o?.exchangeItems) ? o.exchangeItems : [];
+
+      if (returnItems.length > 0) {
+        const anyRefundCompleted = returnItems.some(
+          (ri) => (ri?.refundStatus || '').toLowerCase() === 'completed'
+        );
+        const anyApproved = returnItems.some((ri) => (ri?.status || '').toLowerCase() === 'approved');
+        const anyPending = returnItems.some((ri) => (ri?.status || '').toLowerCase() === 'pending');
+        if (anyRefundCompleted) return { key: 'returned', label: 'Refunded' };
+        if (anyApproved) return { key: 'returned', label: 'Return Approved' };
+        if (anyPending) return { key: 'returned', label: 'Return Requested' };
+        return { key: 'returned', label: 'Returned' };
+      }
+
+      if (exchangeItems.length > 0) {
+        const anyAwaitingPayment = exchangeItems.some(
+          (ei) => (ei?.status || '').toLowerCase() === 'awaiting_payment'
+        );
+        const anyCompleted = exchangeItems.some((ei) => (ei?.status || '').toLowerCase() === 'completed');
+        const anyApproved = exchangeItems.some((ei) => (ei?.status || '').toLowerCase() === 'approved');
+        const anyPending = exchangeItems.some((ei) => (ei?.status || '').toLowerCase() === 'pending');
+        if (anyCompleted) return { key: 'exchanged', label: 'Exchange Completed' };
+        if (anyAwaitingPayment) return { key: 'exchanged', label: 'Awaiting Payment' };
+        if (anyApproved) return { key: 'exchanged', label: 'Exchange Approved' };
+        if (anyPending) return { key: 'exchanged', label: 'Exchange Requested' };
+        return { key: 'exchanged', label: 'Exchanged' };
+      }
+
+      if (base === 'delivered') return { key: 'delivered', label: 'Delivered' };
+      if (base === 'processing') return { key: 'processing', label: 'Processing' };
+      if (base === 'pending') return { key: 'pending', label: 'Pending' };
+      if (base === 'cancel') return { key: 'cancel', label: 'Cancel' };
+      return { key: base || 'pending', label: status };
+    };
+
+    const ds = getDisplayStatus(order.order);
     content = (
       <>
         <section className="invoice__area pt-120 pb-120">
@@ -62,9 +134,20 @@ const OrderArea = ({ orderId }) => {
                   <div className="col-md-6 col-sm-8">
                     <div className="invoice__customer-details">
                       <h4 className="mb-10 text-uppercase">{name}</h4>
+                      <p className="mb-0 text-uppercase">{address}</p>
+                      <p className="mb-0 text-uppercase">{city}, {zipCode}</p>
                       <p className="mb-0 text-uppercase">{country}</p>
-                      <p className="mb-0 text-uppercase">{city}</p>
                       <p className="mb-0">{contact}</p>
+                      {ds.key !== 'delivered' && (
+                        <button
+                          type="button"
+                          onClick={() => setShowAddressModal(true)}
+                          className="tp-btn tp-btn-border mt-3"
+                          style={{ fontSize: '12px', padding: '5px 15px' }}
+                        >
+                          Change Address
+                        </button>
+                      )}
                     </div>
                   </div>
                   <div className="col-md-6 col-sm-4">
@@ -113,8 +196,8 @@ const OrderArea = ({ orderId }) => {
                   </div>
                   <div className="col-lg-3 col-md-4">
                     <div className="invoice__shippint-cost mb-30">
-                      <h5 className="mb-0">Shipping Cost</h5>
-                      <p className="tp-font-medium">₹{shippingCost}</p>
+                      <h5 className="mb-0">Shipping</h5>
+                      <p className="tp-font-medium">Free</p>
                     </div>
                   </div>
                   <div className="col-lg-3 col-md-4">
@@ -158,6 +241,109 @@ const OrderArea = ({ orderId }) => {
             </div>
           </div>
         </section>
+        
+        {/* Address Change Modal */}
+        {showAddressModal && (
+          <div className="tp-auth-modal-overlay" style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px'
+          }}>
+            <div className="tp-auth-modal-content" style={{
+              backgroundColor: '#fff',
+              borderRadius: '8px',
+              maxWidth: '500px',
+              width: '100%',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              position: 'relative',
+              padding: '40px'
+            }}>
+              <button
+                onClick={() => setShowAddressModal(false)}
+                style={{
+                  position: 'absolute',
+                  top: '15px',
+                  right: '15px',
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '24px',
+                  cursor: 'pointer',
+                  color: '#666'
+                }}
+              >
+                ×
+              </button>
+              <h3 className="mb-20">Change Delivery Address</h3>
+              <form onSubmit={handleSubmit(onSubmitAddress)}>
+                <div className="row">
+                  <div className="col-md-12 mb-15">
+                    <label>Address</label>
+                    <input
+                      type="text"
+                      {...register("address", { required: "Address is required" })}
+                      className="tp-checkout-input"
+                    />
+                    <ErrorMsg msg={errors?.address?.message} />
+                  </div>
+                  <div className="col-md-6 mb-15">
+                    <label>City</label>
+                    <input
+                      type="text"
+                      {...register("city", { required: "City is required" })}
+                      className="tp-checkout-input"
+                    />
+                    <ErrorMsg msg={errors?.city?.message} />
+                  </div>
+                  <div className="col-md-6 mb-15">
+                    <label>Zip Code</label>
+                    <input
+                      type="text"
+                      {...register("zipCode", { required: "Zip code is required" })}
+                      className="tp-checkout-input"
+                    />
+                    <ErrorMsg msg={errors?.zipCode?.message} />
+                  </div>
+                  <div className="col-md-6 mb-15">
+                    <label>Country</label>
+                    <input
+                      type="text"
+                      {...register("country", { required: "Country is required" })}
+                      className="tp-checkout-input"
+                    />
+                    <ErrorMsg msg={errors?.country?.message} />
+                  </div>
+                  <div className="col-md-6 mb-15">
+                    <label>Contact</label>
+                    <input
+                      type="text"
+                      {...register("contact", { required: "Contact is required" })}
+                      className="tp-checkout-input"
+                    />
+                    <ErrorMsg msg={errors?.contact?.message} />
+                  </div>
+                  <div className="col-md-12">
+                    <button
+                      type="submit"
+                      disabled={isUpdatingAddress}
+                      className="tp-checkout-btn w-100"
+                    >
+                      {isUpdatingAddress ? "Updating..." : "Update Address"}
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </>
     );
   }

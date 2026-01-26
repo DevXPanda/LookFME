@@ -80,9 +80,104 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "processing", "delivered",'cancel'],
+      enum: ["pending", "processing", "delivered",'cancel', 'returned', 'exchanged'],
       lowercase: true,
     },
+    cancelReason: {
+      type: String,
+      required: false,
+    },
+    returnReason: {
+      type: String,
+      required: false,
+    },
+    exchangeReason: {
+      type: String,
+      required: false,
+    },
+    returnItems: [{
+      productId: String,
+      productTitle: String,
+      quantity: Number,
+      price: Number,
+      reason: String,
+      status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected', 'refunded'],
+        default: 'pending'
+      },
+      refundAmount: Number,
+      refundStatus: {
+        type: String,
+        enum: ['pending', 'processing', 'completed', 'failed'],
+        default: 'pending'
+      },
+      refundTransactionId: String,
+      requestedAt: {
+        type: Date,
+        default: Date.now
+      },
+    }],
+    exchangeItems: [{
+      originalProductId: String,
+      originalProductTitle: String,
+      originalQuantity: Number,
+      originalPrice: Number,
+      exchangeProductId: String,
+      exchangeProductTitle: String,
+      exchangeQuantity: Number,
+      exchangePrice: Number,
+      reason: String,
+      status: {
+        type: String,
+        enum: ['pending', 'approved', 'awaiting_payment', 'rejected', 'completed'],
+        default: 'pending'
+      },
+      priceDifference: Number,
+      requestedAt: {
+        type: Date,
+        default: Date.now
+      },
+    }],
+    refundHistory: [{
+      amount: Number,
+      type: {
+        type: String,
+        enum: ['full', 'partial', 'exchange_difference']
+      },
+      paymentMethod: String,
+      status: {
+        type: String,
+        enum: ['pending', 'processing', 'completed', 'failed']
+      },
+      transactionId: String,
+      reason: String,
+      processedAt: Date,
+      createdAt: {
+        type: Date,
+        default: Date.now
+      }
+    }],
+    addressChangeHistory: [{
+      oldAddress: {
+        address: String,
+        city: String,
+        country: String,
+        zipCode: String,
+        contact: String,
+      },
+      newAddress: {
+        address: String,
+        city: String,
+        country: String,
+        zipCode: String,
+        contact: String,
+      },
+      changedAt: {
+        type: Date,
+        default: Date.now,
+      },
+    }],
   },
   {
     timestamps: true,

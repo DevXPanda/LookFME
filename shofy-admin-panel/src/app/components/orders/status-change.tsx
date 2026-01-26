@@ -5,10 +5,11 @@ import { useUpdateStatusMutation } from "@/redux/order/orderApi";
 
 // option
 const options = [
-  { value: "delivered", label: "delivered" },
+  { value: "delivered", label: "Delivered" },
   { value: "processing", label: "Processing" },
   { value: "pending", label: "Pending" },
-  { value: "cancel", label: "cancel" },
+  { value: "exchanged", label: "Exchanged" },
+  { value: "cancel", label: "Cancel" },
 ];
 
 const OrderStatusChange = ({ id }: { id: string }) => {

@@ -38,7 +38,7 @@ const useCheckoutSubmit = () => {
   const [cartTotal, setCartTotal] = useState("");
   // minimumAmount
   const [minimumAmount, setMinimumAmount] = useState(0);
-  // shippingCost
+  // shippingCost - default to 0 for free shipping
   const [shippingCost, setShippingCost] = useState(0);
   // discountAmount
   const [discountAmount, setDiscountAmount] = useState(0);

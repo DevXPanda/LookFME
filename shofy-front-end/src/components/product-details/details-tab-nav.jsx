@@ -117,7 +117,11 @@ const DetailsTabNav = ({ product }) => {
                     <h3 className="tp-product-details-review-form-title">Review this product</h3>
                     <p>Your email address will not be published. Required fields are marked *</p>
                     {/* form start */}
-                    <ReviewForm product_id={_id} />
+                    {product?.canReview ? (
+                      <ReviewForm product_id={_id} />
+                    ) : (
+                      <div className="alert alert-info mt-3">You can write a review only after your order is delivered.</div>
+                    )}
                     {/* form end */}
                   </div>
                 </div>

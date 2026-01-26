@@ -34,6 +34,63 @@ export interface Order {
   orderNote?: string;
   invoice: number;
   status: string;
+  cancelReason?: string;
+  returnReason?: string;
+  exchangeReason?: string;
+  returnItems?: {
+    productId: string;
+    productTitle: string;
+    quantity: number;
+    price: number;
+    reason?: string;
+    status: string;
+    refundAmount?: number;
+    refundStatus?: string;
+    refundTransactionId?: string;
+    requestedAt?: string;
+  }[];
+  exchangeItems?: {
+    originalProductId: string;
+    originalProductTitle: string;
+    originalQuantity: number;
+    originalPrice: number;
+    exchangeProductId: string;
+    exchangeProductTitle: string;
+    exchangeQuantity: number;
+    exchangePrice: number;
+    reason?: string;
+    status: string;
+    priceDifference: number;
+    requestedAt?: string;
+    exchangeProductImg?: string;
+  }[];
+  refundHistory?: {
+    amount: number;
+    type: string;
+    paymentMethod: string;
+    status: string;
+    transactionId?: string;
+    reason?: string;
+    processedAt?: string;
+    createdAt?: string;
+  }[];
+  addressChangeHistory?: {
+    oldAddress: {
+      address: string;
+      city: string;
+      country: string;
+      zipCode: string;
+      contact: string;
+    };
+    newAddress: {
+      address: string;
+      city: string;
+      country: string;
+      zipCode: string;
+      contact: string;
+    };
+    changedAt?: string;
+  }[];
   createdAt?: string;
   updatedAt?: string;
 }

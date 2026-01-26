@@ -27,12 +27,18 @@ const OrderTable = () => {
   if (!isLoading && isError) {
     content = <ErrorMsg msg="There was an error" />;
   }
-  if (!isLoading && !isError && orders?.data.length === 0) {
+  if (!isLoading && !isError && (orders?.data?.length || 0) === 0) {
     content = <ErrorMsg msg="No Orders Found" />;
   }
 
   if (!isLoading && !isError && orders?.success) {
     let orderItems = [...currentItems];
+    // Sort newest orders first by createdAt (or invoice number if needed)
+    orderItems.sort((a, b) => {
+      const bt = new Date(b.createdAt || b.updatedAt || b._id).getTime();
+      const at = new Date(a.createdAt || a.updatedAt || a._id).getTime();
+      return bt - at;
+    });
     if(searchVal){
       orderItems = orderItems.filter(v => v.invoice.toString().includes(searchVal))
     }
@@ -129,7 +135,7 @@ const OrderTable = () => {
                     )}
                   </td>
                   <td className="px-3 py-3 font-normal text-[#55585B] text-end">
-                    $
+                    ₹
                     {item.cart
                       .reduce((acc, curr) => acc + curr.price, 0)
                       .toFixed(2)}

@@ -46,7 +46,7 @@ const LoginForm = () => {
       // SUCCESS ONLY IF STATUS = "success"
       if (data?.data?.status === "success") {
         notifySuccess("Login successfully");
-        router.push("/checkout"); // your redirect
+        router.push("/"); // redirect to home page
       }
 
       // ERROR HANDLING

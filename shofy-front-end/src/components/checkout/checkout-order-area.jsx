@@ -58,32 +58,17 @@ const CheckoutOrderArea = ({ checkoutData }) => {
                   {...register(`shippingOption`, {
                     required: `Shipping Option is required!`,
                   })}
-                  id="flat_shipping"
+                  id="free_shipping"
                   type="radio"
                   name="shippingOption"
+                  value="free"
+                  defaultChecked
                 />
                 <label
-                  onClick={() => handleShippingCost(60)}
-                  htmlFor="flat_shipping"
+                  onClick={() => handleShippingCost(0)}
+                  htmlFor="free_shipping"
                 >
-                  Delivery: Today Cost :<span>₹60.00</span>
-                </label>
-                <ErrorMsg msg={errors?.shippingOption?.message} />
-              </span>
-              <span>
-                <input
-                  {...register(`shippingOption`, {
-                    required: `Shipping Option is required!`,
-                  })}
-                  id="flat_rate"
-                  type="radio"
-                  name="shippingOption"
-                />
-                <label
-                  onClick={() => handleShippingCost(20)}
-                  htmlFor="flat_rate"
-                >
-                  Delivery: 7 Days Cost: <span>₹20.00</span>
+                  Free Shipping
                 </label>
                 <ErrorMsg msg={errors?.shippingOption?.message} />
               </span>
@@ -98,8 +83,8 @@ const CheckoutOrderArea = ({ checkoutData }) => {
 
            {/*  shipping cost */}
            <li className="tp-order-info-list-subtotal">
-            <span>Shipping Cost</span>
-            <span>₹{shippingCost.toFixed(2)}</span>
+            <span>Shipping</span>
+            <span>Free</span>
           </li>
 
            {/* discount */}
