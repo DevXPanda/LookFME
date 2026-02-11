@@ -30,10 +30,23 @@ export default function Sidebar({ sideMenu, setSideMenu }: IProps) {
     }
   };
 
-  // Auto-expand Orders dropdown if on orders page
+  // Auto-expand dropdowns based on current pathname
   React.useEffect(() => {
-    if (pathname === "/orders" && isDropdown !== "Orders") {
+    // Auto-expand Orders dropdown if on orders page
+    if (pathname?.startsWith("/orders") && isDropdown !== "Orders") {
       setIsDropDown("Orders");
+    }
+    // Auto-expand Inventory dropdown if on inventory page
+    else if (pathname?.startsWith("/inventory") && isDropdown !== "Inventory") {
+      setIsDropDown("Inventory");
+    }
+    // Auto-expand Products dropdown if on product pages
+    else if ((pathname?.startsWith("/product") || pathname?.startsWith("/add-product")) && isDropdown !== "Products") {
+      setIsDropDown("Products");
+    }
+    // Auto-expand Pages dropdown if on pages routes
+    else if ((pathname?.startsWith("/register") || pathname?.startsWith("/login") || pathname?.startsWith("/forgot-password")) && isDropdown !== "Pages") {
+      setIsDropDown("Pages");
     }
   }, [pathname, isDropdown]);
 
@@ -90,8 +103,14 @@ export default function Sidebar({ sideMenu, setSideMenu }: IProps) {
                       </Link>
                     )}
                     {menu.subMenus && (
-                      <a
-                        onClick={() => handleMenuActive(menu.title)}
+                      <Link
+                        href={menu.link}
+                        onClick={() => {
+                          // Navigate and expand dropdown
+                          if (isDropdown !== menu.title) {
+                            handleMenuActive(menu.title);
+                          }
+                        }}
                         className={`group cursor-pointer rounded-md relative text-black text-lg font-medium inline-flex items-center w-full transition-colors ease-in-out duration-300 px-5 py-[9px] mb-2 hover:bg-gray sidebar-link-active ${isDropdown === menu.title ? "bg-themeLight hover:bg-themeLight text-theme" : ""}`}
                       >
                         <span className="inline-block mr-[10px] text-xl">
@@ -104,7 +123,7 @@ export default function Sidebar({ sideMenu, setSideMenu }: IProps) {
                             <DownArrow />
                           </span>
                         )}
-                      </a>
+                      </Link>
                     )}
                     {menu.title === 'Online store' && (
                       <a
