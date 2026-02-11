@@ -1,3 +1,4 @@
+import { ProductVariation } from "@/hooks/useProductSubmit";
 
 type Brand = {
   name: string;
@@ -70,6 +71,8 @@ export interface IProduct {
   createdAt: string;
   updatedAt: string;
   orderQuantity: number;
+  variations?: ProductVariation[];
+  attributeType?: string;
 }
 
 export interface ProductResponse {
@@ -112,7 +115,9 @@ export interface IAddProduct {
   offerDate?: {
     startDate: string | null,
     endDate: string | null
-  },
+  };
+  variations?: ProductVariation[];
+  attributeType?: string;
 }
 
 // review product response 
