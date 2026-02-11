@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const userController= require('../controller/user.controller');
+const userController = require('../controller/user.controller');
 
 
 // add a user
@@ -19,5 +19,7 @@ router.get('/confirmEmail/:token', userController.confirmEmail);
 router.put('/update-user/:id', userController.updateUser);
 // register or login with google
 router.post("/register/:token", userController.signUpWithProvider);
+// block/unblock customer reviews
+router.patch("/:userId/block-reviews", userController.blockCustomerReviews);
 
 module.exports = router;

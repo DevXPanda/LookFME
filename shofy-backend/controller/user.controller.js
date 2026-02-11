@@ -406,3 +406,31 @@ exports.signUpWithProvider = async (req, res, next) => {
     next(error)
   }
 };
+
+// Block/Unblock customer reviews
+exports.blockCustomerReviews = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const { reviewBlocked } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.reviewBlocked = reviewBlocked !== undefined ? reviewBlocked : !user.reviewBlocked;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: `Customer reviews ${user.reviewBlocked ? 'blocked' : 'unblocked'} successfully`,
+      data: {
+        userId: user._id,
+        reviewBlocked: user.reviewBlocked,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};

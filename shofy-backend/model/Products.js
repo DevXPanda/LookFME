@@ -8,7 +8,7 @@ const productsSchema = mongoose.Schema({
     type: String,
     required: false,
   },
-  img:{
+  img: {
     type: String,
     required: true,
     validate: [validator.isURL, "Please provide valid url(s)"]
@@ -30,34 +30,34 @@ const productsSchema = mongoose.Schema({
     required: true,
   },
   imageURLs: [{
-    color:{
-      name:{
+    color: {
+      name: {
         type: String,
         required: false,
         trim: true,
       },
-      clrCode:{
+      clrCode: {
         type: String,
         required: false,
         trim: true,
       }
     },
-    img:{
+    img: {
       type: String,
       required: false,
       validate: [validator.isURL, "Please provide valid url(s)"]
     },
-    sizes:[String]
+    sizes: [String]
   }],
-  parent:{
-    type:String,
-    required:true,
-    trim:true,
-   },
-  children:{
-    type:String,
-    required:true,
-    trim:true,
+  parent: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  children: {
+    type: String,
+    required: true,
+    trim: true,
   },
   price: {
     type: Number,
@@ -104,9 +104,9 @@ const productsSchema = mongoose.Schema({
     },
     default: "in-stock",
   },
-  reviews: [{type:ObjectId, ref: 'Reviews' }],
-  productType:{
-    type:String,
+  reviews: [{ type: ObjectId, ref: 'Reviews' }],
+  productType: {
+    type: String,
     required: true,
     lowercase: true,
   },
@@ -121,12 +121,12 @@ const productsSchema = mongoose.Schema({
   additionalInformation: [{}],
   tags: [String],
   sizes: [String],
-  offerDate:{
-    startDate:{
-      type:Date
+  offerDate: {
+    startDate: {
+      type: Date
     },
-    endDate:{
-      type:Date
+    endDate: {
+      type: Date
     },
   },
   featured: {
@@ -137,7 +137,58 @@ const productsSchema = mongoose.Schema({
     type: Number,
     default: 0,
     min: 0
-  }
+  },
+  attributeType: {
+    type: String,
+    required: false,
+    enum: {
+      values: ["Size", "Pack", "Dozen", "Pair"],
+      message: "Attribute type must be Size, Pack, Dozen, or Pair"
+    }
+  },
+  variations: [{
+    attributeType: {
+      type: String,
+      required: true,
+      enum: ["Size", "Pack", "Dozen", "Pair"]
+    },
+    attributeValue: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    colorName: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    colorCode: {
+      type: String,
+      required: false,
+      trim: true,
+      default: "#000000"
+    },
+    sku: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    stock: {
+      type: Number,
+      required: true,
+      min: [0, "Stock cannot be negative"]
+    },
+    price: {
+      type: Number,
+      required: false,
+      min: [0, "Price cannot be negative"]
+    },
+    image: {
+      type: String,
+      required: false,
+      validate: [validator.isURL, "Please provide valid image URL"]
+    }
+  }]
 }, {
   timestamps: true,
 })

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Wrapper from "@/layout/wrapper";
 import Breadcrumb from "../components/breadcrumb/breadcrumb";
 import OrderArea from "../components/orders/order-area";
@@ -11,7 +12,9 @@ const OrdersPage = () => {
         {/* breadcrumb end */}
 
         {/* order area start */}
-        <OrderArea />
+        <Suspense fallback={<div className="p-8">Loading orders...</div>}>
+          <OrderArea />
+        </Suspense>
         {/* order area end */}
       </div>
     </Wrapper>

@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
-import useProductSubmit from "@/hooks/useProductSubmit";
+import React, { useEffect } from "react";
+import useProductSubmit, { ProductVariation } from "@/hooks/useProductSubmit";
 import ErrorMsg from "../../common/error-msg";
 import FormField from "../form-field";
 import DescriptionTextarea from "../add-product/description-textarea";
@@ -40,7 +40,18 @@ const EditProductSubmit = ({ id }: { id: string }) => {
     isSubmitted,
     setIsSubmitted,
     handleEditProduct,
+    variations,
+    setVariations,
   } = useProductSubmit();
+
+  // Load product data including variations
+  useEffect(() => {
+    if (product) {
+      if (product.variations && product.variations.length > 0) {
+        setVariations(product.variations as ProductVariation[]);
+      }
+    }
+  }, [product, setVariations]);
 
   // decide what to render
   let content = null;
@@ -88,22 +99,32 @@ const EditProductSubmit = ({ id }: { id: string }) => {
                 />
                 <FormField
                   title="SKU"
-                  isRequired={true}
+                  isRequired={variations.length === 0}
                   placeHolder="SKU"
-                  bottomTitle="Enter the product SKU."
+                  bottomTitle={
+                    variations.length > 0
+                      ? "SKU disabled when variations are added. Enter SKU for each variation."
+                      : "Enter the product SKU."
+                  }
                   defaultValue={product.sku}
                   register={register}
                   errors={errors}
+                  disabled={variations.length > 0}
                 />
                 <FormField
                   title="quantity"
-                  isRequired={true}
+                  isRequired={variations.length === 0}
                   placeHolder="Quantity"
-                  bottomTitle="Enter the product quantity."
+                  bottomTitle={
+                    variations.length > 0
+                      ? "Quantity disabled when variations are added. Enter stock for each variation."
+                      : "Enter the product quantity."
+                  }
                   type="number"
                   defaultValue={product.quantity}
                   register={register}
                   errors={errors}
+                  disabled={variations.length > 0}
                 />
                 <FormField
                   title="discount percentage"
@@ -173,6 +194,8 @@ const EditProductSubmit = ({ id }: { id: string }) => {
             <ProductVariants
               isSubmitted={isSubmitted}
               setImageURLs={setImageURLs}
+              variations={variations}
+              setVariations={setVariations}
               default_value={product.imageURLs}
             />
             {/* product variations end */}

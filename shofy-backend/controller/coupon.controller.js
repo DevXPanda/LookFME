@@ -4,10 +4,10 @@ const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
 
 // addCoupon
-const addCoupon = async (req, res,next) => {
+const addCoupon = async (req, res, next) => {
   try {
     const newCoupon = new Coupon(req.body);
-    if(!newCoupon.startTime){
+    if (!newCoupon.startTime) {
       newCoupon.startTime = new Date()
     }
     await newCoupon.save();
@@ -17,7 +17,7 @@ const addCoupon = async (req, res,next) => {
   }
 };
 // addAllCoupon
-const addAllCoupon = async (req, res,next) => {
+const addAllCoupon = async (req, res, next) => {
   try {
     await Coupon.deleteMany();
     await Coupon.insertMany(req.body);
@@ -29,7 +29,7 @@ const addAllCoupon = async (req, res,next) => {
   }
 };
 // getAllCoupons
-const getAllCoupons = async (req, res,next) => {
+const getAllCoupons = async (req, res, next) => {
   try {
     const coupons = await Coupon.find({}).sort({ _id: -1 });
     res.send(coupons);
@@ -38,7 +38,7 @@ const getAllCoupons = async (req, res,next) => {
   }
 };
 // getCouponById
-const getCouponById = async (req, res,next) => {
+const getCouponById = async (req, res, next) => {
   try {
     const coupon = await Coupon.findById(req.params.id);
     res.send(coupon);
@@ -47,7 +47,7 @@ const getCouponById = async (req, res,next) => {
   }
 };
 // updateCoupon
-const updateCoupon = async (req, res,next) => {
+const updateCoupon = async (req, res, next) => {
   try {
     const coupon = await Coupon.findById(req.params.id);
     if (coupon) {
@@ -67,12 +67,12 @@ const updateCoupon = async (req, res,next) => {
   }
 };
 // deleteCoupon
-const deleteCoupon = async (req, res,next) => {
+const deleteCoupon = async (req, res, next) => {
   try {
     await Coupon.findByIdAndDelete(req.params.id);
     res.status(200).json({
-      success:true,
-      message:'Coupon delete successfully',
+      success: true,
+      message: 'Coupon delete successfully',
     })
   } catch (error) {
     next(error)

@@ -54,6 +54,17 @@ const sidebar_menu: Array<ISidebarMenus> = [
     icon: Orders,
     link: "/orders",
     title: "Orders",
+    subMenus: [
+      { title: "All", link: "/orders?status=all" },
+      { title: "Pending", link: "/orders?status=pending" },
+      { title: "Confirmed", link: "/orders?status=confirmed" },
+      { title: "Packaging", link: "/orders?status=packaging" },
+      { title: "Out for delivery", link: "/orders?status=out-for-delivery" },
+      { title: "Delivered", link: "/orders?status=delivered" },
+      { title: "Returned", link: "/orders?status=returned" },
+      { title: "Failed to Deliver", link: "/orders?status=failed-to-deliver" },
+      { title: "Canceled", link: "/orders?status=canceled" },
+    ],
   },
   {
     id: 5,

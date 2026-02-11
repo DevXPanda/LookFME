@@ -20,14 +20,14 @@ const CouponArea = () => {
     control,
     setSelectProductType,
   } = useCouponSubmit();
-  const [searchValue,setSearchValue] = useState<string>("");
-  const [selectValue,setSelectValue] = useState<string>("");
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [selectValue, setSelectValue] = useState<string>("");
   // handle search value
-  const handleSearchValue = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value)
   }
   // handle select value
-  const handleSelectValue = (e:React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSelectValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectValue(e.target.value)
   }
   return (

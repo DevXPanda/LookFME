@@ -14,6 +14,7 @@ type IPropType = {
   isSubmitField: boolean;
   isSubmitted: boolean;
   setIsSubmitField: React.Dispatch<React.SetStateAction<boolean>>;
+  onImageChange?: (url: string) => void;
 };
 const VariantImgUpload = ({
   setFormData,
@@ -23,6 +24,7 @@ const VariantImgUpload = ({
   isSubmitted,
   setIsSubmitField,
   setImageURLs,
+  onImageChange,
 }: IPropType) => {
   const [uploadImage, { data: uploadData, isError, isLoading, error }] =
     useUploadImageMutation();
@@ -57,6 +59,9 @@ const VariantImgUpload = ({
         };
         return updatedFormData;
       });
+    }
+    if (uploadData && !isError && onImageChange) {
+      onImageChange(uploadData.data.url);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, uploadData, isError]);

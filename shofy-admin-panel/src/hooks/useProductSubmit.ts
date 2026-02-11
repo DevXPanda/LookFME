@@ -15,6 +15,18 @@ export interface ImageURL {
   img: string;
   sizes?: string[];
 }
+
+// ProductVariation type
+export interface ProductVariation {
+  attributeType: string;
+  attributeValue: string;
+  colorName: string;
+  colorCode: string;
+  sku: string;
+  stock: number;
+  price: number | null;
+  image: string;
+}
 type IBrand = {
   name: string;
   id: string;
@@ -60,6 +72,7 @@ const useProductSubmit = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [sizes, setSizes] = useState<string[]>([]);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [variations, setVariations] = useState<ProductVariation[]>([]);
 
   const router = useRouter();
 
@@ -105,16 +118,33 @@ const useProductSubmit = () => {
     setAdditionalInformation([]);
     setTags([]);
     setSizes([]);
+    setVariations([]);
     reset();
   };
 
   // handle submit product
   const handleSubmitProduct = async (data: any) => {
-    // console.log("product data--->", data);
+    // Validate variations if they exist
+    if (variations.length > 0) {
+      // Check for duplicate SKUs
+      const skus = variations.map((v) => v.sku).filter((sku) => sku.trim() !== "");
+      const uniqueSkus = new Set(skus);
+      if (skus.length !== uniqueSkus.size) {
+        return notifyError("Duplicate SKUs found in variations. Each variation must have a unique SKU.");
+      }
+
+      // Check all variations have SKU and stock
+      const invalidVariations = variations.filter(
+        (v) => !v.sku.trim() || v.stock < 0
+      );
+      if (invalidVariations.length > 0) {
+        return notifyError("All variations must have a valid SKU and non-negative stock.");
+      }
+    }
 
     // product data
-    const productData = {
-      sku: data.SKU,
+    const productData: any = {
+      sku: variations.length > 0 ? "" : data.SKU, // Empty SKU if variations exist
       img: img,
       title: data.title,
       slug: slugify(data.title, { replacement: "-", lower: true }),
@@ -124,7 +154,7 @@ const useProductSubmit = () => {
       children: children,
       price: data.price,
       discount: data.discount_percentage,
-      quantity: data.quantity,
+      quantity: variations.length > 0 ? 0 : data.quantity, // Zero quantity if variations exist
       brand: brand,
       category: category,
       status: status,
@@ -137,6 +167,8 @@ const useProductSubmit = () => {
       videoId: data.youtube_video_Id,
       additionalInformation: additionalInformation,
       tags: tags,
+      variations: variations.length > 0 ? variations : undefined,
+      attributeType: variations.length > 0 ? variations[0]?.attributeType : undefined,
     };
 
     console.log('productData-------------------..>',productData)
@@ -150,28 +182,56 @@ const useProductSubmit = () => {
     }
     if (Number(data.discount) > Number(data.price)) {
       return notifyError("Product price must be gether than discount");
-    } else {
-      const res = await addProduct(productData);
-      if ("error" in res) {
-        if ("data" in res.error) {
-          const errorData = res.error.data as { message?: string };
-          if (typeof errorData.message === "string") {
-            return notifyError(errorData.message);
-          }
-        }
-      } else {
-        notifySuccess("Product created successFully");
-        setIsSubmitted(true);
-        resetForm();
-        router.push('/product-grid')
+    }
+    
+    // Validate SKU/Quantity if no variations
+    if (variations.length === 0) {
+      if (!data.SKU) {
+        return notifyError("SKU is required when no variations are added");
       }
+      if (!data.quantity || data.quantity < 0) {
+        return notifyError("Quantity is required and must be non-negative");
+      }
+    }
+
+    const res = await addProduct(productData);
+    if ("error" in res) {
+      if ("data" in res.error) {
+        const errorData = res.error.data as { message?: string };
+        if (typeof errorData.message === "string") {
+          return notifyError(errorData.message);
+        }
+      }
+    } else {
+      notifySuccess("Product created successFully");
+      setIsSubmitted(true);
+      resetForm();
+      router.push('/product-grid')
     }
   };
   // handle edit product
   const handleEditProduct = async (data: any, id: string) => {
+    // Validate variations if they exist
+    if (variations.length > 0) {
+      // Check for duplicate SKUs
+      const skus = variations.map((v) => v.sku).filter((sku) => sku.trim() !== "");
+      const uniqueSkus = new Set(skus);
+      if (skus.length !== uniqueSkus.size) {
+        return notifyError("Duplicate SKUs found in variations. Each variation must have a unique SKU.");
+      }
+
+      // Check all variations have SKU and stock
+      const invalidVariations = variations.filter(
+        (v) => !v.sku.trim() || v.stock < 0
+      );
+      if (invalidVariations.length > 0) {
+        return notifyError("All variations must have a valid SKU and non-negative stock.");
+      }
+    }
+
     // product data
-    const productData = {
-      sku: data.SKU,
+    const productData: any = {
+      sku: variations.length > 0 ? "" : data.SKU,
       img: img,
       title: data.title,
       slug: slugify(data.title, { replacement: "-", lower: true }),
@@ -181,7 +241,7 @@ const useProductSubmit = () => {
       children: children,
       price: data.price,
       discount: data.discount_percentage,
-      quantity: data.quantity,
+      quantity: variations.length > 0 ? 0 : data.quantity,
       brand: brand,
       category: category,
       status: status,
@@ -194,6 +254,8 @@ const useProductSubmit = () => {
       videoId: data.youtube_video_Id,
       additionalInformation: additionalInformation,
       tags: tags,
+      variations: variations.length > 0 ? variations : undefined,
+      attributeType: variations.length > 0 ? variations[0]?.attributeType : undefined,
     };
     console.log('edit productData---->',productData)
     const res = await editProduct({ id: id, data: productData });
@@ -263,6 +325,8 @@ const useProductSubmit = () => {
     setOfferDate,
     setIsSubmitted,
     isSubmitted,
+    variations,
+    setVariations,
   };
 };
 

@@ -70,8 +70,8 @@ const useCouponSubmit = () => {
     }
   };
 
-   //handle Submit edit Category
-   const handleSubmitEditCoupon = async (data: any, id: string) => {
+  //handle Submit edit Category
+  const handleSubmitEditCoupon = async (data: any, id: string) => {
     try {
       const coupon_data = {
         logo: logo,

@@ -10,6 +10,7 @@ export default function FormField({
   register,
   errors,
   defaultValue,
+  disabled = false,
 }: {
   title: string;
   isRequired: boolean;
@@ -19,6 +20,7 @@ export default function FormField({
   register: UseFormRegister<any>;
   errors: FieldErrors<any>;
   defaultValue?:string | number;
+  disabled?: boolean;
 }) {
   return (
     <div className="mb-5">
@@ -29,16 +31,19 @@ export default function FormField({
       )}
       <input
         {...register(title.split(" ").join("_"), {
-          required: isRequired ? `${title} is required!` : false,
+          required: isRequired && !disabled ? `${title} is required!` : false,
         })}
-        className="input w-full h-[44px] rounded-md border border-gray6 px-6 text-base"
+        className={`input w-full h-[44px] rounded-md border border-gray6 px-6 text-base ${
+          disabled ? "bg-gray-100 cursor-not-allowed opacity-60" : ""
+        }`}
         type={type}
         name={title}
         id={title}
         placeholder={placeHolder}
         defaultValue={defaultValue}
+        disabled={disabled}
       />
-      {isRequired && (
+      {isRequired && !disabled && (
         <ErrorMsg msg={(errors?.[title]?.message as string) || ""} />
       )}
       {bottomTitle && (

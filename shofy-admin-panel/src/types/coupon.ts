@@ -8,10 +8,10 @@ export interface ICoupon {
   discountPercentage: number;
   minimumAmount: number;
   productType: string;
-  startTime:string;
+  startTime: string;
   createdAt: string;
   updatedAt: string;
-  status:string;
+  status: string;
 }
 
 
@@ -23,6 +23,6 @@ export interface IAddCoupon {
   discountPercentage: number;
   minimumAmount: number;
   productType: string;
-  startTime?:string;
-  status?:string;
+  startTime?: string;
+  status?: string;
 }

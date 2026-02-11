@@ -34,6 +34,8 @@ const ProductSubmit = () => {
     isSubmitted,
     additionalInformation,
     imageURLs,
+    variations,
+    setVariations,
   } = useProductSubmit();
 
   console.log('additionalInformation--->',additionalInformation,'imageURLs--->',imageURLs)
@@ -68,20 +70,30 @@ const ProductSubmit = () => {
               />
               <FormField
                 title="SKU"
-                isRequired={true}
+                isRequired={variations.length === 0}
                 placeHolder="SKU"
-                bottomTitle="Enter the product SKU."
+                bottomTitle={
+                  variations.length > 0
+                    ? "SKU disabled when variations are added. Enter SKU for each variation."
+                    : "Enter the product SKU."
+                }
                 register={register}
                 errors={errors}
+                disabled={variations.length > 0}
               />
               <FormField
                 title="quantity"
-                isRequired={true}
+                isRequired={variations.length === 0}
                 placeHolder="Quantity"
-                bottomTitle="Enter the product quantity."
+                bottomTitle={
+                  variations.length > 0
+                    ? "Quantity disabled when variations are added. Enter stock for each variation."
+                    : "Enter the product quantity."
+                }
                 type="number"
                 register={register}
                 errors={errors}
+                disabled={variations.length > 0}
               />
               <FormField
                 title="discount_percentage"
@@ -142,6 +154,8 @@ const ProductSubmit = () => {
           <ProductVariants
             isSubmitted={isSubmitted}
             setImageURLs={setImageURLs}
+            variations={variations}
+            setVariations={setVariations}
           />
           {/* product variations end */}
         </div>

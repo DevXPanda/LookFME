@@ -6,7 +6,8 @@ import { DownArrow } from "@/svg";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { userLoggedOut } from "@/redux/auth/authSlice";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import OrdersDropdown from "@/app/components/sidebar/orders-dropdown";
 
 // prop type
 type IProps = {
@@ -18,6 +19,7 @@ export default function Sidebar({ sideMenu, setSideMenu }: IProps) {
   const [isDropdown, setIsDropDown] = useState<string>("");
   const dispatch = useDispatch();
   const router = useRouter();
+  const pathname = usePathname();
 
   // handle active menu
   const handleMenuActive = (title: string) => {
@@ -27,6 +29,13 @@ export default function Sidebar({ sideMenu, setSideMenu }: IProps) {
       setIsDropDown(title);
     }
   };
+
+  // Auto-expand Orders dropdown if on orders page
+  React.useEffect(() => {
+    if (pathname === "/orders" && isDropdown !== "Orders") {
+      setIsDropDown("Orders");
+    }
+  }, [pathname]);
 
   // handle logout
   const handleLogOut = () => {
@@ -44,18 +53,18 @@ export default function Sidebar({ sideMenu, setSideMenu }: IProps) {
             <div className="py-4 pb-8 px-8 border-b border-gray h-[78px]">
               <Link href="/dashboard">
                 <div className="flex items-center gap-2">
-  <Image
-    src="/assets/img/logo/logo.svg"
-    alt="LookFame Logo"
-    width={36}
-    height={36}
-    priority
-    style={{ minWidth: 36 }}
-  />
-  <span style={{ fontWeight: 700, fontSize: 22, color: '#222', letterSpacing: 0.5 }}>
-    LookFame
-  </span>
-</div>
+                  <Image
+                    src="/assets/img/logo/logo.svg"
+                    alt="LookFame Logo"
+                    width={36}
+                    height={36}
+                    priority
+                    style={{ minWidth: 36 }}
+                  />
+                  <span style={{ fontWeight: 700, fontSize: 22, color: '#222', letterSpacing: 0.5 }}>
+                    LookFame
+                  </span>
+                </div>
               </Link>
             </div>
             <div className="px-4 py-5">
@@ -114,16 +123,22 @@ export default function Sidebar({ sideMenu, setSideMenu }: IProps) {
                       <ul
                         className={`pl-[42px] pr-[20px] pb-3 ${isDropdown === menu.title ? "block" : "hidden"}`}
                       >
-                        {menu.subMenus.map((sub, i) => (
-                          <li key={i}>
-                            <Link
-                              href={sub.link}
-                              className="block font-normal w-full text-[#6D6F71] hover:text-theme nav-dot"
-                            >
-                              {sub.title}
-                            </Link>
-                          </li>
-                        ))}
+                        {menu.title === "Orders" ? (
+                          <React.Suspense fallback={<li className="text-tiny text-text3 px-4 py-2">Loading...</li>}>
+                            <OrdersDropdown />
+                          </React.Suspense>
+                        ) : (
+                          menu.subMenus.map((sub, i) => (
+                            <li key={i}>
+                              <Link
+                                href={sub.link}
+                                className="block font-normal w-full text-[#6D6F71] hover:text-theme nav-dot"
+                              >
+                                {sub.title}
+                              </Link>
+                            </li>
+                          ))
+                        )}
                       </ul>
                     )}
                   </li>

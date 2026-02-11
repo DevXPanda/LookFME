@@ -1,14 +1,27 @@
-import React from "react";
-import { InventoryCategoryStock, InventoryLowStock, InventoryStockValuation, InventorySalesVsStock } from "./inventory-mock-data";
+import Wrapper from "@/layout/wrapper";
+import Breadcrumb from "../components/breadcrumb/breadcrumb";
+import InventoryCategoryStock from "../components/inventory/category-stock";
+import InventoryLowStock from "../components/inventory/low-stock";
+import InventoryStockValuation from "../components/inventory/stock-valuation";
+import InventorySalesVsStock from "../components/inventory/sales-vs-stock";
 
 export default function InventoryPage() {
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-8">Inventory Overview</h1>
-      <div className="mb-12"><InventoryCategoryStock /></div>
-      <div className="mb-12"><InventoryLowStock /></div>
-      <div className="mb-12"><InventoryStockValuation /></div>
-      <div className="mb-12"><InventorySalesVsStock /></div>
-    </div>
+    <Wrapper>
+      <div className="body-content px-8 py-8 bg-slate-100">
+        {/* breadcrumb start */}
+        <Breadcrumb title="Inventory" subtitle="Inventory Overview" />
+        {/* breadcrumb end */}
+
+        {/* inventory sections start */}
+        <div className="space-y-6">
+          <InventoryCategoryStock />
+          <InventoryLowStock />
+          <InventoryStockValuation />
+          <InventorySalesVsStock />
+        </div>
+        {/* inventory sections end */}
+      </div>
+    </Wrapper>
   );
 }

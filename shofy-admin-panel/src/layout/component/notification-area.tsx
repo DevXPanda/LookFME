@@ -12,8 +12,8 @@ type IPropType = {
   handleNotificationOpen: () => void;
 };
 
-const NotificationArea = ({nRef,notificationOpen,handleNotificationOpen}: IPropType) => {
-  const {data: stockOutProduct,isError,isLoading} = useGetStockOutProductsQuery();
+const NotificationArea = ({ nRef, notificationOpen, handleNotificationOpen }: IPropType) => {
+  const { data: stockOutProduct, isError, isLoading } = useGetStockOutProductsQuery();
   const [products, setProducts] = useState<IProduct[] | undefined>(
     stockOutProduct?.data
   );
@@ -39,7 +39,7 @@ const NotificationArea = ({nRef,notificationOpen,handleNotificationOpen}: IPropT
       {notificationOpen && (
         <div className="absolute w-[280px] sm:w-[350px] h-auto top-full -right-[60px] sm:right-0 shadow-lg rounded-md bg-white py-5 px-5">
           {products &&
-            products.slice(0,5).map((item) => (
+            products.slice(0, 5).map((item) => (
               <div
                 key={item._id}
                 className="flex items-center justify-between last:border-0 border-b border-gray pb-4 mb-4 last:pb-0 last:mb-0"

@@ -5,15 +5,15 @@ import ReviewProductArea from "../components/products/review-products/review-pro
 const OrdersPage = () => {
   return (
     <Wrapper>
-    <div className="body-content px-8 py-8 bg-slate-100">
-      {/* breadcrumb start */}
-      <Breadcrumb title="Reviews" subtitle="Reviews List" />
-      {/* breadcrumb end */}
+      <div className="body-content px-8 py-8 bg-slate-100">
+        {/* breadcrumb start */}
+        <Breadcrumb title="Reviews" subtitle="Reviews List" />
+        {/* breadcrumb end */}
 
-      {/* review area start */}
-      <ReviewProductArea />
-      {/* review area end */}
-    </div>
+        {/* review area start */}
+        <ReviewProductArea />
+        {/* review area end */}
+      </div>
     </Wrapper>
   );
 };
