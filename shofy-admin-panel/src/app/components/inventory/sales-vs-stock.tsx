@@ -87,6 +87,10 @@ const InventorySalesVsStock = () => {
                 const stockRatio = totalUnits > 0 
                   ? ((row.stock / totalUnits) * 100).toFixed(1) 
                   : 0;
+                const ratio: number =
+                  typeof stockRatio === "string"
+                    ? Number(stockRatio)
+                    : stockRatio ?? 0;
                 const isLowStock = (row.stock || 0) < 10;
 
                 return (
@@ -113,9 +117,9 @@ const InventorySalesVsStock = () => {
                         <div className="w-20 bg-gray6 rounded-full h-2">
                           <div
                             className={`h-2 rounded-full ${
-                              parseFloat(stockRatio) < 20
+                              ratio < 20
                                 ? "bg-danger"
-                                : parseFloat(stockRatio) < 50
+                                : ratio < 50
                                 ? "bg-warning"
                                 : "bg-success"
                             }`}
