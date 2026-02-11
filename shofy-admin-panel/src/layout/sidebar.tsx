@@ -35,7 +35,7 @@ export default function Sidebar({ sideMenu, setSideMenu }: IProps) {
     if (pathname === "/orders" && isDropdown !== "Orders") {
       setIsDropDown("Orders");
     }
-  }, [pathname]);
+  }, [pathname, isDropdown]);
 
   // handle logout
   const handleLogOut = () => {

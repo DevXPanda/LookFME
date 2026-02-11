@@ -4,18 +4,6 @@ import { notifyError, notifySuccess } from "@/utils/toast";
 import VariantImgUpload from "./variant-img-upload";
 import { SmClose } from "@/svg";
 
-// Variation type
-export interface ProductVariation {
-  attributeType: string;
-  attributeValue: string;
-  colorName: string;
-  colorCode: string;
-  sku: string;
-  stock: number;
-  price: number | null;
-  image: string;
-}
-
 // prop type
 type IPropType = {
   isSubmitted: boolean;
