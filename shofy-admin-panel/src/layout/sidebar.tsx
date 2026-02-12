@@ -224,8 +224,8 @@ const Sidebar = React.memo(function Sidebar({ sideMenu, setSideMenu }: IProps) {
                     priority
                     style={{ minWidth: 36 }}
                   />
-                  <span style={{ fontWeight: 700, fontSize: 22, color: '#222', letterSpacing: 0.5 }}>
-                    LookFame
+                  <span style={{ fontWeight: 700, fontSize: 22, color: '#CF1B70', letterSpacing: 0.5 }}>
+                    Lookfame
                   </span>
                 </div>
               </Link>
