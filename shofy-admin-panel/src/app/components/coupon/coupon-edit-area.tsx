@@ -8,6 +8,7 @@ import ErrorMsg from "../common/error-msg";
 import GlobalImgUpload from "../category/global-img-upload";
 import CouponFormField from "../brand/form-field-two";
 import ProductType from "../products/add-product/product-type";
+import ProductSelector from "./product-selector";
 
 const CouponEditArea = ({ id }: { id: string }) => {
   const {
@@ -22,9 +23,26 @@ const CouponEditArea = ({ id }: { id: string }) => {
     control,
     setSelectProductType,
     handleSubmitEditCoupon,
+    showOnHomepage,
+    setShowOnHomepage,
+    showOnProduct,
+    setShowOnProduct,
+    selectedProducts,
+    setSelectedProducts,
   } = useCouponSubmit();
   // get specific product
   const { data: coupon, isError, isLoading } = useGetCouponQuery(id);
+
+  // Set default values when coupon loads
+  React.useEffect(() => {
+    if (coupon) {
+      setLogo(coupon.logo || "");
+      setSelectProductType(coupon.productType || "");
+      setShowOnHomepage(coupon.showOnHomepage || false);
+      setShowOnProduct(coupon.showOnProduct || false);
+      setSelectedProducts(coupon.productIds || []);
+    }
+  }, [coupon, setLogo, setSelectProductType, setShowOnHomepage, setShowOnProduct, setSelectedProducts]);
   // decide to render
   let content = null;
   if (isLoading) {
@@ -100,6 +118,55 @@ const CouponEditArea = ({ id }: { id: string }) => {
                 </div>
               </div>
               {/* product type */}
+
+              {/* Display Options */}
+              <div className="mb-6">
+                <p className="mb-0 text-base text-black mb-3">Display Options</p>
+                
+                {/* Show on Homepage */}
+                <div className="mb-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={showOnHomepage}
+                      onChange={(e) => setShowOnHomepage(e.target.checked)}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">Show on Homepage (Special Coupon section)</span>
+                  </label>
+                </div>
+
+                {/* Show on Product Page */}
+                <div className="mb-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={showOnProduct}
+                      onChange={(e) => setShowOnProduct(e.target.checked)}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">Show on Product Page</span>
+                  </label>
+                </div>
+
+                {/* Product Selection - Only show if showOnProduct is checked */}
+                {showOnProduct && (
+                  <div className="mb-4">
+                    <p className="mb-2 text-sm text-gray-700">Select Specific Products (Optional)</p>
+                    <p className="mb-2 text-xs text-gray-500">Leave empty to show on all product pages</p>
+                    <div className="category-add-select select-bordered">
+                      <ProductSelector
+                        control={control}
+                        errors={errors}
+                        selectedProducts={selectedProducts}
+                        setSelectedProducts={setSelectedProducts}
+                        default_value={coupon.productIds}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+              {/* Display Options */}
 
               <button className="tp-btn px-7 py-2">Edit Coupon</button>
             </div>

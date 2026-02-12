@@ -11,6 +11,9 @@ const useCouponSubmit = () => {
   const [openSidebar, setOpenSidebar] = useState<boolean>(false);
   const [selectProductType, setSelectProductType] = useState<string>("");
   const [editId, setEditId] = useState<string>("");
+  const [showOnHomepage, setShowOnHomepage] = useState<boolean>(false);
+  const [showOnProduct, setShowOnProduct] = useState<boolean>(false);
+  const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const router = useRouter();
 
   // add coupon
@@ -31,6 +34,9 @@ const useCouponSubmit = () => {
     if (!openSidebar) {
       setLogo("")
       setSelectProductType("");
+      setShowOnHomepage(false);
+      setShowOnProduct(false);
+      setSelectedProducts([]);
       reset();
     }
   }, [openSidebar, reset])
@@ -45,6 +51,9 @@ const useCouponSubmit = () => {
         discountPercentage: data?.discountpercentage,
         minimumAmount: data?.minimumamount,
         productType: selectProductType,
+        showOnHomepage: showOnHomepage,
+        showOnProduct: showOnProduct,
+        productIds: selectedProducts,
       };
 
       console.log(coupon_data)
@@ -62,6 +71,9 @@ const useCouponSubmit = () => {
         setLogo("")
         setOpenSidebar(false);
         setSelectProductType("");
+        setShowOnHomepage(false);
+        setShowOnProduct(false);
+        setSelectedProducts([]);
         reset();
       }
     } catch (error) {
@@ -81,6 +93,9 @@ const useCouponSubmit = () => {
         discountPercentage: data?.discountpercentage,
         minimumAmount: data?.minimumamount,
         productType: selectProductType,
+        showOnHomepage: showOnHomepage,
+        showOnProduct: showOnProduct,
+        productIds: selectedProducts,
       };
       const res = await editCoupon({ id, data: coupon_data });
       if ("error" in res) {
@@ -118,6 +133,12 @@ const useCouponSubmit = () => {
     setSelectProductType,
     handleSubmitEditCoupon,
     setEditId,
+    showOnHomepage,
+    setShowOnHomepage,
+    showOnProduct,
+    setShowOnProduct,
+    selectedProducts,
+    setSelectedProducts,
   };
 };
 

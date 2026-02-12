@@ -9,6 +9,7 @@ import {
 } from "react-hook-form";
 import CouponFormField from "../brand/form-field-two";
 import ProductType from "../products/add-product/product-type";
+import ProductSelector from "./product-selector";
 
 // prop type
 type IPropType = {
@@ -25,6 +26,12 @@ type IPropType = {
     logo: string;
     handleSubmit: UseFormHandleSubmit<any, undefined>;
     control: Control;
+    showOnHomepage: boolean;
+    setShowOnHomepage: React.Dispatch<React.SetStateAction<boolean>>;
+    showOnProduct: boolean;
+    setShowOnProduct: React.Dispatch<React.SetStateAction<boolean>>;
+    selectedProducts: string[];
+    setSelectedProducts: React.Dispatch<React.SetStateAction<string[]>>;
   };
 };
 
@@ -42,6 +49,12 @@ const CouponOffcanvas = ({ propsItems }: IPropType) => {
     register,
     control,
     setSelectProductType,
+    showOnHomepage,
+    setShowOnHomepage,
+    showOnProduct,
+    setShowOnProduct,
+    selectedProducts,
+    setSelectedProducts,
   } = propsItems;
   return (
     <>
@@ -118,6 +131,54 @@ const CouponOffcanvas = ({ propsItems }: IPropType) => {
                   </div>
                 </div>
                 {/* Product Type */}
+
+                {/* Display Options */}
+                <div className="mb-6">
+                  <p className="mb-0 text-base text-black mb-3">Display Options</p>
+                  
+                  {/* Show on Homepage */}
+                  <div className="mb-4">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={showOnHomepage}
+                        onChange={(e) => setShowOnHomepage(e.target.checked)}
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700">Show on Homepage (Special Coupon section)</span>
+                    </label>
+                  </div>
+
+                  {/* Show on Product Page */}
+                  <div className="mb-4">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={showOnProduct}
+                        onChange={(e) => setShowOnProduct(e.target.checked)}
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700">Show on Product Page</span>
+                    </label>
+                  </div>
+
+                  {/* Product Selection - Only show if showOnProduct is checked */}
+                  {showOnProduct && (
+                    <div className="mb-4">
+                      <p className="mb-2 text-sm text-gray-700">Select Specific Products (Optional)</p>
+                      <p className="mb-2 text-xs text-gray-500">Leave empty to show on all product pages</p>
+                      <div className="category-add-select select-bordered">
+                        <ProductSelector
+                          control={control}
+                          errors={errors}
+                          selectedProducts={selectedProducts}
+                          setSelectedProducts={setSelectedProducts}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {/* Display Options */}
               </div>
             </div>
             <div className="sm:flex items-center sm:space-x-3 py-6 px-8 sticky bottom-0 left-0 right-0 w-full z-[99] bg-white shadow-_md mt-8 flex-wrap sm:flex-nowrap">

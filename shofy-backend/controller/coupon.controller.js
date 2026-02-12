@@ -58,6 +58,9 @@ const updateCoupon = async (req, res, next) => {
       coupon.minimumAmount = req.body.minimumAmount;
       coupon.productType = req.body.productType;
       coupon.logo = req.body.logo;
+      coupon.showOnHomepage = req.body.showOnHomepage !== undefined ? req.body.showOnHomepage : coupon.showOnHomepage;
+      coupon.showOnProduct = req.body.showOnProduct !== undefined ? req.body.showOnProduct : coupon.showOnProduct;
+      coupon.productIds = req.body.productIds || coupon.productIds;
       await coupon.save();
       res.send({ message: 'Coupon Updated Successfully!' });
     }
@@ -79,6 +82,39 @@ const deleteCoupon = async (req, res, next) => {
   }
 };
 
+// getHomepageCoupons - Get coupons that should be shown on homepage
+const getHomepageCoupons = async (req, res, next) => {
+  try {
+    const coupons = await Coupon.find({ 
+      showOnHomepage: true,
+      status: "active",
+      endTime: { $gte: new Date() }
+    }).sort({ _id: -1 });
+    res.send(coupons);
+  } catch (error) {
+    next(error)
+  }
+};
+
+// getProductCoupons - Get coupons for a specific product
+const getProductCoupons = async (req, res, next) => {
+  try {
+    const { productId } = req.params;
+    const coupons = await Coupon.find({ 
+      showOnProduct: true,
+      status: "active",
+      endTime: { $gte: new Date() },
+      $or: [
+        { productIds: { $in: [productId] } },
+        { productIds: { $size: 0 } } // Show coupons with no specific products (all products)
+      ]
+    }).sort({ _id: -1 });
+    res.send(coupons);
+  } catch (error) {
+    next(error)
+  }
+};
+
 module.exports = {
   addCoupon,
   addAllCoupon,
@@ -86,4 +122,6 @@ module.exports = {
   getCouponById,
   updateCoupon,
   deleteCoupon,
+  getHomepageCoupons,
+  getProductCoupons,
 };

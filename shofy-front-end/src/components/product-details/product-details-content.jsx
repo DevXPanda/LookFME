@@ -5,6 +5,7 @@ import DetailsWrapper from "./details-wrapper";
 import { useDispatch } from "react-redux";
 import DetailsTabNav from "./details-tab-nav";
 import RelatedProducts from "./related-products";
+import ProductCoupons from "./product-coupons";
 
 const ProductDetailsContent = ({ productItem }) => {
   const { _id, img, imageURLs, videoId,status } = productItem || {};
@@ -46,6 +47,10 @@ const ProductDetailsContent = ({ productItem }) => {
                 detailsBottom={true}
               />
               {/* product-details-wrapper end */}
+              
+              {/* product coupons start */}
+              <ProductCoupons productId={_id} />
+              {/* product coupons end */}
             </div>
           </div>
         </div>

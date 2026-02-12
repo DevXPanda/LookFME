@@ -19,6 +19,12 @@ const CouponArea = () => {
     setOpenSidebar,
     control,
     setSelectProductType,
+    showOnHomepage,
+    setShowOnHomepage,
+    showOnProduct,
+    setShowOnProduct,
+    selectedProducts,
+    setSelectedProducts,
   } = useCouponSubmit();
   const [searchValue, setSearchValue] = useState<string>("");
   const [selectValue, setSelectValue] = useState<string>("");
@@ -93,6 +99,12 @@ const CouponArea = () => {
           setIsSubmitted,
           control,
           setSelectProductType,
+          showOnHomepage,
+          setShowOnHomepage,
+          showOnProduct,
+          setShowOnProduct,
+          selectedProducts,
+          setSelectedProducts,
         }}
       />
       {/* coupon offcanvas end */}

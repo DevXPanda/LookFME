@@ -147,9 +147,12 @@ const Menus = () => {
                                 <Image
                                   src={offering.image}
                                   alt={offering.title}
-                                  width={80}
-                                  height={80}
+                                  width={300}
+                                  height={300}
+                                  quality={100}
+                                  unoptimized={false}
                                   className="offering-img"
+                                  priority={false}
                                 />
                               </div>
                               <span className="jockey-offering-text">{offering.title}</span>
@@ -174,9 +177,12 @@ const Menus = () => {
                                 <Image
                                   src={trend.image}
                                   alt={trend.title}
-                                  width={60}
-                                  height={60}
+                                  width={300}
+                                  height={300}
+                                  quality={100}
+                                  unoptimized={false}
                                   className="trending-img"
+                                  priority={false}
                                 />
                               </div>
                               <span className="jockey-trending-text">{trend.title}</span>

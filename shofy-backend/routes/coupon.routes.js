@@ -7,6 +7,8 @@ const {
   getCouponById,
   updateCoupon,
   deleteCoupon,
+  getHomepageCoupons,
+  getProductCoupons,
 } = require('../controller/coupon.controller');
 
 //add a coupon
@@ -17,6 +19,12 @@ router.post('/all', addAllCoupon);
 
 //get all coupon
 router.get('/', getAllCoupons);
+
+//get homepage coupons
+router.get('/homepage', getHomepageCoupons);
+
+//get product coupons
+router.get('/product/:productId', getProductCoupons);
 
 //get a coupon
 router.get('/:id', getCouponById);

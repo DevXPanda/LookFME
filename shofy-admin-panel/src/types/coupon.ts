@@ -12,6 +12,9 @@ export interface ICoupon {
   createdAt: string;
   updatedAt: string;
   status: string;
+  showOnHomepage?: boolean;
+  showOnProduct?: boolean;
+  productIds?: string[];
 }
 
 
@@ -25,4 +28,7 @@ export interface IAddCoupon {
   productType: string;
   startTime?: string;
   status?: string;
+  showOnHomepage?: boolean;
+  showOnProduct?: boolean;
+  productIds?: string[];
 }

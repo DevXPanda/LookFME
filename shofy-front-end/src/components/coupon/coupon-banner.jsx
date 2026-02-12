@@ -172,49 +172,19 @@
 
 
 'use client';
+'use client';
 import React from "react";
 import { TextShapeLine } from "@/svg";
+import { useGetHomepageCouponsQuery } from "@/redux/features/coupon/couponApi";
+import Image from "next/image";
 
 const CouponBanner = () => {
+  const { data: coupons, isLoading, isError } = useGetHomepageCouponsQuery();
 
-  const coupons = [
-    {
-      id: 1,
-      logo: "PayTm",
-      logoColor: "bg-pink",
-      title: "Get Cashback Up To",
-      amount: "₹600",
-      subtitle: "On Bajaj Pay Wallet",
-      minAmount: "Minimum Shopping of ₹600"
-    },
-    {
-      id: 2,
-      logo: "M",
-      logoColor: "bg-pink",
-      title: "Get Cashback Up To",
-      amount: "₹250",
-      subtitle: "On Mobikwik Wallet",
-      minAmount: "Minimum Shopping of ₹749"
-    },
-    {
-      id: 3,
-      logo: "M",
-      logoColor: "bg-pink",
-      title: "Get Cashback Up To",
-      amount: "₹300",
-      subtitle: "On Mobikwik Wallet",
-      minAmount: "Minimum Shopping of ₹999"
-    },
-    {
-      id: 4,
-      logo: "PayTm",
-      logoColor: "bg-pink",
-      title: "Get Cashback Up To",
-      amount: "₹500",
-      subtitle: "On Bajaj Pay Wallet",
-      minAmount: "Minimum Shopping of ₹800"
-    }
-  ];
+  // Don't render if no coupons or error
+  if (isLoading || isError || !coupons || coupons.length === 0) {
+    return null;
+  }
 
   return (
     <>
@@ -238,25 +208,35 @@ const CouponBanner = () => {
           <div className="coupon-slider">
             <div className="coupon-track">
               {[...coupons, ...coupons].map((coupon, index) => (
-                <div key={index} className="coupon-item">
+                <div key={`${coupon._id}-${index}`} className="coupon-item">
                   <div
                     className="bg-gray-400 text-white p-3 rounded shadow-lg position-relative"
                     style={{ minWidth: "280px" }}
                   >
                     <div className="d-flex gap-3">
                       <div
-                        className={`${coupon.logoColor} d-flex align-items-center justify-content-center rounded`}
-                        style={{ width: "68px", height: "38px" }}
+                        className="d-flex align-items-center justify-content-center rounded bg-white"
+                        style={{ width: "68px", height: "38px", padding: "4px" }}
                       >
-                        <span className="fw-bold text-white">{coupon.logo}</span>
+                        {coupon.logo ? (
+                          <Image 
+                            src={coupon.logo} 
+                            alt={coupon.title} 
+                            width={60} 
+                            height={30}
+                            className="object-contain"
+                          />
+                        ) : (
+                          <span className="fw-bold text-dark">{coupon.title?.substring(0, 2)}</span>
+                        )}
                       </div>
 
                       <div>
                         <p className="small mb-1">{coupon.title}</p>
-                        <p className="fs-2 fw-bold mb-1">{coupon.amount}</p>
-                        <p className="small mb-2">{coupon.subtitle}</p>
+                        <p className="fs-2 fw-bold mb-1">{coupon.discountPercentage}% OFF</p>
+                        <p className="small mb-2">Code: {coupon.couponCode}</p>
                         <span className="bg-light-pink text-dark small px-2 py-1 rounded">
-                          {coupon.minAmount}
+                          Min: ₹{coupon.minimumAmount}
                         </span>
                       </div>
                     </div>

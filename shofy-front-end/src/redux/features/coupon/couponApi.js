@@ -9,7 +9,19 @@ export const authApi = apiSlice.injectEndpoints({
       providesTags:['Coupon'],
       keepUnusedDataFor: 600,
     }),
+    // get homepage coupons
+    getHomepageCoupons: builder.query({
+      query: () => `api/coupon/homepage`,
+      providesTags:['HomepageCoupons'],
+      keepUnusedDataFor: 600,
+    }),
+    // get product coupons
+    getProductCoupons: builder.query({
+      query: (productId) => `api/coupon/product/${productId}`,
+      providesTags:['ProductCoupons'],
+      keepUnusedDataFor: 600,
+    }),
   }),
 });
 
-export const { useGetOfferCouponsQuery } = authApi;
+export const { useGetOfferCouponsQuery, useGetHomepageCouponsQuery, useGetProductCouponsQuery } = authApi;

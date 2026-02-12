@@ -62,7 +62,7 @@ export interface IAddStuff {
 }
 // single stuff
 export interface IStuff {
-  _id:string;
+  _id: string;
   name: string;
   image?: string;
   address?: string;

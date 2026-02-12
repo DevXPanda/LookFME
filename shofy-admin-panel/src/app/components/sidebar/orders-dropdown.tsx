@@ -31,8 +31,10 @@ const OrdersDropdown = () => {
           <li key={option.key}>
             <Link
               href={`/orders?status=${option.key}`}
-              className={`block font-normal w-full text-[#6D6F71] hover:text-theme nav-dot ${
-                isSelected ? "text-theme font-medium" : ""
+              className={`block font-normal w-full transition-colors duration-200 nav-dot ${
+                isSelected 
+                  ? "text-theme font-medium" 
+                  : "text-[#6D6F71] hover:text-theme"
               }`}
             >
               {option.label}

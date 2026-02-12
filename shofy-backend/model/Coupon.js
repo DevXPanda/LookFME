@@ -39,6 +39,18 @@ const couponSchema = new mongoose.Schema(
       enum: ["active", "inactive"],
       default: "active"
     },
+    showOnHomepage: {
+      type: Boolean,
+      default: false
+    },
+    showOnProduct: {
+      type: Boolean,
+      default: false
+    },
+    productIds: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product"
+    }],
   },
   {
     timestamps: true,
