@@ -21,7 +21,7 @@ export const bannerApi = apiSlice.injectEndpoints({
     }),
     getBannerById: builder.query<IBannerResponse, string>({
       query: (id) => `/api/banners/single/${id}`,
-      providesTags: (result, error, id) => [{ type: "Banner", id }],
+      providesTags: (result, error, id) => [{ type: "Banner" as const, id }],
     }),
     addBanner: builder.mutation<IBannerResponse, Partial<IBanner>>({
       query: (body) => ({
@@ -37,7 +37,7 @@ export const bannerApi = apiSlice.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ["Banners", (result, error, arg) => ({ type: "Banner", id: arg.id })],
+      invalidatesTags: ["Banners"],
     }),
     deleteBanner: builder.mutation<{ success: boolean; message: string }, string>({
       query: (id) => ({

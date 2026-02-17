@@ -48,7 +48,7 @@ export const userManagementApi = apiSlice.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ["AllCustomers", (result, error, arg) => ({ type: "Customer", id: arg.id })],
+      invalidatesTags: ["AllCustomers"],
     }),
 
     // Update wallet coins
@@ -61,11 +61,7 @@ export const userManagementApi = apiSlice.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: [
-        "AllCustomers",
-        (result, error, arg) => ({ type: "Customer", id: arg.id }),
-        (result, error, arg) => ({ type: "WalletTransactions", id: arg.id }),
-      ],
+      invalidatesTags: ["AllCustomers"],
     }),
 
     // Get customer orders
