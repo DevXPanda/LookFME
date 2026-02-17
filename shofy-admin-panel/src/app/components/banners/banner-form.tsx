@@ -11,6 +11,10 @@ import { notifySuccess, notifyError } from "@/utils/toast";
 const BANNER_TYPES = [
   { value: "homepage_hero", label: "Homepage Hero" },
   { value: "homepage_secondary", label: "Homepage Secondary" },
+  { value: "fashion_banner", label: "Fashion Banner" },
+  { value: "ads_banner", label: "Ads Banner" },
+  { value: "autoslider_banner", label: "Autoslider Banner" },
+  { value: "junior_banner", label: "Junior Banner" },
   { value: "other", label: "Other" },
 ];
 

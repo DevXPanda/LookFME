@@ -6,7 +6,7 @@ export interface IBanner {
   redirectLink: string;
   image: string;
   imageMobile: string;
-  bannerType: "homepage_hero" | "homepage_secondary" | "other";
+  bannerType: "homepage_hero" | "homepage_secondary" | "fashion_banner" | "ads_banner" | "autoslider_banner" | "junior_banner" | "other";
   order: number;
   isEnabled: boolean;
   createdAt?: string;
@@ -20,7 +20,7 @@ export interface IBannerForm {
   redirectLink: string;
   image: string;
   imageMobile: string;
-  bannerType: "homepage_hero" | "homepage_secondary" | "other";
+  bannerType: "homepage_hero" | "homepage_secondary" | "fashion_banner" | "ads_banner" | "autoslider_banner" | "junior_banner" | "other";
   order: number;
   isEnabled: boolean;
 }

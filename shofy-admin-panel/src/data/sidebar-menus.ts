@@ -87,7 +87,7 @@ const sidebar_menu: Array<ISidebarMenus> = [
   {
     id: 14,
     icon: Setting,
-    link: "/cms",
+    link: "/cms/homepage-banners",
     title: "CMS Management",
     subMenus: [
       { title: "Homepage Banners", link: "/cms/homepage-banners" },
