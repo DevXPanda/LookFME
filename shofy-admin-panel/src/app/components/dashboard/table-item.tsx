@@ -22,7 +22,7 @@ const TableItem = (props: { order: IOrder }) => {
       </td>
       <td className="px-3 py-3">{order.name}</td>
       <td className="px-3 py-3">{p_method}</td>
-      <td className="px-3 py-3">${order.totalAmount}</td>
+      <td className="px-3 py-3">₹{Number(order.totalAmount || 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}</td>
       <td className="px-3 py-3">
         <span
           className={`text-[11px] px-3 py-1 rounded-md leading-none ${

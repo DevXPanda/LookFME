@@ -10,7 +10,7 @@ const upload = multer();
 router.post('/add-img',upload.single('image'), cloudinaryController.saveImageCloudinary);
 
 //add image
-router.post('/add-multiple-img',upload.array('images',5), cloudinaryController.addMultipleImageCloudinary);
+router.post('/add-multiple-img',upload.array('images',10), cloudinaryController.addMultipleImageCloudinary);
 
 //delete image
 router.delete('/img-delete', cloudinaryController.cloudinaryDeleteController);

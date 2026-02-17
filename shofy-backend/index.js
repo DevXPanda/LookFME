@@ -192,6 +192,9 @@ app.use("/api/review", reviewRoutes);
 app.use("/api/cloudinary", cloudinaryRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/inventory", require("./routes/inventory.routes"));
+app.use("/api/report", require("./routes/report.routes"));
+app.use("/api/user-management", require("./routes/user-management.routes"));
+app.use("/api/banners", require("./routes/banner.routes"));
 
 
 

@@ -5,32 +5,11 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, EffectFade, Autoplay } from 'swiper/modules';
+import { useGetBannersQuery } from '@/redux/features/bannerApi';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
-
-// Desktop images
-const slider_img_1 = '/assets/img/slider/2/1.jpg';
-const slider_img_2 = '/assets/img/slider/2/2.jpg';
-const slider_img_3 = '/assets/img/slider/2/3.jpg';
-const slider_img_4 = '/assets/img/slider/2/4.jpg';
-const slider_img_5 = '/assets/img/slider/2/5.jpg';
-
-// Mobile images
-const mobile_img_1 = '/assets/img/slider/2/slider 1.jpeg';
-const mobile_img_2 = '/assets/img/slider/2/slider-2.png';
-const mobile_img_3 = '/assets/img/slider/2/slider-3.png';
-const mobile_img_4 = '/assets/img/slider/2/slider 4.jpg';
-const mobile_img_5 = '/assets/img/slider/2/slider 5.jpg';
-
-const sliderData = [
-  { id: 1, desktop: slider_img_1, mobile: mobile_img_1, category: "Men's" },
-  { id: 2, desktop: slider_img_2, mobile: mobile_img_2, category: "Women's" },
-  { id: 3, desktop: slider_img_3, mobile: mobile_img_3, category: "Baby" },
-  { id: 4, desktop: slider_img_4, mobile: mobile_img_4, category: 'Bags' },
-  { id: 5, desktop: slider_img_5, mobile: mobile_img_5, category: 'Cosmetic' },
-];
 
 const sliderSettings = {
   slidesPerView: 1,
@@ -49,15 +28,16 @@ const sliderSettings = {
 
 export default function FashionBanner() {
   const router = useRouter();
+  const { data, isLoading } = useGetBannersQuery();
+  const banners = data?.data ?? [];
 
-  const handleBannerClick = (category) => {
-    const slug = category
-      .toLowerCase()
-      .replace("&", "")
-      .split(" ")
-      .join("-");
-    router.push(`/shop?category=${slug}`);
+  const handleBannerClick = (redirectLink) => {
+    if (redirectLink) router.push(redirectLink);
   };
+
+  if (isLoading || banners.length === 0) {
+    return null;
+  }
 
   return (
     <>
@@ -132,16 +112,16 @@ export default function FashionBanner() {
           modules={[Pagination, EffectFade, Autoplay]}
           className="tp-slider-active-2"
         >
-          {sliderData.map((item) => (
-            <SwiperSlide key={item.id}>
+          {banners.map((item) => (
+            <SwiperSlide key={item._id}>
               <div
                 className="tp-slider-item-2 banner-image-container banner-clickable"
-                onClick={() => handleBannerClick(item.category)}
+                onClick={() => handleBannerClick(item.redirectLink)}
               >
                 {/* Desktop Image */}
                 <Image
-                  src={item.desktop}
-                  alt="banner"
+                  src={item.image || '/assets/img/slider/2/1.jpg'}
+                  alt={item.title || 'banner'}
                   fill
                   priority
                   sizes="100vw"
@@ -151,8 +131,8 @@ export default function FashionBanner() {
 
                 {/* Mobile Image */}
                 <Image
-                  src={item.mobile}
-                  alt="banner"
+                  src={item.imageMobile || item.image || '/assets/img/slider/2/1.jpg'}
+                  alt={item.title || 'banner'}
                   fill
                   priority
                   sizes="100vw"

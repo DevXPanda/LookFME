@@ -24,20 +24,36 @@ const addMultipleImageCloudinary = async (req, res) => {
   try {
     const files = req.files;
 
+    if (!files || files.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No files provided",
+      });
+    }
+
     // Array to store Cloudinary image upload responses
     const uploadResults = [];
 
     for (const file of files) {
-      // Upload image to Cloudinary
-      const result = await cloudinaryServices.cloudinaryImageUpload(file.path);
+      try {
+        // Upload image to Cloudinary - use buffer if available, otherwise path
+        const imageBuffer = file.buffer || (file.path ? fs.readFileSync(file.path) : null);
+        if (!imageBuffer) {
+          console.error("No buffer or path available for file:", file);
+          continue;
+        }
+        
+        const result = await cloudinaryServices.cloudinaryImageUpload(imageBuffer);
+        uploadResults.push(result);
 
-      // Store the Cloudinary response in the array
-      uploadResults.push(result);
-    }
-
-    // Delete temporary local files
-    for (const file of files) {
-      fs.unlinkSync(file.path);
+        // Delete temporary local file if it exists
+        if (file.path && fs.existsSync(file.path)) {
+          fs.unlinkSync(file.path);
+        }
+      } catch (fileError) {
+        console.error("Error uploading file:", fileError);
+        // Continue with other files even if one fails
+      }
     }
 
     res.status(200).json({

@@ -50,6 +50,7 @@ export interface IProduct {
   slug?: string;
   unit?: string;
   imageURLs: ImageURL[];
+  supportingImages?: string[];
   parent: string;
   children: string;
   price: number;
@@ -95,6 +96,7 @@ export interface IAddProduct {
     img: string;
     sizes?: string[];
   }[];
+  supportingImages?: string[];
   parent: string;
   children: string;
   price: number;

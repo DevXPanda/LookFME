@@ -45,6 +45,7 @@ const useProductSubmit = () => {
   const [slug, setSlug] = useState<string>("");
   const [unit, setUnit] = useState<string>("");
   const [imageURLs, setImageURLs] = useState<ImageURL[]>([]);
+  const [supportingImages, setSupportingImages] = useState<string[]>([]);
   const [parent, setParent] = useState<string>("");
   const [children, setChildren] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
@@ -100,6 +101,7 @@ const useProductSubmit = () => {
     setSlug("");
     setUnit("");
     setImageURLs([]);
+    setSupportingImages([]);
     setParent("");
     setChildren("");
     setPrice(0);
@@ -150,6 +152,7 @@ const useProductSubmit = () => {
       slug: slugify(data.title, { replacement: "-", lower: true }),
       unit: data.unit,
       imageURLs: imageURLs,
+      supportingImages: supportingImages.filter((img) => img), // Filter out empty strings
       parent: parent,
       children: children,
       price: data.price,
@@ -237,6 +240,7 @@ const useProductSubmit = () => {
       slug: slugify(data.title, { replacement: "-", lower: true }),
       unit: data.unit,
       imageURLs: imageURLs,
+      supportingImages: supportingImages.filter((img) => img), // Filter out empty strings
       parent: parent,
       children: children,
       price: data.price,
@@ -287,6 +291,8 @@ const useProductSubmit = () => {
     setUnit,
     imageURLs,
     setImageURLs,
+    supportingImages,
+    setSupportingImages,
     parent,
     setParent,
     children,

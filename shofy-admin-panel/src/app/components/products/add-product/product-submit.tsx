@@ -7,6 +7,7 @@ import ProductTypeBrand from "./product-type-brand";
 import AdditionalInformation from "./additional-information";
 import ProductVariants from "./product-variants";
 import ProductImgUpload from "./product-img-upload";
+import ProductMultipleImgUpload from "./product-multiple-img-upload";
 import ProductCategory from "../../category/product-category";
 import Tags from "./tags";
 import FormField from "../form-field";
@@ -29,6 +30,8 @@ const ProductSubmit = () => {
     setBrand,
     setProductType,
     setImageURLs,
+    supportingImages,
+    setSupportingImages,
     offerDate,
     setOfferDate,
     isSubmitted,
@@ -165,6 +168,12 @@ const ProductSubmit = () => {
           <ProductImgUpload
             imgUrl={img}
             setImgUrl={setImg}
+            isSubmitted={isSubmitted}
+          />
+
+          <ProductMultipleImgUpload
+            supportingImages={supportingImages}
+            setSupportingImages={setSupportingImages}
             isSubmitted={isSubmitted}
           />
 

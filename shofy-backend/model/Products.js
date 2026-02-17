@@ -49,6 +49,11 @@ const productsSchema = mongoose.Schema({
     },
     sizes: [String]
   }],
+  supportingImages: [{
+    type: String,
+    required: false,
+    validate: [validator.isURL, "Please provide valid url(s)"]
+  }],
   parent: {
     type: String,
     required: true,

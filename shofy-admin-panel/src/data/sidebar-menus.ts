@@ -85,6 +85,31 @@ const sidebar_menu: Array<ISidebarMenus> = [
     title: "Coupons",
   },
   {
+    id: 14,
+    icon: Setting,
+    link: "/cms",
+    title: "CMS Management",
+    subMenus: [
+      { title: "Homepage Banners", link: "/cms/homepage-banners" },
+    ],
+  },
+  {
+    id: 12,
+    icon: Dashboard,
+    link: "/reports-analytics",
+    title: "Reports & Analytics",
+  },
+  {
+    id: 13,
+    icon: StuffUser,
+    link: "/user-management",
+    title: "User Management",
+    subMenus: [
+      { title: "Customers", link: "/user-management/customers" },
+      { title: "Subscribers", link: "/user-management/subscribers" },
+    ],
+  },
+  {
     id: 8,
     icon: Profile,
     link: "/profile",
