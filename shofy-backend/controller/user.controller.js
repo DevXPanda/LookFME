@@ -227,6 +227,7 @@ exports.forgetPassword = async (req, res, next) => {
       });
     } else {
       const token = tokenForVerify(user);
+      const resetLink = `${secret.client_url}/forget-password/${token}`;
       const body = {
         from: secret.email_user,
         to: `${verifyEmail}`,
@@ -238,7 +239,7 @@ exports.forgetPassword = async (req, res, next) => {
 
         <p style="margin-bottom:20px;">Click this link for reset your password</p>
 
-        <a href=${secret.client_url}/forget-password/${token} style="background:#0989FF;color:white;border:1px solid #0989FF; padding: 10px 15px; border-radius: 4px; text-decoration:none;">Reset Password</a>
+        <a href="${resetLink}" style="background:#0989FF;color:white;border:1px solid #0989FF; padding: 10px 15px; border-radius: 4px; text-decoration:none;">Reset Password</a>
 
         <p style="margin-top: 35px;">If you did not initiate this request, please contact us immediately at  support@lookfame.in</p>
 
@@ -248,7 +249,7 @@ exports.forgetPassword = async (req, res, next) => {
       };
       user.confirmationToken = token;
       const date = new Date();
-      date.setDate(date.getDate() + 1);
+      date.setMinutes(date.getMinutes() + 10);
       user.confirmationTokenExpires = date;
       await user.save({ validateBeforeSave: false });
       const message = "Please check your email to reset password!";

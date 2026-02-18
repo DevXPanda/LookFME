@@ -25,13 +25,12 @@ const ForgotForm = () => {
       verifyEmail: data.email,
     }).then((result) => {
       if (result?.error) {
-        notifyError(result?.error?.data?.message)
-      }
-      else {
-        notifySuccess(result.data?.message);
+        notifyError(result?.error?.data?.message || "Failed to send reset email.");
+      } else {
+        notifySuccess(result?.data?.message || "Please check your email to reset password!");
+        reset();
       }
     });
-    reset();
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

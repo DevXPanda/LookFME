@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import { useRouter } from "next/navigation";
 // internal
 import Wrapper from "@/layout/wrapper";
 import LoginShapes from "@/components/login-register/login-shapes";
@@ -21,6 +22,7 @@ const schema = Yup.object().shape({
 });
 
 export default function ForgotPasswordArea ({ token }) {
+  const router = useRouter();
   const [showPass, setShowPass] = useState(false);
   const [showConPass, setShowConPass] = useState(false);
   const [confirmForgotPassword, { }] = useConfirmForgotPasswordMutation();
@@ -35,13 +37,13 @@ export default function ForgotPasswordArea ({ token }) {
       token,
     }).then((result) => {
       if (result?.error) {
-        notifyError(result?.error?.data?.error)
-      } 
-      else {
-        notifySuccess(result?.data?.message);
+        notifyError(result?.error?.data?.error || result?.error?.data?.message || "Failed to reset password.");
+      } else {
+        notifySuccess(result?.data?.message || "Password reset successfully.");
+        reset();
+        router.push("/login");
       }
     });
-    reset();
   };
 
   return (

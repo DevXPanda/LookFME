@@ -195,6 +195,7 @@ app.use("/api/inventory", require("./routes/inventory.routes"));
 app.use("/api/report", require("./routes/report.routes"));
 app.use("/api/user-management", require("./routes/user-management.routes"));
 app.use("/api/banners", require("./routes/banner.routes"));
+app.use("/api/support", require("./routes/support.routes"));
 
 
 

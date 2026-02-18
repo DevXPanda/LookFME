@@ -11,6 +11,7 @@ import {
   Setting,
   Leaf,
   StuffUser,
+  Notification,
 } from "@/svg";
 
 const sidebar_menu: Array<ISidebarMenus> = [
@@ -107,6 +108,15 @@ const sidebar_menu: Array<ISidebarMenus> = [
     subMenus: [
       { title: "Customers", link: "/user-management/customers" },
       { title: "Subscribers", link: "/user-management/subscribers" },
+    ],
+  },
+  {
+    id: 15,
+    icon: Notification,
+    link: "/help-support/inbox",
+    title: "Help & Support",
+    subMenus: [
+      { title: "Inbox", link: "/help-support/inbox" },
     ],
   },
   {

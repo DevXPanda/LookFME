@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 // internal
 import ErrorMsg from "../common/error-msg";
-import { notifySuccess } from "@/utils/toast";
+import { notifySuccess, notifyError } from "@/utils/toast";
 
 // schema
 const schema = Yup.object().shape({
@@ -25,12 +25,30 @@ const ContactForm = () => {
     resolver: yupResolver(schema),
   });
   // on submit
-  const onSubmit = (data) => {
-    if (data) {
-      notifySuccess('Message sent successfully!');
+  const onSubmit = async (data) => {
+    if (!data) return;
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+    try {
+      const res = await fetch(`${baseUrl}/api/support/message`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          subject: data.subject,
+          message: data.message,
+        }),
+      });
+      const result = await res.json().catch(() => ({}));
+      if (res.ok && result.success) {
+        notifySuccess(result.message || "Message sent successfully!");
+        reset();
+      } else {
+        notifyError(result.message || "Failed to send message. Please try again.");
+      }
+    } catch (err) {
+      notifyError("Failed to send message. Please try again.");
     }
-
-    reset();
   };
 
   return (
