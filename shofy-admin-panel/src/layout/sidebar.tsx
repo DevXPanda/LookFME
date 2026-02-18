@@ -6,7 +6,7 @@ import { DownArrow } from "@/svg";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { userLoggedOut } from "@/redux/auth/authSlice";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import OrdersDropdown from "@/app/components/sidebar/orders-dropdown";
 
 // prop type
@@ -20,6 +20,7 @@ const Sidebar = React.memo(function Sidebar({ sideMenu, setSideMenu }: IProps) {
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const dropdownRefs = useRef<{ [key: string]: HTMLUListElement | null }>({});
 
   // Check if a menu item or its submenu is active based on pathname
@@ -36,6 +37,10 @@ const Sidebar = React.memo(function Sidebar({ sideMenu, setSideMenu }: IProps) {
         if (menu.title === "Orders" && pathname.startsWith("/orders")) {
           return true;
         }
+        // For refund requests, check if pathname starts with /refund-requests
+        if (menu.title === "Refund Requests" && pathname.startsWith("/refund-requests")) {
+          return true;
+        }
         // For other menus, check exact match or starts with
         return pathname === sub.link || pathname.startsWith(sub.link + "/");
       });
@@ -50,12 +55,21 @@ const Sidebar = React.memo(function Sidebar({ sideMenu, setSideMenu }: IProps) {
     
     // For orders, check query params
     if (parentTitle === "Orders" && pathname.startsWith("/orders")) {
-      return true;
+      const currentStatus = searchParams?.get("status") || "all";
+      const linkStatus = subLink.split("status=")[1]?.split("&")[0] || "all";
+      return currentStatus === linkStatus;
+    }
+    
+    // For refund requests, check query params
+    if (parentTitle === "Refund Requests" && pathname.startsWith("/refund-requests")) {
+      const currentStatus = searchParams?.get("status") || "all";
+      const linkStatus = subLink.split("status=")[1]?.split("&")[0] || "all";
+      return currentStatus === linkStatus;
     }
     
     // For other menus, check exact match or starts with
     return pathname === subLink || pathname.startsWith(subLink + "/");
-  }, [pathname]);
+  }, [pathname, searchParams]);
 
   // Determine which dropdown should be open based on pathname
   const activeDropdown = useMemo(() => {
@@ -132,16 +146,18 @@ const Sidebar = React.memo(function Sidebar({ sideMenu, setSideMenu }: IProps) {
                     handleMenuActive(menu.title);
                   }
                 }}
-                className={`group cursor-pointer rounded-md relative text-black text-lg font-medium inline-flex items-center w-full transition-colors ease-in-out duration-300 px-5 py-[9px] mb-2 hover:bg-gray sidebar-link-active ${
+                className={`group cursor-pointer rounded-md relative text-black text-lg font-medium inline-flex items-center justify-between w-full transition-colors ease-in-out duration-300 px-5 py-[9px] mb-2 hover:bg-gray sidebar-link-active ${
                   isActive || isOpen ? "bg-themeLight hover:bg-themeLight text-theme" : ""
                 }`}
               >
-                <span className="inline-block mr-[10px] text-xl">
-                  <menu.icon />
+                <span className="inline-flex items-center">
+                  <span className="inline-block mr-[10px] text-xl">
+                    <menu.icon />
+                  </span>
+                  {menu.title}
                 </span>
-                {menu.title}
                 <span 
-                  className={`absolute right-4 top-[52%] transition-transform duration-300 origin-center w-4 h-4 ${
+                  className={`flex items-center justify-center transition-transform duration-300 origin-center w-4 h-4 ${
                     isOpen ? "rotate-180" : ""
                   }`}
                 >
@@ -171,10 +187,10 @@ const Sidebar = React.memo(function Sidebar({ sideMenu, setSideMenu }: IProps) {
                         <li key={i}>
                           <Link
                             href={sub.link}
-                            className={`block font-normal w-full transition-colors duration-200 nav-dot ${
+                            className={`block font-normal w-full transition-all duration-200 rounded-md px-3 py-1.5 nav-dot ${
                               subIsActive 
-                                ? "text-theme font-medium" 
-                                : "text-[#6D6F71] hover:text-theme"
+                                ? "text-theme font-medium bg-themeLight" 
+                                : "text-[#6D6F71] hover:text-theme hover:bg-gray/50"
                             }`}
                           >
                             {sub.title}

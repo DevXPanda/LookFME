@@ -73,6 +73,11 @@ const userSchema = mongoose.Schema(
       default: 0,
       min: 0,
     },
+    totalOrders: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
     confirmationToken: String,
     confirmationTokenExpires: Date,
 

@@ -66,7 +66,10 @@
          @apply bg-white px-6 outline-none focus-within:outline-none focus-visible:outline-none rounded-md border border-gray focus:border-theme focus:bg-white text-tiny;
     }
      .nav-dot{
-         @apply relative px-4 pl-[12px] after:absolute after:top-[11px] after:left-0 after:w-[3px] after:h-[3px] after:rounded-full after:bg-[#6D6F71] after:content-[''];
+         @apply relative px-4 pl-[12px] after:absolute after:top-1/2 after:-translate-y-1/2 after:left-0 after:w-[3px] after:h-[3px] after:rounded-full after:bg-[#6D6F71] after:content-[''];
+    }
+     .nav-dot.text-theme::after{
+         @apply bg-theme;
     }
      .tp-btn{
          @apply inline-flex rounded-md items-center tracking-wide text-base font-medium py-1 px-5 text-white bg-theme hover:bg-themeDark;

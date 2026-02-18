@@ -5,6 +5,19 @@ const { sendEmail } = require("../config/email");
 const { generateToken, tokenForVerify } = require("../utils/token");
 const { secret } = require("../config/secret");
 
+// get current user (for /me)
+exports.getMe = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id).select("-password").lean();
+    if (!user) {
+      return res.status(404).json({ status: "fail", message: "User not found" });
+    }
+    return res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
 // register user
 // sign up
 exports.signup = async (req, res, next) => {

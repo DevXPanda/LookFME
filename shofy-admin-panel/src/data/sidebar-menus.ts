@@ -68,6 +68,19 @@ const sidebar_menu: Array<ISidebarMenus> = [
     ],
   },
   {
+    id: 17,
+    icon: Orders,
+    link: "/refund-requests",
+    title: "Refund Requests",
+    subMenus: [
+      { title: "All", link: "/refund-requests?status=all" },
+      { title: "Pending", link: "/refund-requests?status=pending" },
+      { title: "Approved", link: "/refund-requests?status=approved" },
+      { title: "Refunded", link: "/refund-requests?status=refunded" },
+      { title: "Rejected", link: "/refund-requests?status=rejected" },
+    ],
+  },
+  {
     id: 5,
     icon: Leaf,
     link: "/brands",
@@ -84,6 +97,15 @@ const sidebar_menu: Array<ISidebarMenus> = [
     icon: Coupons,
     link: "/coupon",
     title: "Coupons",
+  },
+  {
+    id: 16,
+    icon: Coupons,
+    link: "/marketing/welcome-offer",
+    title: "Marketing",
+    subMenus: [
+      { title: "Welcome Offer", link: "/marketing/welcome-offer" },
+    ],
   },
   {
     id: 14,

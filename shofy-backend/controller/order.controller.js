@@ -1,6 +1,40 @@
 const { secret } = require("../config/secret");
 const stripe = require("stripe")(secret.stripe_key);
 const Order = require("../model/Order");
+const User = require("../model/User");
+const RefundRequest = require("../model/RefundRequest");
+
+/**
+ * Helper function to create a RefundRequest when order is canceled or returned
+ * Only creates if payment method is not COD and no duplicate exists
+ */
+async function createRefundRequestIfNeeded(order, reason) {
+  try {
+    // Check if payment method is COD (case-insensitive)
+    const paymentMethod = order.paymentMethod?.toLowerCase();
+    if (paymentMethod === "cod" || paymentMethod === "cash on delivery") {
+      return; // Skip refund request for COD orders
+    }
+
+    // Check if refund request already exists for this order
+    const existingRefund = await RefundRequest.findOne({ orderId: order._id });
+    if (existingRefund) {
+      return; // Prevent duplicate refund requests
+    }
+
+    // Create refund request
+    await RefundRequest.create({
+      orderId: order._id,
+      userId: order.user,
+      reason: reason || "Order canceled/returned",
+      status: "pending",
+      refundAmount: order.totalAmount || 0,
+    });
+  } catch (error) {
+    // Log error but don't throw - refund request creation shouldn't block order status update
+    console.error("Error creating refund request:", error);
+  }
+}
 
 // create-payment-intent
 exports.paymentIntent = async (req, res, next) => {
@@ -26,7 +60,10 @@ exports.paymentIntent = async (req, res, next) => {
 exports.addOrder = async (req, res, next) => {
   try {
     const orderItems = await Order.create(req.body);
-
+    const userId = req.body.user;
+    if (userId) {
+      await User.findByIdAndUpdate(userId, { $inc: { totalOrders: 1 } });
+    }
     res.status(200).json({
       success: true,
       message: "Order added successfully",
@@ -73,6 +110,9 @@ exports.updateOrderStatus = async (req, res, next) => {
     }
   }
   try {
+    // Get order before update to check if status is changing to cancel/return
+    const orderBeforeUpdate = await Order.findById(req.params.id);
+    
     await Order.updateOne(
       {
         _id: req.params.id,
@@ -81,7 +121,15 @@ exports.updateOrderStatus = async (req, res, next) => {
         $set: {
           status: newStatus,
         },
-      }, { new: true })
+      }, { new: true });
+
+    // Check if status changed to cancel or return_requested/returned
+    const normalizedNewStatus = typeof newStatus === 'string' ? newStatus.toLowerCase() : '';
+    if (orderBeforeUpdate && (normalizedNewStatus === 'cancel' || normalizedNewStatus === 'return_requested' || normalizedNewStatus === 'returned')) {
+      // Create refund request if payment method is not COD
+      await createRefundRequestIfNeeded(orderBeforeUpdate, `Order status changed to ${newStatus}`);
+    }
+
     res.status(200).json({
       success: true,
       message: 'Status updated successfully',
@@ -205,6 +253,9 @@ exports.cancelOrder = async (req, res, next) => {
       { new: true }
     );
 
+    // Create refund request if payment method is not COD
+    await createRefundRequestIfNeeded(order, reason || "Order canceled by user");
+
     res.status(200).json({
       success: true,
       message: 'Order cancelled successfully',
@@ -306,6 +357,11 @@ exports.returnOrExchangeOrder = async (req, res, next) => {
       updateData,
       { new: true }
     );
+
+    // Create refund request if order is returned and payment method is not COD
+    if (type === 'returned') {
+      await createRefundRequestIfNeeded(order, reason || "Order returned by user");
+    }
 
     res.status(200).json({
       success: true,

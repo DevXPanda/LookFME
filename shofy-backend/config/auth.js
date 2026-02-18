@@ -34,9 +34,19 @@ const tokenForVerify = (user) => {
 };
 
 const isAuth = async (req, res, next) => {
-  const { authorization } = req.headers;
+  const authorization = req.headers?.authorization;
   try {
+    if (!authorization || typeof authorization !== "string") {
+      return res.status(401).send({
+        message: "Authorization header is required",
+      });
+    }
     const token = authorization.split(" ")[1];
+    if (!token) {
+      return res.status(401).send({
+        message: "Bearer token is required",
+      });
+    }
     const decoded = jwt.verify(token, secret.token_secret);
     req.user = decoded;
     next();

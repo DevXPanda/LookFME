@@ -184,22 +184,14 @@ const orderSchema = new mongoose.Schema(
   }
 );
 
-// define pre-save middleware to generate the invoice number
-orderSchema.pre('save', async function (next) {
+const { getNextInvoice } = require("./OrderCounter");
+
+// define pre-save middleware to generate the invoice number (atomic to avoid E11000 duplicate key)
+orderSchema.pre("save", async function (next) {
   const order = this;
-  if (!order.invoice) { // check if the order already has an invoice number
+  if (!order.invoice) {
     try {
-      // find the highest invoice number in the orders collection
-      const highestInvoice = await mongoose
-        .model('Order')
-        .find({})
-        .sort({ invoice: 'desc' })
-        .limit(1)
-        .select({ invoice: 1 });
-      // if there are no orders in the collection, start at 1000
-      const startingInvoice = highestInvoice.length === 0 ? 1000 : highestInvoice[0].invoice + 1;
-      // set the invoice number for the new order
-      order.invoice = startingInvoice;
+      order.invoice = await getNextInvoice();
       next();
     } catch (error) {
       next(error);

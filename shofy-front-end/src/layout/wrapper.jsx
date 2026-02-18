@@ -8,6 +8,7 @@ if (typeof window !== "undefined") {
 // internal
 import BackToTopCom from "@/components/common/back-to-top";
 import ProductModal from "@/components/common/product-modal";
+import WelcomeOfferBanner from "@/components/welcome-offer/welcome-offer-banner";
 import {get_cart_products,initialOrderQuantity} from "@/redux/features/cartSlice";
 import { get_wishlist_products } from "@/redux/features/wishlist-slice";
 import { get_compare_products } from "@/redux/features/compareSlice";
@@ -35,6 +36,7 @@ const Wrapper = ({ children }) => {
     </div>
   ) : (
     <div id="wrapper">
+      <WelcomeOfferBanner />
       {children}
       <BackToTopCom />
       <ToastContainer />

@@ -2,6 +2,7 @@ import Wrapper from "@/layout/wrapper";
 import BusinessAnalytics from "../components/dashboard/business-analytics";
 import ProductPerformance from "../components/dashboard/product-performance";
 import EarningStatistics from "../components/dashboard/earning-statistics";
+import WelcomeOfferCard from "../components/dashboard/welcome-offer-card";
 
 export default function DashboardPage() {
   return (
@@ -13,6 +14,8 @@ export default function DashboardPage() {
             <p className="text-textBody m-0">Welcome to your dashboard</p>
           </div>
         </div>
+
+        <WelcomeOfferCard />
 
         {/* Business Analytics start */}
         <BusinessAnalytics />

@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controller/user.controller');
+const verifyToken = require('../middleware/verifyToken');
 
-
+// get current user
+router.get("/me", verifyToken, userController.getMe);
 // add a user
 router.post("/signup", userController.signup);
 // login

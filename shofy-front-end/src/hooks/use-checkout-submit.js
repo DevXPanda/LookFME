@@ -13,11 +13,14 @@ import { set_coupon } from "@/redux/features/coupon/couponSlice";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import {useCreatePaymentIntentMutation,useSaveOrderMutation} from "@/redux/features/order/orderApi";
 import { useGetOfferCouponsQuery } from "@/redux/features/coupon/couponApi";
+import { useGetWelcomeOfferQuery } from "@/redux/features/welcomeOffer/welcomeOfferApi";
 import { useUpdateProfileMutation } from "@/redux/features/auth/authApi";
 
 const useCheckoutSubmit = () => {
   // offerCoupons
   const { data: offerCoupons, isError, isLoading } = useGetOfferCouponsQuery();
+  // welcome offer (first order discount)
+  const { data: welcomeOfferData } = useGetWelcomeOfferQuery();
   // addOrder
   const [saveOrder, {}] = useSaveOrderMutation();
   // createPaymentIntent
@@ -84,22 +87,30 @@ const useCheckoutSubmit = () => {
     }
   }, [minimumAmount, total, discountAmount, cart_products]);
 
+  // welcome offer: active and user has 0 orders
+  const welcomeOffer = welcomeOfferData?.data;
+  const isWelcomeEligible = welcomeOffer?.isActive === true && (user?.totalOrders ?? 0) === 0;
+
   //calculate total and discount value
   useEffect(() => {
-    const result = cart_products?.filter(
-      (p) => p.productType === discountProductType
-    );
-    const discountProductTotal = result?.reduce(
-      (preValue, currentValue) =>
-        preValue + currentValue.price * currentValue.orderQuantity,
-      0
-    );
-    let totalValue = "";
-    let subTotal = Number((total + shippingCost).toFixed(2));
-    let discountTotal = Number(
-      discountProductTotal * (discountPercentage / 100)
-    );
-    totalValue = Number(subTotal - discountTotal);
+    const subTotal = Number((total + shippingCost).toFixed(2));
+    let discountTotal = 0;
+    if (isWelcomeEligible && welcomeOffer?.discountPercent != null) {
+      discountTotal = Number(subTotal * (welcomeOffer.discountPercent / 100));
+    } else {
+      const result = cart_products?.filter(
+        (p) => p.productType === discountProductType
+      );
+      const discountProductTotal = result?.reduce(
+        (preValue, currentValue) =>
+          preValue + currentValue.price * currentValue.orderQuantity,
+        0
+      );
+      discountTotal = Number(
+        discountProductTotal * (discountPercentage / 100)
+      );
+    }
+    const totalValue = Number(subTotal - discountTotal);
     setDiscountAmount(discountTotal);
     setCartTotal(totalValue);
   }, [
@@ -110,6 +121,8 @@ const useCheckoutSubmit = () => {
     discountProductType,
     discountAmount,
     cartTotal,
+    isWelcomeEligible,
+    welcomeOffer?.discountPercent,
   ]);
 
   // create payment intent

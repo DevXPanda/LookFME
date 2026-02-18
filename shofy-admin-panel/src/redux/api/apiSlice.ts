@@ -56,5 +56,7 @@ export const apiSlice = createApi({
     "Banner",
     "SupportMessages",
     "SupportMessage",
+    "WelcomeOffer",
+    "RefundRequests",
   ],
 });
