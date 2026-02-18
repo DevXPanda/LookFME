@@ -3,6 +3,8 @@ const stripe = require("stripe")(secret.stripe_key);
 const Order = require("../model/Order");
 const User = require("../model/User");
 const RefundRequest = require("../model/RefundRequest");
+const Notification = require("../model/Notification");
+const { generateShippingLabelPDF, generateShippingLabelsZIP } = require("../utils/shippingLabelGenerator");
 
 /**
  * Helper function to create a RefundRequest when order is canceled or returned
@@ -64,6 +66,26 @@ exports.addOrder = async (req, res, next) => {
     if (userId) {
       await User.findByIdAndUpdate(userId, { $inc: { totalOrders: 1 } });
     }
+
+    // Create notification for new order
+    try {
+      await Notification.create({
+        type: "new_order",
+        title: "New Order Received",
+        message: `New order #${orderItems.invoice} has been placed. Total amount: ₹${orderItems.totalAmount?.toFixed(2) || '0.00'}`,
+        orderId: orderItems._id,
+        isRead: false,
+        metadata: {
+          invoice: orderItems.invoice,
+          totalAmount: orderItems.totalAmount,
+          customerName: orderItems.name,
+        },
+      });
+    } catch (notifError) {
+      // Log error but don't fail the order creation
+      console.error("Error creating notification:", notifError);
+    }
+
     res.status(200).json({
       success: true,
       message: "Order added successfully",
@@ -551,6 +573,87 @@ exports.processExchange = async (req, res, next) => {
         order: order,
       });
     }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+// download single shipping label
+exports.downloadSingleShippingLabel = async (req, res, next) => {
+  try {
+    const orderId = req.params.id;
+    const order = await Order.findById(orderId).populate('user');
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order not found',
+      });
+    }
+
+    // Generate PDF
+    const pdfBuffer = await generateShippingLabelPDF(order);
+
+    // Set response headers
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="shipping-label-${order.invoice || orderId}.pdf"`);
+    res.setHeader('Content-Length', pdfBuffer.length);
+
+    // Send PDF
+    res.send(pdfBuffer);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+// download bulk shipping labels
+exports.downloadBulkShippingLabels = async (req, res, next) => {
+  try {
+    const { orderIds } = req.body;
+
+    if (!orderIds || !Array.isArray(orderIds) || orderIds.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Order IDs array is required',
+      });
+    }
+
+    // Fetch all orders
+    const orders = await Order.find({ _id: { $in: orderIds } }).populate('user');
+
+    if (orders.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No orders found',
+      });
+    }
+
+    // Generate PDFs for all orders
+    const pdfPromises = orders.map(order => generateShippingLabelPDF(order));
+    const pdfBuffers = await Promise.all(pdfPromises);
+
+    // If only one order, return single PDF
+    if (pdfBuffers.length === 1) {
+      const order = orders[0];
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="shipping-label-${order.invoice || order._id}.pdf"`);
+      res.setHeader('Content-Length', pdfBuffers[0].length);
+      return res.send(pdfBuffers[0]);
+    }
+
+    // Generate ZIP file for multiple orders
+    const orderIdsForFiles = orders.map(order => order.invoice?.toString() || order._id.toString());
+    const zipBuffer = await generateShippingLabelsZIP(pdfBuffers, orderIdsForFiles);
+
+    // Set response headers
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Disposition', `attachment; filename="shipping-labels-${Date.now()}.zip"`);
+    res.setHeader('Content-Length', zipBuffer.length);
+
+    // Send ZIP
+    res.send(zipBuffer);
   } catch (error) {
     console.log(error);
     next(error);

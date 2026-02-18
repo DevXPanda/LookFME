@@ -82,6 +82,14 @@ const ContactArea = () => {
                           <a href="#">
                             <i className="fa-brands fa-linkedin-in"></i>
                           </a>
+                          <a 
+                            href="https://wa.me/918506069811" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            title="Message us on WhatsApp"
+                          >
+                            <i className="fa-brands fa-whatsapp"></i>
+                          </a>
                         </div>
                       </div>
                     </div>

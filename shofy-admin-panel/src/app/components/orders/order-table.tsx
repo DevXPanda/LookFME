@@ -8,18 +8,21 @@ import { Search, Orders, DownArrow } from "@/svg";
 import ErrorMsg from "../common/error-msg";
 import Pagination from "../ui/Pagination";
 import OrderStatusChange from "./status-change";
-import { useGetAllOrdersQuery } from "@/redux/order/orderApi";
+import { useGetAllOrdersQuery, useDownloadBulkShippingLabelsMutation } from "@/redux/order/orderApi";
 import usePagination from "@/hooks/use-pagination";
+import { notifyError, notifySuccess } from "@/utils/toast";
 
 
 const OrderTable = () => {
   const { data: orders, isError, isLoading, error } = useGetAllOrdersQuery();
+  const [downloadBulkLabels, { isLoading: isDownloading }] = useDownloadBulkShippingLabelsMutation();
   const searchParams = useSearchParams();
   const router = useRouter();
   const urlStatus = searchParams.get("status") || "";
   const [searchVal, setSearchVal] = useState<string>("");
   const [selectVal, setSelectVal] = useState<string>(urlStatus);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const [selectedOrders, setSelectedOrders] = useState<Set<string>>(new Set());
 
   // Update selectVal when URL status changes
   useEffect(() => {
@@ -152,6 +155,23 @@ const OrderTable = () => {
             <tr className="border-b border-gray6 text-tiny">
               <th
                 scope="col"
+                className="pr-8 py-3 text-tiny text-text2 uppercase font-semibold w-[50px]"
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedOrders.size === currentItems.length && currentItems.length > 0}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedOrders(new Set(currentItems.map((item: any) => item._id)));
+                    } else {
+                      setSelectedOrders(new Set());
+                    }
+                  }}
+                  className="w-4 h-4 text-theme bg-gray-100 border-gray-300 rounded focus:ring-theme"
+                />
+              </th>
+              <th
+                scope="col"
                 className="pr-8 py-3 text-tiny text-text2 uppercase font-semibold w-[170px]"
               >
                 INVOICE NO
@@ -206,6 +226,22 @@ const OrderTable = () => {
                 key={item._id}
                 className="bg-white border-b border-gray6 last:border-0 text-start mx-9"
               >
+                <td className="px-3 py-3">
+                  <input
+                    type="checkbox"
+                    checked={selectedOrders.has(item._id)}
+                    onChange={(e) => {
+                      const newSelected = new Set(selectedOrders);
+                      if (e.target.checked) {
+                        newSelected.add(item._id);
+                      } else {
+                        newSelected.delete(item._id);
+                      }
+                      setSelectedOrders(newSelected);
+                    }}
+                    className="w-4 h-4 text-theme bg-gray-100 border-gray-300 rounded focus:ring-theme"
+                  />
+                </td>
                 <td className="px-3 py-3 font-normal text-[#55585B]">
                   #{item.invoice}
                 </td>
@@ -338,19 +374,73 @@ const OrderTable = () => {
     { key: "canceled", label: "Canceled" },
   ];
 
+  const handleBulkDownload = async () => {
+    if (selectedOrders.size === 0) {
+      notifyError("Please select at least one order");
+      return;
+    }
+
+    try {
+      const orderIds = Array.from(selectedOrders);
+      const result = await downloadBulkLabels({ orderIds });
+      
+      // Handle blob response
+      if ('data' in result && result.data instanceof Blob) {
+        const blob = result.data;
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        // Determine file extension based on blob type
+        const isZip = blob.type === 'application/zip' || blob.type === 'application/x-zip-compressed';
+        link.download = `shipping-labels-${Date.now()}.${isZip ? 'zip' : 'pdf'}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+        
+        notifySuccess(`Successfully downloaded ${orderIds.length} shipping label(s)`);
+        setSelectedOrders(new Set());
+      } else {
+        throw new Error('Invalid response format');
+      }
+    } catch (error: any) {
+      console.error("Bulk download error:", error);
+      notifyError(error?.data?.message || error?.message || "Failed to download shipping labels");
+    }
+  };
+
   return (
     <>
       <div className="tp-search-box flex items-center justify-between px-8 py-8 flex-wrap">
-        <div className="search-input relative">
-          <input
-            className="input h-[44px] w-full pl-14"
-            type="text"
-            placeholder="Search by invoice no"
-            onChange={handleSearchChange}
-          />
-          <button className="absolute top-1/2 left-5 translate-y-[-50%] hover:text-theme">
-            <Search />
-          </button>
+        <div className="flex items-center space-x-4">
+          <div className="search-input relative">
+            <input
+              className="input h-[44px] w-full pl-14"
+              type="text"
+              placeholder="Search by invoice no"
+              onChange={handleSearchChange}
+            />
+            <button className="absolute top-1/2 left-5 translate-y-[-50%] hover:text-theme">
+              <Search />
+            </button>
+          </div>
+          {selectedOrders.size > 0 && (
+            <button
+              onClick={handleBulkDownload}
+              disabled={isDownloading}
+              className="px-4 py-2 bg-theme text-white rounded-md hover:bg-theme/90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+            >
+              {isDownloading ? (
+                <>
+                  <span>Downloading...</span>
+                </>
+              ) : (
+                <>
+                  <span>Download Shipping Labels ({selectedOrders.size})</span>
+                </>
+              )}
+            </button>
+          )}
         </div>
         <div className="flex justify-end space-x-6">
           <div className="relative">

@@ -198,6 +198,7 @@ app.use("/api/banners", require("./routes/banner.routes"));
 app.use("/api/support", require("./routes/support.routes"));
 app.use("/api/welcome-offer", require("./routes/welcomeOffer.routes"));
 app.use("/api/refunds", require("./routes/refundRequest.routes"));
+app.use("/api/notifications", require("./routes/notification.routes"));
 
 
 

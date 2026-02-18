@@ -10,6 +10,8 @@ const {
   returnOrExchangeOrder,
   processRefund,
   processExchange,
+  downloadSingleShippingLabel,
+  downloadBulkShippingLabels,
 } = require("../controller/order.controller");
 
 // router
@@ -35,5 +37,9 @@ router.patch("/return-exchange/:id", returnOrExchangeOrder);
 router.patch("/process-refund/:id", processRefund);
 // process exchange
 router.patch("/process-exchange/:id", processExchange);
+// download single shipping label
+router.get("/download-shipping-label/:id", downloadSingleShippingLabel);
+// download bulk shipping labels
+router.post("/download-bulk-shipping-labels", downloadBulkShippingLabels);
 
 module.exports = router;

@@ -93,6 +93,27 @@ export const authApi = apiSlice.injectEndpoints({
         { type: "SingleOrder", id: arg.id },
       ],
     }),
+    // download bulk shipping labels
+    downloadBulkShippingLabels: builder.mutation<Blob, { orderIds: string[] }>({
+      query({ orderIds }) {
+        return {
+          url: `/api/order/download-bulk-shipping-labels`,
+          method: "POST",
+          body: { orderIds },
+          responseHandler: (response) => response.blob(),
+        };
+      },
+    }),
+    // download single shipping label
+    downloadSingleShippingLabel: builder.mutation<Blob, { orderId: string }>({
+      query({ orderId }) {
+        return {
+          url: `/api/order/download-shipping-label/${orderId}`,
+          method: "GET",
+          responseHandler: (response) => response.blob(),
+        };
+      },
+    }),
   }),
 });
 
@@ -106,4 +127,6 @@ export const {
   useGetSingleOrderQuery,
   useProcessRefundMutation,
   useProcessExchangeMutation,
+  useDownloadBulkShippingLabelsMutation,
+  useDownloadSingleShippingLabelMutation,
 } = authApi;

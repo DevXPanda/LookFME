@@ -58,5 +58,6 @@ export const apiSlice = createApi({
     "SupportMessage",
     "WelcomeOffer",
     "RefundRequests",
+    "Notifications",
   ],
 });
