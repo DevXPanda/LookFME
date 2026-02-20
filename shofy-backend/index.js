@@ -112,7 +112,10 @@
 require("dotenv").config();
 
 const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
 const app = express();
+const server = http.createServer(app);
 const path = require("path");
 const cors = require("cors");
 const morgan = require("morgan");
@@ -122,6 +125,34 @@ const connectDB = require("./config/db");
 
 // Global error handler
 const globalErrorHandler = require("./middleware/global-error-handler");
+
+// Socket.io setup
+const io = new Server(server, {
+  cors: {
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://look-fme.vercel.app",
+      "https://look-fme-a675.vercel.app",
+      "https://lookfame.com",
+      "https://www.lookfame.com"
+    ],
+    methods: ["GET", "POST"],
+    credentials: true
+  }
+});
+
+// Store io instance globally for use in controllers
+app.set("io", io);
+
+// Socket.io connection handling
+io.on("connection", (socket) => {
+  console.log("Admin client connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("Admin client disconnected:", socket.id);
+  });
+});
 
 // Routes
 const userRoutes = require("./routes/user.routes");
@@ -222,9 +253,9 @@ app.use((req, res) => {
   });
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-module.exports = app;
+module.exports = { app, io };
 

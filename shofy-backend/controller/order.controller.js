@@ -68,8 +68,9 @@ exports.addOrder = async (req, res, next) => {
     }
 
     // Create notification for new order
+    let notification = null;
     try {
-      await Notification.create({
+      notification = await Notification.create({
         type: "new_order",
         title: "New Order Received",
         message: `New order #${orderItems.invoice} has been placed. Total amount: ₹${orderItems.totalAmount?.toFixed(2) || '0.00'}`,
@@ -81,6 +82,18 @@ exports.addOrder = async (req, res, next) => {
           customerName: orderItems.name,
         },
       });
+
+      // Emit Socket.io event for real-time notification
+      const io = req.app.get("io");
+      if (io) {
+        const populatedNotification = await Notification.findById(notification._id)
+          .populate("orderId", "invoice totalAmount name status");
+        
+        io.emit("new_order_notification", {
+          notification: populatedNotification,
+          unreadCount: await Notification.countDocuments({ isRead: false }),
+        });
+      }
     } catch (notifError) {
       // Log error but don't fail the order creation
       console.error("Error creating notification:", notifError);

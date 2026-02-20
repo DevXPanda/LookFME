@@ -11,6 +11,8 @@ import {
   INotification,
 } from "@/redux/notification/notificationApi";
 import { notifySuccess, notifyError } from "@/utils/toast";
+import { useOrderNotifications } from "@/hooks/useSocket";
+import { showOrderNotificationToast } from "@/components/notifications/OrderNotificationToast";
 
 // prop type
 type IPropType = {
@@ -28,6 +30,18 @@ const NotificationArea = ({ nRef, notificationOpen, handleNotificationOpen }: IP
 
   const notifications = notificationsData?.data || [];
   const unreadCount = unreadCountData?.count || 0;
+
+  // Listen to Socket.io events for real-time notifications
+  useOrderNotifications((data) => {
+    // Refetch notifications and unread count when new order notification arrives
+    refetch();
+    refetchUnreadCount();
+    
+    // Show toast notification
+    if (data.notification) {
+      showOrderNotificationToast(data.notification);
+    }
+  });
 
   // Refetch notifications when dropdown opens
   useEffect(() => {

@@ -178,6 +178,12 @@ const OrderTable = () => {
               </th>
               <th
                 scope="col"
+                className="px-3 py-3 text-tiny text-text2 uppercase font-semibold w-[150px]"
+              >
+                SKU
+              </th>
+              <th
+                scope="col"
                 className="px-3 py-3 text-tiny text-text2 uppercase font-semibold"
               >
                 Customer
@@ -244,6 +250,28 @@ const OrderTable = () => {
                 </td>
                 <td className="px-3 py-3 font-normal text-[#55585B]">
                   #{item.invoice}
+                </td>
+                <td className="px-3 py-3 font-normal text-[#55585B]">
+                  {(() => {
+                    // Extract SKUs from cart items
+                    const skus = item.cart
+                      .map((cartItem: any) => {
+                        // Check for variation SKU first (if product has variations)
+                        if (cartItem.selectedVariation?.sku) {
+                          return cartItem.selectedVariation.sku;
+                        }
+                        // Fall back to product SKU
+                        if (cartItem.sku) {
+                          return cartItem.sku;
+                        }
+                        // If no SKU found, return null
+                        return null;
+                      })
+                      .filter((sku: string | null) => sku !== null);
+                    
+                    // Return comma-separated SKUs or "N/A" if none found
+                    return skus.length > 0 ? skus.join(", ") : "N/A";
+                  })()}
                 </td>
                 <td className="pr-8 py-5 whitespace-nowrap">
                   <a
