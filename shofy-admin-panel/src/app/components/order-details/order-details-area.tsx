@@ -1,6 +1,6 @@
 "use client";
 import dayjs from "dayjs";
-import React,{useRef, useState} from "react";
+import React, { useRef, useState } from "react";
 import ErrorMsg from "../common/error-msg";
 import { Card, Typography } from "@material-tailwind/react";
 import { useGetSingleOrderQuery, useProcessRefundMutation, useProcessExchangeMutation } from "@/redux/order/orderApi";
@@ -8,6 +8,15 @@ import { Invoice } from "@/svg";
 import { useReactToPrint } from "react-to-print";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import Image from "next/image";
+
+const formatImageUrl = (url: any) => {
+  if (!url || typeof url !== "string") return "https://placehold.co/200x200?text=No+Image";
+  if (url.startsWith("http")) return url;
+  if (url.startsWith("/")) {
+    return `http://localhost:3001${url}`;
+  }
+  return url;
+};
 
 const OrderDetailsArea = ({ id }: { id: string }) => {
   const { data: orderData, isLoading, isError, refetch } = useGetSingleOrderQuery(id);
@@ -88,9 +97,9 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                       width="110"
                     /> */}
                   </h2>
-                  <p className="text-base text-gray-500 dark:text-gray-400 mt-2">
+                  {/* <p className="text-base text-gray-500 dark:text-gray-400 mt-2">
                     Dhaka, Bangladesh
-                  </p>
+                  </p> */}
                 </div>
               </div>
               <div className="flex lg:flex-row md:flex-row flex-col justify-between pt-4">
@@ -108,7 +117,7 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                   <span className="font-bold text-base uppercase block">
                     INVOICE NO
                   </span>
-                  <span className="text-base block">#{orderData.invoice}</span>
+                  <span className="text-base block">#{orderData?.invoice}</span>
                 </div>
                 <div className="flex flex-col lg:text-right text-left">
                   <span className="font-bold text-base uppercase block">
@@ -116,11 +125,11 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                   </span>
                   <span className="text-base text-gray-500 block">
                     {orderData?.user?.name} <br />
-                    <span className="ml-2">{orderData.contact}</span>
+                    <span className="ml-2">{orderData?.contact}</span>
                     <br />
-                    {orderData.address}
+                    {orderData?.address}
                     <br />
-                    {orderData.city}
+                    {orderData?.city}
                   </span>
                 </div>
               </div>
@@ -130,67 +139,102 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                 <div className="w-full overflow-x-auto">
                   <table className="w-full text-base text-left text-gray-500 whitespace-no-wrap">
                     <thead className="bg-white">
-                      <tr className="border-b border-gray6 text-tiny">
-                        <td className="pl-3 py-3 text-tiny text-textBody uppercase font-semibold">SR.</td>
-                        <td className="pr-8 py-3 text-tiny text-textBody uppercase font-semibold">Product Title</td>
-                        <td className="pr-8 py-3 text-tiny text-textBody uppercase font-semibold text-center">QUANTITY</td>
-                        <td className="pr-3 py-3 text-tiny text-textBody uppercase font-semibold text-center">ITEM PRICE</td>
+                      <tr className="border-b border-gray6 text-tiny text-center">
+                        <td className="pl-3 py-3 text-tiny text-textBody uppercase font-semibold text-start">SR.</td>
+                        <td className="pr-8 py-3 text-tiny text-textBody uppercase font-semibold text-start">Product Title</td>
+                        <td className="pr-8 py-3 text-tiny text-textBody uppercase font-semibold">QUANTITY</td>
+                        <td className="pr-3 py-3 text-tiny text-textBody uppercase font-semibold">ITEM PRICE</td>
                         <td className="pr-3 py-3 text-tiny text-textBody uppercase font-semibold text-right">AMOUNT</td>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y text-base ">
-                      {orderData.cart.map((item, i) => {
+                      {orderData?.cart?.map((item, i) => {
                         // Check if this item is being returned or exchanged
                         const returnItem = orderData.returnItems?.find((ri: any) => ri.productId === item._id);
                         const exchangeItem = orderData.exchangeItems?.find((ei: any) => ei.originalProductId === item._id);
-                        
+
                         return (
-                        <tr key={item._id} className={returnItem || exchangeItem ? "bg-yellow-50" : ""}>
-                          <td className="bg-white border-b border-gray6 px-3 py-3 text-start">
-                            {i + 1}
-                            {(returnItem || exchangeItem) && (
-                              <span className="ml-2 text-xs px-2 py-1 rounded bg-blue-100 text-blue-800">
-                                {returnItem ? "RETURN" : "EXCHANGE"}
-                              </span>
-                            )}
-                          </td>
-                          <td className="bg-white border-b border-gray6 px-3 pl-0 py-3 text-start">
-                            <div className="flex items-center gap-3">
-                              {item.img && (
-                                <Image 
-                                  src={item.img} 
-                                  alt={item.title} 
-                                  width={50} 
-                                  height={50}
-                                  className="rounded"
-                                  style={{ objectFit: 'cover' }}
-                                />
+                          <tr key={item._id} className={returnItem || exchangeItem ? "bg-yellow-50" : ""}>
+                            <td className="bg-white border-b border-gray6 px-3 py-3 text-start">
+                              {i + 1}
+                              {(returnItem || exchangeItem) && (
+                                <span className="ml-2 text-xs px-2 py-1 rounded bg-blue-100 text-blue-800">
+                                  {returnItem ? "RETURN" : "EXCHANGE"}
+                                </span>
                               )}
-                              <div>
-                                <div className="font-medium">{item.title}</div>
-                                {returnItem && (
-                                  <div className="text-xs text-blue-600 mt-1">
-                                    Return Qty: {returnItem.quantity} | Status: {returnItem.status} | Refund: ₹{returnItem.refundAmount?.toFixed(2)}
-                                  </div>
+                            </td>
+                            <td className="bg-white border-b border-gray6 px-3 pl-0 py-3 text-start">
+                              <div className="flex items-center gap-3">
+                                {(item.img || item?.imageURLs?.[0]?.img) && (
+                                  <Image
+                                    src={formatImageUrl(item?.imageURLs?.[0]?.img || item.img)}
+                                    alt={item.title}
+                                    width={50}
+                                    height={50}
+                                    className="rounded"
+                                    style={{ objectFit: 'cover' }}
+                                  />
                                 )}
-                                {exchangeItem && (
-                                  <div className="text-xs text-green-600 mt-1">
-                                    Exchange Qty: {exchangeItem.originalQuantity} | Status: {exchangeItem.status}
-                                  </div>
-                                )}
+                                <div>
+                                  <div className="font-medium text-heading">{item.title}</div>
+
+                                  {/* Combo Items Display */}
+                                  {item.isCombo && item.comboItems && (
+                                    <div className="mt-2 flex flex-wrap gap-2">
+                                      {item.comboItems.map((combo, idx) => (
+                                        <div key={idx} className="text-[11px] bg-slate-50 px-2 py-1 rounded text-slate-600 border border-slate-200 flex items-center gap-1">
+                                          <span className="opacity-70">Item {idx + 1}:</span>
+                                          <span className="font-bold text-slate-900">{combo.color}</span>
+                                          <span className="text-slate-300">|</span>
+                                          <span className="font-bold text-slate-900">{combo.size}</span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
+
+                                  {/* Individual Product Selection Display */}
+                                  {!item.isCombo && (item.selectedColor || item.selectedSize) && (
+                                    <div className="text-xs text-slate-500 mt-1 flex items-center gap-3">
+                                      {item.selectedColor && (
+                                        <span className="flex items-center gap-1.5">
+                                          <span>Color:</span>
+                                          <span className="font-semibold text-slate-800">
+                                            {typeof item.selectedColor === 'object' ? item.selectedColor.name : item.selectedColor}
+                                          </span>
+                                        </span>
+                                      )}
+                                      {item.selectedSize && (
+                                        <span className="flex items-center gap-1.5">
+                                          <span>Size:</span>
+                                          <span className="font-semibold text-slate-800">{item.selectedSize}</span>
+                                        </span>
+                                      )}
+                                    </div>
+                                  )}
+
+                                  {returnItem && (
+                                    <div className="text-xs text-blue-600 mt-2 bg-blue-50/50 p-1.5 rounded inline-block border border-blue-100">
+                                      Return Qty: {returnItem.quantity} | Status: {returnItem.status} | Refund: ₹{returnItem.refundAmount?.toFixed(2)}
+                                    </div>
+                                  )}
+                                  {exchangeItem && (
+                                    <div className="text-xs text-green-600 mt-2 bg-green-50/50 p-1.5 rounded inline-block border border-green-100">
+                                      Exchange Qty: {exchangeItem.originalQuantity} | Status: {exchangeItem.status}
+                                    </div>
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          </td>
-                          <td className="bg-white border-b border-gray6 px-3 py-3 font-bold text-center">
-                            {item.orderQuantity}
-                          </td>
-                          <td className="bg-white border-b border-gray6 px-3 py-3 font-bold text-center">
-                            ₹{item.price.toFixed(2)}
-                          </td>
-                          <td className="bg-white border-b border-gray6 px-3 py-3 text-right font-bold">
-                            ₹{(item.price * item.orderQuantity).toFixed(2)}
-                          </td>
-                        </tr>
+                            </td>
+                            <td className="bg-white border-b border-gray6 px-3 py-3 font-bold text-center">
+                              {item.orderQuantity}
+                            </td>
+                            <td className="bg-white border-b border-gray6 px-3 py-3 font-bold text-center">
+                              ₹{item.price.toFixed(2)}
+                            </td>
+                            <td className="bg-white border-b border-gray6 px-3 py-3 text-right font-bold">
+                              ₹{(item.price * item.orderQuantity).toFixed(2)}
+                            </td>
+                          </tr>
                         );
                       })}
                     </tbody>
@@ -234,7 +278,7 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                 </div>
               </div>
             </div>
-            
+
             {/* Return Items Section */}
             {orderData.returnItems && orderData.returnItems.length > 0 && (
               <div className="mt-6 pt-6 border-t border-slate-200">
@@ -245,11 +289,11 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                     return (
                       <div key={index} className="p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
                         <div className="flex items-start gap-4 mb-3">
-                          {originalItem?.img && (
-                            <Image 
-                              src={originalItem.img} 
-                              alt={originalItem.title} 
-                              width={80} 
+                          {(originalItem?.img || originalItem?.imageURLs?.[0]?.img) && (
+                            <Image
+                              src={formatImageUrl(originalItem?.imageURLs?.[0]?.img || originalItem.img)}
+                              alt={originalItem.title}
+                              width={80}
                               height={80}
                               className="rounded"
                               style={{ objectFit: 'cover' }}
@@ -261,32 +305,30 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                               <strong>Product ID:</strong> {returnItem.productId}
                             </p>
                             <p className="text-sm text-gray-700 mb-2">
-                              <strong>Quantity:</strong> {returnItem.quantity} | 
-                              <strong> Price:</strong> ₹{returnItem.price} | 
+                              <strong>Quantity:</strong> {returnItem.quantity} |
+                              <strong> Price:</strong> ₹{returnItem.price} |
                               <strong> Refund Amount:</strong> ₹{returnItem.refundAmount?.toFixed(2)}
                             </p>
                             <p className="text-sm text-gray-700 mb-2">
                               <strong>Reason:</strong> {returnItem.reason}
                             </p>
                             <p className="text-sm text-gray-700 mb-2">
-                              <strong>Status:</strong> 
-                              <span className={`ml-2 px-2 py-1 rounded text-xs ${
-                                returnItem.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                              <strong>Status:</strong>
+                              <span className={`ml-2 px-2 py-1 rounded text-xs ${returnItem.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                                 returnItem.status === 'approved' ? 'bg-green-100 text-green-800' :
-                                returnItem.status === 'rejected' ? 'bg-red-100 text-red-800' :
-                                'bg-blue-100 text-blue-800'
-                              }`}>
+                                  returnItem.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                                    'bg-blue-100 text-blue-800'
+                                }`}>
                                 {returnItem.status}
                               </span>
                               {returnItem.refundStatus && (
                                 <>
                                   <strong className="ml-3">Refund Status:</strong>
-                                  <span className={`ml-2 px-2 py-1 rounded text-xs ${
-                                    returnItem.refundStatus === 'completed' ? 'bg-green-100 text-green-800' :
+                                  <span className={`ml-2 px-2 py-1 rounded text-xs ${returnItem.refundStatus === 'completed' ? 'bg-green-100 text-green-800' :
                                     returnItem.refundStatus === 'processing' ? 'bg-yellow-100 text-yellow-800' :
-                                    returnItem.refundStatus === 'failed' ? 'bg-red-100 text-red-800' :
-                                    'bg-gray-100 text-gray-800'
-                                  }`}>
+                                      returnItem.refundStatus === 'failed' ? 'bg-red-100 text-red-800' :
+                                        'bg-gray-100 text-gray-800'
+                                    }`}>
                                     {returnItem.refundStatus}
                                   </span>
                                 </>
@@ -340,11 +382,11 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                           <div>
                             <h6 className="font-semibold text-green-700 mb-2">Original Product</h6>
                             <div className="flex items-start gap-3">
-                              {originalItem?.img && (
-                                <Image 
-                                  src={originalItem.img} 
-                                  alt={originalItem.title} 
-                                  width={80} 
+                              {(originalItem?.img || originalItem?.imageURLs?.[0]?.img) && (
+                                <Image
+                                  src={formatImageUrl(originalItem?.imageURLs?.[0]?.img || originalItem.img)}
+                                  alt={originalItem.title}
+                                  width={80}
                                   height={80}
                                   className="rounded"
                                   style={{ objectFit: 'cover' }}
@@ -365,36 +407,35 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                             <h6 className="font-semibold text-green-700 mb-2">Exchange Product</h6>
                             <div className="flex items-start gap-3">
                               <div className="flex items-start gap-3">
-  {exchangeItem.exchangeProductImg && (
-    <Image
-      src={exchangeItem.exchangeProductImg}
-      alt={exchangeItem.exchangeProductTitle}
-      width={80}
-      height={80}
-      className="rounded"
-      style={{ objectFit: 'cover' }}
-    />
-  )}
-  <div>
-    <p className="font-medium">{exchangeItem.exchangeProductTitle}</p>
-    <p className="text-sm text-gray-600">
-      ID: {exchangeItem.exchangeProductId}
-    </p>
-    <p className="text-sm text-gray-600">
-      Qty: {exchangeItem.exchangeQuantity} × ₹{exchangeItem.exchangePrice} = ₹{(exchangeItem.exchangeQuantity * exchangeItem.exchangePrice).toFixed(2)}
-    </p>
-    <p className={`text-sm font-semibold mt-2 ${
-      exchangeItem.priceDifference > 0 ? 'text-red-600' :
-      exchangeItem.priceDifference < 0 ? 'text-green-600' :
-      'text-gray-600'
-    }`}>
-      Price Difference: ₹{Math.abs(exchangeItem.priceDifference).toFixed(2)}
-      {exchangeItem.priceDifference > 0 ? ' (Customer pays more)' :
-       exchangeItem.priceDifference < 0 ? ' (Customer receives refund)' :
-       ' (No difference)'}
-    </p>
-  </div>
-</div>
+                                {exchangeItem.exchangeProductImg && (
+                                  <Image
+                                    src={formatImageUrl(exchangeItem.exchangeProductImg)}
+                                    alt={exchangeItem.exchangeProductTitle}
+                                    width={80}
+                                    height={80}
+                                    className="rounded"
+                                    style={{ objectFit: 'cover' }}
+                                  />
+                                )}
+                                <div>
+                                  <p className="font-medium">{exchangeItem.exchangeProductTitle}</p>
+                                  <p className="text-sm text-gray-600">
+                                    ID: {exchangeItem.exchangeProductId}
+                                  </p>
+                                  <p className="text-sm text-gray-600">
+                                    Qty: {exchangeItem.exchangeQuantity} × ₹{exchangeItem.exchangePrice} = ₹{(exchangeItem.exchangeQuantity * exchangeItem.exchangePrice).toFixed(2)}
+                                  </p>
+                                  <p className={`text-sm font-semibold mt-2 ${exchangeItem.priceDifference > 0 ? 'text-red-600' :
+                                    exchangeItem.priceDifference < 0 ? 'text-green-600' :
+                                      'text-gray-600'
+                                    }`}>
+                                    Price Difference: ₹{Math.abs(exchangeItem.priceDifference).toFixed(2)}
+                                    {exchangeItem.priceDifference > 0 ? ' (Customer pays more)' :
+                                      exchangeItem.priceDifference < 0 ? ' (Customer receives refund)' :
+                                        ' (No difference)'}
+                                  </p>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -402,14 +443,13 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                           <strong>Reason:</strong> {exchangeItem.reason}
                         </p>
                         <p className="text-sm text-gray-700 mb-2">
-                          <strong>Status:</strong> 
-                          <span className={`ml-2 px-2 py-1 rounded text-xs ${
-                            exchangeItem.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                          <strong>Status:</strong>
+                          <span className={`ml-2 px-2 py-1 rounded text-xs ${exchangeItem.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                             exchangeItem.status === 'approved' ? 'bg-green-100 text-green-800' :
-                            exchangeItem.status === 'awaiting_payment' ? 'bg-orange-100 text-orange-800' :
-                            exchangeItem.status === 'rejected' ? 'bg-red-100 text-red-800' :
-                            'bg-blue-100 text-blue-800'
-                          }`}>
+                              exchangeItem.status === 'awaiting_payment' ? 'bg-orange-100 text-orange-800' :
+                                exchangeItem.status === 'rejected' ? 'bg-red-100 text-red-800' :
+                                  'bg-blue-100 text-blue-800'
+                            }`}>
                             {exchangeItem.status === 'awaiting_payment'
                               ? 'awaiting payment'
                               : exchangeItem.status}
@@ -447,7 +487,7 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
             {(orderData.cancelReason || orderData.returnReason || orderData.exchangeReason || (orderData.addressChangeHistory && orderData.addressChangeHistory.length > 0)) && (
               <div className="mt-6 pt-6 border-t border-slate-200">
                 <h3 className="text-lg font-bold mb-4">Order Status & History</h3>
-                
+
                 {/* Cancel Reason */}
                 {orderData.cancelReason && (
                   <div className="mb-4 p-4 bg-red-50 border-l-4 border-red-500 rounded">
@@ -455,7 +495,7 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                     <p className="text-sm text-gray-700"><strong>Reason:</strong> {orderData.cancelReason}</p>
                   </div>
                 )}
-                
+
                 {/* Return Reason (if order-level return) */}
                 {orderData.returnReason && !orderData.returnItems?.length && (
                   <div className="mb-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
@@ -463,7 +503,7 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                     <p className="text-sm text-gray-700"><strong>Reason:</strong> {orderData.returnReason}</p>
                   </div>
                 )}
-                
+
                 {/* Exchange Reason (if order-level exchange) */}
                 {orderData.exchangeReason && !orderData.exchangeItems?.length && (
                   <div className="mb-4 p-4 bg-green-50 border-l-4 border-green-500 rounded">
@@ -471,7 +511,7 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                     <p className="text-sm text-gray-700"><strong>Reason:</strong> {orderData.exchangeReason}</p>
                   </div>
                 )}
-                
+
                 {/* Address Change History */}
                 {orderData.addressChangeHistory && orderData.addressChangeHistory.length > 0 && (
                   <div className="mt-4">
@@ -524,12 +564,11 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                                 Type: {refund.type} | Method: {refund.paymentMethod}
                               </p>
                             </div>
-                            <span className={`px-2 py-1 rounded text-xs ${
-                              refund.status === 'completed' ? 'bg-green-100 text-green-800' :
+                            <span className={`px-2 py-1 rounded text-xs ${refund.status === 'completed' ? 'bg-green-100 text-green-800' :
                               refund.status === 'processing' ? 'bg-yellow-100 text-yellow-800' :
-                              refund.status === 'failed' ? 'bg-red-100 text-red-800' :
-                              'bg-gray-100 text-gray-800'
-                            }`}>
+                                refund.status === 'failed' ? 'bg-red-100 text-red-800' :
+                                  'bg-gray-100 text-gray-800'
+                              }`}>
                               {refund.status}
                             </span>
                           </div>
@@ -540,8 +579,8 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                             <p className="text-xs text-gray-600 mt-1">Reason: {refund.reason}</p>
                           )}
                           <p className="text-xs text-gray-500 mt-1">
-                            {refund.processedAt ? `Processed: ${dayjs(refund.processedAt).format('MMM D, YYYY h:mm A')}` : 
-                             `Created: ${dayjs(refund.createdAt).format('MMM D, YYYY h:mm A')}`}
+                            {refund.processedAt ? `Processed: ${dayjs(refund.processedAt).format('MMM D, YYYY h:mm A')}` :
+                              `Created: ${dayjs(refund.createdAt).format('MMM D, YYYY h:mm A')}`}
                           </p>
                         </div>
                       ))}

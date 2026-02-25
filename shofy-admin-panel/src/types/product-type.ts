@@ -75,6 +75,10 @@ export interface IProduct {
   variations?: ProductVariation[];
   attributeType?: string;
   showInLayout?: string;
+  isCombo?: boolean;
+  comboItems?: { color: string; size: string }[];
+  selectedColor?: string | { name: string; clrCode: string };
+  selectedSize?: string;
 }
 
 export interface ProductResponse {

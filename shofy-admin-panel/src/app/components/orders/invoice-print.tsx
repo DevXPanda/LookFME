@@ -61,6 +61,27 @@ const InvoicePrint = ({ orderData }: IPropType) => {
                           <span className="font-medium text-heading text-hover-primary transition">
                             {p.title}
                           </span>
+                          {/* Combo selections display */}
+                          {p.isCombo && p.comboItems && (
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {p.comboItems.map((combo, index) => (
+                                <span key={index} className="text-[10px] bg-gray-100 px-1 rounded text-gray-500 whitespace-nowrap">
+                                  #{index + 1}: {combo.color}/{combo.size}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          {/* Standard selection display */}
+                          {!p.isCombo && (p.selectedColor || p.selectedSize) && (
+                            <div className="text-[10px] text-gray-400 mt-1">
+                              {p.selectedColor && (
+                                <span>Color: {typeof p.selectedColor === 'object' ? p.selectedColor.name : p.selectedColor} </span>
+                              )}
+                              {p.selectedSize && (
+                                <span>Size: {p.selectedSize}</span>
+                              )}
+                            </div>
+                          )}
                         </a>
                       </td>
                       <td className="px-3 py-3 font-normal text-[#55585B] text-end">
@@ -112,7 +133,7 @@ const InvoicePrint = ({ orderData }: IPropType) => {
         </div>
       </div>
       {/* details table */}
-      
+
       {/* details table */}
       <div className="grid grid-cols-12 gap-6 px-6 py-6">
         <div className="col-span-12">
@@ -161,7 +182,7 @@ const InvoicePrint = ({ orderData }: IPropType) => {
       {/* details table */}
 
       <div className="flex items-center justify-center flex-wrap px-8 mb-6 bg-white rounded-t-md rounded-b-md  py-6 text-center">
-          <h3 className="font-normal mb-0">Thank you for your order. Come again!</h3>
+        <h3 className="font-normal mb-0">Thank you for your order. Come again!</h3>
       </div>
     </>
   );
