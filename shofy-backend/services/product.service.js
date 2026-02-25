@@ -71,25 +71,25 @@ exports.getAllProductsService = async () => {
   const products = await Product.find({}).populate({
     path: "reviews",
     match: { visible: { $ne: false } },
-    populate: { 
-      path: "userId", 
+    populate: {
+      path: "userId",
       select: "name email imageURL reviewBlocked",
       match: { reviewBlocked: { $ne: true } },
     },
   });
-  
+
   // Filter out reviews where user is blocked or review is hidden
   products.forEach(product => {
     if (product.reviews) {
-      product.reviews = product.reviews.filter(review => 
-        review && 
-        review.visible !== false && 
-        review.userId && 
+      product.reviews = product.reviews.filter(review =>
+        review &&
+        review.visible !== false &&
+        review.userId &&
         review.userId.reviewBlocked !== true
       );
     }
   });
-  
+
   return products;
 };
 
@@ -98,70 +98,77 @@ exports.getProductTypeService = async (req) => {
   const type = req.params.type;
   const query = req.query;
   let products;
-  if (query.new === "true") {
-    products = await Product.find({ productType: type })
+  if (query.new === "true" || query.new === true) {
+    products = await Product.find({
+      productType: type,
+      showInLayout: { $in: ["New Arrivals", "All Sections"] },
+    })
       .sort({ createdAt: -1 })
       .limit(8)
       .populate({
         path: "reviews",
         match: { visible: { $ne: false } },
-        populate: { 
-          path: "userId", 
+        populate: {
+          path: "userId",
           select: "name email imageURL reviewBlocked",
           match: { reviewBlocked: { $ne: true } },
         },
       });
-  } else if (query.featured === "true") {
+  } else if (query.featured === "true" || query.featured === true) {
     products = await Product.find({
       productType: type,
-      featured: true,
+      showInLayout: { $in: ["This Week’s Featured", "All Sections"] },
     }).populate({
       path: "reviews",
       match: { visible: { $ne: false } },
-      populate: { 
-        path: "userId", 
+      populate: {
+        path: "userId",
         select: "name email imageURL reviewBlocked",
         match: { reviewBlocked: { $ne: true } },
       },
     });
-  } else if (query.topSellers === "true") {
-    products = await Product.find({ productType: type })
+  } else if (query.topSellers === "true" || query.topSellers === true) {
+    products = await Product.find({
+      productType: type,
+      showInLayout: { $in: ["All Sections", "New Arrivals", "Popular on LookFame", "This Week’s Featured"] } // Allow all for Best Sellers or limit? User didn't specify, but let's be safe.
+    })
       .sort({ sellCount: -1 })
       .limit(8)
       .populate({
         path: "reviews",
         match: { visible: { $ne: false } },
-        populate: { 
-          path: "userId", 
+        populate: {
+          path: "userId",
           select: "name email imageURL reviewBlocked",
           match: { reviewBlocked: { $ne: true } },
         },
       });
   } else {
+    // Default case (All Collection/Shop) - show everything for that type
     products = await Product.find({ productType: type }).populate({
       path: "reviews",
       match: { visible: { $ne: false } },
-      populate: { 
-        path: "userId", 
+      populate: {
+        path: "userId",
         select: "name email imageURL reviewBlocked",
         match: { reviewBlocked: { $ne: true } },
       },
     });
   }
-  
+
   // Filter out reviews where user is blocked or review is hidden
   products = products.map(product => {
     if (product.reviews) {
-      product.reviews = product.reviews.filter(review => 
-        review && 
-        review.visible !== false && 
-        review.userId && 
+      product.reviews = product.reviews.filter(review =>
+        review &&
+        review.visible !== false &&
+        review.userId &&
         review.userId.reviewBlocked !== true
       );
     }
     return product;
   });
-  
+
   return products;
 };
 
@@ -173,55 +180,58 @@ exports.getOfferTimerProductService = async (query) => {
   }).populate({
     path: "reviews",
     match: { visible: { $ne: false } },
-    populate: { 
-      path: "userId", 
+    populate: {
+      path: "userId",
       select: "name email imageURL reviewBlocked",
       match: { reviewBlocked: { $ne: true } },
     },
   });
-  
+
   // Filter out reviews where user is blocked or review is hidden
   products.forEach(product => {
     if (product.reviews) {
-      product.reviews = product.reviews.filter(review => 
-        review && 
-        review.visible !== false && 
-        review.userId && 
+      product.reviews = product.reviews.filter(review =>
+        review &&
+        review.visible !== false &&
+        review.userId &&
         review.userId.reviewBlocked !== true
       );
     }
   });
-  
+
   return products;
 };
 
 // get popular product service by type
 exports.getPopularProductServiceByType = async (type) => {
-  const products = await Product.find({ productType: type })
+  const products = await Product.find({
+    productType: type,
+    showInLayout: { $in: ["Popular on LookFame", "All Sections"] }
+  })
     .sort({ "reviews.length": -1 })
     .limit(8)
     .populate({
       path: "reviews",
       match: { visible: { $ne: false } },
-      populate: { 
-        path: "userId", 
+      populate: {
+        path: "userId",
         select: "name email imageURL reviewBlocked",
         match: { reviewBlocked: { $ne: true } },
       },
     });
-  
+
   // Filter out reviews where user is blocked or review is hidden
   products.forEach(product => {
     if (product.reviews) {
-      product.reviews = product.reviews.filter(review => 
-        review && 
-        review.visible !== false && 
-        review.userId && 
+      product.reviews = product.reviews.filter(review =>
+        review &&
+        review.visible !== false &&
+        review.userId &&
         review.userId.reviewBlocked !== true
       );
     }
   });
-  
+
   return products;
 };
 
@@ -231,8 +241,8 @@ exports.getTopRatedProductService = async () => {
   }).populate({
     path: "reviews",
     match: { visible: { $ne: false } },
-    populate: { 
-      path: "userId", 
+    populate: {
+      path: "userId",
       select: "name email imageURL reviewBlocked",
       match: { reviewBlocked: { $ne: true } },
     },
@@ -241,15 +251,15 @@ exports.getTopRatedProductService = async () => {
   const topRatedProducts = products
     .map((product) => {
       // Filter out reviews where user is blocked or review is hidden
-      const visibleReviews = product.reviews.filter(review => 
-        review && 
-        review.visible !== false && 
-        review.userId && 
+      const visibleReviews = product.reviews.filter(review =>
+        review &&
+        review.visible !== false &&
+        review.userId &&
         review.userId.reviewBlocked !== true
       );
-      
+
       if (visibleReviews.length === 0) return null;
-      
+
       const totalRating = visibleReviews.reduce(
         (sum, review) => sum + review.rating,
         0
@@ -274,23 +284,23 @@ exports.getProductService = async (id) => {
   const product = await Product.findById(id).populate({
     path: "reviews",
     match: { visible: { $ne: false } }, // Only show visible reviews
-    populate: { 
-      path: "userId", 
+    populate: {
+      path: "userId",
       select: "name email imageURL reviewBlocked",
       match: { reviewBlocked: { $ne: true } }, // Only show reviews from non-blocked users
     },
   });
-  
+
   // Filter out reviews where user is blocked or review is hidden
   if (product && product.reviews) {
-    product.reviews = product.reviews.filter(review => 
-      review && 
-      review.visible !== false && 
-      review.userId && 
+    product.reviews = product.reviews.filter(review =>
+      review &&
+      review.visible !== false &&
+      review.userId &&
       review.userId.reviewBlocked !== true
     );
   }
-  
+
   return product;
 };
 
@@ -304,25 +314,25 @@ exports.getRelatedProductService = async (productId) => {
   }).populate({
     path: "reviews",
     match: { visible: { $ne: false } },
-    populate: { 
-      path: "userId", 
+    populate: {
+      path: "userId",
       select: "name email imageURL reviewBlocked",
       match: { reviewBlocked: { $ne: true } },
     },
   });
-  
+
   // Filter out reviews where user is blocked or review is hidden
   relatedProducts.forEach(product => {
     if (product.reviews) {
-      product.reviews = product.reviews.filter(review => 
-        review && 
-        review.visible !== false && 
-        review.userId && 
+      product.reviews = product.reviews.filter(review =>
+        review &&
+        review.visible !== false &&
+        review.userId &&
         review.userId.reviewBlocked !== true
       );
     }
   });
-  
+
   return relatedProducts;
 };
 
@@ -381,13 +391,16 @@ exports.updateProductService = async (id, currProduct) => {
     product.additionalInformation = currProduct.additionalInformation;
     product.offerDate.startDate = currProduct.offerDate.startDate;
     product.offerDate.endDate = currProduct.offerDate.endDate;
-    
+
     // Update variations and attributeType if provided
     if (currProduct.variations !== undefined) {
       product.variations = currProduct.variations;
     }
     if (currProduct.attributeType !== undefined) {
       product.attributeType = currProduct.attributeType;
+    }
+    if (currProduct.showInLayout !== undefined) {
+      product.showInLayout = currProduct.showInLayout;
     }
 
     await product.save();
@@ -406,8 +419,8 @@ exports.getReviewsProducts = async () => {
     .populate({
       path: "reviews",
       match: { visible: { $ne: false } }, // Only show visible reviews
-      populate: { 
-        path: "userId", 
+      populate: {
+        path: "userId",
         select: "name email imageURL reviewBlocked",
         match: { reviewBlocked: { $ne: true } }, // Only show reviews from non-blocked users
       },
@@ -416,10 +429,10 @@ exports.getReviewsProducts = async () => {
   // Filter products that have visible reviews after population
   const products = result.filter(p => {
     // Filter out reviews where user is blocked or review is hidden
-    const visibleReviews = p.reviews.filter(review => 
-      review && 
-      review.visible !== false && 
-      review.userId && 
+    const visibleReviews = p.reviews.filter(review =>
+      review &&
+      review.visible !== false &&
+      review.userId &&
       review.userId.reviewBlocked !== true
     );
     return visibleReviews.length > 0;

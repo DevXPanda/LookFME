@@ -12,7 +12,7 @@ import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
 
 const ProductItem = ({ product, style_2 = false }) => {
-  const { _id, img, category, title, reviews, price, discount, tags, status } = product || {};
+  const { _id, img, category, title, reviews, price = 0, discount, tags = [], status } = product || {};
   const [ratingVal, setRatingVal] = useState(0);
   const { cart_products } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -55,11 +55,12 @@ const ProductItem = ({ product, style_2 = false }) => {
       <div className="tp-product-thumb-2 p-relative z-index-1 fix">
         <Link href={`/product-details/${_id}`}>
           <Image
-            src={img}
-            alt="product img"
+            src={product?.imageURLs?.[0]?.img || img || "https://placehold.co/160x200?text=No+Image"}
+            alt={title || "product img"}
             width={160}
             height={200}
             className="w-full h-full object-cover rounded-lg"
+            priority
           />
         </Link>
         <div className="tp-product-badge">

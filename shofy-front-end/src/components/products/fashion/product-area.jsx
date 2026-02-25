@@ -25,7 +25,7 @@ const normalizeCategoryName = (name) => {
 const ProductArea = () => {
   // Fetch categories from backend
   const { data: categoriesData } = useGetProductTypeCategoryQuery('fashion');
-  const { data: products, isError, isLoading } = useGetProductTypeQuery({ type: 'fashion' });
+  const { data: products, isError, isLoading } = useGetProductTypeQuery({ type: 'fashion', query: '' });
 
   // Build tabs dynamically from backend categories: "All Collection" + category names
   const tabs = useMemo(() => {
@@ -89,9 +89,9 @@ const ProductArea = () => {
         const normalizedProductCategory = normalizeCategoryName(p.category?.name);
         const normalizedProductParent = normalizeCategoryName(p.parent);
         const normalizedProductChildren = normalizeCategoryName(p.children);
-        return normalizedProductCategory === normalizedFilterCategory || 
-               normalizedProductParent === normalizedFilterCategory ||
-               normalizedProductChildren === normalizedFilterCategory;
+        return normalizedProductCategory === normalizedFilterCategory ||
+          normalizedProductParent === normalizedFilterCategory ||
+          normalizedProductChildren === normalizedFilterCategory;
       });
     }
 

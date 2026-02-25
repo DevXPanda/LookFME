@@ -1,77 +1,101 @@
 /* Header Navigation Fix - Ensure all menu items fit in one row */
 
 /* Reduce margins between menu items */
-.main-menu.menu-style-2 > nav > ul > li {
-  margin-right: 18px !important; /* Further reduced for better fit */
+.main-menu.menu-style-2>nav>ul>li {
+  margin-right: 18px !important;
+  /* Further reduced for better fit */
 }
 
 /* Make menu items more compact */
-.main-menu.menu-style-2 > nav > ul > li > a {
-  padding: 18px 0 !important; /* Further reduced padding */
-  font-size: 14px !important; /* Smaller font for better fit */
-  white-space: nowrap; /* Prevent text wrapping */
-  font-weight: 500; /* Medium weight for better readability */
+.main-menu.menu-style-2>nav>ul>li>a {
+  padding: 18px 0 !important;
+  /* Further reduced padding */
+  font-size: 14px !important;
+  /* Smaller font for better fit */
+  white-space: nowrap;
+  /* Prevent text wrapping */
+  font-weight: 500;
+  /* Medium weight for better readability */
 }
 
 /* Ensure the menu container has enough width */
 .tp-mega-menu-wrapper .col-xl-6 {
-  min-width: 0; /* Allow flexbox to work properly */
-  padding-right: 0; /* Remove right padding */
+  min-width: 0;
+  /* Allow flexbox to work properly */
+  padding-right: 0;
+  /* Remove right padding */
 }
 
 /* Make the main menu container flexbox */
-.main-menu.menu-style-2 > nav > ul {
+.main-menu.menu-style-2>nav>ul {
   display: flex !important;
-  flex-wrap: nowrap !important; /* Prevent wrapping */
-  justify-content: space-between !important; /* Distribute items evenly */
+  flex-wrap: nowrap !important;
+  /* Prevent wrapping */
+  justify-content: space-between !important;
+  /* Distribute items evenly */
   align-items: center;
   width: 100%;
   max-width: 100%;
-  overflow: hidden; /* Prevent horizontal scroll */
+  overflow: hidden;
+  /* Prevent horizontal scroll */
 }
 
 /* Ensure menu items don't shrink */
-.main-menu.menu-style-2 > nav > ul > li {
+.main-menu.menu-style-2>nav>ul>li {
   flex-shrink: 0;
-  flex: 1; /* Give each item equal space */
-  text-align: center; /* Center the text */
-  min-width: 0; /* Allow text to shrink if needed */
+  flex: 1;
+  /* Give each item equal space */
+  text-align: center;
+  /* Center the text */
+  min-width: 0;
+  /* Allow text to shrink if needed */
 }
 
 /* Specific spacing for each menu item */
-.main-menu.menu-style-2 > nav > ul > li:nth-child(1) { /* Home */
+.main-menu.menu-style-2>nav>ul>li:nth-child(1) {
+  /* Home */
   flex: 0.8;
 }
-.main-menu.menu-style-2 > nav > ul > li:nth-child(2) { /* Men */
+
+.main-menu.menu-style-2>nav>ul>li:nth-child(2) {
+  /* Men */
   flex: 0.8;
 }
-.main-menu.menu-style-2 > nav > ul > li:nth-child(3) { /* Women */
+
+.main-menu.menu-style-2>nav>ul>li:nth-child(3) {
+  /* Women */
   flex: 0.8;
 }
-.main-menu.menu-style-2 > nav > ul > li:nth-child(4) { /* Junior */
+
+.main-menu.menu-style-2>nav>ul>li:nth-child(4) {
+  /* Junior */
   flex: 0.8;
 }
-.main-menu.menu-style-2 > nav > ul > li:nth-child(5) { /* Accessories */
+
+.main-menu.menu-style-2>nav>ul>li:nth-child(5) {
+  /* Accessories */
   flex: 1.2;
 }
-.main-menu.menu-style-2 > nav > ul > li:nth-child(6) { /* Beauty */
+
+.main-menu.menu-style-2>nav>ul>li:nth-child(6) {
+  /* Beauty */
   flex: 0.8;
 }
 
 /* Responsive adjustments */
 @media (min-width: 1200px) and (max-width: 1399px) {
-  .main-menu.menu-style-2 > nav > ul > li {
+  .main-menu.menu-style-2>nav>ul>li {
     margin-right: 18px !important;
   }
-  
-  .main-menu.menu-style-2 > nav > ul > li > a {
+
+  .main-menu.menu-style-2>nav>ul>li>a {
     font-size: 14px !important;
     padding: 18px 0 !important;
   }
 }
 
 @media (min-width: 1400px) {
-  .main-menu.menu-style-2 > nav > ul > li {
+  .main-menu.menu-style-2>nav>ul>li {
     margin-right: 22px !important;
   }
 }
@@ -116,10 +140,10 @@
   min-width: 180px !important;
   padding: 15px 0 !important;
   border-radius: 8px !important;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
   z-index: 9999 !important;
   transition: all 0.3s ease !important;
-  
+
   /* Initial state */
   visibility: hidden !important;
   opacity: 0 !important;
@@ -163,11 +187,11 @@
   /* Force display and positioning */
   display: block !important;
   pointer-events: auto !important;
-  
+
   /* Override any conflicting CSS variables */
   --tp-common-white: white !important;
   --tp-common-black: #333 !important;
-  
+
   /* Ensure proper stacking context */
   isolation: isolate !important;
 }
@@ -201,6 +225,7 @@
   visibility: visible !important;
   opacity: 1 !important;
   transform: translateY(0) !important;
-  background: red !important; /* Make it obvious */
+  background: red !important;
+  /* Make it obvious */
   border: 3px solid blue !important;
 }

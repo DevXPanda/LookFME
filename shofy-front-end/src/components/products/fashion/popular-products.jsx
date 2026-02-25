@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, FreeMode, Mousewheel } from "swiper/modules";
 import { useGetPopularProductByTypeQuery } from "@/redux/features/productApi";
@@ -68,6 +68,7 @@ const PopularProducts = () => {
 
   if (isLoading) content = <HomeTwoPopularPrdLoader loading={isLoading} />;
   if (!isLoading && isError) content = <ErrorMsg msg="There was an error" />;
+
   if (!isLoading && !isError && products?.data?.length === 0)
     content = <ErrorMsg msg="No Products found!" />;
 
@@ -112,7 +113,9 @@ const PopularProducts = () => {
         >
           {products.data.map((prd) => (
             <SwiperSlide key={prd._id}>
-              <ProductItem product={prd} />
+              <div style={{ width: '100%', height: '100%' }}>
+                <ProductItem product={prd} />
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>
@@ -125,15 +128,19 @@ const PopularProducts = () => {
       <style jsx>{`
         .tp-popular-slider-wrapper {
           position: relative;
-          display: flex;
-          align-items: center;
-          overflow: visible;
+          width: 100%;
+          margin: 0 auto;
         }
 
-        .tp-popular-slider-active .swiper-wrapper {
+        .tp-popular-slider-active {
+          width: 100%;
+          display: block;
+        }
+
+        .tp-popular-slider-active :global(.swiper-wrapper) {
           cursor: grab;
         }
-        .tp-popular-slider-active .swiper-wrapper:active {
+        .tp-popular-slider-active :global(.swiper-wrapper:active) {
           cursor: grabbing;
         }
 

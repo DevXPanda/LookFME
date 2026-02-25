@@ -9,7 +9,7 @@ import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { notifyError } from "@/utils/toast";
 
 const ProductSliderItem = ({ product }) => {
-  const { _id, title, price, img,status } = product || {};
+  const { _id, title, price = 0, img, status } = product || {};
   const { cart_products } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
   const isAddedToCart = cart_products.some((prd) => prd._id === _id);
@@ -35,7 +35,7 @@ const ProductSliderItem = ({ product }) => {
       <div
         className="tp-category-thumb-4 include-bg"
         style={{
-          backgroundImage: `url(${img})`,
+          backgroundImage: `url(${product?.imageURLs?.[0]?.img || img || "https://placehold.co/200x200?text=No+Image"})`,
           backgroundColor: "#FFFFFF",
           backgroundPosition: "0px -80px",
         }}

@@ -106,13 +106,13 @@ const ProductTypeBrand = ({
               defaultValue={
                 default_value
                   ? {
-                      label: default_value.brand,
-                      value: default_value.brand,
-                    }
+                    label: default_value.brand,
+                    value: default_value.brand,
+                  }
                   : {
-                      label: "Select..",
-                      value: 0,
-                    }
+                    label: "Select..",
+                    value: 0,
+                  }
               }
               onChange={(selectedOption) => {
                 field.onChange(selectedOption);

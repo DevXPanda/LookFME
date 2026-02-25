@@ -23,45 +23,45 @@ const normalizeCategoryName = (name) => {
 
 // slider setting with horizontal mouse wheel support
 const slider_setting = {
-    slidesPerView: 4,
-		spaceBetween: 30,
-		mousewheel: {
-			forceToAxis: true,
-			sensitivity: 1,
-			releaseOnEdges: false,
-		},
-		pagination: {
-			el: ".tp-arrival-slider-dot",
-			clickable: true,
-		},
-		navigation: {
-			nextEl: ".tp-arrival-slider-button-next",
-			prevEl: ".tp-arrival-slider-button-prev",
-		},
-		breakpoints: {
-			'1200': {
-				slidesPerView: 4,
-			},
-			'992': {
-				slidesPerView: 3,
-			},
-			'768': {
-				slidesPerView: 2,
-			},
-			'576': {
-				slidesPerView: 2,
-			},
-			'0': {
-				slidesPerView: 1,
-			},
-		}
+  slidesPerView: 4,
+  spaceBetween: 30,
+  mousewheel: {
+    forceToAxis: true,
+    sensitivity: 1,
+    releaseOnEdges: false,
+  },
+  pagination: {
+    el: ".tp-arrival-slider-dot",
+    clickable: true,
+  },
+  navigation: {
+    nextEl: ".tp-arrival-slider-button-next",
+    prevEl: ".tp-arrival-slider-button-prev",
+  },
+  breakpoints: {
+    '1200': {
+      slidesPerView: 4,
+    },
+    '992': {
+      slidesPerView: 3,
+    },
+    '768': {
+      slidesPerView: 2,
+    },
+    '576': {
+      slidesPerView: 2,
+    },
+    '0': {
+      slidesPerView: 1,
+    },
+  }
 }
 
 const NewArrivals = () => {
   // Fetch categories from backend
   const { data: categoriesData } = useGetProductTypeCategoryQuery('electronics');
-  const { data: products, isError, isLoading } = useGetProductTypeQuery({type:'electronics',query:'new=true'});
-  
+  const { data: products, isError, isLoading } = useGetProductTypeQuery({ type: 'electronics', query: 'new=true' });
+
   // Build tabs dynamically from backend categories: "All" + category names
   const tabs = useMemo(() => {
     const categoryTabs = ["All"];
@@ -89,9 +89,9 @@ const NewArrivals = () => {
       const normalizedProductCategory = normalizeCategoryName(p.category?.name);
       const normalizedProductParent = normalizeCategoryName(p.parent);
       const normalizedProductChildren = normalizeCategoryName(p.children);
-      return normalizedProductCategory === normalizedFilterCategory || 
-             normalizedProductParent === normalizedFilterCategory ||
-             normalizedProductChildren === normalizedFilterCategory;
+      return normalizedProductCategory === normalizedFilterCategory ||
+        normalizedProductParent === normalizedFilterCategory ||
+        normalizedProductChildren === normalizedFilterCategory;
     });
   }, [products?.data, activeTab]);
 
@@ -100,7 +100,7 @@ const NewArrivals = () => {
 
   if (isLoading) {
     content = (
-      <HomeNewArrivalPrdLoader loading={isLoading}/>
+      <HomeNewArrivalPrdLoader loading={isLoading} />
     );
   }
   if (!isLoading && isError) {
@@ -162,7 +162,7 @@ const NewArrivals = () => {
                   <button type="button" className="tp-arrival-slider-button-prev">
                     <PrevArr />
                   </button>
-                   {" "}
+                  {" "}
                   <button type="button" className="tp-arrival-slider-button-next">
                     <NextArr />
                   </button>

@@ -13,8 +13,9 @@ import useAddToCart from "@/hooks/use-add-to-cart";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 
 const ProductItem = ({ product, offer_style = false }) => {
-  const { _id, img, category, title, reviews, price, discount,status,offerDate } = product || {};
+  const { _id, img, category, title, reviews, price = 0, discount, status, offerDate } = product || {};
   console.log(status)
+
   const { cart_products } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
   const isAddedToCart = cart_products.some((prd) => prd._id === _id);
@@ -22,7 +23,7 @@ const ProductItem = ({ product, offer_style = false }) => {
   const dispatch = useDispatch();
   const [ratingVal, setRatingVal] = useState(0);
   const { handleAddToCart } = useAddToCart();
-  
+
   useEffect(() => {
     if (reviews && reviews.length > 0) {
       const rating =
@@ -52,12 +53,13 @@ const ProductItem = ({ product, offer_style = false }) => {
         <div className="tp-product-thumb p-relative fix">
           <Link href={`/product-details/${_id}`}>
             <Image
-              src={img}
+              src={product?.imageURLs?.[0]?.img || img || "https://placehold.co/416x480?text=No+Image"}
               width="0"
               height="0"
               sizes="100vw"
               style={{ width: '100%', height: 'auto' }}
               alt="product-electronic"
+              priority
             />
 
             <div className="tp-product-badge">

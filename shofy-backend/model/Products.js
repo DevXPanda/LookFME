@@ -193,7 +193,12 @@ const productsSchema = mongoose.Schema({
       required: false,
       validate: [validator.isURL, "Please provide valid image URL"]
     }
-  }]
+  }],
+  showInLayout: {
+    type: String,
+    enum: ["Popular on LookFame", "This Week’s Featured", "New Arrivals", "All Sections"],
+    default: "All Sections"
+  }
 }, {
   timestamps: true,
 })

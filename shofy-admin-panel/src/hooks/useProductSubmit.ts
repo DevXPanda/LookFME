@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import slugify from "slugify";
 import { useForm } from "react-hook-form";
-import {useRouter} from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useAddProductMutation, useEditProductMutation } from "@/redux/product/productApi";
 import { notifyError, notifySuccess } from "@/utils/toast";
 
@@ -172,9 +172,10 @@ const useProductSubmit = () => {
       tags: tags,
       variations: variations.length > 0 ? variations : undefined,
       attributeType: variations.length > 0 ? variations[0]?.attributeType : undefined,
+      showInLayout: data.showInLayout || "All Sections",
     };
 
-    console.log('productData-------------------..>',productData)
+    console.log('productData-------------------..>', productData)
 
 
     if (!img) {
@@ -186,7 +187,7 @@ const useProductSubmit = () => {
     if (Number(data.discount) > Number(data.price)) {
       return notifyError("Product price must be gether than discount");
     }
-    
+
     // Validate SKU/Quantity if no variations
     if (variations.length === 0) {
       if (!data.SKU) {
@@ -260,8 +261,9 @@ const useProductSubmit = () => {
       tags: tags,
       variations: variations.length > 0 ? variations : undefined,
       attributeType: variations.length > 0 ? variations[0]?.attributeType : undefined,
+      showInLayout: data.showInLayout || "All Sections",
     };
-    console.log('edit productData---->',productData)
+    console.log('edit productData---->', productData)
     const res = await editProduct({ id: id, data: productData });
     if ("error" in res) {
       if ("data" in res.error) {

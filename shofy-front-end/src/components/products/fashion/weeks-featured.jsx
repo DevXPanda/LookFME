@@ -118,13 +118,9 @@
 //     </section>
 //   );
 // };
-
-// export default WeeksFeatured;
-
-
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Rating } from 'react-simple-star-rating';
@@ -137,6 +133,8 @@ import { HomeTwoFeaturedPrdLoader } from '@/components/loader';
 const WeeksFeatured = () => {
   const { data, isLoading, isError } =
     useGetProductTypeQuery({ type: 'fashion', query: 'featured=true' });
+
+
 
   const scrollRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -196,6 +194,7 @@ const WeeksFeatured = () => {
 
   if (isLoading) return <HomeTwoFeaturedPrdLoader loading />;
   if (isError) return <ErrorMsg msg="Something went wrong" />;
+  if (!isLoading && !isError && data?.data?.length === 0) return <ErrorMsg msg="No Products found!" />;
 
   return (
     <section className="featured-area">
@@ -283,7 +282,7 @@ const WeeksFeatured = () => {
                     {/* IMAGE */}
                     <div className="featured-image">
                       <Image
-                        src={item.img}
+                        src={item.imageURLs && item.imageURLs.length > 0 ? item.imageURLs[0].img : item.img}
                         alt={item.title}
                         fill
                         priority

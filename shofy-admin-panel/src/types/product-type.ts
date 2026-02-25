@@ -25,9 +25,9 @@ type AdditionalInformation = {
   value: string;
 }
 type IReviewUser = {
-  _id:string;
-  name:string;
-  email:string;
+  _id: string;
+  name: string;
+  email: string;
 }
 type TReview = {
   _id: string;
@@ -74,6 +74,7 @@ export interface IProduct {
   orderQuantity: number;
   variations?: ProductVariation[];
   attributeType?: string;
+  showInLayout?: string;
 }
 
 export interface ProductResponse {
@@ -120,15 +121,16 @@ export interface IAddProduct {
   };
   variations?: ProductVariation[];
   attributeType?: string;
+  showInLayout?: string;
 }
 
 // review product response 
 export interface IReviewProductRes {
-  success:boolean;
-  data:IProduct[]
+  success: boolean;
+  data: IProduct[]
 }
 // delete review product response 
 export interface IDelReviewsRes {
-  success:boolean;
-  message:string;
+  success: boolean;
+  message: string;
 }

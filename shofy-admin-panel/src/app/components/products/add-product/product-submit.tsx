@@ -41,7 +41,7 @@ const ProductSubmit = () => {
     setVariations,
   } = useProductSubmit();
 
-  console.log('additionalInformation--->',additionalInformation,'imageURLs--->',imageURLs)
+  console.log('additionalInformation--->', additionalInformation, 'imageURLs--->', imageURLs)
 
   return (
     <form onSubmit={handleSubmit(handleSubmitProduct)}>
@@ -194,6 +194,22 @@ const ProductSubmit = () => {
             {/* tags start */}
             <div className="grid grid-cols-1 sm:grid-cols-1 gap-3 mb-5">
               <Tags tags={tags} setTags={setTags} />
+            </div>
+          </div>
+
+          <div className="bg-white px-8 py-8 rounded-md mb-6">
+            <p className="mb-5 text-base text-black">Show In Client Layout</p>
+            <div className="grid grid-cols-1 sm:grid-cols-1 gap-3 mb-5">
+              <select
+                {...register("showInLayout")}
+                name="showInLayout"
+                className="input w-full h-[44px] rounded-md border border-gray6 px-6 text-base"
+              >
+                <option value="All Sections">All Sections</option>
+                <option value="Popular on LookFame">Popular on LookFame</option>
+                <option value="This Week’s Featured">This Week’s Featured</option>
+                <option value="New Arrivals">New Arrivals</option>
+              </select>
             </div>
           </div>
         </div>
