@@ -29,7 +29,7 @@ const sliderSettings = {
 export default function FashionBanner() {
   const router = useRouter();
   const { data, isLoading } = useGetBannersQuery();
-  const banners = data?.data ?? [];
+  const banners = (data?.data ?? []).filter(b => b.bannerType === 'homepage_hero');
 
   const handleBannerClick = (redirectLink) => {
     if (redirectLink) router.push(redirectLink);
@@ -41,7 +41,8 @@ export default function FashionBanner() {
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .tp-slider-area {
           position: relative;
           width: 100%;

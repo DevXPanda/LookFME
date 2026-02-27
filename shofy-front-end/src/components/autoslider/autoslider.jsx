@@ -178,24 +178,37 @@
 
 "use client";
 import React, { useRef, useEffect, useState, useMemo } from "react";
+import { useGetBannersQuery } from "@/redux/features/bannerApi";
+import { useRouter } from "next/navigation";
 
 const AutoSlider = () => {
+  const router = useRouter();
   const scrollContainerRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const images = useMemo(
-    () => [
-      "/assets/img/autoslider/1.jpg",
-      "/assets/img/autoslider/2.jpg",
-      "/assets/img/autoslider/3.png",
-    ],
-    []
-  );
+  const { data, isLoading } = useGetBannersQuery();
+  const banners = (data?.data ?? []).filter(b => b.bannerType === 'autoslider_banner');
+
+  const images = useMemo(() => {
+    if (banners.length > 0) {
+      return banners.map(b => ({
+        src: b.image,
+        mobileSrc: b.imageMobile || b.image,
+        link: b.redirectLink,
+        title: b.title
+      }));
+    }
+    return [
+      { src: "/assets/img/autoslider/1.jpg", mobileSrc: "/assets/img/autoslider/1.jpg", link: "#" },
+      { src: "/assets/img/autoslider/2.jpg", mobileSrc: "/assets/img/autoslider/2.jpg", link: "#" },
+      { src: "/assets/img/autoslider/3.png", mobileSrc: "/assets/img/autoslider/3.png", link: "#" },
+    ];
+  }, [banners]);
 
   // Auto slide
   useEffect(() => {
-    if (isHovered) return;
+    if (isHovered || images.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % images.length);
     }, 4000);
@@ -212,6 +225,8 @@ const AutoSlider = () => {
       behavior: "smooth",
     });
   }, [currentIndex]);
+
+  if (isLoading) return null;
 
   return (
     <section
@@ -234,64 +249,71 @@ const AutoSlider = () => {
           width: "100%",
         }}
       >
-        {images.map((src, i) => (
+        {images.map((img, i) => (
           <div
             key={i}
+            onClick={() => img.link !== "#" && router.push(img.link)}
             style={{
               flexShrink: 0,
               width: "100%",
-              aspectRatio: "3 / 1", // ✅ SAME AS BANNERS
+              aspectRatio: "3 / 1",
               position: "relative",
               scrollSnapAlign: "start",
               overflow: "hidden",
+              cursor: img.link !== "#" ? "pointer" : "default"
             }}
           >
-            <img
-              src={src}
-              alt={`slide-${i}`}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                objectPosition: "center",
-                display: "block",
-              }}
-            />
+            <picture>
+              <source media="(max-width: 767px)" srcSet={img.mobileSrc} />
+              <img
+                src={img.src}
+                alt={img.title || `slide-${i}`}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: "center",
+                  display: "block",
+                }}
+              />
+            </picture>
           </div>
         ))}
       </div>
 
       {/* Indicators */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: "18px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          display: "flex",
-          gap: "10px",
-          zIndex: 20,
-        }}
-      >
-        {images.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentIndex(index)}
-            style={{
-              width: currentIndex === index ? "26px" : "12px",
-              height: "12px",
-              borderRadius: "999px",
-              border: "none",
-              background:
-                currentIndex === index
-                  ? "rgba(255,255,255,0.95)"
-                  : "rgba(255,255,255,0.5)",
-              cursor: "pointer",
-              transition: "all 0.3s ease",
-            }}
-          />
-        ))}
-      </div>
+      {images.length > 1 && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: "18px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            gap: "10px",
+            zIndex: 20,
+          }}
+        >
+          {images.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              style={{
+                width: currentIndex === index ? "26px" : "12px",
+                height: "12px",
+                borderRadius: "999px",
+                border: "none",
+                background:
+                  currentIndex === index
+                    ? "rgba(255,255,255,0.95)"
+                    : "rgba(255,255,255,0.5)",
+                cursor: "pointer",
+                transition: "all 0.3s ease",
+              }}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 };

@@ -32,7 +32,44 @@ const getBannerById = async (req, res, next) => {
 
 const addBanner = async (req, res, next) => {
   try {
-    const banner = new Banner(req.body);
+    const {
+      title,
+      subtitle,
+      buttonText,
+      redirectLink,
+      image,
+      desktopImage,
+      imageMobile,
+      mobileImage,
+      bannerType,
+      order,
+      status,
+      isEnabled
+    } = req.body;
+
+    // Mapping payload fields
+    const bannerData = {
+      title,
+      subtitle,
+      buttonText,
+      redirectLink,
+      image: desktopImage || image,
+      imageMobile: mobileImage || imageMobile,
+      bannerType,
+      order: order !== undefined ? Number(order) : undefined,
+      isEnabled: status !== undefined ? (status === 'active' || status === true) : isEnabled
+    };
+
+    // Explicit validation for required fields
+    if (!bannerData.image) {
+      return res.status(400).json({
+        success: false,
+        message: "Desktop image is required",
+        errorMessages: [{ path: "image", message: "Desktop image is required" }]
+      });
+    }
+
+    const banner = new Banner(bannerData);
     await banner.save();
     res.status(201).json({ success: true, message: "Banner added successfully", data: banner });
   } catch (error) {
@@ -42,9 +79,37 @@ const addBanner = async (req, res, next) => {
 
 const updateBanner = async (req, res, next) => {
   try {
+    const {
+      title,
+      subtitle,
+      buttonText,
+      redirectLink,
+      image,
+      desktopImage,
+      imageMobile,
+      mobileImage,
+      bannerType,
+      order,
+      status,
+      isEnabled
+    } = req.body;
+
+    // Mapping payload fields
+    const bannerData = {
+      title,
+      subtitle,
+      buttonText,
+      redirectLink,
+      image: desktopImage || image,
+      imageMobile: mobileImage || imageMobile,
+      bannerType,
+      order: order !== undefined ? Number(order) : undefined,
+      isEnabled: status !== undefined ? (status === 'active' || status === true) : isEnabled
+    };
+
     const banner = await Banner.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      { $set: bannerData },
       { new: true, runValidators: true }
     );
     if (!banner) {

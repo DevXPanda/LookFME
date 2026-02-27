@@ -8,7 +8,19 @@ const bannerSchema = new mongoose.Schema(
     redirectLink: { type: String, default: "/shop" },
     image: { type: String, required: true },
     imageMobile: { type: String, default: "" },
-    bannerType: { type: String, enum: ["homepage_hero", "homepage_secondary", "other"], default: "homepage_hero" },
+    bannerType: {
+      type: String,
+      enum: [
+        "homepage_hero",
+        "homepage_secondary",
+        "fashion_banner",
+        "ads_banner",
+        "autoslider_banner",
+        "junior_banner",
+        "other"
+      ],
+      default: "homepage_hero"
+    },
     order: { type: Number, default: 0 },
     isEnabled: { type: Boolean, default: true },
   },
