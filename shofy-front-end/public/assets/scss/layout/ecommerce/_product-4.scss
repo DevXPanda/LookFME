@@ -4,30 +4,35 @@
 /*  8.12 Product Card Style 4 CSS
 /*----------------------------------------*/
 
-.#{$theme-prifix}-product{
+.#{$theme-prifix}-product {
     $self : &;
-    &-item-4{
+
+    &-item-4 {
         background-color: var(--tp-common-white);
         @extend %tp-transition;
-        &:hover{
+
+        &:hover {
             box-shadow: 0px -8px 25px rgba(1, 15, 28, 0.15), 0px 0px 0px rgba(1, 15, 28, 0.15);
-            #{$self}{
-                &-thumb-4{
-                    & img{
+
+            #{$self} {
+                &-thumb-4 {
+                    & img {
                         @include transform(scale(1.2));
                     }
                 }
-                &-price-4{
+
+                &-price-4 {
                     visibility: hidden;
                     opacity: 0;
                 }
-                &-add-to-cart-4{
+
+                &-add-to-cart-4 {
                     visibility: visible;
                     opacity: 1;
                     @include transform(translateY(0px));
                 }
 
-                &-action-4{
+                &-action-4 {
                     visibility: visible;
                     opacity: 1;
                     right: 20px;
@@ -35,8 +40,9 @@
             }
         }
     }
-    &-action{
-        &-4{
+
+    &-action {
+        &-4 {
             position: absolute;
             top: 20px;
             right: 0;
@@ -46,57 +52,68 @@
             opacity: 0;
             @extend %tp-transition;
 
-            @media #{$xs}{
+            @media #{$xs} {
                 top: 30px;
             }
 
-            &.has-shadow{
-                & .tp-product-action-btn-3{
+            &.has-shadow {
+                & .tp-product-action-btn-3 {
                     box-shadow: 0px 1px 1px rgba(1, 15, 28, 0.1);
                     border: 0;
                 }
             }
 
-            & .tp-product-action-btn-3{
+            & .tp-product-action-btn-3 {
                 box-shadow: none;
             }
         }
     }
-    &-thumb-4{
+
+    &-thumb-4 {
         position: relative;
         margin-bottom: 21px;
         background-color: #F6F6F6;
-        & img{
+        aspect-ratio: 4 / 5;
+        overflow: hidden;
+
+        & img {
             @extend %tp-transition;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
     }
-    &-title-4{
+
+    &-title-4 {
         font-weight: 400;
         font-size: 20px;
         line-height: 1;
         margin-bottom: 2px;
 
-        & a{
-            &:hover{
+        & a {
+            &:hover {
                 color: var(--tp-theme-brown);
             }
         }
 
     }
-    &-info-4{
-        & p{
+
+    &-info-4 {
+        & p {
             font-size: 14px;
             margin-bottom: 2px;
         }
     }
-    &-price{
-        &-4{
+
+    &-price {
+        &-4 {
             font-weight: 500;
             font-size: 16px;
             color: var(--tp-common-black);
             display: inline-block;
             @extend %tp-transition;
-            &.old-price{
+
+            &.old-price {
                 font-size: 14px;
                 text-decoration: line-through;
                 color: var(--tp-text-2);
@@ -104,58 +121,68 @@
             }
         }
     }
-    &-add-to-cart-4{
+
+    &-add-to-cart-4 {
         position: absolute;
         bottom: 0;
         left: 0;
         margin: auto;
         background-color: var(--tp-common-white);
         font-weight: 500;
-        font-size: 16px;       
+        font-size: 16px;
         color: var(--tp-common-black);
         visibility: hidden;
         opacity: 0;
         @extend %tp-transition;
         @include transform(translateY(10px));
-        & svg{
+
+        & svg {
             @extend %tp-svg-y-3;
         }
-        &:hover{
+
+        &:hover {
             color: var(--tp-theme-brown);
         }
-        
+
     }
 }
 
-.#{$theme-prifix}-best{
+.#{$theme-prifix}-best {
     $selfbe : &;
-    &-slider{
-        & .#{$theme-prifix}-swiper-scrollbar{
+
+    &-slider {
+        & .#{$theme-prifix}-swiper-scrollbar {
             background-color: #D3D8DD;
-            width: calc(100% - 600px );
+            width: calc(100% - 600px);
             margin: auto;
-            @media #{$lg}{
-                width: calc(100% - 300px );
+
+            @media #{$lg} {
+                width: calc(100% - 300px);
             }
-            @media #{$md}{
-                width: calc(100% - 200px );
+
+            @media #{$md} {
+                width: calc(100% - 200px);
             }
-            @media #{$sm}{
-                width: calc(100% - 100px );
+
+            @media #{$sm} {
+                width: calc(100% - 100px);
             }
-            @media #{$xs}{
+
+            @media #{$xs} {
                 width: 100%;
             }
         }
     }
-    &-item-4{
-        &:hover{
-            & .tp-product-price-wrapper-4{
+
+    &-item-4 {
+        &:hover {
+            & .tp-product-price-wrapper-4 {
                 visibility: hidden;
                 opacity: 0;
             }
-            #{$selfbe}{
-                &-add-to-cart-btn{
+
+            #{$selfbe} {
+                &-add-to-cart-btn {
                     visibility: visible;
                     opacity: 1;
                     @include transform(translateY(0px));
@@ -163,32 +190,36 @@
             }
         }
     }
-    &-price{
+
+    &-price {
         position: relative;
 
-        @at-root{
-            .tp-product-price-wrapper-4{
+        @at-root {
+            .tp-product-price-wrapper-4 {
                 @extend %tp-transition;
             }
         }
     }
-    &-add-to-cart-btn{
+
+    &-add-to-cart-btn {
         position: absolute;
         bottom: 0;
         left: 0;
         margin: auto;
         background-color: var(--tp-common-white);
         font-weight: 500;
-        font-size: 16px;       
+        font-size: 16px;
         color: var(--tp-common-black);
         visibility: hidden;
         opacity: 0;
         @extend %tp-transition;
         @include transform(translateY(10px));
-        & svg{
+
+        & svg {
             @extend %tp-svg-y-3;
         }
-        &:hover{
+
+        &:hover {
             color: var(--tp-theme-brown);
         }
     }

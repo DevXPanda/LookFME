@@ -3,8 +3,42 @@
 @tailwind utilities;
 
 @import '~bootstrap/scss/bootstrap';
-@import "~slick-carousel/slick/slick.css"; 
+@import "~slick-carousel/slick/slick.css";
 @import "swiper/css/bundle";
 @import 'node_modules/react-modal-video/scss/modal-video.scss';
 @import '../../public/assets/scss/main.scss';
 
+
+.tp-size-variation-btn {
+    display: inline-block;
+    min-width: 44px;
+    height: 44px;
+    line-height: 40px;
+    text-align: center;
+    padding: 0 10px;
+    border: 2px solid #e1e1e1;
+    background-color: transparent;
+    color: #010f1c;
+    font-weight: 500;
+    font-size: 14px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    text-transform: uppercase;
+
+    &.active,
+    &:hover {
+        border-color: #BE5985;
+        background-color: #BE5985;
+        color: #fff;
+        box-shadow: 0 4px 10px rgba(190, 89, 133, 0.2);
+    }
+}
+
+.tp-product-details-variation-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #010f1c;
+    margin-bottom: 12px;
+}

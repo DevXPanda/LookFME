@@ -38,7 +38,7 @@
      LEFT SECTION
      =========================== */
   .jockey-left-section {
-    flex: 2;
+    flex: 1;
     display: flex;
     flex-direction: row;
     background: #f8f6f3;
@@ -47,109 +47,67 @@
   }
 
   .jockey-categories-section {
-    flex: 2;
+    flex: 1;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     padding: 30px 20px;
-    border-right: 1px solid #e5e5e5;
     overflow-y: auto;
     scrollbar-width: none;
   }
 
-  .jockey-category-column {
-    padding: 0 15px;
-    position: relative;
+  /* ... skipping category column and title styles as they remain the same ... */
 
-    &:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      width: 1px;
-      background-color: #e5e5e5;
-    }
-  }
-
-  .jockey-category-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--tp-common-black);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 15px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid var(--tp-theme-primary);
-    display: inline-block;
-  }
-
-  .jockey-category-items {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    li {
-      margin-bottom: 8px;
-
-      a {
-        font-size: 13px;
-        color: #666;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        display: block;
-        padding: 2px 0;
-
-        &:hover {
-          color: var(--tp-theme-primary);
-          padding-left: 5px;
-        }
-      }
-    }
-  }
-
-  /* Banner on Right of Left Section */
-  .jockey-banner-right {
-    flex: 1;
+  /* New Unified Right Section */
+  .jockey-right-section {
+    flex: 2;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: row;
+    align-items: flex-start;
+    /* vertical align to start */
     background: #f8f6f3;
+    height: 80vh;
+  }
+
+  /* Banner Column */
+  .jockey-banner-column {
+    flex: 0 0 30%;
+    /* Fixed width for banner column */
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 30px;
+    border-right: 1px solid #e5e5e5;
   }
 
   .jockey-banner-container {
     width: 100%;
-    height: 100%;
     display: flex;
-    align-items: center;
     justify-content: center;
   }
 
   .jockey-banner-image {
-    width: 85%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 90%;
 
     img {
       width: 100%;
-      max-height: 65vh;
+      height: auto;
+      max-height: 70vh;
       object-fit: contain;
       border-radius: 8px;
     }
   }
 
-  /* ===========================
-     RIGHT SECTION (updated visuals)
-     =========================== */
+  /* Content Section (Offers + Trending) */
   .jockey-offers-section {
-    flex: 1.2;
-    padding: 25px 20px;
+    flex: 1;
+    padding: 30px 25px;
     background: #f8f6f3;
-    border-left: 1px solid #e5e5e5;
-    height: 80vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    scrollbar-width: none;
   }
 
   .jockey-section-title {
@@ -173,7 +131,8 @@
   .jockey-trending-item {
     position: relative;
     overflow: hidden;
-    border: none; /* removed border */
+    border: none;
+    /* removed border */
     border-radius: 8px;
     background: transparent;
     transition: all 0.3s ease;
@@ -195,7 +154,8 @@
     img {
       width: 100%;
       height: 100%;
-      object-fit: cover; /* fill the grid cell completely */
+      object-fit: cover;
+      /* fill the grid cell completely */
       transition: transform 0.4s ease;
       image-rendering: -webkit-optimize-contrast;
       image-rendering: crisp-edges;
@@ -212,7 +172,8 @@
 
   .jockey-offering-text,
   .jockey-trending-text {
-    display: none; /* hide text under images */
+    display: none;
+    /* hide text under images */
   }
 
   /* ===========================

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
 // internal
+import { notifyError } from '@/utils/toast';
 import { AskQuestion, CompareTwo, WishlistTwo } from '@/svg';
 import DetailsBottomInfo from './details-bottom-info';
 import ProductDetailsCountdown from './product-details-countdown';
@@ -20,6 +21,7 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
   const { sku, img, title, imageURLs, category, description, discount, price, status, reviews, tags, offerDate } = productItem || {};
   const [ratingVal, setRatingVal] = useState(0);
   const [textMore, setTextMore] = useState(false);
+  const [selectedSize, setSelectedSize] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
   const { handleAddToCart } = useAddToCart();
@@ -36,9 +38,24 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
     }
   }, [reviews]);
 
+  // Find all available sizes across all variations and top-level
+  const allSizesInVariations = (imageURLs || []).flatMap(item => item.sizes || []);
+  const allAvailableSizes = [...new Set([...allSizesInVariations, ...(productItem?.sizes || [])])];
+
+  // Get sizes for the current active image/variation
+  const activeVariation = imageURLs.find(item => item.img === activeImg);
+  const activeVariationSizes = activeVariation?.sizes || [];
+
+  // If active variation has sizes, use them. Otherwise show all available sizes for the product.
+  const availableSizes = activeVariationSizes.length > 0 ? activeVariationSizes : allAvailableSizes;
+
   // handle add product
   const handleAddProduct = (prd) => {
-    handleAddToCart(prd);
+    if (availableSizes.length > 0 && !selectedSize) {
+      notifyError("Please select a size");
+      return;
+    }
+    handleAddToCart({ ...prd, selectedSize });
   };
 
   // handle buy now - add to cart and redirect to checkout
@@ -50,6 +67,11 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
 
     // Prevent multiple clicks/touches
     if (isBuyNowProcessing || status === 'out-of-stock') return;
+
+    if (availableSizes.length > 0 && !selectedSize) {
+      notifyError("Please select a size");
+      return;
+    }
 
     // Check authentication first
     try {
@@ -90,7 +112,7 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
 
     try {
       // Add product to cart
-      dispatch(add_cart_product(productItem));
+      dispatch(add_cart_product({ ...productItem, selectedSize }));
       dispatch(handleModalClose());
 
       // Small delay to ensure cart state is updated before navigation
@@ -114,6 +136,7 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
   const handleCompareProduct = (prd) => {
     dispatch(add_to_compare(prd));
   };
+
 
   return (
     <div className="tp-product-details-wrapper">
@@ -146,27 +169,50 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
       </div>
 
       {/* variations */}
-      {imageURLs.some(item => item?.color && item?.color?.name) && <div className="tp-product-details-variation">
-        <div className="tp-product-details-variation-item">
-          <h4 className="tp-product-details-variation-title">Color :</h4>
-          <div className="tp-product-details-variation-list">
-            {imageURLs.map((item, i) => (
-              <button onClick={() => handleImageActive(item)} key={i} type="button"
-                className={`color tp-color-variation-btn ${item.img === activeImg ? "active" : ""}`} >
-                <span
-                  data-bg-color={`${item.color.clrCode}`}
-                  style={{ backgroundColor: `${item.color.clrCode}` }}
-                ></span>
-                {item.color && item.color.name && (
-                  <span className="tp-color-variation-tootltip">
-                    {item.color.name}
-                  </span>
-                )}
-              </button>
-            ))}
+      <div className="tp-product-details-variation">
+        {imageURLs.some(item => item?.color?.name || item?.color?.clrCode) &&
+          <div className="tp-product-details-variation-item">
+            <h4 className="tp-product-details-variation-title">Color :</h4>
+            <div className="tp-product-details-variation-list">
+              {imageURLs.map((item, i) => {
+                const hasColor = item.color?.name || item.color?.clrCode;
+                if (!hasColor && i === 0 && imageURLs.length > 1) return null; // Skip empty first item if others exist
+                return (
+                  <button onClick={() => { handleImageActive(item); setSelectedSize(""); }} key={i} type="button"
+                    className={`color tp-color-variation-btn ${item.img === activeImg ? "active" : ""}`} >
+                    <span
+                      data-bg-color={`${item.color?.clrCode || "#000000"}`}
+                      style={{ backgroundColor: `${item.color?.clrCode || "#000000"}` }}
+                    ></span>
+                    {item.color && item.color.name && (
+                      <span className="tp-color-variation-tootltip">
+                        {item.color.name}
+                      </span>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+          </div>}
+
+        {availableSizes.length > 0 && (
+          <div className="tp-product-details-variation-item">
+            <h4 className="tp-product-details-variation-title">Size :</h4>
+            <div className="tp-product-details-variation-list">
+              {availableSizes.map((size, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setSelectedSize(size)}
+                  className={`tp-size-variation-btn ${selectedSize === size ? "active" : ""}`}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>}
+        )}
+      </div>
 
       {/* if ProductDetailsCountdown true start */}
       {offerDate?.endDate && <ProductDetailsCountdown offerExpiryTime={offerDate?.endDate} />}

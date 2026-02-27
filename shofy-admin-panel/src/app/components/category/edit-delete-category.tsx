@@ -27,8 +27,10 @@ const CategoryEditDelete = ({ id }: IPropType) => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      cancelButtonColor: "#6c757d",
       confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+      reverseButtons: true,
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {

@@ -105,7 +105,7 @@ const FashionCategory = () => {
           overflow: "hidden",
           boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
           position: "relative",
-          backgroundImage: `url(${item.img})`,
+          backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.7) 100%), url(${item.img})`,
           backgroundPosition: "center",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
@@ -119,7 +119,7 @@ const FashionCategory = () => {
           style={{
             width: "100%",
             background: "none",
-            padding: "18px 12px 16px 12px",
+            padding: "18px 12px 18px 12px",
             boxSizing: "border-box",
             borderBottomLeftRadius: "18px",
             borderBottomRightRadius: "18px",
@@ -129,15 +129,16 @@ const FashionCategory = () => {
           <h3
             style={{
               fontWeight: 700,
-              fontSize: "18px",
-              color: "#222",
+              fontSize: "20px",
+              color: "#ffffff",
               margin: 0,
-              marginBottom: "10px",
+              marginBottom: "8px",
               textTransform: "uppercase",
-              letterSpacing: "0.5px",
+              letterSpacing: "0.8px",
               background: "none",
               display: "block",
               padding: 0,
+              textShadow: "0 2px 4px rgba(0,0,0,0.3)",
             }}
           >
             <a
@@ -148,7 +149,7 @@ const FashionCategory = () => {
               }}
               style={{
                 textDecoration: "none",
-                color: "#222",
+                color: "#ffffff",
                 background: "none",
                 padding: 0,
               }}
@@ -157,7 +158,7 @@ const FashionCategory = () => {
             </a>
           </h3>
           <a
-            className="tp-btn tp-btn-border"
+            className="tp-btn tp-btn-border-white"
             onClick={(e) => {
               e.stopPropagation();
               handleCategoryRoute(item.parent);
@@ -167,9 +168,13 @@ const FashionCategory = () => {
               alignItems: "center",
               justifyContent: "center",
               width: "auto",
-              paddingLeft: "22px",
-              paddingRight: "22px",
-              marginTop: "10px",
+              paddingLeft: "24px",
+              paddingRight: "24px",
+              marginTop: "8px",
+              borderColor: "#ffffff",
+              color: "#ffffff",
+              fontSize: "14px",
+              fontWeight: 500,
             }}
           >
             Shop Now{" "}

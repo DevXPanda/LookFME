@@ -205,7 +205,7 @@ const WeeksFeatured = () => {
           <span className="tp-section-title-pre-2">
             Shop by Featured <TextShapeLine />
           </span>
-          <h3 className="tp-section-title-2">This Week’s Featured</h3>
+          <h3 className="tp-section-title-2">Designer Embroidery T-Shirts</h3>
         </div>
 
         <div className="featured-wrapper">
