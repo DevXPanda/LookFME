@@ -2,7 +2,7 @@ const fs = require("fs");
 const { cloudinaryServices } = require("../services/cloudinary.service");
 
 // add image
-const saveImageCloudinary = async (req, res,next) => {
+const saveImageCloudinary = async (req, res, next) => {
   // console.log(req.file)
   try {
     const result = await cloudinaryServices.cloudinaryImageUpload(
@@ -11,7 +11,25 @@ const saveImageCloudinary = async (req, res,next) => {
     res.status(200).json({
       success: true,
       message: "image uploaded successfully",
-      data:{url:result.secure_url,id:result.public_id},
+      data: { url: result.secure_url, id: result.public_id },
+    });
+  } catch (err) {
+    console.log(err);
+    next(err)
+  }
+};
+
+// add file (resume)
+const saveFileCloudinary = async (req, res, next) => {
+  try {
+    const result = await cloudinaryServices.cloudinaryFileUpload(
+      req.file.buffer,
+      req.file.originalname
+    );
+    res.status(200).json({
+      success: true,
+      message: "file uploaded successfully",
+      data: { url: result.secure_url, id: result.public_id },
     });
   } catch (err) {
     console.log(err);
@@ -42,7 +60,7 @@ const addMultipleImageCloudinary = async (req, res) => {
           console.error("No buffer or path available for file:", file);
           continue;
         }
-        
+
         const result = await cloudinaryServices.cloudinaryImageUpload(imageBuffer);
         uploadResults.push(result);
 
@@ -62,9 +80,9 @@ const addMultipleImageCloudinary = async (req, res) => {
       data:
         uploadResults.length > 0
           ? uploadResults.map((res) => ({
-              url: res.secure_url,
-              id: res.public_id,
-            }))
+            url: res.secure_url,
+            id: res.public_id,
+          }))
           : [],
     });
   } catch (err) {
@@ -99,4 +117,5 @@ exports.cloudinaryController = {
   cloudinaryDeleteController,
   saveImageCloudinary,
   addMultipleImageCloudinary,
+  saveFileCloudinary,
 };

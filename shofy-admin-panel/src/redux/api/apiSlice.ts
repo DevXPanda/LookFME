@@ -59,5 +59,7 @@ export const apiSlice = createApi({
     "WelcomeOffer",
     "RefundRequests",
     "Notifications",
+    "CareerApplications",
+    "CareerApplication",
   ],
 });

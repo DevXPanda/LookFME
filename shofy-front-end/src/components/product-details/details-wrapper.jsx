@@ -372,10 +372,6 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
           <WishlistTwo />
           Add Wishlist
         </button>
-        <button type="button" className="tp-product-details-action-sm-btn">
-          <AskQuestion />
-          Ask a question
-        </button>
       </div>
       {/* product-details-action-sm end */}
 

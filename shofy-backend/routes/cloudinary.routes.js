@@ -7,10 +7,14 @@ const multer = require('multer');
 
 const upload = multer();
 //add image
-router.post('/add-img',upload.single('image'), cloudinaryController.saveImageCloudinary);
+router.post('/add-img', upload.single('image'), cloudinaryController.saveImageCloudinary);
 
 //add image
-router.post('/add-multiple-img',upload.array('images',10), cloudinaryController.addMultipleImageCloudinary);
+//add image
+router.post('/add-multiple-img', upload.array('images', 10), cloudinaryController.addMultipleImageCloudinary);
+
+//add file (resume)
+router.post('/add-file', upload.single('file'), cloudinaryController.saveFileCloudinary);
 
 //delete image
 router.delete('/img-delete', cloudinaryController.cloudinaryDeleteController);

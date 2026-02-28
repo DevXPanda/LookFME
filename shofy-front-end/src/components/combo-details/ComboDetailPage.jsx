@@ -28,11 +28,10 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
 
   const tabStyle = (tab) =>
     `px-6 py-3 text-xl font-medium cursor-pointer 
-   ${
-     activeTab === tab
-       ? "border-pink-500 text-pink-600"
-       : "border-transparent text-gray-500 hover:text-gray-700"
-   }`;
+   ${activeTab === tab
+      ? "border-pink-500 text-pink-600"
+      : "border-transparent text-gray-500 hover:text-gray-700"
+    }`;
 
   useEffect(() => {
     setMainImageState(mainImage);
@@ -108,7 +107,7 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
   // Handle Add to Cart
   const handleAddToCartClick = (e) => {
     e.preventDefault();
-    
+
     const comboProduct = createComboProduct();
     if (!comboProduct) return;
 
@@ -116,7 +115,7 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
     try {
       const userInfoCookie = Cookies.get('userInfo');
       let isAuthenticated = false;
-      
+
       if (userInfoCookie) {
         try {
           const userInfo = JSON.parse(userInfoCookie);
@@ -127,12 +126,12 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
       } else {
         isAuthenticated = user?.name || user?.email;
       }
-      
+
       if (!isAuthenticated) {
         // Show auth modal
         if (typeof window !== 'undefined') {
-          window.dispatchEvent(new CustomEvent('showAuthModal', { 
-            detail: { source: 'addToCart', product: comboProduct } 
+          window.dispatchEvent(new CustomEvent('showAuthModal', {
+            detail: { source: 'addToCart', product: comboProduct }
           }));
         }
         return;
@@ -140,8 +139,8 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
     } catch (error) {
       console.error('Error checking authentication:', error);
       if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('showAuthModal', { 
-          detail: { source: 'addToCart', product: comboProduct } 
+        window.dispatchEvent(new CustomEvent('showAuthModal', {
+          detail: { source: 'addToCart', product: comboProduct }
         }));
       }
       return;
@@ -153,25 +152,25 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
     for (let i = 0; i < quantity; i++) {
       addToCartHook(comboProduct);
     }
-    
+
     notifySuccess(`${quantity} Combo Pack${quantity > 1 ? 's' : ''} added to cart`);
   };
 
   // Handle Buy Now - add to cart and redirect to checkout
   const [isBuyNowProcessing, setIsBuyNowProcessing] = useState(false);
-  
+
   const handleBuyNow = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     // Prevent multiple clicks/touches
     if (isBuyNowProcessing) return;
-    
+
     // Check authentication first
     try {
       const userInfoCookie = Cookies.get('userInfo');
       let isAuthenticated = false;
-      
+
       if (userInfoCookie) {
         try {
           const userInfo = JSON.parse(userInfoCookie);
@@ -182,12 +181,12 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
       } else {
         isAuthenticated = user?.name || user?.email;
       }
-      
+
       if (!isAuthenticated) {
         // Show auth modal
         if (typeof window !== 'undefined') {
-          window.dispatchEvent(new CustomEvent('showAuthModal', { 
-            detail: { source: 'buyNow', product: null } 
+          window.dispatchEvent(new CustomEvent('showAuthModal', {
+            detail: { source: 'buyNow', product: null }
           }));
         }
         return;
@@ -195,15 +194,15 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
     } catch (error) {
       console.error('Error checking authentication:', error);
       if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('showAuthModal', { 
-          detail: { source: 'buyNow', product: null } 
+        window.dispatchEvent(new CustomEvent('showAuthModal', {
+          detail: { source: 'buyNow', product: null }
         }));
       }
       return;
     }
-    
+
     setIsBuyNowProcessing(true);
-    
+
     try {
       const comboProduct = createComboProduct();
       if (!comboProduct) {
@@ -215,13 +214,13 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
       for (let i = 0; i < quantity; i++) {
         addToCartHook(comboProduct);
       }
-      
+
       notifySuccess(`${quantity} Combo Pack${quantity > 1 ? 's' : ''} added to cart`);
-      
+
       // Small delay to ensure cart state is updated before navigation
       // This is especially important on mobile devices
       await new Promise(resolve => setTimeout(resolve, 150));
-      
+
       // Navigate to checkout
       router.push('/checkout');
     } catch (error) {
@@ -492,7 +491,7 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
                   </div>
 
                   {/* Add to Cart Button */}
-                  <button 
+                  <button
                     onClick={handleAddToCartClick}
                     className="flex-1 bg-white border border-[#F875AA] text-[#F875AA] font-bold py-2 rounded-lg text-lg transition-all hover:bg-[#F875AA] hover:text-white"
                   >
@@ -501,12 +500,12 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
                 </div>
 
                 {/* Buy Now Button */}
-                <button 
+                <button
                   onClick={handleBuyNow}
                   disabled={isBuyNowProcessing}
                   className="w-full bg-[#F875AA] text-white font-bold py-2 rounded-lg text-lg transition-all hover:bg-[#e6669a] disabled:opacity-50 disabled:cursor-wait"
                   type="button"
-                  style={{ 
+                  style={{
                     touchAction: 'manipulation',
                     WebkitTapHighlightColor: 'transparent',
                     userSelect: 'none'
@@ -526,11 +525,6 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
                 <button className="flex items-center gap-1 hover:text-gray-800">
                   <Wishlist />
                   <span>Add Wishlist</span>
-                </button>
-
-                <button className="flex items-center gap-1 hover:text-gray-800">
-                  <span className="text-base">?</span>
-                  <span>Ask a question</span>
                 </button>
               </div>
 

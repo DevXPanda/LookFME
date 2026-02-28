@@ -36,7 +36,7 @@ const NotificationArea = ({ nRef, notificationOpen, handleNotificationOpen }: IP
     // Refetch notifications and unread count when new order notification arrives
     refetch();
     refetchUnreadCount();
-    
+
     // Show toast notification
     if (data.notification) {
       showOrderNotificationToast(data.notification);
@@ -51,15 +51,23 @@ const NotificationArea = ({ nRef, notificationOpen, handleNotificationOpen }: IP
     }
   }, [notificationOpen, refetch, refetchUnreadCount]);
 
-  const handleMarkAsRead = async (id: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const getNotificationLink = (notification: INotification) => {
+    if (notification.type === "career_application" && notification.metadata?.applicationId) {
+      return `/career-applications/${notification.metadata.applicationId}`;
+    }
+    if (notification.orderId) {
+      return `/orders/${notification.orderId._id}`;
+    }
+    return "#";
+  };
+
+  const handleMarkAsRead = async (id: string) => {
     try {
       await markAsRead(id).unwrap();
       refetch();
       refetchUnreadCount();
     } catch (error: any) {
-      notifyError(error?.data?.message || "Failed to mark as read");
+      console.error(error);
     }
   };
 
@@ -125,20 +133,22 @@ const NotificationArea = ({ nRef, notificationOpen, handleNotificationOpen }: IP
               {notifications.map((notification: INotification) => (
                 <Link
                   key={notification._id}
-                  href={notification.orderId ? `/orders/${notification.orderId._id}` : "#"}
-                  className={`flex items-start justify-between last:border-0 border-b border-gray pb-4 mb-4 last:pb-0 last:mb-0 hover:bg-gray/50 rounded-md p-2 -mx-2 transition-colors ${
-                    !notification.isRead ? "bg-blue-50/50" : ""
-                  }`}
-                  onClick={() => {
+                  href={getNotificationLink(notification)}
+                  className={`flex items-start justify-between last:border-0 border-b border-gray pb-4 mb-4 last:pb-0 last:mb-0 hover:bg-gray/50 rounded-md p-2 -mx-2 transition-colors ${!notification.isRead ? "bg-blue-50/50" : ""
+                    }`}
+                  onClick={(e) => {
+                    const link = getNotificationLink(notification);
+                    if (link === "#") {
+                      e.preventDefault();
+                    }
                     if (!notification.isRead) {
-                      handleMarkAsRead(notification._id, {} as React.MouseEvent);
+                      handleMarkAsRead(notification._id);
                     }
                   }}
                 >
                   <div className="flex items-start space-x-3 flex-1">
-                    <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${
-                      !notification.isRead ? "bg-theme" : "bg-transparent"
-                    }`}></div>
+                    <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${!notification.isRead ? "bg-theme" : "bg-transparent"
+                      }`}></div>
                     <div className="flex-1 min-w-0">
                       <h5 className="text-sm mb-1 leading-tight font-medium text-heading">
                         {notification.title}

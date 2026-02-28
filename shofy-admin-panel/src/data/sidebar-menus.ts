@@ -143,6 +143,15 @@ const sidebar_menu: Array<ISidebarMenus> = [
     ],
   },
   {
+    id: 18,
+    icon: StuffUser,
+    link: "/career-applications",
+    title: "Career Applications",
+    subMenus: [
+      { title: "Inbox", link: "/career-applications" },
+    ],
+  },
+  {
     id: 8,
     icon: Profile,
     link: "/profile",

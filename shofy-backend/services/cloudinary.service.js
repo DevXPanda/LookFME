@@ -34,6 +34,31 @@ const cloudinaryImageUpload = (imageBuffer) => {
 };
 
 
+const cloudinaryFileUpload = (fileBuffer, originalname) => {
+  return new Promise((resolve, reject) => {
+    // Generate a unique ID that includes the original extension
+    const uniqueId = `resumes/${Date.now()}_${originalname.replace(/\s+/g, '_')}`;
+
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { resource_type: 'raw', public_id: uniqueId },
+      (error, result) => {
+        if (error) {
+          console.error('Error uploading file to Cloudinary:', error);
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+
+    const bufferStream = new Readable();
+    bufferStream.push(fileBuffer);
+    bufferStream.push(null);
+
+    bufferStream.pipe(uploadStream);
+  });
+};
+
 // cloudinaryImageDelete
 const cloudinaryImageDelete = async (public_id) => {
   const deletionResult = await cloudinary.uploader.destroy(public_id);
@@ -43,4 +68,5 @@ const cloudinaryImageDelete = async (public_id) => {
 exports.cloudinaryServices = {
   cloudinaryImageDelete,
   cloudinaryImageUpload,
+  cloudinaryFileUpload,
 };

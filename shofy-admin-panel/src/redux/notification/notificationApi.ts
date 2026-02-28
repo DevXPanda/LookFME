@@ -2,7 +2,7 @@ import { apiSlice } from "../api/apiSlice";
 
 export interface INotification {
   _id: string;
-  type: "new_order" | "order_status_change" | "stock_out" | "other";
+  type: "new_order" | "order_status_change" | "stock_out" | "career_application" | "other";
   title: string;
   message: string;
   orderId?: {
@@ -18,6 +18,7 @@ export interface INotification {
     invoice?: number;
     totalAmount?: number;
     customerName?: string;
+    applicationId?: string;
   };
   createdAt: string;
   updatedAt: string;
