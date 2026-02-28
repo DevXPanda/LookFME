@@ -381,8 +381,18 @@ exports.updateProductService = async (id, currProduct) => {
     if (currProduct.img !== undefined) product.img = currProduct.img;
     if (currProduct.slug !== undefined) product.slug = currProduct.slug;
     if (currProduct.unit !== undefined) product.unit = currProduct.unit;
-    if (currProduct.imageURLs !== undefined) product.imageURLs = currProduct.imageURLs;
-    if (currProduct.tags !== undefined) product.tags = currProduct.tags;
+    if (currProduct.imageURLs !== undefined) {
+      product.imageURLs = [];
+      product.imageURLs = currProduct.imageURLs;
+    }
+    if (currProduct.supportingImages !== undefined) {
+      product.supportingImages = [];
+      product.supportingImages = currProduct.supportingImages;
+    }
+    if (currProduct.tags !== undefined) {
+      product.tags = [];
+      product.tags = currProduct.tags;
+    }
     if (currProduct.parent !== undefined) product.parent = currProduct.parent;
     if (currProduct.children !== undefined) product.children = currProduct.children;
     if (currProduct.price !== undefined) product.price = currProduct.price;

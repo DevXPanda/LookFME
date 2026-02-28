@@ -10,6 +10,7 @@ import ProductTypeBrand from "../add-product/product-type-brand";
 import AdditionalInformation from "../add-product/additional-information";
 import ProductVariants from "../add-product/product-variants";
 import ProductImgUpload from "../add-product/product-img-upload";
+import ProductMultipleImgUpload from "../add-product/product-multiple-img-upload";
 import Tags from "../add-product/tags";
 import ProductCategory from "../../category/product-category";
 
@@ -42,16 +43,21 @@ const EditProductSubmit = ({ id }: { id: string }) => {
     handleEditProduct,
     variations,
     setVariations,
+    supportingImages,
+    setSupportingImages,
   } = useProductSubmit();
 
-  // Load product data including variations
+  // Load product data including variations and supporting images
   useEffect(() => {
     if (product) {
       if (product.variations && product.variations.length > 0) {
         setVariations(product.variations as ProductVariation[]);
       }
+      if (product.supportingImages && product.supportingImages.length > 0) {
+        setSupportingImages(product.supportingImages);
+      }
     }
-  }, [product, setVariations]);
+  }, [product, setVariations, setSupportingImages]);
 
   // decide what to render
   let content = null;
@@ -207,6 +213,12 @@ const EditProductSubmit = ({ id }: { id: string }) => {
               imgUrl={img}
               setImgUrl={setImg}
               default_img={product.img}
+              isSubmitted={isSubmitted}
+            />
+
+            <ProductMultipleImgUpload
+              supportingImages={supportingImages}
+              setSupportingImages={setSupportingImages}
               isSubmitted={isSubmitted}
             />
 
