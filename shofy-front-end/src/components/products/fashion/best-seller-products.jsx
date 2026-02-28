@@ -52,13 +52,14 @@ const BestSellerProducts = () => {
           }
           @media (max-width: 576px) {
             .custom-grid-layout {
-              grid-template-columns: 1fr;
+              grid-template-columns: repeat(2, 1fr);
+              gap: 12px;
             }
           }
         `}</style>
         <div className="custom-grid-layout w-100">
           {display_items.map((prd, index) => (
-            <div key={`${prd._id}-${index}`}>
+            <div key={`${prd._id}-${index}`} className="h-full">
               <ProductItem product={prd} />
             </div>
           ))}

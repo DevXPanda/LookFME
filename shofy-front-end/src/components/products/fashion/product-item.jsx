@@ -173,6 +173,35 @@ const ProductItem = ({ product }) => {
            width: 18px;
            height: 18px;
         }
+        @media (max-width: 576px) {
+           .custom-image-wrapper {
+              height: 200px; /* Shorter image for mobile 2-grid */
+           }
+           .custom-product-title {
+              font-size: 13px;
+              height: 38px;
+              margin: 6px 0;
+           }
+           .custom-product-content {
+              padding: 12px;
+           }
+           .custom-current-price {
+              font-size: 15px;
+           }
+           .custom-old-price {
+              font-size: 12px;
+           }
+           .custom-discount-text {
+              font-size: 12px;
+           }
+           .custom-price-wrapper {
+              min-height: 44px; /* Fix alignment regardless of 1 or 2 lines */
+              align-items: flex-start;
+           }
+           .custom-overlay-actions {
+              display: none; /* Rely on clicking the card on touch */
+           }
+        }
       `}</style>
       <div className="custom-product-card">
         <div className="custom-image-wrapper">

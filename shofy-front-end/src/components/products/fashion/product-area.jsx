@@ -228,7 +228,7 @@ const ProductArea = () => {
             >
               {display_items.map((prd) => (
                 <SwiperSlide key={prd._id}>
-                  <div className="popular-product-slide">
+                  <div className="popular-product-slide h-full">
                     <ProductItem product={prd} />
                   </div>
                 </SwiperSlide>

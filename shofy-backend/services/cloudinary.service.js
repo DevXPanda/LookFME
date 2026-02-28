@@ -42,7 +42,7 @@ const cloudinaryFileUpload = (fileBuffer, originalname) => {
     const uniqueId = `resumes/${Date.now()}_${originalname.replace(/\s+/g, '_')}`;
 
     const uploadStream = cloudinary.uploader.upload_stream(
-      { resource_type: 'raw', public_id: uniqueId },
+      { upload_preset: 'LOOKFAME', resource_type: 'auto', public_id: uniqueId },
       (error, result) => {
         if (error) {
           console.error('Error uploading file to Cloudinary:', error);

@@ -131,7 +131,8 @@ const TrendingProducts = () => {
           }
           @media (max-width: 576px) {
             .custom-grid-layout {
-              grid-template-columns: 1fr;
+              grid-template-columns: repeat(2, 1fr);
+              gap: 12px;
             }
           }
         `}</style>
@@ -139,7 +140,7 @@ const TrendingProducts = () => {
         {filteredItems.length > 0 ? (
           <div className="custom-grid-layout">
             {filteredItems.map((item) => (
-              <div key={item._id}>
+              <div key={item._id} className="h-full">
                 <ProductItem product={item} />
               </div>
             ))}

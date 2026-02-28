@@ -75,23 +75,7 @@ const Career = () => {
             <li>Employee discounts on Lookfame collections</li>
           </ul>
 
-          <h6 className="text-2xl font-semibold mb-4">Open Positions</h6>
-          <div className="space-y-4 mb-8">
-            <div className="p-4 border rounded-lg shadow-sm hover:shadow-md transition">
-              <h6 className="text-xl font-semibold">Frontend Developer</h6>
-              <p className="text-gray-600">Lucknow · Full-time</p>
-            </div>
-            <div className="p-4 border rounded-lg shadow-sm hover:shadow-md transition">
-              <h6 className="text-xl font-semibold">UI/UX Designer</h6>
-              <p className="text-gray-600">Remote · Contract</p>
-            </div>
-            <div className="p-4 border rounded-lg shadow-sm hover:shadow-md transition">
-              <h6 className="text-xl font-semibold">Marketing Executive</h6>
-              <p className="text-gray-600">Lucknow · Full-time</p>
-            </div>
-          </div>
-
-          <h6 className="text-2xl font-semibold mb-4 mt-12">Apply Now</h6>
+          <h6 className="text-2xl font-semibold mb-4 mt-8">Apply Now</h6>
           <form onSubmit={handleSubmit} className="max-w-2xl bg-white p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="mb-4">
               <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">Full Name *</label>
@@ -105,13 +89,7 @@ const Career = () => {
 
             <div className="mb-4">
               <label htmlFor="role" className="block text-sm font-semibold text-gray-700 mb-2">Role Applying For *</label>
-              <select id="role" value={formData.role} onChange={handleInputChange} required className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-[#F875AA] transition-all bg-white text-gray-700 appearance-none bg-no-repeat bg-right pr-10" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`, backgroundPosition: "right 1rem center" }}>
-                <option value="">Select a role</option>
-                <option value="Frontend Developer">Frontend Developer</option>
-                <option value="UI/UX Designer">UI/UX Designer</option>
-                <option value="Marketing Executive">Marketing Executive</option>
-                <option value="Other">Other</option>
-              </select>
+              <input type="text" id="role" value={formData.role} onChange={handleInputChange} required className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-[#F875AA] transition-all bg-white text-gray-700" placeholder="e.g. Frontend Developer" />
             </div>
 
             <div className="mb-4">
