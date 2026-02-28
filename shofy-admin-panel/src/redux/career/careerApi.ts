@@ -3,7 +3,7 @@ import { apiSlice } from "../api/apiSlice";
 export const careerApi = apiSlice.injectEndpoints({
     overrideExisting: true,
     endpoints: (builder) => ({
-        getCareerApplications: builder.query({
+        getCareerApplications: builder.query<any, void>({
             query: () => `/api/career`,
             providesTags: ["CareerApplications"],
             keepUnusedDataFor: 600,

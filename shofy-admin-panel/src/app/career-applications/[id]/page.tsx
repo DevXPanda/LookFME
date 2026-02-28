@@ -113,12 +113,13 @@ const CareerApplicationDetailPage = ({ params }: { params: { id: string } }) => 
                             <dt className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Resume</dt>
                             <dd className="mt-2 text-sm text-gray-700">
                                 <a
-                                    href={application.resumeUrl}
+                                    href={`${application.resumeUrl}?fl_attachment=true`}
                                     target="_blank"
                                     rel="noreferrer"
+                                    download={`Resume_${application.name.replace(/\s+/g, '_')}`}
                                     className="bg-[#F875AA] text-white px-4 py-2 rounded shadow hover:bg-[#e6669a] transition inline-block font-semibold"
                                 >
-                                    View / Download Resume
+                                    Download Resume
                                 </a>
                             </dd>
                         </div>

@@ -37,6 +37,8 @@ const cloudinaryImageUpload = (imageBuffer) => {
 const cloudinaryFileUpload = (fileBuffer, originalname) => {
   return new Promise((resolve, reject) => {
     // Generate a unique ID that includes the original extension
+    // Cloudinary raw uploads need the extension in the public_id to serve it with the right content-type
+    const ext = originalname.split('.').pop();
     const uniqueId = `resumes/${Date.now()}_${originalname.replace(/\s+/g, '_')}`;
 
     const uploadStream = cloudinary.uploader.upload_stream(

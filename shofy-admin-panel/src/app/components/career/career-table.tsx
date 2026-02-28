@@ -13,7 +13,7 @@ const PREVIEW_LENGTH = 60;
 const CareerTable = () => {
     const [searchVal, setSearchVal] = useState<string>("");
 
-    const { data: messagesData, isError, isLoading } = useGetCareerApplicationsQuery();
+    const { data: messagesData, isError, isLoading } = useGetCareerApplicationsQuery(undefined);
 
     const allMessages = messagesData?.data || [];
     const filtered = searchVal.trim()
