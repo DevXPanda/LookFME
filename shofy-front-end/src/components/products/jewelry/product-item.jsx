@@ -9,15 +9,18 @@ import { AddCart, Cart, QuickView, Wishlist } from "@/svg";
 import { handleProductModal } from "@/redux/features/productModalSlice";
 import useAddToCart from "@/hooks/use-add-to-cart";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
+import { getProductPrice } from "@/utils/price-utils";
+import '@/styles/product-card-fix.css';
 
 const ProductItem = ({ product }) => {
-  const { _id, img, title, price, tags,status } = product || {};
+  const { _id, img, title, price, tags, status, description } = product || {};
   const { cart_products } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
   const isAddedToCart = cart_products.some((prd) => prd._id === _id);
   const isAddedToWishlist = wishlist.some((prd) => prd._id === _id);
   const dispatch = useDispatch();
   const { handleAddToCart } = useAddToCart();
+  const { currentPrice, originalPrice, isDiscountActive } = getProductPrice(product);
 
   // handle add product
   const handleAddProduct = (prd) => {
@@ -37,6 +40,7 @@ const ProductItem = ({ product }) => {
         </Link>
         <div className="tp-product-badge">
           {status === 'out-of-stock' && <span className="product-hot">out-stock</span>}
+          {isDiscountActive && <span className="product-offer">-{product.discount}%</span>}
         </div>
         <div className="tp-product-action-3 tp-product-action-4 has-shadow tp-product-action-blackStyle tp-product-action-brownStyle">
           <div className="tp-product-action-item-3 d-flex flex-column">
@@ -87,16 +91,27 @@ const ProductItem = ({ product }) => {
           <p>{tags[0]}</p>
         </div>
 
-        <div className="tp-product-price-inner-4">
-          <div className="tp-product-price-wrapper-4">
-            <span className="tp-product-price-4">₹{price.toFixed(2)}</span>
-          </div>
-          <div className="tp-product-price-add-to-cart">
-            {isAddedToCart ? <Link href="/cart" className="tp-product-add-to-cart-4">
-              <AddCart /> View Cart
-            </Link> : <button disabled={status === 'out-of-stock'} onClick={()=> handleAddProduct(product)} className="tp-product-add-to-cart-4">
-              <AddCart /> Add to Cart
-            </button>}
+        <div className="tp-product-rating-price-group">
+          <div className="tp-product-price-inner-4">
+            <div className="tp-product-price-wrapper-4">
+              {isDiscountActive ? (
+                <>
+                  <span className="tp-product-price-4 new-price">₹{(currentPrice || 0).toFixed(2)}</span>
+                  <span className="tp-product-price-4 old-price ml-10" style={{ textDecoration: 'line-through', color: '#a0a0a0', fontSize: '14px' }}>
+                    ₹{(originalPrice || 0).toFixed(2)}
+                  </span>
+                </>
+              ) : (
+                <span className="tp-product-price-4">₹{(price || 0).toFixed(2)}</span>
+              )}
+            </div>
+            <div className="tp-product-price-add-to-cart">
+              {isAddedToCart ? <Link href="/cart" className="tp-product-add-to-cart-4">
+                <AddCart /> View Cart
+              </Link> : <button disabled={status === 'out-of-stock'} onClick={() => handleAddProduct(product)} className="tp-product-add-to-cart-4">
+                <AddCart /> Add to Cart
+              </button>}
+            </div>
           </div>
         </div>
       </div>

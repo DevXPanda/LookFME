@@ -1,0 +1,65 @@
+/* Product Card Description Truncation and Equal Height Fixes */
+
+.tp-product-description {
+    display: none !important;
+}
+
+
+/* Base classes for equal height */
+.tp-product-item,
+.tp-product-item-2,
+.tp-product-item-3,
+.tp-product-item-4 {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background-color: #fff;
+}
+
+/* Ensure content area expands */
+.tp-product-content,
+.tp-product-content-2,
+.tp-product-content-3,
+.tp-product-content-4 {
+    flex-grow: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Align titles and descriptions consistently */
+.tp-product-title,
+.tp-product-title-2,
+.tp-product-title-3,
+.tp-product-title-4,
+.tp-category-title-4 {
+    margin-bottom: 8px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    line-height: 1.25em !important;
+    height: 2.5em !important;
+    /* Exactly 2 lines: 1.25 * 2 */
+    min-height: 2.5em !important;
+    /* Exactly 2 lines truncation */
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* New grouped class for rating and price */
+.tp-product-rating-price-group {
+    margin-top: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Specific adjustments for price wrappers if they are outside the group initially */
+.tp-product-price-wrapper,
+.tp-product-price-wrapper-2,
+.tp-product-price-wrapper-3,
+.tp-product-price-wrapper-4 {
+    margin-top: 0 !important;
+    /* Reset if pushed to group */
+}

@@ -105,6 +105,7 @@ const sidebar_menu: Array<ISidebarMenus> = [
     title: "Marketing",
     subMenus: [
       { title: "Welcome Offer", link: "/marketing/welcome-offer" },
+      { title: "Product Discounts", link: "/marketing/product-discounts" },
     ],
   },
   {

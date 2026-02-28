@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Rating } from 'react-simple-star-rating';
 import Link from 'next/link';
+import '@/styles/product-card-fix.css';
 // internal
 import ErrorMsg from '@/components/common/error-msg';
 import { useGetTopRatedProductsQuery } from '@/redux/features/productApi';
@@ -14,7 +15,7 @@ const TopRatedProducts = () => {
 
   if (isLoading) {
     content = (
-      <ShopTopRatedLoader loading={isLoading}/>
+      <ShopTopRatedLoader loading={isLoading} />
     );
   }
   else if (!isLoading && isError) {
@@ -42,8 +43,9 @@ const TopRatedProducts = () => {
             </div>
           </div>
           <h4 className="tp-shop-widget-product-title">
-            <Link href={`/product-details/${item._id}`}>{item.title.substring(0,20)}...</Link>
+            <Link href={`/product-details/${item._id}`}>{item.title.substring(0, 20)}...</Link>
           </h4>
+
           <div className="tp-shop-widget-product-price-wrapper">
             <span className="tp-shop-widget-product-price">₹{item.price.toFixed(2)}</span>
           </div>

@@ -6,10 +6,12 @@ import { AddCart, Cart, QuickView, Wishlist } from "@/svg";
 import { handleProductModal } from "@/redux/features/productModalSlice";
 import useAddToCart from "@/hooks/use-add-to-cart";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
+import { getProductPrice } from "@/utils/price-utils";
 import { notifyError } from "@/utils/toast";
+import '@/styles/product-card-fix.css';
 
 const ProductSliderItem = ({ product }) => {
-  const { _id, title, price = 0, img, status } = product || {};
+  const { _id, title, price = 0, img, status, description } = product || {};
   const { cart_products } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
   const isAddedToCart = cart_products.some((prd) => prd._id === _id);
@@ -82,18 +84,29 @@ const ProductSliderItem = ({ product }) => {
         <h3 className="tp-category-title-4">
           <Link href={`/product-details/${_id}`}>{title}</Link>
         </h3>
-        <div className="tp-category-price-wrapper-4">
-          <span className="tp-category-price-4">₹{price.toFixed(2)}</span>
-          <div className="tp-category-add-to-cart">
-            {isAddedToCart ? (
-              <Link href="/cart" className="tp-category-add-to-cart-4">
-                <AddCart />{" "}View Cart
-              </Link>
+        <div className="tp-product-rating-price-group">
+          <div className="tp-category-price-wrapper-4">
+            {getProductPrice(product).isDiscountActive ? (
+              <>
+                <span className="tp-category-price-4">₹{(getProductPrice(product).currentPrice || 0).toFixed(2)}</span>
+                <span className="tp-category-price-4 old-price ml-10" style={{ textDecoration: 'line-through', color: '#a0a0a0', fontSize: '14px' }}>
+                  ₹{(getProductPrice(product).originalPrice || 0).toFixed(2)}
+                </span>
+              </>
             ) : (
-              <button onClick={() => handleAddProduct(product)} className="tp-category-add-to-cart-4">
-                <AddCart />{" "}Add to Cart
-              </button>
+              <span className="tp-category-price-4">₹{(price || 0).toFixed(2)}</span>
             )}
+            <div className="tp-category-add-to-cart">
+              {isAddedToCart ? (
+                <Link href="/cart" className="tp-category-add-to-cart-4">
+                  <AddCart />{" "}View Cart
+                </Link>
+              ) : (
+                <button onClick={() => handleAddProduct(product)} className="tp-category-add-to-cart-4">
+                  <AddCart />{" "}Add to Cart
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

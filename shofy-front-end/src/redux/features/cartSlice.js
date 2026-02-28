@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getLocalStorage, setLocalStorage } from "@/utils/localstorage";
 import { notifyError, notifySuccess } from "@/utils/toast";
+import { getProductPrice } from "@/utils/price-utils";
 
 const initialState = {
   cart_products: [],
@@ -13,10 +14,14 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     add_cart_product: (state, { payload }) => {
+      // Calculate current price based on active discounts
+      const { currentPrice } = getProductPrice(payload);
+      const productWithPrice = { ...payload, price: currentPrice };
+
       const isExist = state.cart_products.some((i) => i._id === payload._id && i.selectedSize === payload.selectedSize);
       if (!isExist) {
         const newItem = {
-          ...payload,
+          ...productWithPrice,
           orderQuantity: state.orderQuantity,
         };
         state.cart_products.push(newItem);
@@ -24,6 +29,8 @@ export const cartSlice = createSlice({
       } else {
         state.cart_products.map((item) => {
           if (item._id === payload._id && item.selectedSize === payload.selectedSize) {
+            // Update price in case it changed since last add
+            item.price = currentPrice;
             if (item.quantity >= item.orderQuantity + state.orderQuantity) {
               item.orderQuantity =
                 state.orderQuantity !== 1

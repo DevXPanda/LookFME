@@ -7,6 +7,7 @@ export interface ICategoryItem {
   productType: string;
   products?: string[];
   status: string;
+  featuredForCustomerSection?: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -22,6 +23,7 @@ export interface IAddCategory {
   children?: string[];
   productType: string;
   description?: string;
+  featuredForCustomerSection?: boolean;
 }
 
 export interface IAddCategoryResponse {

@@ -5,15 +5,17 @@ import { Rating } from "react-simple-star-rating";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
 import '@/styles/rating-fix.css';
+import '@/styles/product-card-fix.css';
 // internal
 import { Cart, QuickView, Wishlist } from "@/svg";
 import Timer from "@/components/common/timer";
 import { handleProductModal } from "@/redux/features/productModalSlice";
 import useAddToCart from "@/hooks/use-add-to-cart";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
+import { getProductPrice } from "@/utils/price-utils";
 
 const ProductItem = ({ product, offer_style = false }) => {
-  const { _id, img, category, title, reviews, price = 0, discount, status, offerDate } = product || {};
+  const { _id, img, category, title, reviews, price = 0, discount, status, offerDate, description } = product || {};
   console.log(status)
 
   const { cart_products } = useSelector((state) => state.cart);
@@ -21,6 +23,7 @@ const ProductItem = ({ product, offer_style = false }) => {
   const isAddedToCart = cart_products.some((prd) => prd._id === _id);
   const isAddedToWishlist = wishlist.some((prd) => prd._id === _id);
   const dispatch = useDispatch();
+  const { currentPrice, originalPrice, isDiscountActive } = getProductPrice(product);
   const [ratingVal, setRatingVal] = useState(0);
   const { handleAddToCart } = useAddToCart();
 
@@ -64,6 +67,7 @@ const ProductItem = ({ product, offer_style = false }) => {
 
             <div className="tp-product-badge">
               {status === 'out-of-stock' && <span className="product-hot">out-stock</span>}
+              {isDiscountActive && <span className="product-offer">-{product.discount}%</span>}
             </div>
           </Link>
 
@@ -118,28 +122,39 @@ const ProductItem = ({ product, offer_style = false }) => {
           <h3 className="tp-product-title">
             <Link href={`/product-details/${_id}`}>{title}</Link>
           </h3>
-          <div className="tp-product-rating d-flex align-items-center">
-            <div className="tp-product-rating-icon">
-              <Rating
-                allowFraction
-                size={16}
-                initialValue={ratingVal}
-                readonly={true}
-              />
+          <div className="tp-product-rating-price-group">
+            <div className="tp-product-rating d-flex align-items-center">
+              <div className="tp-product-rating-icon">
+                <Rating
+                  allowFraction
+                  size={16}
+                  initialValue={ratingVal}
+                  readonly={true}
+                />
+              </div>
+              <div className="tp-product-rating-text">
+                <span>
+                  ({reviews && reviews.length > 0 ? reviews.length : 0} Review)
+                </span>
+              </div>
             </div>
-            <div className="tp-product-rating-text">
-              <span>
-                ({reviews && reviews.length > 0 ? reviews.length : 0} Review)
-              </span>
+            <div className="tp-product-price-wrapper">
+              {isDiscountActive ? (
+                <>
+                  <span className="tp-product-price new-price">₹{(currentPrice || 0).toFixed(2)}</span>
+                  <span className="tp-product-price old-price ml-10" style={{ textDecoration: 'line-through', color: '#a0a0a0', fontSize: '14px' }}>
+                    ₹{(originalPrice || 0).toFixed(2)}
+                  </span>
+                </>
+              ) : (
+                <span className="tp-product-price new-price">₹{parseFloat(price || 0).toFixed(2)}</span>
+              )}
             </div>
-          </div>
-          <div className="tp-product-price-wrapper">
-            <span className="tp-product-price new-price">₹{parseFloat(price).toFixed(2)}</span>
           </div>
           {offer_style && (
             <div className="tp-product-countdown">
               <div className="tp-product-countdown-inner">
-                {dayjs().isAfter(offerDate?.endDate) ? (
+                {(!offerDate?.endDate || dayjs().isAfter(offerDate.endDate)) ? (
                   <ul>
                     <li>
                       <span>{0}</span> Day
@@ -155,7 +170,7 @@ const ProductItem = ({ product, offer_style = false }) => {
                     </li>
                   </ul>
                 ) : (
-                  <Timer expiryTimestamp={new Date(offerDate?.endDate)} />
+                  <Timer expiryTimestamp={new Date(offerDate.endDate)} />
                 )}
               </div>
             </div>

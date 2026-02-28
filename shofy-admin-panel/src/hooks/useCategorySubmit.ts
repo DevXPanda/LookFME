@@ -11,6 +11,7 @@ const useCategorySubmit = () => {
   const [error, setError] = useState<string>("");
   const [selectProductType, setSelectProductType] = useState<string>("");
   const [categoryChildren, setCategoryChildren] = useState<string[]>([]);
+  const [featuredForCustomerSection, setFeaturedForCustomerSection] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const router = useRouter();
   // add
@@ -43,6 +44,7 @@ const useCategorySubmit = () => {
         description: data?.description,
         productType: data?.productType?.value,
         children: categoryChildren,
+        featuredForCustomerSection: featuredForCustomerSection,
       };
       const res = await addCategory({ ...category_data });
       if ("error" in res) {
@@ -58,6 +60,7 @@ const useCategorySubmit = () => {
         reset();
         setCategoryChildren([]);
         setCategoryImg("");
+        setFeaturedForCustomerSection(false);
       }
     } catch (error) {
       console.log(error);
@@ -73,6 +76,7 @@ const useCategorySubmit = () => {
         description: data?.description,
         productType: data?.productType?.value,
         children: categoryChildren,
+        featuredForCustomerSection: featuredForCustomerSection,
       };
       const res = await editCategory({ id, data: category_data });
       // console.log(res)
@@ -111,6 +115,8 @@ const useCategorySubmit = () => {
     setDescription,
     categoryChildren,
     setCategoryChildren,
+    featuredForCustomerSection,
+    setFeaturedForCustomerSection,
     handleSubmitCategory,
     error,
     isSubmitted,

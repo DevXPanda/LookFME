@@ -368,29 +368,37 @@ exports.updateProductService = async (id, currProduct) => {
 
   const product = await Product.findById(id);
   if (product) {
-    product.title = currProduct.title;
-    product.brand.name = currProduct.brand.name;
-    product.brand.id = currProduct.brand.id;
-    product.category.name = currProduct.category.name;
-    product.category.id = currProduct.category.id;
-    product.sku = currProduct.sku;
-    product.img = currProduct.img;
-    product.slug = currProduct.slug;
-    product.unit = currProduct.unit;
-    product.imageURLs = currProduct.imageURLs;
-    product.tags = currProduct.tags;
-    product.parent = currProduct.parent;
-    product.children = currProduct.children;
-    product.price = currProduct.price;
-    product.discount = currProduct.discount;
-    product.quantity = currProduct.quantity;
-    product.status = currProduct.status;
-    product.productType = currProduct.productType;
-    product.description = currProduct.description;
-    product.videoId = currProduct.videoId || product.videoId;
-    product.additionalInformation = currProduct.additionalInformation;
-    product.offerDate.startDate = currProduct.offerDate.startDate;
-    product.offerDate.endDate = currProduct.offerDate.endDate;
+    if (currProduct.title !== undefined) product.title = currProduct.title;
+    if (currProduct.brand) {
+      if (currProduct.brand.name !== undefined) product.brand.name = currProduct.brand.name;
+      if (currProduct.brand.id !== undefined) product.brand.id = currProduct.brand.id;
+    }
+    if (currProduct.category) {
+      if (currProduct.category.name !== undefined) product.category.name = currProduct.category.name;
+      if (currProduct.category.id !== undefined) product.category.id = currProduct.category.id;
+    }
+    if (currProduct.sku !== undefined) product.sku = currProduct.sku;
+    if (currProduct.img !== undefined) product.img = currProduct.img;
+    if (currProduct.slug !== undefined) product.slug = currProduct.slug;
+    if (currProduct.unit !== undefined) product.unit = currProduct.unit;
+    if (currProduct.imageURLs !== undefined) product.imageURLs = currProduct.imageURLs;
+    if (currProduct.tags !== undefined) product.tags = currProduct.tags;
+    if (currProduct.parent !== undefined) product.parent = currProduct.parent;
+    if (currProduct.children !== undefined) product.children = currProduct.children;
+    if (currProduct.price !== undefined) product.price = currProduct.price;
+    if (currProduct.discount !== undefined) product.discount = currProduct.discount;
+    if (currProduct.quantity !== undefined) product.quantity = currProduct.quantity;
+    if (currProduct.status !== undefined) product.status = currProduct.status;
+    if (currProduct.productType !== undefined) product.productType = currProduct.productType;
+    if (currProduct.description !== undefined) product.description = currProduct.description;
+    if (currProduct.videoId !== undefined) product.videoId = currProduct.videoId;
+    if (currProduct.additionalInformation !== undefined) product.additionalInformation = currProduct.additionalInformation;
+
+    if (currProduct.offerDate) {
+      if (!product.offerDate) product.offerDate = {};
+      if (currProduct.offerDate.startDate !== undefined) product.offerDate.startDate = currProduct.offerDate.startDate;
+      if (currProduct.offerDate.endDate !== undefined) product.offerDate.endDate = currProduct.offerDate.endDate;
+    }
 
     // Update variations and attributeType if provided
     if (currProduct.variations !== undefined) {

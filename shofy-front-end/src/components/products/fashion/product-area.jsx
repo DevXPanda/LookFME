@@ -27,11 +27,24 @@ const ProductArea = () => {
   const { data: categoriesData } = useGetProductTypeCategoryQuery('fashion');
   const { data: products, isError, isLoading } = useGetProductTypeQuery({ type: 'fashion', query: '' });
 
-  // Build tabs dynamically from backend categories: "All Collection" + category names
+  // Build tabs dynamically: Priority to featured categories, else show top 6 by product count
   const tabs = useMemo(() => {
     const categoryTabs = ["All Collection"];
     if (categoriesData?.result?.length > 0) {
-      categoriesData.result.forEach(cat => {
+      // 1. Check for categories explicitly marked as featured for this section
+      const featured = categoriesData.result.filter(cat => cat.featuredForCustomerSection === true);
+
+      let selectedCategories = [];
+      if (featured.length > 0) {
+        selectedCategories = featured;
+      } else {
+        // 2. Fallback: Show only top 6 categories sorted by total products
+        selectedCategories = [...categoriesData.result]
+          .sort((a, b) => (b.products?.length || 0) - (a.products?.length || 0))
+          .slice(0, 6);
+      }
+
+      selectedCategories.forEach(cat => {
         if (cat.parent && !categoryTabs.includes(cat.parent)) {
           categoryTabs.push(cat.parent);
         }

@@ -16,6 +16,7 @@ import { add_cart_product } from '@/redux/features/cartSlice';
 import { add_to_wishlist } from '@/redux/features/wishlist-slice';
 import { add_to_compare } from '@/redux/features/compareSlice';
 import { handleModalClose } from '@/redux/features/productModalSlice';
+import { getProductPrice } from '@/utils/price-utils';
 
 const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBottom = false }) => {
   const { sku, img, title, imageURLs, category, description, discount, price, status, reviews, tags, offerDate } = productItem || {};
@@ -26,6 +27,8 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
   const router = useRouter();
   const { handleAddToCart } = useAddToCart();
   const { user } = useSelector((state) => state.auth);
+
+  const { currentPrice, originalPrice, isDiscountActive } = getProductPrice(productItem);
 
   useEffect(() => {
     if (reviews && reviews.length > 0) {
@@ -150,6 +153,13 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
         <div className="tp-product-details-stock mb-10">
           <span>{status}</span>
         </div>
+        {isDiscountActive && (
+          <div className="tp-product-details-stock mb-10 ml-10">
+            <span className="product-offer" style={{ backgroundColor: '#f50963', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '12px' }}>
+              -{discount}%
+            </span>
+          </div>
+        )}
         <div className="tp-product-details-rating-wrapper d-flex align-items-center mb-10">
           <div className="tp-product-details-rating">
             <Rating allowFraction size={16} initialValue={ratingVal} readonly={true} />
@@ -159,13 +169,19 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
           </div>
         </div>
       </div>
-      <p>{textMore ? description : `${description.substring(0, 100)}...`}
-        <span onClick={() => setTextMore(!textMore)}>{textMore ? 'See less' : 'See more'}</span>
-      </p>
 
       {/* price */}
       <div className="tp-product-details-price-wrapper mb-20">
-        <span className="tp-product-details-price new-price">₹{price.toFixed(2)}</span>
+        {isDiscountActive ? (
+          <>
+            <span className="tp-product-details-price new-price">₹{(currentPrice || 0).toFixed(2)}</span>
+            <span className="tp-product-details-price old-price ml-10" style={{ textDecoration: 'line-through', color: '#a0a0a0', fontSize: '16px' }}>
+              ₹{(originalPrice || 0).toFixed(2)}
+            </span>
+          </>
+        ) : (
+          <span className="tp-product-details-price new-price">₹{(price || 0).toFixed(2)}</span>
+        )}
       </div>
 
       {/* variations */}
@@ -262,7 +278,7 @@ const DetailsWrapper = ({ productItem, handleImageActive, activeImg, detailsBott
       {/* product-details-action-sm end */}
 
       {detailsBottom && <DetailsBottomInfo category={category?.name} sku={sku} tag={tags[0]} />}
-    </div>
+    </div >
   );
 };
 

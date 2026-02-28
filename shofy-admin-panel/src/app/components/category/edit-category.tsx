@@ -10,23 +10,33 @@ import { useGetCategoryQuery } from "@/redux/category/categoryApi";
 import CategoryParent from "./category-parent";
 import CategoryDescription from "./category-description";
 
-const  EditCategory = ({ id }: { id: string }) => {
+const EditCategory = ({ id }: { id: string }) => {
   const { data: categoryData, isError, isLoading } = useGetCategoryQuery(id);
   const {
     selectProductType,
     setSelectProductType,
     errors,
     control,
-    categoryChildren,
-    setCategoryChildren,
     register,
     handleSubmit,
     setCategoryImg,
     categoryImg,
+    featuredForCustomerSection,
+    setFeaturedForCustomerSection,
     error,
     isSubmitted,
     handleSubmitEditCategory,
+    categoryChildren,
+    setCategoryChildren,
   } = useCategorySubmit();
+
+  React.useEffect(() => {
+    if (categoryData) {
+      setCategoryImg(categoryData.img || "");
+      setCategoryChildren(categoryData.children || []);
+      setFeaturedForCustomerSection(categoryData.featuredForCustomerSection || false);
+    }
+  }, [categoryData, setCategoryImg, setCategoryChildren, setFeaturedForCustomerSection]);
   return (
     <div className="grid grid-cols-12 gap-6">
       <div className="col-span-12 lg:col-span-4">
@@ -81,6 +91,24 @@ const  EditCategory = ({ id }: { id: string }) => {
                 default_value={categoryData.description}
               />
               {/* Category Description */}
+
+              {/* Featured for Customer Section */}
+              <div className="mb-6 flex items-center">
+                <input
+                  type="checkbox"
+                  id="featuredForCustomerSection"
+                  className="w-4 h-4 text-theme bg-gray-100 border-gray-300 rounded focus:ring-theme"
+                  checked={featuredForCustomerSection}
+                  onChange={(e) => setFeaturedForCustomerSection(e.target.checked)}
+                />
+                <label
+                  htmlFor="featuredForCustomerSection"
+                  className="ml-2 text-sm font-medium text-black cursor-pointer"
+                >
+                  Featured for Customer Section
+                </label>
+              </div>
+              {/* Featured for Customer Section */}
 
               <button className="tp-btn px-7 py-2">Edit Category</button>
             </div>

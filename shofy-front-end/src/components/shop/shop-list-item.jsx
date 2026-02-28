@@ -9,13 +9,15 @@ import { handleProductModal } from "@/redux/features/productModalSlice";
 import useAddToCart from "@/hooks/use-add-to-cart";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
+import { getProductPrice } from "@/utils/price-utils";
+import '@/styles/product-card-fix.css';
 
 const ShopListItem = ({ product }) => {
   const { _id, img, category, title, reviews, price, discount, tags, description } = product || {};
   const dispatch = useDispatch()
   const [ratingVal, setRatingVal] = useState(0);
   const { handleAddToCart } = useAddToCart();
-  
+
   useEffect(() => {
     if (reviews && reviews.length > 0) {
       const rating =
@@ -46,6 +48,9 @@ const ShopListItem = ({ product }) => {
       <div className="tp-product-list-thumb p-relative fix">
         <Link href={`/product-details/${_id}`}>
           <Image src={img} alt="product img" width={350} height={310} />
+          <div className="tp-product-badge">
+            {getProductPrice(product).isDiscountActive && <span className="product-offer">-{product.discount}%</span>}
+          </div>
         </Link>
 
         {/* <!-- product action --> */}
@@ -63,7 +68,7 @@ const ShopListItem = ({ product }) => {
             </button>
             <button
               type="button"
-              onClick={()=> handleWishlistProduct(product)}
+              onClick={() => handleWishlistProduct(product)}
               className="tp-product-action-btn-2 tp-product-add-to-wishlist-btn"
             >
               <Wishlist />
@@ -73,7 +78,7 @@ const ShopListItem = ({ product }) => {
             </button>
             <button
               type="button"
-              onClick={()=> handleCompareProduct(product)}
+              onClick={() => handleCompareProduct(product)}
               className="tp-product-action-btn-2 tp-product-add-to-compare-btn"
             >
               <CompareThree />
@@ -92,15 +97,23 @@ const ShopListItem = ({ product }) => {
           <h3 className="tp-product-title-2">
             <Link href={`/product-details/${_id}`}>{title}</Link>
           </h3>
-          <div className="tp-product-rating-icon tp-product-rating-icon-2">
-            <Rating allowFraction size={16} initialValue={ratingVal} readonly={true} />
+          <div className="tp-product-rating-price-group">
+            <div className="tp-product-rating-icon tp-product-rating-icon-2">
+              <Rating allowFraction size={16} initialValue={ratingVal} readonly={true} />
+            </div>
+            <div className="tp-product-price-wrapper-2">
+              {getProductPrice(product).isDiscountActive ? (
+                <>
+                  <span className="tp-product-price-2 new-price">₹{(getProductPrice(product).currentPrice || 0).toFixed(2)}</span>
+                  <span className="tp-product-price-2 old-price ml-10" style={{ textDecoration: 'line-through', color: '#a0a0a0', fontSize: '14px' }}>
+                    ₹{(getProductPrice(product).originalPrice || 0).toFixed(2)}
+                  </span>
+                </>
+              ) : (
+                <span className="tp-product-price-2 new-price">₹{(price || 0).toFixed(2)}</span>
+              )}
+            </div>
           </div>
-          <div className="tp-product-price-wrapper-2">
-            <span className="tp-product-price-2 new-price">₹{price}</span>
-          </div>
-          <p>
-            {description.substring(0, 100)}
-          </p>
           <div className="tp-product-list-add-to-cart">
             <button onClick={() => handleAddProduct(product)} className="tp-product-list-add-to-cart-btn">
               Add To Cart

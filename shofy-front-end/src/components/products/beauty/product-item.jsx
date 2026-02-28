@@ -7,15 +7,18 @@ import { Cart, QuickView, Wishlist } from "@/svg";
 import { handleProductModal } from "@/redux/features/productModalSlice";
 import useAddToCart from "@/hooks/use-add-to-cart";
 import { add_to_wishlist } from "@/redux/features/wishlist-slice";
+import { getProductPrice } from "@/utils/price-utils";
+import '@/styles/product-card-fix.css';
 
 const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
-  const { _id, img, title, discount, price = 0, tags = [], status } = product || {};
+  const { _id, img, title, discount, price = 0, tags = [], status, description } = product || {};
   const { cart_products } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
   const isAddedToCart = cart_products.some((prd) => prd._id === _id);
   const isAddedToWishlist = wishlist.some((prd) => prd._id === _id);
   const dispatch = useDispatch();
   const { handleAddToCart } = useAddToCart();
+  const { currentPrice, originalPrice, isDiscountActive } = getProductPrice(product);
 
   // handle add product
   const handleAddProduct = (prd) => {
@@ -37,6 +40,7 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
 
         <div className="tp-product-badge">
           {status === 'out-of-stock' && <span className="product-hot">out-stock</span>}
+          {isDiscountActive && <span className="product-offer">-{product.discount}%</span>}
         </div>
 
         {/* product action */}
@@ -105,8 +109,19 @@ const ProductItem = ({ product, prdCenter = false, primary_style = false }) => {
         <h3 className="tp-product-title-3">
           <Link href={`/product-details/${_id}`}>{title}</Link>
         </h3>
-        <div className="tp-product-price-wrapper-3">
-          <span className="tp-product-price-3">₹{price.toFixed(2)}</span>
+        <div className="tp-product-rating-price-group">
+          <div className="tp-product-price-wrapper-3">
+            {isDiscountActive ? (
+              <>
+                <span className="tp-product-price-3 new-price">₹{(currentPrice || 0).toFixed(2)}</span>
+                <span className="tp-product-price-3 old-price ml-10" style={{ textDecoration: 'line-through', color: '#a0a0a0', fontSize: '14px' }}>
+                  ₹{(originalPrice || 0).toFixed(2)}
+                </span>
+              </>
+            ) : (
+              <span className="tp-product-price-3">₹{(price || 0).toFixed(2)}</span>
+            )}
+          </div>
         </div>
       </div>
     </div>

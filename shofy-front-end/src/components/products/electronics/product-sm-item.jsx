@@ -2,9 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Rating } from "react-simple-star-rating";
+import '@/styles/product-card-fix.css';
 
 const ProductSmItem = ({ product }) => {
-  const {_id, img, category, title,price, reviews } = product || {};
+  const { _id, img, category, title, price, reviews, description } = product || {};
   const [ratingVal, setRatingVal] = useState(0);
 
   useEffect(() => {
@@ -42,7 +43,7 @@ const ProductSmItem = ({ product }) => {
             <Rating allowFraction size={16} initialValue={ratingVal} readonly={true} />
           </div>
           <div className="tp-product-rating-text">
-          ({reviews && reviews.length > 0 ? reviews.length : 0} Review)
+            ({reviews && reviews.length > 0 ? reviews.length : 0} Review)
           </div>
         </div>
         <div className="tp-product-price-wrapper">

@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Rating } from "react-simple-star-rating";
 import Link from "next/link";
 import '@/styles/rating-fix.css';
+import '@/styles/product-card-fix.css';
+import { getProductPrice } from "@/utils/price-utils";
+
 // internal
 import { Cart, CompareThree, QuickView, Wishlist } from "@/svg";
 import { handleProductModal } from "@/redux/features/productModalSlice";
@@ -12,7 +15,7 @@ import { add_to_wishlist } from "@/redux/features/wishlist-slice";
 import { add_to_compare } from "@/redux/features/compareSlice";
 
 const ProductItem = ({ product, style_2 = false }) => {
-  const { _id, img, category, title, reviews, price = 0, discount, tags = [], status } = product || {};
+  const { _id, img, category, title, reviews, price = 0, discount, tags = [], status, description } = product || {};
   const [ratingVal, setRatingVal] = useState(0);
   const { cart_products } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -20,6 +23,8 @@ const ProductItem = ({ product, style_2 = false }) => {
   const isAddedToWishlist = wishlist.some((prd) => prd._id === _id);
   const dispatch = useDispatch();
   const { handleAddToCart: addToCartHook } = useAddToCart(); // Use the hook
+
+  const { currentPrice, originalPrice, isDiscountActive } = getProductPrice(product);
 
   useEffect(() => {
     if (reviews && reviews.length > 0) {
@@ -37,6 +42,7 @@ const ProductItem = ({ product, style_2 = false }) => {
     if (prd.status === 'out-of-stock') {
       return;
     }
+    // Ensure we pass the calculated price to the hook if needed (hook usually takes full product)
     addToCartHook(prd); // Use the hook for add to cart
   };
   // handle wishlist product
@@ -65,6 +71,7 @@ const ProductItem = ({ product, style_2 = false }) => {
         </Link>
         <div className="tp-product-badge">
           {status === 'out-of-stock' && <span className="product-hot">out-stock</span>}
+          {isDiscountActive && <span className="product-offer">-{product.discount}%</span>}
         </div>
         {/* product action */}
         <div className="tp-product-action-2 tp-product-action-blackStyle">
@@ -128,13 +135,26 @@ const ProductItem = ({ product, style_2 = false }) => {
         <h3 className="tp-product-title-2">
           <Link href={`/product-details/${_id}`}>{title}</Link>
         </h3>
-        <div className="tp-product-rating-icon tp-product-rating-icon-2">
-          <Rating allowFraction size={16} initialValue={ratingVal} readonly={true} />
-        </div>
-        <div className="tp-product-price-wrapper-2">
-          <span className="tp-product-price-2 new-price">
-            ₹{price.toFixed(2)}
-          </span>
+        <div className="tp-product-rating-price-group">
+          <div className="tp-product-rating-icon tp-product-rating-icon-2">
+            <Rating allowFraction size={16} initialValue={ratingVal} readonly={true} />
+          </div>
+          <div className="tp-product-price-wrapper-2">
+            {isDiscountActive ? (
+              <>
+                <span className="tp-product-price-2 new-price">
+                  ₹{(currentPrice || 0).toFixed(2)}
+                </span>
+                <span className="tp-product-price-2 old-price ml-10" style={{ textDecoration: 'line-through', color: '#a0a0a0', fontSize: '14px' }}>
+                  ₹{(originalPrice || 0).toFixed(2)}
+                </span>
+              </>
+            ) : (
+              <span className="tp-product-price-2 new-price">
+                ₹{(price || 0).toFixed(2)}
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </div>

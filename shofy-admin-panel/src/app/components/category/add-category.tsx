@@ -21,6 +21,8 @@ const AddCategory = () => {
     handleSubmitCategory,
     setCategoryImg,
     categoryImg,
+    featuredForCustomerSection,
+    setFeaturedForCustomerSection,
     error,
     isSubmitted,
   } = useCategorySubmit();
@@ -63,6 +65,24 @@ const AddCategory = () => {
             {/* Category Description */}
             <CategoryDescription register={register} />
             {/* Category Description */}
+
+            {/* Featured for Customer Section */}
+            <div className="mb-6 flex items-center">
+              <input
+                type="checkbox"
+                id="featuredForCustomerSection"
+                className="w-4 h-4 text-theme bg-gray-100 border-gray-300 rounded focus:ring-theme"
+                checked={featuredForCustomerSection}
+                onChange={(e) => setFeaturedForCustomerSection(e.target.checked)}
+              />
+              <label
+                htmlFor="featuredForCustomerSection"
+                className="ml-2 text-sm font-medium text-black cursor-pointer"
+              >
+                Featured for Customer Section
+              </label>
+            </div>
+            {/* Featured for Customer Section */}
 
             <button className="tp-btn px-7 py-2">Add Category</button>
           </div>

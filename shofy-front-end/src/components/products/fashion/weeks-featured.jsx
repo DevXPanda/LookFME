@@ -129,6 +129,7 @@ import { useGetProductTypeQuery } from '@/redux/features/productApi';
 import { PrevLongArr, NextLongArr, ArrowRightLong, TextShapeLine } from '@/svg';
 import ErrorMsg from '@/components/common/error-msg';
 import { HomeTwoFeaturedPrdLoader } from '@/components/loader';
+import { getProductPrice } from '@/utils/price-utils';
 
 const WeeksFeatured = () => {
   const { data, isLoading, isError } =
@@ -282,8 +283,8 @@ const WeeksFeatured = () => {
                     {/* IMAGE */}
                     <div className="featured-image">
                       <Image
-                        src={item.imageURLs && item.imageURLs.length > 0 ? item.imageURLs[0].img : item.img}
-                        alt={item.title}
+                        src={item.imageURLs && item.imageURLs.length > 0 ? item.imageURLs[0].img : (item.img || "https://placehold.co/400x500?text=No+Image")}
+                        alt={item.title || "featured product"}
                         fill
                         priority
                       />
@@ -292,7 +293,20 @@ const WeeksFeatured = () => {
                     {/* CONTENT */}
                     <div className="featured-content">
                       <h3>{item.title}</h3>
-                      <span className="price">₹{item.price}</span>
+                      <div className="tp-featured-price-wrapper">
+                        {getProductPrice(item).isDiscountActive ? (
+                          <>
+                            <span className="price">₹{(getProductPrice(item).currentPrice || 0).toFixed(2)}</span>
+                            <span className="old-price" style={{ textDecoration: 'line-through', color: '#a0a0a0', fontSize: '14px', marginLeft: '10px' }}>
+                              ₹{(getProductPrice(item).originalPrice || 0).toFixed(2)}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="price">₹{(item.price || 0).toFixed(2)}</span>
+                        )}
+                      </div>
+
+
 
                       <Rating
                         allowFraction
@@ -380,6 +394,19 @@ const WeeksFeatured = () => {
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
+          line-clamp: 2;
+        }
+
+        .tp-product-description {
+           display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          line-clamp: 2;
+          overflow: hidden;
+        }
+
+        .tp-product-see-more:hover {
+          text-decoration: underline;
         }
 
         .price {

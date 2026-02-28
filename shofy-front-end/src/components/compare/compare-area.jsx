@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { Rating } from "react-simple-star-rating";
+import '@/styles/product-card-fix.css';
 // internal
 import useAddToCart from "@/hooks/use-add-to-cart";
 import { remove_compare_product } from "@/redux/features/compareSlice";
@@ -66,10 +67,6 @@ const CompareArea = () => {
                         {compareItems.map(item => (
                           <td key={item._id}>
                             <div className="tp-compare-desc">
-                              <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing
-                                elit. Ad, distinctio.
-                              </p>
                             </div>
                           </td>
                         ))}
@@ -120,7 +117,7 @@ const CompareArea = () => {
                         {compareItems.map(item => (
                           <td key={item._id}>
                             <div className="tp-compare-remove">
-                              <button onClick={()=>handleRemoveComparePrd({title:item.title,id:item._id })}>
+                              <button onClick={() => handleRemoveComparePrd({ title: item.title, id: item._id })}>
                                 <i className="fal fa-trash-alt"></i>
                               </button>
                             </div>

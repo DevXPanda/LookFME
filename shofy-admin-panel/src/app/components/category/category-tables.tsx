@@ -63,7 +63,14 @@ const CategoryTables = () => {
                     <td className="pr-8 py-5 whitespace-nowrap">
                       <a href="#" className="flex items-center space-x-5">
                         {item.img && <Image className="w-10 h-10 rounded-full shrink shrink-0 object-cover" src={item.img} alt="image" width={40} height={40} />}
-                        <span className="font-medium text-heading text-hover-primary transition">{item.parent}</span>
+                        <div className="flex flex-col">
+                          <span className="font-medium text-heading text-hover-primary transition">{item.parent}</span>
+                          {item.featuredForCustomerSection && (
+                            <span className="text-[10px] bg-themeLight text-theme px-1.5 py-0.5 rounded font-semibold w-fit mt-1">
+                              Featured
+                            </span>
+                          )}
+                        </div>
                       </a>
                     </td>
                     <td className="px-3 py-3 font-normal text-[#55585B] text-end">
