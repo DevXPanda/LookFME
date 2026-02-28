@@ -4,7 +4,6 @@ const Products = require('../model/Products');
 
 // create category service
 exports.createCategoryService = async (data) => {
-  console.log('createCategoryService RECEIVED DATA:', JSON.stringify(data, null, 2));
   const { parent, productType, img, description } = data;
   let children = data.children || [];
 
@@ -86,7 +85,6 @@ exports.deleteCategoryService = async (id) => {
 
 // update category
 exports.updateCategoryService = async (id, payload) => {
-  console.log(`updateCategoryService ID: ${id}, PAYLOAD:`, JSON.stringify(payload, null, 2));
   const isExist = await Category.findOne({ _id: id })
 
   if (!isExist) {

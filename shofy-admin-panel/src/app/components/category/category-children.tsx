@@ -19,7 +19,7 @@ const CategoryChildren = ({
       setCategoryChildren(default_value);
     }
   }, [default_value, setCategoryChildren]);
-  console.log('default-value',default_value)
+  console.log('default-value', default_value)
   return (
     <div className="mb-6">
       <p className="mb-0 text-base text-black">Children</p>

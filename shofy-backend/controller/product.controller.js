@@ -4,13 +4,12 @@ const Product = require("../model/Products");
 
 
 // add product
-exports.addProduct = async (req, res,next) => {
-  console.log('product--->',req.body);
+exports.addProduct = async (req, res, next) => {
   try {
     const firstItem = {
       color: {
-        name:'',
-        clrCode:''
+        name: '',
+        clrCode: ''
       },
       img: req.body.img,
     };
@@ -20,10 +19,8 @@ exports.addProduct = async (req, res,next) => {
       imageURLs: imageURLs,
     });
 
-    console.log('product-result',result)
- 
     res.status(200).json({
-      success:true,
+      success: true,
       status: "success",
       message: "Product created successfully!",
       data: result,
@@ -36,11 +33,11 @@ exports.addProduct = async (req, res,next) => {
 
 
 // add all product
-module.exports.addAllProducts = async (req,res,next) => {
+module.exports.addAllProducts = async (req, res, next) => {
   try {
     const result = await productServices.addAllProductService(req.body);
     res.json({
-      message:'Products added successfully',
+      message: 'Products added successfully',
       result,
     })
   } catch (error) {
@@ -49,12 +46,12 @@ module.exports.addAllProducts = async (req,res,next) => {
 }
 
 // get all products
-exports.getAllProducts = async (req,res,next) => {
+exports.getAllProducts = async (req, res, next) => {
   try {
     const result = await productServices.getAllProductsService();
     res.status(200).json({
-      success:true,
-      data:result,
+      success: true,
+      data: result,
     })
   } catch (error) {
     next(error)
@@ -62,12 +59,12 @@ exports.getAllProducts = async (req,res,next) => {
 }
 
 // get all products by type
-module.exports.getProductsByType = async (req,res,next) => {
+module.exports.getProductsByType = async (req, res, next) => {
   try {
     const result = await productServices.getProductTypeService(req);
     res.status(200).json({
-      success:true, 
-      data:result,
+      success: true,
+      data: result,
     })
   } catch (error) {
     console.log(error)
@@ -76,12 +73,12 @@ module.exports.getProductsByType = async (req,res,next) => {
 }
 
 // get offer product controller
-module.exports.getOfferTimerProducts = async (req,res,next) => {
+module.exports.getOfferTimerProducts = async (req, res, next) => {
   try {
     const result = await productServices.getOfferTimerProductService(req.query.type);
     res.status(200).json({
-      success:true, 
-      data:result,
+      success: true,
+      data: result,
     })
   } catch (error) {
     next(error)
@@ -89,12 +86,12 @@ module.exports.getOfferTimerProducts = async (req,res,next) => {
 }
 
 // get Popular Product By Type
-module.exports.getPopularProductByType = async (req,res,next) => {
+module.exports.getPopularProductByType = async (req, res, next) => {
   try {
     const result = await productServices.getPopularProductServiceByType(req.params.type);
     res.status(200).json({
-      success:true, 
-      data:result,
+      success: true,
+      data: result,
     })
   } catch (error) {
     next(error)
@@ -102,12 +99,12 @@ module.exports.getPopularProductByType = async (req,res,next) => {
 }
 
 // get top rated Products
-module.exports.getTopRatedProducts = async (req,res,next) => {
+module.exports.getTopRatedProducts = async (req, res, next) => {
   try {
     const result = await productServices.getTopRatedProductService();
     res.status(200).json({
-      success:true, 
-      data:result,
+      success: true,
+      data: result,
     })
   } catch (error) {
     next(error)
@@ -115,7 +112,7 @@ module.exports.getTopRatedProducts = async (req,res,next) => {
 }
 
 // getSingleProduct
-exports.getSingleProduct = async (req,res,next) => {
+exports.getSingleProduct = async (req, res, next) => {
   try {
     const product = await productServices.getProductService(req.params.id)
     res.json(product)
@@ -125,12 +122,12 @@ exports.getSingleProduct = async (req,res,next) => {
 }
 
 // get Related Product
-exports.getRelatedProducts = async (req,res,next) => {
+exports.getRelatedProducts = async (req, res, next) => {
   try {
     const products = await productServices.getRelatedProductService(req.params.id)
     res.status(200).json({
-      success:true, 
-      data:products,
+      success: true,
+      data: products,
     })
   } catch (error) {
     next(error)
@@ -138,9 +135,9 @@ exports.getRelatedProducts = async (req,res,next) => {
 }
 
 // update product
-exports.updateProduct = async (req, res,next) => {
+exports.updateProduct = async (req, res, next) => {
   try {
-    const product = await productServices.updateProductService(req.params.id,req.body)
+    const product = await productServices.updateProductService(req.params.id, req.body)
     res.send({ data: product, message: "Product updated successfully!" });
   } catch (error) {
     next(error)
@@ -148,12 +145,12 @@ exports.updateProduct = async (req, res,next) => {
 };
 
 // update product
-exports.reviewProducts = async (req, res,next) => {
+exports.reviewProducts = async (req, res, next) => {
   try {
     const products = await productServices.getReviewsProducts()
     res.status(200).json({
-      success:true, 
-      data:products,
+      success: true,
+      data: products,
     })
   } catch (error) {
     next(error)
@@ -161,12 +158,12 @@ exports.reviewProducts = async (req, res,next) => {
 };
 
 // update product
-exports.stockOutProducts = async (req, res,next) => {
+exports.stockOutProducts = async (req, res, next) => {
   try {
     const products = await productServices.getStockOutProducts();
     res.status(200).json({
-      success:true, 
-      data:products,
+      success: true,
+      data: products,
     })
   } catch (error) {
     next(error)
@@ -174,11 +171,11 @@ exports.stockOutProducts = async (req, res,next) => {
 };
 
 // update product
-exports.deleteProduct = async (req, res,next) => {
+exports.deleteProduct = async (req, res, next) => {
   try {
     await productServices.deleteProduct(req.params.id);
     res.status(200).json({
-      message:'Product delete successfully'
+      message: 'Product delete successfully'
     })
   } catch (error) {
     next(error)

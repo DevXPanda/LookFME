@@ -26,11 +26,13 @@ const CategoryEditDelete = ({ id }: IPropType) => {
       text: `Delete this category ?`,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#6c757d",
       confirmButtonText: "Yes, delete it!",
       cancelButtonText: "Cancel",
-      reverseButtons: true,
+      customClass: {
+        confirmButton: 'swal-confirm-btn',
+        cancelButton: 'swal-cancel-btn'
+      },
+      buttonsStyling: false
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -72,7 +74,7 @@ const CategoryEditDelete = ({ id }: IPropType) => {
           onClick={() => handleDelete(id)}
           onMouseEnter={() => setShowDelete(true)}
           onMouseLeave={() => setShowDelete(false)}
-          className="w-10 h-10 leading-[33px] text-tiny bg-white border border-gray text-slate-600 rounded-md hover:bg-danger hover:border-danger hover:text-white"
+          className="w-10 h-10 leading-[33px] text-tiny bg-danger border border-danger text-white rounded-md hover:bg-red-700 hover:border-red-700"
         >
           <Delete />
         </button>

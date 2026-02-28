@@ -99,9 +99,8 @@ export default function ProductCategory({
               icon={
                 <ChevronDownIcon
                   strokeWidth={2.5}
-                  className={`mx-auto h-4 w-4 transition-transform ${
-                    open === item._id ? "rotate-180" : ""
-                  }`}
+                  className={`mx-auto h-4 w-4 transition-transform ${open === item._id ? "rotate-180" : ""
+                    }`}
                 />
               }
             >

@@ -9,7 +9,7 @@ import usePagination from '@/hooks/use-pagination';
 
 const CategoryTables = () => {
   const { data: categories, isError, isLoading } = useGetAllCategoriesQuery();
-  const [deleteCategory,{data:delData,error:delErr}] = useDeleteCategoryMutation();
+  const [deleteCategory, { data: delData, error: delErr }] = useDeleteCategoryMutation();
   const paginationData = usePagination(categories?.result || [], 5);
   const { currentItems, handlePageClick, pageCount } = paginationData;
   // decide what to render
@@ -27,8 +27,8 @@ const CategoryTables = () => {
 
   if (!isLoading && !isError && categories?.success && currentItems.length > 0) {
 
-    
-    
+
+
     content = (
       <>
         <div className="overflow-scroll 2xl:overflow-visible">
@@ -74,7 +74,7 @@ const CategoryTables = () => {
                     </td>
                     <td className="px-9 py-3 text-end">
                       <div className="flex items-center justify-end space-x-2">
-                        <CategoryEditDelete id={item._id}/>
+                        <CategoryEditDelete id={item._id} />
                       </div>
                     </td>
                   </tr>
@@ -86,7 +86,7 @@ const CategoryTables = () => {
         <div className="flex justify-between items-center flex-wrap">
           <p className="mb-0 text-tiny">Showing 1-{currentItems.length} of {categories?.result.length}</p>
           <div className="pagination py-3 flex justify-end items-center pagination">
-           <Pagination
+            <Pagination
               handlePageClick={handlePageClick}
               pageCount={pageCount}
             />

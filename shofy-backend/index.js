@@ -147,10 +147,10 @@ app.set("io", io);
 
 // Socket.io connection handling
 io.on("connection", (socket) => {
-  console.log("Admin client connected:", socket.id);
+  // console.log("Admin client connected:", socket.id);
 
   socket.on("disconnect", () => {
-    console.log("Admin client disconnected:", socket.id);
+    // console.log("Admin client disconnected:", socket.id);
   });
 });
 
