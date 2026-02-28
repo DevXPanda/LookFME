@@ -17,7 +17,7 @@ const formatImageUrl = (url) => {
 };
 
 const ProductDetailsContent = ({ productItem }) => {
-  const { _id, img, imageURLs, videoId, status } = productItem || {};
+  const { _id, img, imageURLs, supportingImages, videoId, status } = productItem || {};
   const [activeImg, setActiveImg] = useState(formatImageUrl(img || (imageURLs && imageURLs.length > 0 ? imageURLs[0].img : "")));
   const dispatch = useDispatch();
   // active image change when img change
@@ -40,6 +40,8 @@ const ProductDetailsContent = ({ productItem }) => {
                 activeImg={activeImg}
                 handleImageActive={handleImageActive}
                 imageURLs={imageURLs || []}
+                img={img}
+                supportingImages={supportingImages || []}
                 imgWidth={580}
                 imgHeight={670}
                 videoId={videoId}

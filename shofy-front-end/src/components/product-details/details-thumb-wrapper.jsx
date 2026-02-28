@@ -13,7 +13,9 @@ const formatImageUrl = (url) => {
 };
 
 const DetailsThumbWrapper = ({
-  imageURLs: variations,
+  imageURLs: variations = [],
+  img = "",
+  supportingImages = [],
   handleImageActive,
   activeImg,
   imgWidth = 416,
@@ -22,12 +24,38 @@ const DetailsThumbWrapper = ({
   status
 }) => {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
+
+  // Combine all images
+  const allThumbnails = [];
+
+  // 1. Main image
+  if (img) {
+    allThumbnails.push({ img: img });
+  }
+
+  // 2. Variations
+  if (variations && variations.length > 0) {
+    variations.forEach(v => {
+      if (v.img) allThumbnails.push({ img: v.img });
+    });
+  }
+
+  // 3. Supporting images
+  if (supportingImages && supportingImages.length > 0) {
+    supportingImages.forEach(sImg => {
+      if (sImg) allThumbnails.push({ img: sImg });
+    });
+  }
+
+  // Create a unique array of thumbnails based on URL
+  const uniqueThumbnails = Array.from(new Map(allThumbnails.map(item => [item.img, item])).values());
+
   return (
     <>
       <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex">
         <nav>
           <div className="nav nav-tabs flex-sm-column">
-            {variations?.map((item, i) => (
+            {uniqueThumbnails.map((item, i) => (
               <button
                 key={i}
                 className={`nav-link ${formatImageUrl(item.img) === activeImg ? "active" : ""}`}
@@ -38,7 +66,7 @@ const DetailsThumbWrapper = ({
                   alt="image"
                   width={78}
                   height={100}
-                  style={{ width: "100%", height: "100%" }}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
               </button>
             ))}
