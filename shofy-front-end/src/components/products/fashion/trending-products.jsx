@@ -113,34 +113,34 @@ const TrendingProducts = () => {
     content = (
       <>
         <style>{`
-          .tp-trending-grid {
-            display: grid;
-            gap: 28px;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            margin-top: 40px;
+          .custom-grid-layout {
+             display: grid;
+             grid-template-columns: repeat(4, 1fr);
+             gap: 24px;
+             margin-top: 40px;
           }
-
-          @media (max-width: 768px) {
-            .tp-trending-grid {
-              grid-template-columns: repeat(2, 1fr);
-              gap: 20px;
-              padding: 0 10px;
+          @media (max-width: 1200px) {
+            .custom-grid-layout {
+              grid-template-columns: repeat(3, 1fr);
             }
           }
-
-          @media (max-width: 480px) {
-            .tp-trending-grid {
+          @media (max-width: 992px) {
+            .custom-grid-layout {
               grid-template-columns: repeat(2, 1fr);
-              gap: 16px;
+            }
+          }
+          @media (max-width: 576px) {
+            .custom-grid-layout {
+              grid-template-columns: 1fr;
             }
           }
         `}</style>
 
         {filteredItems.length > 0 ? (
-          <div className="tp-trending-grid">
+          <div className="custom-grid-layout">
             {filteredItems.map((item) => (
-              <div key={item._id} className="tp-trending-item">
-                <ProductItem product={item} style_2 />
+              <div key={item._id}>
+                <ProductItem product={item} />
               </div>
             ))}
           </div>

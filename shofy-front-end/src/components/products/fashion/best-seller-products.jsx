@@ -16,7 +16,7 @@ const BestSellerProducts = () => {
 
   if (isLoading) {
     content = (
-      <HomeTwoBestSellPrdPrdLoader loading={isLoading}/>
+      <HomeTwoBestSellPrdPrdLoader loading={isLoading} />
     );
   }
   if (!isLoading && isError) {
@@ -27,15 +27,44 @@ const BestSellerProducts = () => {
   }
   if (!isLoading && !isError && products?.data?.length > 0) {
     let product_items = products.data;
-    
-    // Show up to 5 best seller products without duplication
-    let display_items = product_items.slice(0, 5);
-    
-    content = display_items.map((prd, index) => (
-      <div key={`${prd._id}-${index}`} className="col-xl-2-4 col-lg-4 col-md-6 col-sm-6 mb-4">
-        <ProductItem product={prd} />
-      </div>
-    ))
+
+    // Adjusting to 8 items to fit a 4-column grid appropriately 
+    let display_items = product_items.slice(0, 8);
+
+    content = (
+      <>
+        <style>{`
+          .custom-grid-layout {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            text-align: left;
+          }
+          @media (max-width: 1200px) {
+            .custom-grid-layout {
+              grid-template-columns: repeat(3, 1fr);
+            }
+          }
+          @media (max-width: 992px) {
+            .custom-grid-layout {
+              grid-template-columns: repeat(2, 1fr);
+            }
+          }
+          @media (max-width: 576px) {
+            .custom-grid-layout {
+              grid-template-columns: 1fr;
+            }
+          }
+        `}</style>
+        <div className="custom-grid-layout w-100">
+          {display_items.map((prd, index) => (
+            <div key={`${prd._id}-${index}`}>
+              <ProductItem product={prd} />
+            </div>
+          ))}
+        </div>
+      </>
+    );
   }
   return (
     <>

@@ -12,6 +12,12 @@ const userSchema = mongoose.Schema(
       minLength: [3, "Name must be at least 3 characters."],
       maxLength: [100, "Name is too large"],
     },
+    lastName: {
+      type: String,
+      required: false,
+      trim: true,
+      maxLength: [100, "Last Name is too large"],
+    },
     email: {
       type: String,
       validate: [validator.isEmail, "Provide a valid Email"],
@@ -54,7 +60,23 @@ const userSchema = mongoose.Schema(
       type: String,
       required: false,
     },
+    city: {
+      type: String,
+      required: false,
+    },
+    state: {
+      type: String,
+      required: false,
+    },
+    zipCode: {
+      type: String,
+      required: false,
+    },
     bio: {
+      type: String,
+      required: false,
+    },
+    locality: {
       type: String,
       required: false,
     },

@@ -11,7 +11,7 @@ import useCartInfo from "./use-cart-info";
 import { set_shipping } from "@/redux/features/order/orderSlice";
 import { set_coupon } from "@/redux/features/coupon/couponSlice";
 import { notifyError, notifySuccess } from "@/utils/toast";
-import {useCreatePaymentIntentMutation,useSaveOrderMutation} from "@/redux/features/order/orderApi";
+import { useCreatePaymentIntentMutation, useSaveOrderMutation } from "@/redux/features/order/orderApi";
 import { useGetOfferCouponsQuery } from "@/redux/features/coupon/couponApi";
 import { useGetWelcomeOfferQuery } from "@/redux/features/welcomeOffer/welcomeOfferApi";
 import { useUpdateProfileMutation } from "@/redux/features/auth/authApi";
@@ -22,9 +22,9 @@ const useCheckoutSubmit = () => {
   // welcome offer (first order discount)
   const { data: welcomeOfferData } = useGetWelcomeOfferQuery();
   // addOrder
-  const [saveOrder, {}] = useSaveOrderMutation();
+  const [saveOrder, { }] = useSaveOrderMutation();
   // createPaymentIntent
-  const [createPaymentIntent, {}] = useCreatePaymentIntentMutation();
+  const [createPaymentIntent, { }] = useCreatePaymentIntentMutation();
   // updateProfile
   const [updateProfile] = useUpdateProfileMutation();
   // cart_products
@@ -58,14 +58,14 @@ const useCheckoutSubmit = () => {
   // showCard
   const [showCard, setShowCard] = useState(false);
   // coupon apply message
-  const [couponApplyMsg,setCouponApplyMsg] = useState("");
+  const [couponApplyMsg, setCouponApplyMsg] = useState("");
 
   const dispatch = useDispatch();
   const router = useRouter();
   const stripe = useStripe();
   const elements = useElements();
 
-  const {register,handleSubmit,setValue,control,formState: { errors }} = useForm();
+  const { register, handleSubmit, setValue, control, formState: { errors } } = useForm();
 
   let couponRef = useRef("");
 
@@ -201,6 +201,7 @@ const useCheckoutSubmit = () => {
     setValue("country", shipping_info.country);
     setValue("address", shipping_info.address);
     setValue("city", shipping_info.city);
+    setValue("state", shipping_info.state);
     setValue("zipCode", shipping_info.zipCode);
     setValue("contactNo", shipping_info.contactNo);
     setValue("email", shipping_info.email);
@@ -216,7 +217,7 @@ const useCheckoutSubmit = () => {
       const existingAddresses = JSON.parse(
         localStorage.getItem(`user_addresses_${user._id}`) || "[]"
       );
-      
+
       const addressObj = {
         id: Date.now().toString(),
         firstName: data.firstName,
@@ -224,6 +225,7 @@ const useCheckoutSubmit = () => {
         country: data.country,
         address: data.address,
         city: data.city,
+        state: data.state,
         zipCode: data.zipCode,
         contactNo: data.contactNo,
         email: data.email,
@@ -231,9 +233,9 @@ const useCheckoutSubmit = () => {
 
       // Check if address already exists
       const existingIndex = existingAddresses.findIndex(
-        addr => addr.address === addressObj.address && 
-                addr.city === addressObj.city &&
-                addr.zipCode === addressObj.zipCode
+        addr => addr.address === addressObj.address &&
+          addr.city === addressObj.city &&
+          addr.zipCode === addressObj.zipCode
       );
 
       if (existingIndex >= 0) {
@@ -248,7 +250,7 @@ const useCheckoutSubmit = () => {
       try {
         await updateProfile({
           id: user._id,
-          address: `${data.address}, ${data.city}, ${data.zipCode}`,
+          address: `${data.address}, ${data.city}, ${data.state}, ${data.zipCode}`,
           phone: data.contactNo,
         }).unwrap();
       } catch (error) {
@@ -265,6 +267,7 @@ const useCheckoutSubmit = () => {
       contact: data.contactNo,
       email: data.email,
       city: data.city,
+      state: data.state,
       country: data.country,
       zipCode: data.zipCode,
       shippingOption: data.shippingOption,
@@ -275,7 +278,7 @@ const useCheckoutSubmit = () => {
       shippingCost: shippingCost,
       discount: discountAmount,
       totalAmount: cartTotal,
-      orderNote:data.orderNote,
+      orderNote: data.orderNote,
       user: `${user?._id}`,
     };
     if (data.payment === 'Card') {
@@ -300,14 +303,14 @@ const useCheckoutSubmit = () => {
           cardInfo: paymentMethod,
         };
 
-       return handlePaymentWithStripe(orderData);
+        return handlePaymentWithStripe(orderData);
       }
     }
     if (data.payment === 'COD') {
       saveOrder({
         ...orderInfo
       }).then(res => {
-        if(res?.error){
+        if (res?.error) {
         }
         else {
           localStorage.removeItem("cart_products")
@@ -323,7 +326,7 @@ const useCheckoutSubmit = () => {
   // handlePaymentWithStripe
   const handlePaymentWithStripe = async (order) => {
     try {
-      const {paymentIntent, error:intentErr} = await stripe.confirmCardPayment(
+      const { paymentIntent, error: intentErr } = await stripe.confirmCardPayment(
         clientSecret,
         {
           payment_method: {
@@ -349,8 +352,8 @@ const useCheckoutSubmit = () => {
       saveOrder({
         ...orderData
       })
-      .then((result) => {
-          if(result?.error){
+        .then((result) => {
+          if (result?.error) {
           }
           else {
             localStorage.removeItem("couponInfo");
@@ -358,7 +361,7 @@ const useCheckoutSubmit = () => {
             router.push(`/order/${result.data?.order?._id}`);
           }
         })
-       } 
+    }
     catch (err) {
       console.log(err);
     }

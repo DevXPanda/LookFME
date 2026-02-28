@@ -4,12 +4,13 @@ import ErrorMsg from '@/components/common/error-msg';
 import { useGetProductTypeQuery } from '@/redux/features/productApi';
 import { useGetProductTypeCategoryQuery } from '@/redux/features/categoryApi';
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Scrollbar, Mousewheel } from "swiper/modules";
+import { Scrollbar, Mousewheel, Navigation } from "swiper/modules";
 import { TextShapeLine } from '@/svg';
 import ProductItem from './product-item';
 import { HomeTwoPrdLoader } from '@/components/loader';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
+import 'swiper/css/navigation';
 
 // Normalize category/subcategory names for consistent comparison (handles case, hyphens, spaces, & symbols)
 // Removes all spaces and hyphens to match variations like "T-shirt" vs "Tshirt" vs "T Shirt"
@@ -59,8 +60,8 @@ const ProductArea = () => {
 
   // Slider settings with horizontal mouse wheel support
   const slider_setting = {
-    slidesPerView: 5,
-    spaceBetween: 20,
+    slidesPerView: 4,
+    spaceBetween: 24,
     loop: false,
     centeredSlides: false,
     mousewheel: {
@@ -68,22 +69,18 @@ const ProductArea = () => {
       sensitivity: 1,
       releaseOnEdges: false,
     },
-    scrollbar: {
-      el: ".swiper-scrollbar",
-      draggable: true,
-      dragClass: "tp-swiper-scrollbar-drag",
-      snapOnRelease: true,
+    navigation: {
+      nextEl: ".tp-category-slider-button-next",
+      prevEl: ".tp-category-slider-button-prev",
     },
     breakpoints: {
-      1200: { slidesPerView: 5 },
-      992: { slidesPerView: 4 },
-      768: { slidesPerView: 3 },
+      1200: { slidesPerView: 4 },
+      992: { slidesPerView: 3 },
+      768: { slidesPerView: 2 },
       576: { slidesPerView: 2 },
-      0: { slidesPerView: 2 },
+      0: { slidesPerView: 1 },
     },
   };
-
-  // Decide what to render
   let content = null;
   let display_items = [];
 
@@ -168,10 +165,52 @@ const ProductArea = () => {
 
         {/* Swiper only if products exist */}
         {display_items.length > 0 && (
-          <>
+          <div className="tp-category-slider-wrapper">
             <style>{`
+              .tp-category-slider-wrapper {
+                position: relative;
+                width: 100%;
+                margin: 0 auto;
+              }
+              .tp-category-slider-button-prev,
+              .tp-category-slider-button-next {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                background-color: #ffffff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                z-index: 10;
+                box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+                font-size: 24px;
+                color: rgb(190, 89, 133);
+              }
+              .tp-category-slider-button-prev:hover,
+              .tp-category-slider-button-next:hover {
+                background-color: rgb(190, 89, 133);
+                border-color: rgb(190, 89, 133);
+                box-shadow: 0px 6px 16px rgba(190, 89, 133, 0.3);
+                color: #ffffff;
+              }
+              .tp-category-slider-button-prev {
+                left: -25px;
+              }
+              .tp-category-slider-button-next {
+                right: -25px;
+              }
               /* Adjust slides on mobile for proper spacing */
               @media (max-width: 768px) {
+                .tp-category-slider-button-prev,
+                .tp-category-slider-button-next {
+                  display: none;
+                }
                 .popular-product-slide {
                   padding: 0 6px;
                 }
@@ -181,9 +220,10 @@ const ProductArea = () => {
               }
             `}</style>
 
+            <button className="tp-category-slider-button-prev">←</button>
             <Swiper
               {...slider_setting}
-              modules={[Scrollbar, Mousewheel]}
+              modules={[Scrollbar, Mousewheel, Navigation]}
               className="tp-category-slider-active-2 swiper-container mb-50"
             >
               {display_items.map((prd) => (
@@ -193,9 +233,9 @@ const ProductArea = () => {
                   </div>
                 </SwiperSlide>
               ))}
-              <div className="swiper-scrollbar tp-swiper-scrollbar tp-swiper-scrollbar-drag"></div>
             </Swiper>
-          </>
+            <button className="tp-category-slider-button-next">→</button>
+          </div>
         )}
       </div>
     </section>

@@ -30,6 +30,7 @@ const CheckoutBillingArea = ({ register, errors, setValue }) => {
           setValue("country", firstAddress.country || "INDIA", { shouldValidate: false, shouldDirty: true });
           setValue("address", firstAddress.address || "", { shouldValidate: false, shouldDirty: true });
           setValue("city", firstAddress.city || "", { shouldValidate: false, shouldDirty: true });
+          setValue("state", firstAddress.state || "", { shouldValidate: false, shouldDirty: true });
           setValue("zipCode", firstAddress.zipCode || "", { shouldValidate: false, shouldDirty: true });
           setValue("contactNo", firstAddress.contactNo || user.phone || "", { shouldValidate: false, shouldDirty: true });
           setValue("email", firstAddress.email || user.email || "", { shouldValidate: false, shouldDirty: true });
@@ -61,6 +62,7 @@ const CheckoutBillingArea = ({ register, errors, setValue }) => {
         setValue("country", selectedAddress.country || "INDIA", { shouldValidate: true, shouldDirty: true });
         setValue("address", selectedAddress.address || "", { shouldValidate: true, shouldDirty: true });
         setValue("city", selectedAddress.city || "", { shouldValidate: true, shouldDirty: true });
+        setValue("state", selectedAddress.state || "", { shouldValidate: true, shouldDirty: true });
         setValue("zipCode", selectedAddress.zipCode || "", { shouldValidate: true, shouldDirty: true });
         setValue("contactNo", selectedAddress.contactNo || "", { shouldValidate: true, shouldDirty: true });
         setValue("email", selectedAddress.email || user?.email || "", { shouldValidate: true, shouldDirty: true });
@@ -81,6 +83,7 @@ const CheckoutBillingArea = ({ register, errors, setValue }) => {
       setValue("country", address.country || "INDIA", { shouldValidate: false, shouldDirty: true });
       setValue("address", address.address || "", { shouldValidate: false, shouldDirty: true });
       setValue("city", address.city || "", { shouldValidate: false, shouldDirty: true });
+      setValue("state", address.state || "", { shouldValidate: false, shouldDirty: true });
       setValue("zipCode", address.zipCode || "", { shouldValidate: false, shouldDirty: true });
       setValue("contactNo", address.contactNo || "", { shouldValidate: false, shouldDirty: true });
       setValue("email", address.email || user?.email || "", { shouldValidate: false, shouldDirty: true });
@@ -97,6 +100,7 @@ const CheckoutBillingArea = ({ register, errors, setValue }) => {
     setValue("country", "INDIA");
     setValue("address", "");
     setValue("city", "");
+    setValue("state", "");
     setValue("zipCode", "");
     setValue("contactNo", user?.phone || "");
     setValue("email", user?.email || "");
@@ -128,7 +132,7 @@ const CheckoutBillingArea = ({ register, errors, setValue }) => {
                 >
                   <p><strong>{address.firstName} {address.lastName}</strong></p>
                   <p>{address.address}</p>
-                  <p>{address.city}, {address.zipCode}</p>
+                  <p>{address.city}, {address.state} {address.zipCode}</p>
                   <p>{address.country}</p>
                   <p>{address.contactNo}</p>
                 </div>
@@ -224,7 +228,7 @@ const CheckoutBillingArea = ({ register, errors, setValue }) => {
                 <ErrorMsg msg={errors?.address?.message} />
               </div>
             </div>
-            <div className="col-md-6">
+            <div className="col-md-4">
               <div className="tp-checkout-input">
                 <label>Town / City</label>
                 <input
@@ -238,7 +242,21 @@ const CheckoutBillingArea = ({ register, errors, setValue }) => {
                 <ErrorMsg msg={errors?.city?.message} />
               </div>
             </div>
-            <div className="col-md-6">
+            <div className="col-md-4">
+              <div className="tp-checkout-input">
+                <label>State</label>
+                <input
+                  {...register("state", { required: `State is required!` })}
+                  name="state"
+                  id="state"
+                  type="text"
+                  placeholder="State"
+                  style={savedAddresses.length > 0 && !showNewAddressForm ? { display: 'none' } : {}}
+                />
+                <ErrorMsg msg={errors?.state?.message} />
+              </div>
+            </div>
+            <div className="col-md-4">
               <div className="tp-checkout-input">
                 <label>Postcode ZIP</label>
                 <input
@@ -313,6 +331,7 @@ const CheckoutBillingArea = ({ register, errors, setValue }) => {
             <input {...register("country", { required: true })} type="hidden" defaultValue={selectedAddress.country || "INDIA"} />
             <input {...register("address", { required: true })} type="hidden" defaultValue={selectedAddress.address || ""} />
             <input {...register("city", { required: true })} type="hidden" defaultValue={selectedAddress.city || ""} />
+            <input {...register("state", { required: true })} type="hidden" defaultValue={selectedAddress.state || ""} />
             <input {...register("zipCode", { required: true })} type="hidden" defaultValue={selectedAddress.zipCode || ""} />
             <input {...register("contactNo", { required: true })} type="hidden" defaultValue={selectedAddress.contactNo || ""} />
             <input {...register("email", { required: true })} type="hidden" defaultValue={selectedAddress.email || user?.email || ""} />

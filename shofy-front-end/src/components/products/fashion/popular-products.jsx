@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, FreeMode, Mousewheel } from "swiper/modules";
 import { useGetPopularProductByTypeQuery } from "@/redux/features/productApi";
@@ -14,8 +14,8 @@ import "swiper/css/free-mode";
 
 // Swiper Settings
 const slider_setting = {
-  slidesPerView: 5,
-  spaceBetween: 20,
+  slidesPerView: 4,
+  spaceBetween: 24,
   loop: false,
   grabCursor: true,
   simulateTouch: true,
@@ -42,9 +42,9 @@ const slider_setting = {
   },
 
   breakpoints: {
-    1200: { slidesPerView: 5 },
-    992: { slidesPerView: 4 },
-    768: { slidesPerView: 3 },
+    1200: { slidesPerView: 4 },
+    992: { slidesPerView: 3 },
+    768: { slidesPerView: 2 },
     576: { slidesPerView: 2 },
     0: { slidesPerView: 1 },
   },
@@ -73,7 +73,6 @@ const PopularProducts = () => {
     content = <ErrorMsg msg="No Products found!" />;
 
   if (!isLoading && !isError && products?.data?.length > 0) {
-    // Mobile grid view
     if (isMobile) {
       content = (
         <>
@@ -104,7 +103,6 @@ const PopularProducts = () => {
         </>
       );
     } else {
-      // Desktop Swiper view
       content = (
         <Swiper
           {...slider_setting}

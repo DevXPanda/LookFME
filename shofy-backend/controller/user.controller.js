@@ -349,9 +349,14 @@ exports.updateUser = async (req, res, next) => {
     const user = await User.findById(userId);
     if (user) {
       user.name = req.body.name;
+      user.lastName = req.body.lastName;
       user.email = req.body.email;
       user.phone = req.body.phone;
       user.address = req.body.address;
+      user.city = req.body.city;
+      user.state = req.body.state;
+      user.zipCode = req.body.zipCode;
+      user.locality = req.body.locality;
       user.bio = req.body.bio;
       const updatedUser = await user.save();
       const token = generateToken(updatedUser);
