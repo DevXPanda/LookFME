@@ -82,7 +82,16 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                     <span className="pl-2 font-medium text-base capitalize">
                       {" "}
                       <span className="font-heading">
-                        <span className="inline-flex px-2 text-base font-medium leading-5 rounded-full">
+                        <span className={`inline-flex px-3 py-1 text-xs font-bold leading-5 rounded-full uppercase tracking-wider ${orderData.status === "pending"
+                          ? "text-amber-700 bg-amber-50 border border-amber-200"
+                          : orderData.status === "delivered"
+                            ? "text-emerald-700 bg-emerald-50 border border-emerald-200"
+                            : orderData.status === "processing"
+                              ? "text-indigo-700 bg-indigo-50 border border-indigo-200"
+                              : orderData.status === "cancel" || orderData.status === "canceled"
+                                ? "text-rose-700 bg-rose-50 border border-rose-200"
+                                : "text-slate-700 bg-slate-50 border border-slate-200"
+                          }`}>
                           {orderData.status}
                         </span>
                       </span>

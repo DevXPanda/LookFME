@@ -80,7 +80,7 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "processing", "delivered",'cancel', 'returned', 'exchanged'],
+      enum: ["pending", "processing", "delivered", 'cancel', 'returned', 'exchanged'],
       lowercase: true,
     },
     cancelReason: {
@@ -99,6 +99,7 @@ const orderSchema = new mongoose.Schema(
       productId: String,
       productTitle: String,
       quantity: Number,
+      size: String,
       price: Number,
       reason: String,
       status: {
@@ -122,10 +123,12 @@ const orderSchema = new mongoose.Schema(
       originalProductId: String,
       originalProductTitle: String,
       originalQuantity: Number,
+      originalSize: String,
       originalPrice: Number,
       exchangeProductId: String,
       exchangeProductTitle: String,
       exchangeQuantity: Number,
+      exchangeSize: String,
       exchangePrice: Number,
       reason: String,
       status: {

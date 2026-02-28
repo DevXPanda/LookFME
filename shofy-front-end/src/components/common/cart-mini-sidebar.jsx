@@ -19,10 +19,10 @@ const CartMiniSidebar = () => {
     dispatch(remove_product(prd))
   }
 
-// handle close cart mini 
-const handleCloseCartMini = () => {
-  dispatch(closeCartMini())
-}
+  // handle close cart mini 
+  const handleCloseCartMini = () => {
+    dispatch(closeCartMini())
+  }
   return (
     <>
       <div className={`cartmini__area tp-all-font-roboto ${cartMiniOpen ? 'cartmini-opened' : ''}`}>
@@ -39,10 +39,10 @@ const handleCloseCartMini = () => {
               </div>
             </div>
             <div className="cartmini__shipping">
-              <RenderCartProgress/>
+              <RenderCartProgress />
             </div>
             {cart_products.length > 0 && <div className="cartmini__widget">
-              {cart_products.map((item,i) => (
+              {cart_products.map((item, i) => (
                 <div key={i} className="cartmini__widget-item">
                   <div className="cartmini__thumb">
                     <Link href={`/product-details/${item._id}`}>
@@ -54,6 +54,11 @@ const handleCloseCartMini = () => {
                       <Link href={`/product-details/${item._id}`}>{item.title}</Link>
                     </h5>
                     <div className="cartmini__price-wrapper">
+                      {item.selectedSize && (
+                        <div className="cartmini__size mb-5">
+                          <span style={{ fontSize: '12px', color: '#55585b' }}>Size: {item.selectedSize}</span>
+                        </div>
+                      )}
                       <span className="cartmini__price">₹{item.price.toFixed(2)}</span>
                       <span className="cartmini__quantity">{" "}x{item.orderQuantity}</span>
                     </div>

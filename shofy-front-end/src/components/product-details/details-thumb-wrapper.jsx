@@ -3,8 +3,17 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import PopupVideo from "../common/popup-video";
 
+const formatImageUrl = (url) => {
+  if (!url || typeof url !== "string") return "https://placehold.co/200x200?text=No+Image";
+  if (url.startsWith("http")) return url;
+  if (url.startsWith("/")) {
+    return `http://localhost:7000${url}`;
+  }
+  return url;
+};
+
 const DetailsThumbWrapper = ({
-  imageURLs,
+  imageURLs: variations,
   handleImageActive,
   activeImg,
   imgWidth = 416,
@@ -18,14 +27,14 @@ const DetailsThumbWrapper = ({
       <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex">
         <nav>
           <div className="nav nav-tabs flex-sm-column">
-            {imageURLs?.map((item, i) => (
+            {variations?.map((item, i) => (
               <button
                 key={i}
-                className={`nav-link ${item.img === activeImg ? "active" : ""}`}
+                className={`nav-link ${formatImageUrl(item.img) === activeImg ? "active" : ""}`}
                 onClick={() => handleImageActive(item)}
               >
                 <Image
-                  src={item.img}
+                  src={formatImageUrl(item.img)}
                   alt="image"
                   width={78}
                   height={100}

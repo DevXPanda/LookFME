@@ -23,6 +23,17 @@ const OrderTable = () => {
   const [selectVal, setSelectVal] = useState<string>(urlStatus);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [selectedOrders, setSelectedOrders] = useState<Set<string>>(new Set());
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+  const formatImageUrl = (url: any) => {
+    if (!url || typeof url !== "string") return "https://placehold.co/200x200?text=No+Image";
+    if (url.startsWith("http")) return url;
+    if (url.startsWith("/")) {
+      return `http://localhost:7000${url}`;
+    }
+    return url;
+  };
 
   // Update selectVal when URL status changes
   useEffect(() => {
@@ -178,6 +189,12 @@ const OrderTable = () => {
               </th>
               <th
                 scope="col"
+                className="px-3 py-3 text-tiny text-text2 uppercase font-semibold w-[120px]"
+              >
+                Product Image
+              </th>
+              <th
+                scope="col"
                 className="px-3 py-3 text-tiny text-text2 uppercase font-semibold w-[150px]"
               >
                 SKU
@@ -187,6 +204,12 @@ const OrderTable = () => {
                 className="px-3 py-3 text-tiny text-text2 uppercase font-semibold"
               >
                 Customer
+              </th>
+              <th
+                scope="col"
+                className="px-3 py-3 text-tiny text-text2 uppercase font-semibold w-[150px] text-end"
+              >
+                Size
               </th>
               <th
                 scope="col"
@@ -251,6 +274,32 @@ const OrderTable = () => {
                 <td className="px-3 py-3 font-normal text-[#55585B]">
                   #{item.invoice}
                 </td>
+                <td className="px-3 py-3">
+                  <div className="flex flex-col items-center">
+                    {item.cart && item.cart[0] && (
+                      <div className="w-[40px] h-[40px] relative rounded overflow-hidden border border-gray6">
+                        <Image
+                          src={formatImageUrl(item.cart[0].img || item.cart[0].imageURLs?.[0]?.img)}
+                          alt="product"
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    )}
+                    {item.cart.length > 1 && (
+                      <button
+                        onClick={() => {
+                          const images = item.cart.map((c: any) => formatImageUrl(c.img || c.imageURLs?.[0]?.img));
+                          setPreviewImages(images);
+                          setIsPreviewOpen(true);
+                        }}
+                        className="text-[10px] text-theme hover:underline mt-1 font-medium"
+                      >
+                        +{item.cart.length - 1} more
+                      </button>
+                    )}
+                  </div>
+                </td>
                 <td className="px-3 py-3 font-normal text-[#55585B]">
                   {(() => {
                     // Extract SKUs from cart items
@@ -268,7 +317,7 @@ const OrderTable = () => {
                         return null;
                       })
                       .filter((sku: string | null) => sku !== null);
-                    
+
                     // Return comma-separated SKUs or "N/A" if none found
                     return skus.length > 0 ? skus.join(", ") : "N/A";
                   })()}
@@ -292,6 +341,14 @@ const OrderTable = () => {
                 </td>
 
                 <td className="px-3 py-3 font-normal text-[#55585B] text-end">
+                  {(() => {
+                    const sizes = item.cart
+                      .map((cartItem: any) => cartItem.selectedSize)
+                      .filter((size: any) => size)
+                    return sizes.length > 0 ? Array.from(new Set(sizes)).join(", ") : "-";
+                  })()}
+                </td>
+                <td className="px-3 py-3 font-normal text-[#55585B] text-end">
                   {item.cart.reduce(
                     (acc, curr) => acc + curr.orderQuantity,
                     0
@@ -305,16 +362,16 @@ const OrderTable = () => {
                 </td>
                 <td className="px-3 py-3 text-end">
                   <span
-                    className={`text-[11px] ${item.status === "pending"
-                      ? "text-warning bg-warning/10"
+                    className={`text-[10px] uppercase tracking-wider ${item.status === "pending"
+                      ? "text-amber-700 bg-amber-50 border border-amber-200"
                       : item.status === "delivered"
-                        ? "text-success bg-success/10"
+                        ? "text-emerald-700 bg-emerald-50 border border-emerald-200"
                         : item.status === "processing"
-                          ? "text-indigo-500 bg-indigo-100"
-                          : item.status === "cancel"
-                            ? "text-danger bg-danger/10"
-                            : ""
-                      } px-3 py-1 rounded-md leading-none font-medium text-end`}
+                          ? "text-indigo-700 bg-indigo-50 border border-indigo-200"
+                          : item.status === "cancel" || item.status === "canceled"
+                            ? "text-rose-700 bg-rose-50 border border-rose-200"
+                            : "text-slate-700 bg-slate-50 border border-slate-200"
+                      } px-2.5 py-1 rounded-full leading-none font-bold text-end`}
                   >
                     {item.status}
                   </span>
@@ -325,8 +382,8 @@ const OrderTable = () => {
 
                 <td className="px-9 py-3 text-end">
                   <div className="flex items-center justify-end space-x-2">
-                    <OrderStatusChange 
-                      id={item._id} 
+                    <OrderStatusChange
+                      id={item._id}
                       currentStatus={item.status}
                     />
                   </div>
@@ -411,7 +468,7 @@ const OrderTable = () => {
     try {
       const orderIds = Array.from(selectedOrders);
       const result = await downloadBulkLabels({ orderIds });
-      
+
       // Handle blob response
       if ('data' in result && result.data instanceof Blob) {
         const blob = result.data;
@@ -425,7 +482,7 @@ const OrderTable = () => {
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
-        
+
         notifySuccess(`Successfully downloaded ${orderIds.length} shipping label(s)`);
         setSelectedOrders(new Set());
       } else {
@@ -525,6 +582,47 @@ const OrderTable = () => {
       </div>
 
       <div className="relative overflow-x-auto mx-8">{content}</div>
+
+      {/* Image Preview Modal */}
+      {isPreviewOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[85vh] overflow-hidden flex flex-col">
+            <div className="px-6 py-4 border-b border-gray6 flex items-center justify-between bg-white sticky top-0">
+              <h3 className="text-lg font-bold text-heading uppercase tracking-wider">Order Items Preview</h3>
+              <button
+                onClick={() => setIsPreviewOpen(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 hover:text-heading transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="p-8 overflow-y-auto">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {previewImages.map((img, idx) => (
+                  <div key={idx} className="group relative aspect-square rounded-lg overflow-hidden border border-gray6 bg-gray-50 shadow-sm hover:shadow-md transition-shadow">
+                    <Image
+                      src={img}
+                      alt={`preview-${idx}`}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="px-6 py-4 border-t border-gray6 bg-gray-50 text-right">
+              <button
+                onClick={() => setIsPreviewOpen(false)}
+                className="px-6 py-2 bg-theme text-white rounded-lg hover:bg-theme/90 font-semibold transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

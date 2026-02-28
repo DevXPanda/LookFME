@@ -7,18 +7,27 @@ import DetailsTabNav from "./details-tab-nav";
 import RelatedProducts from "./related-products";
 import ProductCoupons from "./product-coupons";
 
+const formatImageUrl = (url) => {
+  if (!url || typeof url !== "string") return "https://placehold.co/200x200?text=No+Image";
+  if (url.startsWith("http")) return url;
+  if (url.startsWith("/")) {
+    return `http://localhost:7000${url}`;
+  }
+  return url;
+};
+
 const ProductDetailsContent = ({ productItem }) => {
-  const { _id, img, imageURLs, videoId,status } = productItem || {};
-  const [activeImg, setActiveImg] = useState(img);
+  const { _id, img, imageURLs, videoId, status } = productItem || {};
+  const [activeImg, setActiveImg] = useState(formatImageUrl(img || (imageURLs && imageURLs.length > 0 ? imageURLs[0].img : "")));
   const dispatch = useDispatch();
   // active image change when img change
   useEffect(() => {
-    setActiveImg(img);
-  }, [img]);
+    setActiveImg(formatImageUrl(img || (imageURLs && imageURLs.length > 0 ? imageURLs[0].img : "")));
+  }, [img, imageURLs]);
 
   // handle image active
   const handleImageActive = (item) => {
-    setActiveImg(item.img);
+    setActiveImg(formatImageUrl(item.img));
   };
   return (
     <section className="tp-product-details-area">
@@ -30,7 +39,7 @@ const ProductDetailsContent = ({ productItem }) => {
               <DetailsThumbWrapper
                 activeImg={activeImg}
                 handleImageActive={handleImageActive}
-                imageURLs={imageURLs}
+                imageURLs={imageURLs || []}
                 imgWidth={580}
                 imgHeight={670}
                 videoId={videoId}
@@ -47,7 +56,7 @@ const ProductDetailsContent = ({ productItem }) => {
                 detailsBottom={true}
               />
               {/* product-details-wrapper end */}
-              
+
               {/* product coupons start */}
               <ProductCoupons productId={_id} />
               {/* product coupons end */}

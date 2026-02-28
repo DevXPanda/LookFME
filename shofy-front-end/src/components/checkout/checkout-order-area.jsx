@@ -22,7 +22,7 @@ const CheckoutOrderArea = ({ checkoutData }) => {
     discountAmount,
     control
   } = checkoutData;
-  
+
   // Watch payment method to determine if Stripe is required
   const paymentMethod = useWatch({ control, name: 'payment' });
   const { cart_products } = useSelector((state) => state.cart);
@@ -44,6 +44,9 @@ const CheckoutOrderArea = ({ checkoutData }) => {
             <li key={item._id} className="tp-order-info-list-desc">
               <p>
                 {item.title} <span> x {item.orderQuantity}</span>
+                {item.selectedSize && (
+                  <span className="d-block text-muted" style={{ fontSize: '12px' }}>Size: {item.selectedSize}</span>
+                )}
               </p>
               <span>₹{item.price.toFixed(2)}</span>
             </li>
@@ -75,20 +78,20 @@ const CheckoutOrderArea = ({ checkoutData }) => {
             </div>
           </li>
 
-           {/*  subtotal */}
-           <li className="tp-order-info-list-subtotal">
+          {/*  subtotal */}
+          <li className="tp-order-info-list-subtotal">
             <span>Subtotal</span>
             <span>₹{total.toFixed(2)}</span>
           </li>
 
-           {/*  shipping cost */}
-           <li className="tp-order-info-list-subtotal">
+          {/*  shipping cost */}
+          <li className="tp-order-info-list-subtotal">
             <span>Shipping</span>
             <span>Free</span>
           </li>
 
-           {/* discount */}
-           <li className="tp-order-info-list-subtotal">
+          {/* discount */}
+          <li className="tp-order-info-list-subtotal">
             <span>Discount</span>
             <span>₹{discountAmount.toFixed(2)}</span>
           </li>

@@ -28,6 +28,7 @@
     text-transform: uppercase;
 
     &.active,
+    &.selected,
     &:hover {
         border-color: #BE5985;
         background-color: #BE5985;

@@ -11,7 +11,7 @@ const path = require('path');
 function generateShippingLabelPDF(order) {
   return new Promise((resolve, reject) => {
     try {
-      const doc = new PDFDocument({ 
+      const doc = new PDFDocument({
         size: [400, 300], // 4x3 inches (shipping label size)
         margins: { top: 10, bottom: 10, left: 10, right: 10 }
       });
@@ -26,45 +26,45 @@ function generateShippingLabelPDF(order) {
 
       // Header
       doc.fontSize(16)
-         .font('Helvetica-Bold')
-         .text('SHIPPING LABEL', { align: 'center' })
-         .moveDown(0.5);
+        .font('Helvetica-Bold')
+        .text('SHIPPING LABEL', { align: 'center' })
+        .moveDown(0.5);
 
       // Order Information
       doc.fontSize(10)
-         .font('Helvetica-Bold')
-         .text(`Order #${order.invoice}`, { align: 'left' })
-         .font('Helvetica')
-         .fontSize(9)
-         .text(`Date: ${new Date(order.createdAt || Date.now()).toLocaleDateString()}`, { align: 'left' })
-         .moveDown(0.5);
+        .font('Helvetica-Bold')
+        .text(`Order #${order.invoice}`, { align: 'left' })
+        .font('Helvetica')
+        .fontSize(9)
+        .text(`Date: ${new Date(order.createdAt || Date.now()).toLocaleDateString()}`, { align: 'left' })
+        .moveDown(0.5);
 
       // Shipping Address Section
       doc.fontSize(11)
-         .font('Helvetica-Bold')
-         .text('SHIP TO:', { align: 'left' })
-         .font('Helvetica')
-         .fontSize(10)
-         .text(order.name || '', { align: 'left' })
-         .text(order.address || '', { align: 'left' })
-         .text(`${order.city || ''}, ${order.zipCode || ''}`, { align: 'left' })
-         .text(order.country || '', { align: 'left' })
-         .moveDown(0.3)
-         .text(`Phone: ${order.contact || ''}`, { align: 'left' })
-         .text(`Email: ${order.email || ''}`, { align: 'left' })
-         .moveDown(0.5);
+        .font('Helvetica-Bold')
+        .text('SHIP TO:', { align: 'left' })
+        .font('Helvetica')
+        .fontSize(10)
+        .text(order.name || '', { align: 'left' })
+        .text(order.address || '', { align: 'left' })
+        .text(`${order.city || ''}, ${order.zipCode || ''}`, { align: 'left' })
+        .text(order.country || '', { align: 'left' })
+        .moveDown(0.3)
+        .text(`Phone: ${order.contact || ''}`, { align: 'left' })
+        .text(`Email: ${order.email || ''}`, { align: 'left' })
+        .moveDown(0.5);
 
       // Order Items Summary
       if (order.cart && order.cart.length > 0) {
         doc.fontSize(10)
-           .font('Helvetica-Bold')
-           .text('ITEMS:', { align: 'left' })
-           .font('Helvetica')
-           .fontSize(9);
-        
+          .font('Helvetica-Bold')
+          .text('ITEMS:', { align: 'left' })
+          .font('Helvetica')
+          .fontSize(9);
+
         const totalQty = order.cart.reduce((sum, item) => sum + (item.orderQuantity || 0), 0);
         doc.text(`Total Items: ${totalQty}`, { align: 'left' });
-        
+
         order.cart.forEach((item, index) => {
           if (index < 3) { // Show first 3 items
             doc.text(`- ${item.title || 'Item'} (Qty: ${item.orderQuantity || 0})`, { align: 'left' });
@@ -78,12 +78,11 @@ function generateShippingLabelPDF(order) {
 
       // Footer
       doc.fontSize(8)
-         .font('Helvetica')
-         .text(`Status: ${order.status?.toUpperCase() || 'PENDING'}`, { align: 'left' })
-         .text(`Payment: ${order.paymentMethod || 'N/A'}`, { align: 'left' })
-         .moveDown(0.3)
-         .fontSize(7)
-         .text(`Order ID: ${order._id}`, { align: 'left' });
+        .font('Helvetica')
+        .text(`Payment: ${order.paymentMethod || 'N/A'}`, { align: 'left' })
+        .moveDown(0.3)
+        .fontSize(7)
+        .text(`Order ID: ${order._id}`, { align: 'left' });
 
       doc.end();
     } catch (error) {
