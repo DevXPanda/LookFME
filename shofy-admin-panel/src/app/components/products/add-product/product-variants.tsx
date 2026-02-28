@@ -27,17 +27,17 @@ const ProductVariants = ({
       : [{ color: { clrCode: "", name: "" }, img: "", sizes: [] }]
   );
   const [isSubmitField, setIsSubmitField] = useState<boolean>(false);
-  
+
   // New state for attribute-based variations
   const [attributeType, setAttributeType] = useState<string>("");
   const [attributeValues, setAttributeValues] = useState<string>("");
   const [colorName, setColorName] = useState<string>("");
   const [colorCode, setColorCode] = useState<string>("");
   const [variationImage, setVariationImage] = useState<string>("");
-  
+
   // set default value
   const [hasDefaultValues, setHasDefaultValues] = useState<boolean>(false);
-  
+
   // default value set
   useEffect(() => {
     if (default_value && !hasDefaultValues) {
@@ -287,10 +287,11 @@ const ProductVariants = ({
                         className="input w-full h-[38px] rounded-md border border-gray6 px-3 text-sm"
                         type="number"
                         placeholder="Enter Stock"
-                        value={variation.stock || ""}
-                        onChange={(e) =>
-                          updateVariation(index, "stock", parseInt(e.target.value) || 0)
-                        }
+                        value={variation.stock !== undefined && variation.stock !== null ? variation.stock : ""}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          updateVariation(index, "stock", val === "" ? "" : parseInt(val) || 0);
+                        }}
                         min="0"
                         required
                       />
