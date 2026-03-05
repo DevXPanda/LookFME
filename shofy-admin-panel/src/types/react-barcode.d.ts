@@ -1,5 +1,5 @@
 declare module "react-barcode" {
-    import React from "react";
+    import { Component } from "react";
 
     interface BarcodeProps {
         value: string;
@@ -23,6 +23,6 @@ declare module "react-barcode" {
         renderer?: string;
     }
 
-    const Barcode: React.FC<BarcodeProps>;
+    class Barcode extends Component<BarcodeProps> { }
     export default Barcode;
 }
