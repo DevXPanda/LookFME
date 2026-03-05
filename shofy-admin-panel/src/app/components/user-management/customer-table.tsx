@@ -87,7 +87,7 @@ const CustomerTable = () => {
     );
   }
 
-  if (!isLoading && !isError && currentItems) {
+  if (!isLoading && !isError && allCustomers.length > 0) {
     content = (
       <>
         <div className="overflow-x-auto -mx-6 sm:mx-0">
