@@ -1,7 +1,9 @@
 import React from "react";
 import { Order } from "@/types/order-amount-type";
 import dayjs from "dayjs";
-import Barcode from "react-barcode";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+import BarcodeRaw from "react-barcode";
+const Barcode = BarcodeRaw as any;
 import { QRCodeSVG } from "qrcode.react";
 
 // prop type
