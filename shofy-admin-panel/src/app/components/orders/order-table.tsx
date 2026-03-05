@@ -30,7 +30,8 @@ const OrderTable = () => {
     if (!url || typeof url !== "string") return "https://placehold.co/200x200?text=No+Image";
     if (url.startsWith("http")) return url;
     if (url.startsWith("/")) {
-      return `http://localhost:7000${url}`;
+      const baseUrl = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:7000";
+      return `${baseUrl}${url}`;
     }
     return url;
   };
