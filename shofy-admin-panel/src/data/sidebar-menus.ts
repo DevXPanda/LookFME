@@ -16,6 +16,12 @@ import {
 
 const sidebar_menu: Array<ISidebarMenus> = [
   {
+    id: 1,
+    icon: Dashboard,
+    link: "/dashboard",
+    title: "Dashboard",
+  },
+  {
     id: 100,
     icon: Setting, // Use appropriate icon
     link: "/inventory",
@@ -27,12 +33,7 @@ const sidebar_menu: Array<ISidebarMenus> = [
       { title: "Sales vs Stock Report", link: "/inventory/sales-vs-stock" },
     ],
   },
-  {
-    id: 1,
-    icon: Dashboard,
-    link: "/dashboard",
-    title: "Dashboard",
-  },
+
   {
     id: 2,
     icon: Products,

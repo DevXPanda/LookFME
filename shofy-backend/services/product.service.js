@@ -67,8 +67,21 @@ exports.addAllProductService = async (data) => {
 };
 
 // get product data
-exports.getAllProductsService = async () => {
-  const products = await Product.find({}).populate({
+exports.getAllProductsService = async (query = {}) => {
+  const { searchTerm } = query;
+  let findQuery = {};
+
+  if (searchTerm) {
+    findQuery = {
+      $or: [
+        { title: { $regex: searchTerm, $options: "i" } },
+        { sku: { $regex: searchTerm, $options: "i" } },
+        { "variations.sku": { $regex: searchTerm, $options: "i" } }
+      ]
+    };
+  }
+
+  const products = await Product.find(findQuery).populate({
     path: "reviews",
     match: { visible: { $ne: false } },
     populate: {
@@ -118,6 +131,19 @@ exports.getProductTypeService = async (req) => {
     products = await Product.find({
       productType: type,
       showInLayout: { $in: ["This Week’s Featured", "All Sections"] },
+    }).populate({
+      path: "reviews",
+      match: { visible: { $ne: false } },
+      populate: {
+        path: "userId",
+        select: "name email imageURL reviewBlocked",
+        match: { reviewBlocked: { $ne: true } },
+      },
+    });
+  } else if (query.designer_embroidery === "true" || query.designer_embroidery === true) {
+    products = await Product.find({
+      productType: type,
+      showInLayout: { $in: ["designer_embroidery", "All Sections"] },
     }).populate({
       path: "reviews",
       match: { visible: { $ne: false } },

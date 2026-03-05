@@ -48,9 +48,6 @@ const RefundTable = () => {
     });
   }, [refundsData?.data, searchVal]);
 
-  const paginationData = usePagination(filteredRefunds, 10);
-  const { currentItems, handlePageClick, pageCount } = paginationData;
-
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchVal(e.target.value);
   };
@@ -102,11 +99,11 @@ const RefundTable = () => {
   // Handle error state - only show error if it's a real error (not empty data)
   if (isError) {
     // Check if error is 404 "Not Found" - might be from backend route not found
-    const errorMessage = error && 'data' in error 
+    const errorMessage = error && 'data' in error
       ? (error.data as any)?.message || (error.data as any)?.errorMessages?.[0]?.message || "Failed to load refund requests"
       : error && 'status' in error && (error as any).status === 404
-      ? "Refund requests endpoint not found. Please check backend configuration."
-      : "Failed to load refund requests";
+        ? "Refund requests endpoint not found. Please check backend configuration."
+        : "Failed to load refund requests";
     return <ErrorMsg msg={errorMessage} />;
   }
 
@@ -162,9 +159,8 @@ const RefundTable = () => {
                       <button
                         key={status}
                         onClick={() => handleStatusSelect(status)}
-                        className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${
-                          selectVal === status ? "bg-themeLight text-theme" : ""
-                        }`}
+                        className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${selectVal === status ? "bg-themeLight text-theme" : ""
+                          }`}
                       >
                         {status === "all" ? "All" : status.charAt(0).toUpperCase() + status.slice(1)}
                       </button>
@@ -204,7 +200,7 @@ const RefundTable = () => {
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((item) => (
+              {filteredRefunds.map((item) => (
                 <tr
                   key={item._id}
                   className="bg-white border-b border-gray6 last:border-0 text-start"
@@ -246,11 +242,8 @@ const RefundTable = () => {
 
         <div className="flex justify-between items-center flex-wrap p-6 border-t border-gray6">
           <p className="mb-0 text-tiny">
-            Showing 1-{currentItems.length} of {filteredRefunds.length}
+            Showing all {filteredRefunds.length} of {refundsData?.data?.length || 0} Refunds
           </p>
-          <div className="pagination py-3 flex justify-end items-center pagination">
-            <Pagination handlePageClick={handlePageClick} pageCount={pageCount} />
-          </div>
         </div>
       </div>
     </>

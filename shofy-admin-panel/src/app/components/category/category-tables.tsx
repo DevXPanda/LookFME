@@ -1,17 +1,13 @@
 "use client"
 import React, { useState } from 'react';
 import Image from 'next/image';
-import Pagination from '../ui/Pagination';
 import ErrorMsg from '../common/error-msg';
 import CategoryEditDelete from './edit-delete-category';
 import { useDeleteCategoryMutation, useGetAllCategoriesQuery } from '@/redux/category/categoryApi';
-import usePagination from '@/hooks/use-pagination';
 
 const CategoryTables = () => {
   const { data: categories, isError, isLoading } = useGetAllCategoriesQuery();
   const [deleteCategory, { data: delData, error: delErr }] = useDeleteCategoryMutation();
-  const paginationData = usePagination(categories?.result || [], 5);
-  const { currentItems, handlePageClick, pageCount } = paginationData;
   // decide what to render
   let content = null;
 
@@ -21,13 +17,12 @@ const CategoryTables = () => {
   if (!isLoading && isError) {
     content = <ErrorMsg msg="There was an error" />;
   }
-  if (!isLoading && !isError && categories?.result.length === 0) {
+  if (!isLoading && !isError && (!categories?.result || categories?.result.length === 0)) {
     content = <ErrorMsg msg="No Category Found" />;
   }
 
-  if (!isLoading && !isError && categories?.success && currentItems.length > 0) {
-
-
+  if (!isLoading && !isError && categories?.success && categories?.result && categories.result.length > 0) {
+    const allCategories = [...categories.result].reverse();
 
     content = (
       <>
@@ -55,7 +50,7 @@ const CategoryTables = () => {
                 </tr>
               </thead>
               <tbody>
-                {[...currentItems.reverse()].map(item => (
+                {allCategories.map((item: any) => (
                   <tr key={item._id} className="bg-white border-b border-gray6 last:border-0 text-start mx-9">
                     <td className="px-3 py-3 pl-0 font-normal text-[#55585B]">
                       #{item._id.slice(2, 10)}
@@ -91,13 +86,7 @@ const CategoryTables = () => {
           </div>
         </div>
         <div className="flex justify-between items-center flex-wrap">
-          <p className="mb-0 text-tiny">Showing 1-{currentItems.length} of {categories?.result.length}</p>
-          <div className="pagination py-3 flex justify-end items-center pagination">
-            <Pagination
-              handlePageClick={handlePageClick}
-              pageCount={pageCount}
-            />
-          </div>
+          <p className="mb-0 text-tiny">Showing all {categories?.result.length} Categories</p>
         </div>
       </>
     )

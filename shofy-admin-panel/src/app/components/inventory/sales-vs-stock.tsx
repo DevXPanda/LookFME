@@ -2,18 +2,14 @@
 import React, { useMemo } from "react";
 import { useGetSalesVsStockQuery } from "@/redux/api/inventoryApi";
 import ErrorMsg from "../common/error-msg";
-import Pagination from "../ui/Pagination";
-import usePagination from "@/hooks/use-pagination";
 
 const InventorySalesVsStock = () => {
   const { data, isLoading, isError } = useGetSalesVsStockQuery();
-  const paginationData = usePagination(data?.data || [], 10);
-  const { currentItems, handlePageClick, pageCount } = paginationData;
 
   // Calculate summary statistics
   const summary = useMemo(() => {
     if (!data?.data) return null;
-    
+
     const totalSold = data.data.reduce(
       (sum: number, item: any) => sum + (item.sold || 0),
       0
@@ -57,6 +53,12 @@ const InventorySalesVsStock = () => {
                 </th>
                 <th
                   scope="col"
+                  className="px-3 py-3 text-tiny text-text2 uppercase font-semibold"
+                >
+                  SKU
+                </th>
+                <th
+                  scope="col"
                   className="px-3 py-3 text-tiny text-text2 uppercase font-semibold text-end"
                 >
                   Sold
@@ -82,10 +84,10 @@ const InventorySalesVsStock = () => {
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((row: any, i: number) => {
+              {data.data.map((row: any, i: number) => {
                 const totalUnits = (row.sold || 0) + (row.stock || 0);
-                const stockRatio = totalUnits > 0 
-                  ? ((row.stock / totalUnits) * 100).toFixed(1) 
+                const stockRatio = totalUnits > 0
+                  ? ((row.stock / totalUnits) * 100).toFixed(1)
                   : 0;
                 const ratio: number =
                   typeof stockRatio === "string"
@@ -96,12 +98,14 @@ const InventorySalesVsStock = () => {
                 return (
                   <tr
                     key={i}
-                    className={`bg-white border-b border-gray6 last:border-0 text-start ${
-                      isLowStock ? "bg-red-50/30" : ""
-                    }`}
+                    className={`bg-white border-b border-gray6 last:border-0 text-start ${isLowStock ? "bg-red-50/30" : ""
+                      }`}
                   >
                     <td className="px-3 py-3 font-medium text-heading">
                       {row.product}
+                    </td>
+                    <td className="px-3 py-3 font-normal text-[#55585B]">
+                      {row.sku}
                     </td>
                     <td className="px-3 py-3 font-normal text-success text-end">
                       {row.sold?.toLocaleString() || 0}
@@ -116,13 +120,12 @@ const InventorySalesVsStock = () => {
                       <div className="flex items-center justify-end gap-2">
                         <div className="w-20 bg-gray6 rounded-full h-2">
                           <div
-                            className={`h-2 rounded-full ${
-                              ratio < 20
-                                ? "bg-danger"
-                                : ratio < 50
+                            className={`h-2 rounded-full ${ratio < 20
+                              ? "bg-danger"
+                              : ratio < 50
                                 ? "bg-warning"
                                 : "bg-success"
-                            }`}
+                              }`}
                             style={{ width: `${stockRatio}%` }}
                           ></div>
                         </div>
@@ -138,21 +141,11 @@ const InventorySalesVsStock = () => {
           </table>
         </div>
 
-        {/* pagination start */}
-        {pageCount > 1 && (
-          <div className="flex justify-between items-center flex-wrap mx-8 mt-4">
-            <p className="mb-0 text-tiny">
-              Showing 1-{currentItems.length} of {data?.data?.length || 0}
-            </p>
-            <div className="pagination py-3 flex justify-end items-center pagination">
-              <Pagination
-                handlePageClick={handlePageClick}
-                pageCount={pageCount}
-              />
-            </div>
-          </div>
-        )}
-        {/* pagination end */}
+        <div className="flex justify-between items-center flex-wrap mx-8 mt-4">
+          <p className="mb-0 text-tiny">
+            Showing all {data.data.length} Products
+          </p>
+        </div>
       </>
     );
   }

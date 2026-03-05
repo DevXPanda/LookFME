@@ -26,18 +26,57 @@ const DetailsBottomInfo = ({ sku, category, tag }) => {
 
       <div className="tp-product-details-social">
         <span>Share: </span>
-        <a href="#">
+        {/* Facebook */}
+        <a
+          href={`https://www.facebook.com/sharer/sharer.php?u=${typeof window !== "undefined" ? encodeURIComponent(window.location.href) : ""}`}
+          target="_blank"
+          rel="noreferrer"
+        >
           <i className="fa-brands fa-facebook-f"></i>
         </a>
-        <a href="#">
-          <i className="fa-brands fa-twitter"></i>
+        {/* WhatsApp */}
+        <a
+          href={`https://api.whatsapp.com/send?text=${typeof window !== "undefined" ? encodeURIComponent(window.location.href) : ""}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <i className="fa-brands fa-whatsapp"></i>
         </a>
-        <a href="#">
-          <i className="fa-brands fa-linkedin-in"></i>
+        {/* Instagram */}
+        <a
+          href="https://www.instagram.com/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <i className="fa-brands fa-instagram"></i>
         </a>
-        <a href="#">
-          <i className="fa-brands fa-vimeo-v"></i>
-        </a>
+        {/* Generic Share / Copy Link */}
+        <button
+          onClick={() => {
+            if (navigator.share) {
+              navigator.share({
+                title: 'Check out this product!',
+                url: window.location.href,
+              }).catch(console.error);
+            } else {
+              // Fallback: Copy to Clipboard
+              navigator.clipboard.writeText(window.location.href);
+              alert("Link copied to clipboard!");
+            }
+          }}
+          style={{
+            background: 'none',
+            border: 'none',
+            padding: '0',
+            marginLeft: '10px',
+            cursor: 'pointer',
+            color: '#55585b',
+            fontSize: '16px'
+          }}
+          title="Share Link"
+        >
+          <i className="fa-solid fa-share-nodes"></i>
+        </button>
       </div>
 
       {/* product-details-msg */}

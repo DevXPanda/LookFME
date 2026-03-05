@@ -209,6 +209,7 @@ const ProductSubmit = () => {
                 <option value="Popular on LookFame">Popular on LookFame</option>
                 <option value="This Week’s Featured">This Week’s Featured</option>
                 <option value="New Arrivals">New Arrivals</option>
+                <option value="designer_embroidery">Designer Embroidery T-Shirts</option>
               </select>
             </div>
           </div>

@@ -25,7 +25,7 @@ const StaffTables = () => {
   }
 
   if (!isLoading && !isError && staffData?.status) {
-    const allStaff = [...currentItems].reverse();
+    const allStaff = [...staffData.data].reverse();
 
     content = (
       <>
@@ -56,7 +56,7 @@ const StaffTables = () => {
                 </tr>
               </thead>
               <tbody>
-                {allStaff.map(item => (
+                {allStaff.map((item: any) => (
                   <tr key={item._id} className="bg-white border-b border-gray6 last:border-0 text-start mx-9">
                     <td className="pr-8 py-5 whitespace-nowrap">
                       <a href="#" className="flex items-center space-x-5">
@@ -78,7 +78,7 @@ const StaffTables = () => {
                     </td>
                     <td className="px-9 py-3 text-end">
                       <div className="flex items-center justify-end space-x-2">
-                        <StaffAction id={item._id}/>
+                        <StaffAction id={item._id} />
                       </div>
                     </td>
                   </tr>
@@ -88,13 +88,7 @@ const StaffTables = () => {
           </div>
         </div>
         <div className="flex justify-between items-center flex-wrap">
-          <p className="mb-0 text-tiny">Showing 1-{currentItems.length} of {staffData?.data.length}</p>
-          <div className="pagination py-3 flex justify-end items-center pagination">
-              <Pagination
-                handlePageClick={handlePageClick}
-                pageCount={pageCount}
-              />
-          </div>
+          <p className="mb-0 text-tiny">Showing all {staffData?.data.length} Staff members</p>
         </div>
       </>
     )

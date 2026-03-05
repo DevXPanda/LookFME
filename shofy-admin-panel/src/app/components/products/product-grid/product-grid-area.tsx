@@ -1,19 +1,36 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useGetAllProductsQuery } from "@/redux/product/productApi";
 import ErrorMsg from "../../common/error-msg";
 import ProductGridItem from "./product-grid-item";
-import Pagination from "../../ui/Pagination";
 import { Search } from "@/svg";
 import Link from "next/link";
-import usePagination from "@/hooks/use-pagination";
 
 const ProductGridArea = () => {
   const { data: products, isError, isLoading } = useGetAllProductsQuery();
-  const paginationData = usePagination(products?.data || [], 10);
-  const { currentItems, handlePageClick, pageCount } = paginationData;
   const [searchValue, setSearchValue] = useState<string>("");
   const [selectValue, setSelectValue] = useState<string>("");
+
+  const filteredProducts = useMemo(() => {
+    if (!products?.data) return [];
+    let list = [...products.data];
+
+    // search field
+    if (searchValue) {
+      const searchLower = searchValue.toLowerCase().replace(/^#/, "").trim();
+      list = list.filter((p) =>
+        p.title.toLowerCase().includes(searchLower) ||
+        (p.sku && p.sku.toLowerCase().includes(searchLower)) ||
+        (p.variations && p.variations.some((v: any) => v.sku && v.sku.toLowerCase().includes(searchLower)))
+      );
+    }
+
+    if (selectValue) {
+      list = list.filter((p) => p.productType === selectValue);
+    }
+
+    return list;
+  }, [products?.data, searchValue, selectValue]);
 
   // search field
   const handleSearchProduct = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,23 +51,12 @@ const ProductGridArea = () => {
   if (!isLoading && isError) {
     content = <ErrorMsg msg="There was an error" />;
   }
-  if (!isLoading && isError && products?.data.length === 0) {
+  if (!isLoading && !isError && products?.success && filteredProducts.length === 0) {
     content = <ErrorMsg msg="No Products Found" />;
   }
 
-  if (!isLoading && !isError && products?.success) {
-    let productItems =[...currentItems].reverse();
-
-    // search field
-    if (searchValue) {
-      productItems = productItems.filter((p) =>
-        p.title.toLowerCase().includes(searchValue.toLowerCase())
-      );
-    }
-
-    if (selectValue) {
-      productItems = productItems.filter((p) => p.productType === selectValue);
-    }
+  if (!isLoading && !isError && products?.success && filteredProducts.length > 0) {
+    let productItems = [...filteredProducts].reverse();
 
     content = (
       <>
@@ -65,15 +71,9 @@ const ProductGridArea = () => {
         {/* bottom  */}
         <div className="flex justify-between items-center flex-wrap mx-8">
           <p className="mb-0 text-tiny">
-            Showing {currentItems.length} of{" "}
-            {products?.data.length}
+            Showing all {filteredProducts.length} of{" "}
+            {products?.data.length || 0} Products
           </p>
-          <div className="pagination py-3 flex justify-end items-center mx-8 pagination">
-            <Pagination
-              handlePageClick={handlePageClick}
-              pageCount={pageCount}
-            />
-          </div>
         </div>
       </>
     );
@@ -98,12 +98,12 @@ const ProductGridArea = () => {
               Categories :{" "}
             </span>
             <select onChange={handleSelectField}>
-                <option value="">Categories</option>
-                <option value="electronics">Electronics</option>
-                <option value="fashion">Fashion</option>
-                <option value="beauty">beauty</option>
-                <option value="jewelry">jewelry</option>
-              </select>
+              <option value="">Categories</option>
+              <option value="electronics">Electronics</option>
+              <option value="fashion">Fashion</option>
+              <option value="beauty">beauty</option>
+              <option value="jewelry">jewelry</option>
+            </select>
           </div>
           <div className="product-add-btn flex ">
             <Link href="/add-product" className="tp-btn">

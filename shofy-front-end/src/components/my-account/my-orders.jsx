@@ -7,6 +7,7 @@ import { useGetAllProductsQuery } from "@/redux/features/productApi";
 import { notifySuccess, notifyError } from "@/utils/toast";
 import ErrorMsg from "@/components/common/error-msg";
 import Image from "next/image";
+import { QuickView } from "@/svg";
 
 const MyOrders = ({ orderData }) => {
   const order_items = orderData?.orders;
@@ -14,12 +15,18 @@ const MyOrders = ({ orderData }) => {
   const [returnOrExchangeOrder, { isLoading: isReturning }] = useReturnOrExchangeOrderMutation();
   const [showCancelModal, setShowCancelModal] = useState(null);
   const [showReturnModal, setShowReturnModal] = useState(null);
+  const [showViewModal, setShowViewModal] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
   const { register, handleSubmit, formState: { errors }, reset, watch, setValue } = useForm();
 
   // Fetch order details when return/exchange modal is open
   const orderDetails = useGetUserOrderByIdQuery(showReturnModal?.id, {
     skip: !showReturnModal?.id,
+  });
+
+  // Fetch order details for view modal
+  const viewOrderDetails = useGetUserOrderByIdQuery(showViewModal, {
+    skip: !showViewModal,
   });
 
   // Fetch all products for exchange selection
@@ -190,16 +197,31 @@ const MyOrders = ({ orderData }) => {
                 {(() => {
                   const ds = getDisplayStatus(item);
                   return (
-                <td
-                  data-info={`status ${ds.key === "pending" ? "pending" : ""} ${ds.key === "processing" ? "hold" : ""} ${ds.key === "delivered" ? "done" : ""} ${ds.key === "returned" ? "warning" : ""} ${ds.key === "exchanged" ? "info" : ""}`}
-                  className={`status ${ds.key === "pending" ? "pending" : ""} ${ds.key === "processing" ? "hold" : ""} ${ds.key === "delivered" ? "done" : ""} ${ds.key === "returned" ? "warning" : ""} ${ds.key === "exchanged" ? "info" : ""}`}
-                >
-                  {ds.label}
-                </td>
+                    <td
+                      data-info={`status ${ds.key === "pending" ? "pending" : ""} ${ds.key === "processing" ? "hold" : ""} ${ds.key === "delivered" ? "done" : ""} ${ds.key === "returned" ? "warning" : ""} ${ds.key === "exchanged" ? "info" : ""}`}
+                      className={`status ${ds.key === "pending" ? "pending" : ""} ${ds.key === "processing" ? "hold" : ""} ${ds.key === "delivered" ? "done" : ""} ${ds.key === "returned" ? "warning" : ""} ${ds.key === "exchanged" ? "info" : ""}`}
+                    >
+                      {ds.label}
+                    </td>
                   );
                 })()}
                 <td>
-                  <div className="d-flex gap-2 flex-wrap">
+                  <div className="d-flex gap-2 flex-wrap align-items-center">
+                    <button
+                      type="button"
+                      onClick={() => setShowViewModal(item._id)}
+                      title="View Order Details"
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                        width: '34px', height: '34px', borderRadius: '6px',
+                        border: '1px solid #6c5ce7', background: '#f8f7ff', color: '#6c5ce7',
+                        cursor: 'pointer', transition: 'all 0.2s'
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.background = '#6c5ce7'; e.currentTarget.style.color = '#fff'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = '#f8f7ff'; e.currentTarget.style.color = '#6c5ce7'; }}
+                    >
+                      <QuickView />
+                    </button>
                     <Link href={`/order/${item._id}`} className="tp-logout-btn" style={{ fontSize: '12px', padding: '5px 10px' }}>
                       Invoice
                     </Link>
@@ -207,41 +229,41 @@ const MyOrders = ({ orderData }) => {
                       const ds = getDisplayStatus(item);
                       return ds.key !== 'delivered' && ds.key !== 'cancel' && ds.key !== 'returned' && ds.key !== 'exchanged';
                     })() && (
-                      <button
-                        type="button"
-                        onClick={() => setShowCancelModal(item._id)}
-                        className="tp-btn tp-btn-border"
-                        style={{ fontSize: '12px', padding: '5px 10px', background: '#fff', color: '#dc3545', borderColor: '#dc3545' }}
-                      >
-                        Cancel
-                      </button>
-                    )}
+                        <button
+                          type="button"
+                          onClick={() => setShowCancelModal(item._id)}
+                          className="tp-btn tp-btn-border"
+                          style={{ fontSize: '12px', padding: '5px 10px', background: '#fff', color: '#dc3545', borderColor: '#dc3545' }}
+                        >
+                          Cancel
+                        </button>
+                      )}
                     {(() => {
                       const ds = getDisplayStatus(item);
                       return ds.key === 'delivered';
                     })() && (
-                      <button
-                        type="button"
-                        onClick={() => setShowReturnModal({ id: item._id, type: 'returned' })}
-                        className="tp-btn tp-btn-border"
-                        style={{ fontSize: '12px', padding: '5px 10px', background: '#fff', color: '#0d6efd', borderColor: '#0d6efd' }}
-                      >
-                        Return
-                      </button>
-                    )}
+                        <button
+                          type="button"
+                          onClick={() => setShowReturnModal({ id: item._id, type: 'returned' })}
+                          className="tp-btn tp-btn-border"
+                          style={{ fontSize: '12px', padding: '5px 10px', background: '#fff', color: '#0d6efd', borderColor: '#0d6efd' }}
+                        >
+                          Return
+                        </button>
+                      )}
                     {(() => {
                       const ds = getDisplayStatus(item);
                       return ds.key === 'delivered';
                     })() && (
-                      <button
-                        type="button"
-                        onClick={() => setShowReturnModal({ id: item._id, type: 'exchanged' })}
-                        className="tp-btn tp-btn-border"
-                        style={{ fontSize: '12px', padding: '5px 10px', background: '#fff', color: '#198754', borderColor: '#198754' }}
-                      >
-                        Exchange
-                      </button>
-                    )}
+                        <button
+                          type="button"
+                          onClick={() => setShowReturnModal({ id: item._id, type: 'exchanged' })}
+                          className="tp-btn tp-btn-border"
+                          style={{ fontSize: '12px', padding: '5px 10px', background: '#fff', color: '#198754', borderColor: '#198754' }}
+                        >
+                          Exchange
+                        </button>
+                      )}
                   </div>
                 </td>
               </tr>
@@ -577,6 +599,147 @@ const MyOrders = ({ orderData }) => {
           </div>
         </div>
       )}
+
+      {/* View Order Details Modal */}
+      {showViewModal && (() => {
+        const vd = viewOrderDetails?.data?.order;
+        const isVdLoading = viewOrderDetails?.isLoading;
+        return (
+          <div style={{
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 9999,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: '16px'
+          }} onClick={() => setShowViewModal(null)}>
+            <div style={{
+              backgroundColor: '#fff', borderRadius: '12px',
+              maxWidth: '720px', width: '100%', maxHeight: '90vh',
+              overflowY: 'auto', position: 'relative', padding: '0',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.15)'
+            }} onClick={e => e.stopPropagation()}>
+              {/* Header */}
+              <div style={{
+                padding: '20px 28px', borderBottom: '1px solid #eee',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                background: 'linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%)',
+                borderRadius: '12px 12px 0 0', color: '#fff'
+              }}>
+                <div>
+                  <h4 style={{ margin: 0, fontSize: '18px', fontWeight: 700 }}>Order Details</h4>
+                  {vd && <p style={{ margin: '4px 0 0', fontSize: '13px', opacity: 0.9 }}>#{vd._id?.substring(20, 25)}</p>}
+                </div>
+                <button onClick={() => setShowViewModal(null)} style={{
+                  background: 'rgba(255,255,255,0.2)', border: 'none', color: '#fff',
+                  width: '32px', height: '32px', borderRadius: '8px', fontSize: '18px',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>×</button>
+              </div>
+
+              {isVdLoading ? (
+                <div style={{ padding: '60px', textAlign: 'center' }}>
+                  <p style={{ color: '#888' }}>Loading order details...</p>
+                </div>
+              ) : vd ? (
+                <div style={{ padding: '24px 28px' }}>
+                  {/* Order Info Grid */}
+                  <div style={{
+                    display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                    gap: '16px', marginBottom: '24px'
+                  }}>
+                    <div style={{ padding: '14px 16px', background: '#f8f9fa', borderRadius: '8px' }}>
+                      <p style={{ margin: 0, fontSize: '11px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Order ID</p>
+                      <p style={{ margin: '4px 0 0', fontWeight: 600, fontSize: '14px' }}>#{vd._id?.substring(20, 25)}</p>
+                    </div>
+                    <div style={{ padding: '14px 16px', background: '#f8f9fa', borderRadius: '8px' }}>
+                      <p style={{ margin: 0, fontSize: '11px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Order Date</p>
+                      <p style={{ margin: '4px 0 0', fontWeight: 600, fontSize: '14px' }}>{dayjs(vd.createdAt).format('MMMM D, YYYY')}</p>
+                    </div>
+                    <div style={{ padding: '14px 16px', background: '#f8f9fa', borderRadius: '8px' }}>
+                      <p style={{ margin: 0, fontSize: '11px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Status</p>
+                      <p style={{
+                        margin: '4px 0 0', fontWeight: 600, fontSize: '14px',
+                        color: getDisplayStatus(vd).key === 'delivered' ? '#198754'
+                          : getDisplayStatus(vd).key === 'cancel' ? '#dc3545'
+                            : getDisplayStatus(vd).key === 'processing' ? '#fd7e14' : '#6c5ce7'
+                      }}>{getDisplayStatus(vd).label}</p>
+                    </div>
+                    <div style={{ padding: '14px 16px', background: '#f8f9fa', borderRadius: '8px' }}>
+                      <p style={{ margin: 0, fontSize: '11px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Payment</p>
+                      <p style={{ margin: '4px 0 0', fontWeight: 600, fontSize: '14px', textTransform: 'capitalize' }}>{vd.paymentMethod || 'N/A'}</p>
+                    </div>
+                  </div>
+
+                  {/* Shipping Address */}
+                  {(vd.shippingAddress || vd.user) && (
+                    <div style={{ marginBottom: '24px', padding: '16px', border: '1px solid #eee', borderRadius: '8px' }}>
+                      <h6 style={{ margin: '0 0 10px', fontSize: '13px', color: '#555', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Shipping Address</h6>
+                      <p style={{ margin: 0, fontSize: '14px', lineHeight: 1.6, color: '#333' }}>
+                        {vd.shippingAddress?.name || vd.user?.name || ''}<br />
+                        {vd.shippingAddress?.address || vd.address || ''}
+                        {(vd.shippingAddress?.city || vd.city) && <><br />{vd.shippingAddress?.city || vd.city}{(vd.shippingAddress?.state || vd.state) ? `, ${vd.shippingAddress?.state || vd.state}` : ''} {vd.shippingAddress?.zipCode || vd.zipCode || ''}</>}
+                        {(vd.shippingAddress?.country || vd.country) && <><br />{vd.shippingAddress?.country || vd.country}</>}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Products */}
+                  <h6 style={{ margin: '0 0 12px', fontSize: '13px', color: '#555', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Products</h6>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
+                    {vd.cart?.map((cartItem, idx) => (
+                      <div key={idx} style={{
+                        display: 'flex', gap: '14px', padding: '14px',
+                        border: '1px solid #f0f0f0', borderRadius: '8px',
+                        alignItems: 'flex-start'
+                      }}>
+                        {cartItem.img && (
+                          <Image src={cartItem.img} alt={cartItem.title || ''}
+                            width={70} height={70}
+                            style={{ borderRadius: '8px', objectFit: 'cover', flexShrink: 0 }}
+                          />
+                        )}
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <p style={{ margin: 0, fontWeight: 600, fontSize: '14px', color: '#222' }}>{cartItem.title}</p>
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '6px' }}>
+                            {cartItem.sku && (
+                              <span style={{ fontSize: '12px', color: '#666', background: '#f5f5f5', padding: '2px 8px', borderRadius: '4px' }}>SKU: #{cartItem.sku}</span>
+                            )}
+                            {cartItem.color && cartItem.color.name && (
+                              <span style={{ fontSize: '12px', color: '#666', background: '#f5f5f5', padding: '2px 8px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: cartItem.color.clrCode || cartItem.color.name, display: 'inline-block', border: '1px solid #ddd' }}></span>
+                                {cartItem.color.name}
+                              </span>
+                            )}
+                            {cartItem.size && (
+                              <span style={{ fontSize: '12px', color: '#666', background: '#f5f5f5', padding: '2px 8px', borderRadius: '4px' }}>Size: {cartItem.size}</span>
+                            )}
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
+                            <span style={{ fontSize: '13px', color: '#888' }}>Qty: {cartItem.orderQuantity || 1}</span>
+                            <span style={{ fontWeight: 700, fontSize: '14px', color: '#6c5ce7' }}>₹{((cartItem.price || 0) * (cartItem.orderQuantity || 1)).toFixed(2)}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Order Total */}
+                  <div style={{
+                    padding: '16px', background: 'linear-gradient(135deg, #f8f7ff 0%, #f0eeff 100%)',
+                    borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+                  }}>
+                    <span style={{ fontSize: '14px', fontWeight: 600, color: '#555' }}>Order Total</span>
+                    <span style={{ fontSize: '20px', fontWeight: 700, color: '#6c5ce7' }}>₹{(vd.totalAmount || vd.subTotal || 0).toFixed(2)}</span>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ padding: '60px', textAlign: 'center' }}>
+                  <p style={{ color: '#888' }}>Order not found.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 };

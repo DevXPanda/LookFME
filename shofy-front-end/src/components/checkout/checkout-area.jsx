@@ -15,12 +15,12 @@ const CheckoutArea = () => {
   const router = useRouter();
   useEffect(() => {
     const isAuthenticate = Cookies.get("userInfo");
-    if(!isAuthenticate){
+    if (!isAuthenticate) {
       router.push("/login")
     }
-  },[router]);
+  }, [router]);
   const checkoutData = useCheckoutSubmit();
-  const {handleSubmit,submitHandler,register,errors,handleCouponCode,couponRef,couponApplyMsg,setValue} = checkoutData;
+  const { handleSubmit, submitHandler, handleError, register, errors, handleCouponCode, couponRef, couponApplyMsg, setValue, trigger } = checkoutData;
   const { cart_products } = useSelector((state) => state.cart);
   return (
     <>
@@ -49,10 +49,10 @@ const CheckoutArea = () => {
                   />
                 </div>
               </div>
-              <form onSubmit={handleSubmit(submitHandler)}>
+              <form onSubmit={handleSubmit(submitHandler, handleError)}>
                 <div className="row">
                   <div className="col-lg-7">
-                    <CheckoutBillingArea register={register} errors={errors} setValue={setValue} />
+                    <CheckoutBillingArea register={register} errors={errors} setValue={setValue} trigger={trigger} />
                   </div>
                   <div className="col-lg-5">
                     <CheckoutOrderArea checkoutData={checkoutData} />

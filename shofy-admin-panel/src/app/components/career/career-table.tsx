@@ -1,9 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import ErrorMsg from "@/app/components/common/error-msg";
-import Pagination from "@/app/components/ui/Pagination";
 import { useGetCareerApplicationsQuery } from "@/redux/career/careerApi";
-import usePagination from "@/hooks/use-pagination";
 import { Search } from "@/svg";
 import Link from "next/link";
 import { View } from "@/svg";
@@ -24,9 +22,6 @@ const CareerTable = () => {
                 m.role?.toLowerCase().includes(searchVal.toLowerCase())
         )
         : allMessages;
-
-    const paginationData = usePagination(filtered, 9999);
-    const { currentItems, handlePageClick, pageCount } = paginationData;
 
     const messagePreview = (msg: any) => {
         const text = msg.message || "";
@@ -68,7 +63,7 @@ const CareerTable = () => {
         );
     }
 
-    if (!isLoading && !isError && currentItems.length > 0) {
+    if (!isLoading && !isError && filtered.length > 0) {
         content = (
             <>
                 <div className="overflow-x-auto -mx-6 sm:mx-0">
@@ -85,7 +80,7 @@ const CareerTable = () => {
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-100">
-                            {currentItems.map((item: any) => (
+                            {filtered.map((item: any) => (
                                 <tr key={item._id} className="hover:bg-gray-50/50 transition-colors">
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.name}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{item.email}</td>
@@ -121,10 +116,8 @@ const CareerTable = () => {
                 </div>
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-6 py-4 border-t border-gray-100 bg-gray-50/30">
                     <p className="text-sm text-gray-500">
-                        Showing <span className="font-medium text-gray-700">1–{currentItems.length}</span> of{" "}
-                        <span className="font-medium text-gray-700">{filtered.length}</span> applications
+                        Showing all <span className="font-medium text-gray-700">{filtered.length}</span> applications
                     </p>
-                    {pageCount > 1 && <Pagination handlePageClick={handlePageClick} pageCount={pageCount} />}
                 </div>
             </>
         );

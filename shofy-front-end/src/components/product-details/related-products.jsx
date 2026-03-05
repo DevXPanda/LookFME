@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Scrollbar, Navigation, Autoplay } from "swiper/modules";
 // internal
 import { useGetRelatedProductsQuery } from "@/redux/features/productApi";
-import ProductItem from "../products/beauty/product-item";
+import ProductItem from "../products/fashion/product-item";
 import ErrorMsg from "../common/error-msg";
 import { HomeNewArrivalPrdLoader } from "../loader";
 
@@ -62,7 +62,7 @@ const RelatedProducts = ({ id }) => {
       >
         {product_items.map((item) => (
           <SwiperSlide key={item._id}>
-            <ProductItem product={item} primary_style={true} />
+            <ProductItem product={item} />
           </SwiperSlide>
         ))}
       </Swiper>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useGetAllReviewsQuery } from "@/redux/review/reviewApi";
 import { Search } from "@/svg";
 import ErrorMsg from "../../common/error-msg";
@@ -11,8 +11,44 @@ const ReviewProductArea = () => {
   const { data: reviewsData, isError, isLoading } = useGetAllReviewsQuery();
   const [searchValue, setSearchValue] = useState<string>("");
   const [selectValue, setSelectValue] = useState<string>("");
-  const paginationData = usePagination(reviewsData?.data || [], 10);
-  const { currentItems, handlePageClick, pageCount } = paginationData;
+
+  const filteredReviews = useMemo(() => {
+    if (!reviewsData?.data) return [];
+    let list = [...reviewsData.data];
+
+    // search field - search by customer name, product name, SKU, or comment
+    if (searchValue) {
+      const searchLower = searchValue.toLowerCase().replace(/^#/, "").trim();
+      list = list.filter((review: any) => {
+        const customerName = review.userId?.name?.toLowerCase() || "";
+        const productName = review.productId?.title?.toLowerCase() || "";
+        const productSku = review.productId?.sku?.toLowerCase() || "";
+        const comment = review.comment?.toLowerCase() || "";
+
+        // Check variations SKUs as well
+        const variationSkus = review.productId?.variations?.some(
+          (v: any) => v.sku && v.sku.toLowerCase().includes(searchLower)
+        );
+
+        return (
+          customerName.includes(searchLower) ||
+          productName.includes(searchLower) ||
+          productSku.includes(searchLower) ||
+          variationSkus ||
+          comment.includes(searchLower)
+        );
+      });
+    }
+
+    // filter by rating
+    if (selectValue) {
+      list = list.filter(
+        (review: any) => review.rating === parseInt(selectValue)
+      );
+    }
+
+    return list;
+  }, [reviewsData?.data, searchValue, selectValue]);
 
   // search field
   const handleSearchReview = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,34 +69,12 @@ const ReviewProductArea = () => {
   if (!isLoading && isError) {
     content = <ErrorMsg msg="There was an error" />;
   }
-  if (!isLoading && !isError && reviewsData?.data?.length === 0) {
+  if (!isLoading && !isError && reviewsData?.success && filteredReviews.length === 0) {
     content = <ErrorMsg msg="No Reviews Found" />;
   }
 
-  if (!isError && reviewsData?.success) {
-    let review_items = [...currentItems];
-    
-    // search field - search by customer name, product name, or comment
-    if (searchValue) {
-      review_items = review_items.filter((review: any) => {
-        const customerName = review.userId?.name?.toLowerCase() || "";
-        const productName = review.productId?.title?.toLowerCase() || "";
-        const comment = review.comment?.toLowerCase() || "";
-        const searchLower = searchValue.toLowerCase();
-        return (
-          customerName.includes(searchLower) ||
-          productName.includes(searchLower) ||
-          comment.includes(searchLower)
-        );
-      });
-    }
-    
-    // filter by rating
-    if (selectValue) {
-      review_items = review_items.filter(
-        (review: any) => review.rating === parseInt(selectValue)
-      );
-    }
+  if (!isError && reviewsData?.success && filteredReviews.length > 0) {
+    let review_items = [...filteredReviews];
 
     content = (
       <>
@@ -150,19 +164,11 @@ const ReviewProductArea = () => {
           </table>
         </div>
 
-        {pageCount > 1 && (
-          <div className="flex justify-between items-center flex-wrap mx-8">
-            <p className="mb-0 text-tiny mr-3">
-              Showing 1-{currentItems.length} of {reviewsData?.data?.length || 0}
-            </p>
-            <div className="pagination py-3 flex justify-end items-center mr-8 pagination">
-              <Pagination
-                handlePageClick={handlePageClick}
-                pageCount={pageCount}
-              />
-            </div>
-          </div>
-        )}
+        <div className="flex justify-between items-center flex-wrap mx-8">
+          <p className="mb-0 text-tiny mr-3">
+            Showing all {filteredReviews.length} of {reviewsData?.data?.length || 0} Reviews
+          </p>
+        </div>
       </>
     );
   }

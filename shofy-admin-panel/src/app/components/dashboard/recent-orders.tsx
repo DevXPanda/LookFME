@@ -9,9 +9,6 @@ import usePagination from "@/hooks/use-pagination";
 
 const RecentOrders = () => {
   const { data: recentOrders, isError, isLoading } = useGetRecentOrdersQuery();
-  const paginationData = usePagination(recentOrders?.orders || [], 5);
-  const { currentItems, handlePageClick, pageCount } = paginationData;
-
   // decide what to render
   let content = null;
 
@@ -22,25 +19,22 @@ const RecentOrders = () => {
     content = <ErrorMsg msg="There was an error" />;
   }
 
-  if (!isLoading && !isError && currentItems) {
+  if (!isLoading && !isError && recentOrders?.orders) {
+    const orders = recentOrders.orders;
     content = (
       <>
         <table className="w-full text-base text-left text-gray-500">
           <TableHead />
           <tbody>
-            {currentItems?.map((order) => (
-                <TableItem key={order._id} order={order} />
-              ))}
+            {orders.map((order: any) => (
+              <TableItem key={order._id} order={order} />
+            ))}
           </tbody>
         </table>
         {/*  */}
         <div className="px-4 pt-6 border-t border-gray6">
           <div className="flex flex-col justify-between sm:flex-row pagination">
-          <span className="flex items-center uppercase">Showing 1-{currentItems.length} of {recentOrders?.orders.length}</span>
-            <Pagination
-              handlePageClick={handlePageClick}
-              pageCount={pageCount}
-            />
+            <span className="flex items-center uppercase">Showing all {orders.length} Recent Orders</span>
           </div>
         </div>
       </>

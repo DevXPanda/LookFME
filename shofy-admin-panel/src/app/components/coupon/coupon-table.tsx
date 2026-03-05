@@ -42,7 +42,7 @@ const CouponTable = ({ cls, setOpenSidebar, selectValue, searchValue }: IPropTyp
     content = <ErrorMsg msg="There was an error" />;
   }
   if (!isError && coupons) {
-    let coupon_items = [...currentItems];
+    let coupon_items = [...coupons];
     // search value filtering if search value true
     if (searchValue) {
       coupon_items = coupon_items.filter((c) =>
@@ -80,7 +80,7 @@ const CouponTable = ({ cls, setOpenSidebar, selectValue, searchValue }: IPropTyp
             </tr>
           </thead>
           <tbody>
-            {coupon_items.map((coupon) => (
+            {coupon_items.map((coupon: any) => (
               <tr
                 key={coupon._id}
                 className="bg-white border-b border-gray6 last:border-0 text-start mx-9"
@@ -112,8 +112,8 @@ const CouponTable = ({ cls, setOpenSidebar, selectValue, searchValue }: IPropTyp
                 <td className="px-3 py-3 font-normal text-[#55585B] text-end">
                   <span
                     className={`text-[11px] px-3 py-1 rounded-md leading-none font-medium text-end ${dayjs().isAfter(dayjs(coupon.endTime))
-                        ? "text-danger bg-danger/10"
-                        : "text-success bg-success/10"
+                      ? "text-danger bg-danger/10"
+                      : "text-success bg-success/10"
                       }`}
                   >
                     {dayjs().isAfter(dayjs(coupon.endTime))
@@ -141,18 +141,8 @@ const CouponTable = ({ cls, setOpenSidebar, selectValue, searchValue }: IPropTyp
 
         <div className="flex justify-between items-center flex-wrap mx-8">
           <p className="mb-0 text-tiny">
-            Showing 1-
-            {
-              currentItems.length
-            }{" "}
-            of {coupons?.length}
+            Showing all {coupon_items.length} of {coupons?.length} Coupons
           </p>
-          <div className="pagination py-3 flex justify-end items-center mx-8 pagination">
-            <Pagination
-              handlePageClick={handlePageClick}
-              pageCount={pageCount}
-            />
-          </div>
         </div>
       </>
     );

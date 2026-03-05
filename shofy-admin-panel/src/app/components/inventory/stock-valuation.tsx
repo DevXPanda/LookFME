@@ -2,18 +2,14 @@
 import React, { useMemo } from "react";
 import { useGetStockValuationQuery } from "@/redux/api/inventoryApi";
 import ErrorMsg from "../common/error-msg";
-import Pagination from "../ui/Pagination";
-import usePagination from "@/hooks/use-pagination";
 
 const InventoryStockValuation = () => {
   const { data, isLoading, isError } = useGetStockValuationQuery();
-  const paginationData = usePagination(data?.data || [], 10);
-  const { currentItems, handlePageClick, pageCount } = paginationData;
 
   // Calculate summary statistics
   const summary = useMemo(() => {
     if (!data?.data) return null;
-    
+
     const totalValuation = data.data.reduce(
       (sum: number, item: any) => sum + (item.valuation || 0),
       0
@@ -53,6 +49,12 @@ const InventoryStockValuation = () => {
                 </th>
                 <th
                   scope="col"
+                  className="px-3 py-3 text-tiny text-text2 uppercase font-semibold"
+                >
+                  SKU
+                </th>
+                <th
+                  scope="col"
                   className="px-3 py-3 text-tiny text-text2 uppercase font-semibold text-end"
                 >
                   Stock
@@ -72,13 +74,16 @@ const InventoryStockValuation = () => {
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((row: any, i: number) => (
+              {data.data.map((row: any, i: number) => (
                 <tr
                   key={i}
                   className="bg-white border-b border-gray6 last:border-0 text-start"
                 >
                   <td className="px-3 py-3 font-medium text-heading">
                     {row.product}
+                  </td>
+                  <td className="px-3 py-3 font-normal text-[#55585B]">
+                    {row.sku}
                   </td>
                   <td className="px-3 py-3 font-normal text-[#55585B] text-end">
                     {row.stock?.toLocaleString() || 0}
@@ -95,21 +100,11 @@ const InventoryStockValuation = () => {
           </table>
         </div>
 
-        {/* pagination start */}
-        {pageCount > 1 && (
-          <div className="flex justify-between items-center flex-wrap mx-8 mt-4">
-            <p className="mb-0 text-tiny">
-              Showing 1-{currentItems.length} of {data?.data?.length || 0}
-            </p>
-            <div className="pagination py-3 flex justify-end items-center pagination">
-              <Pagination
-                handlePageClick={handlePageClick}
-                pageCount={pageCount}
-              />
-            </div>
-          </div>
-        )}
-        {/* pagination end */}
+        <div className="flex justify-between items-center flex-wrap mx-8 mt-4">
+          <p className="mb-0 text-tiny">
+            Showing all {data.data.length} Products
+          </p>
+        </div>
       </>
     );
   }
@@ -120,7 +115,7 @@ const InventoryStockValuation = () => {
         <h2 className="text-xl font-semibold text-heading">Stock Valuation Report</h2>
         <p className="text-tiny text-text3 mt-1">Current inventory value by product</p>
       </div>
-      
+
       {/* Summary Cards */}
       {summary && (
         <div className="px-8 py-6 grid grid-cols-1 md:grid-cols-3 gap-4 border-b border-gray6">

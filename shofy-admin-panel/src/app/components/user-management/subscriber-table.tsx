@@ -63,7 +63,7 @@ const SubscriberTable = () => {
   const handleExportToExcel = () => {
     try {
       const subscribers = subscribersData?.data || [];
-      
+
       if (subscribers.length === 0) {
         notifyError("No data to export");
         return;
@@ -114,7 +114,7 @@ const SubscriberTable = () => {
     );
   }
 
-  if (!isLoading && !isError && currentItems.length > 0) {
+  if (!isLoading && !isError && allSubscribers.length > 0) {
     content = (
       <>
         <div className="overflow-x-auto -mx-6 sm:mx-0">
@@ -129,7 +129,7 @@ const SubscriberTable = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-100">
-              {currentItems.map((item) => (
+              {allSubscribers.map((item: any) => (
                 <tr key={item._id} className="hover:bg-gray-50/50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">#{item._id.slice(-8)}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{item.email}</td>
@@ -138,11 +138,10 @@ const SubscriberTable = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
-                      className={`inline-flex px-2.5 py-1 rounded-lg text-xs font-medium ${
-                        item.status === "active"
+                      className={`inline-flex px-2.5 py-1 rounded-lg text-xs font-medium ${item.status === "active"
                           ? "bg-green-100 text-green-800"
                           : "bg-gray-100 text-gray-700"
-                      }`}
+                        }`}
                     >
                       {item.status?.charAt(0).toUpperCase() + item.status?.slice(1) || "—"}
                     </span>
@@ -157,9 +156,8 @@ const SubscriberTable = () => {
         </div>
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-6 py-4 border-t border-gray-100 bg-gray-50/30">
           <p className="text-sm text-gray-500">
-            Showing <span className="font-medium text-gray-700">1–{currentItems.length}</span> of <span className="font-medium text-gray-700">{allSubscribers.length}</span> subscribers
+            Showing all <span className="font-medium text-gray-700">{allSubscribers.length}</span> subscribers
           </p>
-          {pageCount > 1 && <Pagination handlePageClick={handlePageClick} pageCount={pageCount} />}
         </div>
       </>
     );

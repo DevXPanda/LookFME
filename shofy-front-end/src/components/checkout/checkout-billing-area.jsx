@@ -4,12 +4,21 @@ import ErrorMsg from "../common/error-msg";
 import { useSelector } from "react-redux";
 import { useUpdateProfileMutation } from "@/redux/features/auth/authApi";
 
-const CheckoutBillingArea = ({ register, errors, setValue }) => {
+const CheckoutBillingArea = ({ register, errors, setValue, trigger }) => {
   const { user } = useSelector((state) => state.auth);
   const [savedAddresses, setSavedAddresses] = useState([]);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
   const [showNewAddressForm, setShowNewAddressForm] = useState(false);
   const [updateProfile] = useUpdateProfileMutation();
+
+  // Watch for validation errors and show the form if any billing field is invalid
+  useEffect(() => {
+    const billingFields = ["firstName", "lastName", "country", "address", "city", "state", "zipCode", "contactNo", "email"];
+    const hasBillingErrors = billingFields.some(field => errors[field]);
+    if (hasBillingErrors) {
+      setShowNewAddressForm(true);
+    }
+  }, [errors]);
 
   // Load saved addresses on mount
   useEffect(() => {
@@ -66,9 +75,10 @@ const CheckoutBillingArea = ({ register, errors, setValue }) => {
         setValue("zipCode", selectedAddress.zipCode || "", { shouldValidate: true, shouldDirty: true });
         setValue("contactNo", selectedAddress.contactNo || "", { shouldValidate: true, shouldDirty: true });
         setValue("email", selectedAddress.email || user?.email || "", { shouldValidate: true, shouldDirty: true });
+        if (trigger) trigger();
       }
     }
-  }, [selectedAddressId, savedAddresses, showNewAddressForm, setValue, user]);
+  }, [selectedAddressId, savedAddresses, showNewAddressForm, setValue, user, trigger]);
 
   // Handle address selection
   const handleSelectAddress = (addressId) => {
@@ -76,17 +86,17 @@ const CheckoutBillingArea = ({ register, errors, setValue }) => {
     if (address) {
       setSelectedAddressId(addressId);
       setShowNewAddressForm(false);
-      // Set form values with shouldValidate: false to prevent validation errors while form is hidden
-      // Use shouldDirty: true to mark fields as touched
-      setValue("firstName", address.firstName || "", { shouldValidate: false, shouldDirty: true });
-      setValue("lastName", address.lastName || "", { shouldValidate: false, shouldDirty: true });
-      setValue("country", address.country || "INDIA", { shouldValidate: false, shouldDirty: true });
-      setValue("address", address.address || "", { shouldValidate: false, shouldDirty: true });
-      setValue("city", address.city || "", { shouldValidate: false, shouldDirty: true });
-      setValue("state", address.state || "", { shouldValidate: false, shouldDirty: true });
-      setValue("zipCode", address.zipCode || "", { shouldValidate: false, shouldDirty: true });
-      setValue("contactNo", address.contactNo || "", { shouldValidate: false, shouldDirty: true });
-      setValue("email", address.email || user?.email || "", { shouldValidate: false, shouldDirty: true });
+      // Set form values with shouldValidate: true to ensure form validity
+      setValue("firstName", address.firstName || "", { shouldValidate: true, shouldDirty: true });
+      setValue("lastName", address.lastName || "", { shouldValidate: true, shouldDirty: true });
+      setValue("country", address.country || "INDIA", { shouldValidate: true, shouldDirty: true });
+      setValue("address", address.address || "", { shouldValidate: true, shouldDirty: true });
+      setValue("city", address.city || "", { shouldValidate: true, shouldDirty: true });
+      setValue("state", address.state || "", { shouldValidate: true, shouldDirty: true });
+      setValue("zipCode", address.zipCode || "", { shouldValidate: true, shouldDirty: true });
+      setValue("contactNo", address.contactNo || "", { shouldValidate: true, shouldDirty: true });
+      setValue("email", address.email || user?.email || "", { shouldValidate: true, shouldDirty: true });
+      if (trigger) trigger();
     }
   };
 
@@ -211,7 +221,7 @@ const CheckoutBillingArea = ({ register, errors, setValue }) => {
                   placeholder="INDIA"
                   style={savedAddresses.length > 0 && !showNewAddressForm ? { display: 'none' } : {}}
                 />
-                <ErrorMsg msg={errors?.lastName?.message} />
+                <ErrorMsg msg={errors?.country?.message} />
               </div>
             </div>
             <div className="col-md-12">
@@ -320,24 +330,6 @@ const CheckoutBillingArea = ({ register, errors, setValue }) => {
         </div>
       </div>
 
-      {/* Hidden inputs to ensure form values are tracked when saved address is selected */}
-      {savedAddresses.length > 0 && !showNewAddressForm && selectedAddressId && (() => {
-        const selectedAddress = savedAddresses.find(addr => addr.id === selectedAddressId);
-        if (!selectedAddress) return null;
-        return (
-          <div style={{ display: 'none' }}>
-            <input {...register("firstName", { required: true })} type="hidden" defaultValue={selectedAddress.firstName || ""} />
-            <input {...register("lastName", { required: true })} type="hidden" defaultValue={selectedAddress.lastName || ""} />
-            <input {...register("country", { required: true })} type="hidden" defaultValue={selectedAddress.country || "INDIA"} />
-            <input {...register("address", { required: true })} type="hidden" defaultValue={selectedAddress.address || ""} />
-            <input {...register("city", { required: true })} type="hidden" defaultValue={selectedAddress.city || ""} />
-            <input {...register("state", { required: true })} type="hidden" defaultValue={selectedAddress.state || ""} />
-            <input {...register("zipCode", { required: true })} type="hidden" defaultValue={selectedAddress.zipCode || ""} />
-            <input {...register("contactNo", { required: true })} type="hidden" defaultValue={selectedAddress.contactNo || ""} />
-            <input {...register("email", { required: true })} type="hidden" defaultValue={selectedAddress.email || user?.email || ""} />
-          </div>
-        );
-      })()}
     </div>
   );
 };

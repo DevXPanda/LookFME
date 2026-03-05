@@ -1,9 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import ErrorMsg from "@/app/components/common/error-msg";
-import Pagination from "@/app/components/ui/Pagination";
 import { useGetSupportMessagesQuery } from "@/redux/support/supportApi";
-import usePagination from "@/hooks/use-pagination";
 import { Search } from "@/svg";
 import Link from "next/link";
 import { View } from "@/svg";
@@ -19,15 +17,12 @@ const InboxTable = () => {
   const allMessages = messagesData?.data || [];
   const filtered = searchVal.trim()
     ? allMessages.filter(
-        (m) =>
-          m.name?.toLowerCase().includes(searchVal.toLowerCase()) ||
-          m.email?.toLowerCase().includes(searchVal.toLowerCase()) ||
-          m.subject?.toLowerCase().includes(searchVal.toLowerCase())
-      )
+      (m) =>
+        m.name?.toLowerCase().includes(searchVal.toLowerCase()) ||
+        m.email?.toLowerCase().includes(searchVal.toLowerCase()) ||
+        m.subject?.toLowerCase().includes(searchVal.toLowerCase())
+    )
     : allMessages;
-
-  const paginationData = usePagination(filtered, 9999);
-  const { currentItems, handlePageClick, pageCount } = paginationData;
 
   const messagePreview = (msg: ISupportMessage) => {
     const text = msg.message || "";
@@ -69,7 +64,7 @@ const InboxTable = () => {
     );
   }
 
-  if (!isLoading && !isError && currentItems.length > 0) {
+  if (!isLoading && !isError && filtered.length > 0) {
     content = (
       <>
         <div className="overflow-x-auto -mx-6 sm:mx-0">
@@ -86,7 +81,7 @@ const InboxTable = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-100">
-              {currentItems.map((item) => (
+              {filtered.map((item: any) => (
                 <tr key={item._id} className="hover:bg-gray-50/50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.name}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{item.email}</td>
@@ -95,10 +90,10 @@ const InboxTable = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                     {item.createdAt
                       ? new Date(item.createdAt).toLocaleDateString("en-IN", {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                        })
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      })
                       : "—"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -122,10 +117,8 @@ const InboxTable = () => {
         </div>
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-6 py-4 border-t border-gray-100 bg-gray-50/30">
           <p className="text-sm text-gray-500">
-            Showing <span className="font-medium text-gray-700">1–{currentItems.length}</span> of{" "}
-            <span className="font-medium text-gray-700">{filtered.length}</span> messages
+            Showing all <span className="font-medium text-gray-700">{filtered.length}</span> messages
           </p>
-          {pageCount > 1 && <Pagination handlePageClick={handlePageClick} pageCount={pageCount} />}
         </div>
       </>
     );

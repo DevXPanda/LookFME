@@ -5,18 +5,26 @@ import { useGetSingleOrderQuery, useDownloadSingleShippingLabelMutation } from "
 import { Invoice, View } from "@/svg";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import InvoicePrint from "./invoice-print";
+import ShippingLabelPrint from "./shipping-label-print";
 
-const OrderActions = ({ id,cls }: { id: string,cls?:string }) => {
+const OrderActions = ({ id, cls }: { id: string, cls?: string }) => {
   const [showInvoice, setShowInvoice] = useState<boolean>(false);
   const [showView, setShowView] = useState<boolean>(false);
   const [showLabel, setShowLabel] = useState<boolean>(false);
+  const [showShipPrint, setShowShipPrint] = useState<boolean>(false);
   const printRefTwo = useRef<HTMLDivElement | null>(null);
+  const printRefThree = useRef<HTMLDivElement | null>(null);
   const { data: orderData, isLoading, isError } = useGetSingleOrderQuery(id);
   const [downloadLabel, { isLoading: isDownloadingLabel }] = useDownloadSingleShippingLabelMutation();
 
   const handlePrint = useReactToPrint({
     content: () => printRefTwo?.current,
-    documentTitle: "Receipt",
+    documentTitle: "Invoice",
+  });
+
+  const handlePrintShippingLabel = useReactToPrint({
+    content: () => printRefThree?.current,
+    documentTitle: "Shipping-Label",
   });
 
   const handlePrintReceipt = async () => {
@@ -29,10 +37,19 @@ const OrderActions = ({ id,cls }: { id: string,cls?:string }) => {
     // console.log('id', id);
   };
 
+  const handlePrintLabelUI = async () => {
+    try {
+      handlePrintShippingLabel();
+    } catch (err) {
+      console.log("print label error", err);
+      notifyError("Failed to print label");
+    }
+  };
+
   const handleDownloadLabel = async () => {
     try {
       const result = await downloadLabel({ orderId: id });
-      
+
       if ('data' in result && result.data instanceof Blob) {
         const blob = result.data;
         const url = window.URL.createObjectURL(blob);
@@ -43,7 +60,7 @@ const OrderActions = ({ id,cls }: { id: string,cls?:string }) => {
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
-        
+
         notifySuccess("Shipping label downloaded successfully");
       } else {
         throw new Error('Invalid response format');
@@ -62,9 +79,14 @@ const OrderActions = ({ id,cls }: { id: string,cls?:string }) => {
             <InvoicePrint orderData={orderData} />
           </div>
         )}
+        {orderData && (
+          <div ref={printRefThree}>
+            <ShippingLabelPrint orderData={orderData} />
+          </div>
+        )}
       </td>
 
-      <td className={`${cls?cls:'px-9 py-3 text-end'}`}>
+      <td className={`${cls ? cls : 'px-9 py-3 text-end'}`}>
         <div className="flex items-center justify-end space-x-2">
           <div className="relative">
             <button
@@ -76,9 +98,8 @@ const OrderActions = ({ id,cls }: { id: string,cls?:string }) => {
               <Invoice />
             </button>
             <div
-              className={`${
-                showInvoice ? "flex" : "hidden"
-              } flex-col items-center z-50 absolute left-1/2 -translate-x-1/2 bottom-full mb-1`}
+              className={`${showInvoice ? "flex" : "hidden"
+                } flex-col items-center z-50 absolute left-1/2 -translate-x-1/2 bottom-full mb-1`}
             >
               <span className="relative z-10 p-2 text-tiny leading-none font-medium text-white whitespace-no-wrap w-max bg-slate-800 rounded py-1 px-2 inline-block">
                 Print
@@ -96,9 +117,8 @@ const OrderActions = ({ id,cls }: { id: string,cls?:string }) => {
               <View />
             </Link>
             <div
-              className={`${
-                showView ? "flex" : "hidden"
-              } flex-col items-center z-50 absolute left-1/2 -translate-x-1/2 bottom-full mb-1`}
+              className={`${showView ? "flex" : "hidden"
+                } flex-col items-center z-50 absolute left-1/2 -translate-x-1/2 bottom-full mb-1`}
             >
               <span className="relative z-10 p-2 text-tiny leading-none font-medium text-white whitespace-no-wrap w-max bg-slate-800 rounded py-1 px-2 inline-block">
                 View
@@ -118,12 +138,31 @@ const OrderActions = ({ id,cls }: { id: string,cls?:string }) => {
               📦
             </button>
             <div
-              className={`${
-                showLabel ? "flex" : "hidden"
-              } flex-col items-center z-50 absolute left-1/2 -translate-x-1/2 bottom-full mb-1`}
+              className={`${showLabel ? "flex" : "hidden"
+                } flex-col items-center z-50 absolute left-1/2 -translate-x-1/2 bottom-full mb-1`}
             >
               <span className="relative z-10 p-2 text-tiny leading-none font-medium text-white whitespace-no-wrap w-max bg-slate-800 rounded py-1 px-2 inline-block">
-                {isDownloadingLabel ? "Downloading..." : "Shipping Label"}
+                {isDownloadingLabel ? "Downloading..." : "Download Label PDF"}
+              </span>
+              <div className="w-3 h-3 -mt-2 rotate-45 bg-black"></div>
+            </div>
+          </div>
+          <div className="relative">
+            <button
+              onMouseEnter={() => setShowShipPrint(true)}
+              onMouseLeave={() => setShowShipPrint(false)}
+              onClick={handlePrintLabelUI}
+              className="inline-block w-auto px-3 h-10 leading-10 text-tiny bg-gray text-black rounded-md hover:bg-theme hover:text-white"
+              title="Print Shipping Label"
+            >
+              Print
+            </button>
+            <div
+              className={`${showShipPrint ? "flex" : "hidden"
+                } flex-col items-center z-50 absolute left-1/2 -translate-x-1/2 bottom-full mb-1`}
+            >
+              <span className="relative z-10 p-2 text-tiny leading-none font-medium text-white whitespace-no-wrap w-max bg-slate-800 rounded py-1 px-2 inline-block">
+                Print Label
               </span>
               <div className="w-3 h-3 -mt-2 rotate-45 bg-black"></div>
             </div>

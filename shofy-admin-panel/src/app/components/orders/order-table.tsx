@@ -96,8 +96,38 @@ const OrderTable = () => {
     return filtered;
   }, [orders?.data, searchVal, selectVal]);
 
-  const paginationData = usePagination(filteredOrders, 5);
-  const { currentItems, handlePageClick, pageCount } = paginationData;
+  // handle change input 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchVal(e.target.value);
+  };
+
+  // handle status selection
+  const handleStatusSelect = (status: string) => {
+    setSelectVal(status);
+    setIsDropdownOpen(false);
+    // Update URL to sync with sidebar
+    if (status === "all" || !status) {
+      router.push("/orders");
+    } else {
+      router.push(`/orders?status=${status}`);
+    }
+  };
+
+  // Get current status label
+  const getCurrentStatusLabel = (): string => {
+    if (!selectVal || selectVal === "all") return "All";
+    const labels: Record<string, string> = {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "packaging": "Packaging",
+      "out-for-delivery": "Out for delivery",
+      "delivered": "Delivered",
+      "returned": "Returned",
+      "failed-to-deliver": "Failed to Deliver",
+      "canceled": "Canceled",
+    };
+    return labels[selectVal] || "All";
+  };
 
   // Calculate counts for each status
   const statusCounts = useMemo(() => {
@@ -170,10 +200,10 @@ const OrderTable = () => {
               >
                 <input
                   type="checkbox"
-                  checked={selectedOrders.size === currentItems.length && currentItems.length > 0}
+                  checked={selectedOrders.size === filteredOrders.length && filteredOrders.length > 0}
                   onChange={(e) => {
                     if (e.target.checked) {
-                      setSelectedOrders(new Set(currentItems.map((item: any) => item._id)));
+                      setSelectedOrders(new Set(filteredOrders.map((item: any) => item._id)));
                     } else {
                       setSelectedOrders(new Set());
                     }
@@ -250,7 +280,7 @@ const OrderTable = () => {
             </tr>
           </thead>
           <tbody>
-            {currentItems.map((item) => (
+            {filteredOrders.map((item) => (
               <tr
                 key={item._id}
                 className="bg-white border-b border-gray6 last:border-0 text-start mx-9"
@@ -396,56 +426,15 @@ const OrderTable = () => {
           </tbody>
         </table>
 
-        {/* pagination start */}
-        <div className="flex justify-between items-center flex-wrap">
+        {/* bottom info */}
+        <div className="flex justify-between items-center flex-wrap mt-4">
           <p className="mb-0 text-tiny">
-            Showing 1-
-            {currentItems.length} of {filteredOrders.length}
+            Showing all {filteredOrders.length} of {orders?.data?.length || 0} Orders
           </p>
-          <div className="pagination py-3 flex justify-end items-center sm:mx-8 pagination">
-            <Pagination
-              handlePageClick={handlePageClick}
-              pageCount={pageCount}
-            />
-          </div>
         </div>
-        {/* pagination end */}
       </>
     );
   }
-
-  // handle change input 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchVal(e.target.value);
-  };
-
-  // handle status selection
-  const handleStatusSelect = (status: string) => {
-    setSelectVal(status);
-    setIsDropdownOpen(false);
-    // Update URL to sync with sidebar
-    if (status === "all" || !status) {
-      router.push("/orders");
-    } else {
-      router.push(`/orders?status=${status}`);
-    }
-  };
-
-  // Get current status label
-  const getCurrentStatusLabel = (): string => {
-    if (!selectVal || selectVal === "all") return "All";
-    const labels: Record<string, string> = {
-      "pending": "Pending",
-      "confirmed": "Confirmed",
-      "packaging": "Packaging",
-      "out-for-delivery": "Out for delivery",
-      "delivered": "Delivered",
-      "returned": "Returned",
-      "failed-to-deliver": "Failed to Deliver",
-      "canceled": "Canceled",
-    };
-    return labels[selectVal] || "All";
-  };
 
   const statusOptions = [
     { key: "all", label: "All" },

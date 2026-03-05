@@ -20,10 +20,12 @@ const InventoryLowStock = () => {
 
   if (!isLoading && !isError && data?.success) {
     let filteredData = data?.data || [];
-    
+
     if (searchVal) {
+      const searchLower = searchVal.toLowerCase().replace(/^#/, "").trim();
       filteredData = filteredData.filter((item: any) =>
-        item.product?.toLowerCase().includes(searchVal.toLowerCase())
+        item.product?.toLowerCase().includes(searchLower) ||
+        item.sku?.toLowerCase().includes(searchLower)
       );
     }
 
@@ -38,6 +40,12 @@ const InventoryLowStock = () => {
                   className="pr-8 py-3 text-tiny text-text2 uppercase font-semibold"
                 >
                   Product
+                </th>
+                <th
+                  scope="col"
+                  className="px-3 py-3 text-tiny text-text2 uppercase font-semibold"
+                >
+                  SKU
                 </th>
                 <th
                   scope="col"
@@ -56,7 +64,7 @@ const InventoryLowStock = () => {
             <tbody>
               {filteredData.length === 0 ? (
                 <tr>
-                  <td colSpan={3} className="px-3 py-8 text-center text-text3">
+                  <td colSpan={4} className="px-3 py-8 text-center text-text3">
                     No low stock items found
                   </td>
                 </tr>
@@ -68,6 +76,9 @@ const InventoryLowStock = () => {
                   >
                     <td className="px-3 py-3 font-medium text-heading">
                       {row.product}
+                    </td>
+                    <td className="px-3 py-3 font-normal text-[#55585B]">
+                      {row.sku}
                     </td>
                     <td className="px-3 py-3 font-normal text-[#55585B] text-end">
                       {row.stock}

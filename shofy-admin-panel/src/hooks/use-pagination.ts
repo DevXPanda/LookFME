@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type PaginationResult<T> = {
   currentItems: T[];
@@ -8,6 +8,10 @@ type PaginationResult<T> = {
 
 function usePagination<T>(items: T[], itemsPerPage: number): PaginationResult<T> {
   const [itemOffset, setItemOffset] = useState(0);
+
+  useEffect(() => {
+    setItemOffset(0);
+  }, [items.length, itemsPerPage]);
 
   const endOffset = itemOffset + itemsPerPage;
   const currentItems = items.slice(itemOffset, endOffset);

@@ -151,6 +151,7 @@ const CheckoutOrderArea = ({ checkoutData }) => {
             id="cod"
             name="payment"
             value="COD"
+            defaultChecked
           />
           <label htmlFor="cod">Cash on Delivery</label>
           <ErrorMsg msg={errors?.payment?.message} />

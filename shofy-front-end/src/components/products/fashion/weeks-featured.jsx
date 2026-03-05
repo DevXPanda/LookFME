@@ -133,7 +133,7 @@ import { getProductPrice } from '@/utils/price-utils';
 
 const WeeksFeatured = () => {
   const { data, isLoading, isError } =
-    useGetProductTypeQuery({ type: 'fashion', query: 'featured=true' });
+    useGetProductTypeQuery({ type: 'fashion', query: 'designer_embroidery=true' });
 
 
 
@@ -292,33 +292,35 @@ const WeeksFeatured = () => {
 
                     {/* CONTENT */}
                     <div className="featured-content">
+                      <div className="mb-2">
+                        <Rating
+                          allowFraction
+                          size={14}
+                          readonly
+                          initialValue={
+                            item.reviews?.length
+                              ? item.reviews.reduce((a, b) => a + b.rating, 0) /
+                              item.reviews.length
+                              : 0
+                          }
+                        />
+                      </div>
                       <h3>{item.title}</h3>
                       <div className="tp-featured-price-wrapper">
                         {getProductPrice(item).isDiscountActive ? (
-                          <>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}>
                             <span className="price">₹{(getProductPrice(item).currentPrice || 0).toFixed(2)}</span>
-                            <span className="old-price" style={{ textDecoration: 'line-through', color: '#a0a0a0', fontSize: '14px', marginLeft: '10px' }}>
+                            <span className="old-price" style={{ textDecoration: 'line-through', color: '#888', fontSize: '13px' }}>
                               ₹{(getProductPrice(item).originalPrice || 0).toFixed(2)}
                             </span>
-                          </>
+                            <span className="discount-text" style={{ fontSize: '12px', fontWeight: '600', color: '#38a169' }}>
+                              ({item.discount}% off)
+                            </span>
+                          </div>
                         ) : (
                           <span className="price">₹{(item.price || 0).toFixed(2)}</span>
                         )}
                       </div>
-
-
-
-                      <Rating
-                        allowFraction
-                        size={16}
-                        readonly
-                        initialValue={
-                          item.reviews?.length
-                            ? item.reviews.reduce((a, b) => a + b.rating, 0) /
-                            item.reviews.length
-                            : 0
-                        }
-                      />
 
                       <Link
                         href={`/product-details/${item._id}`}

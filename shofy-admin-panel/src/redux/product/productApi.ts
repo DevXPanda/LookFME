@@ -1,5 +1,5 @@
 import { apiSlice } from "../api/apiSlice";
-import { IAddProduct,IReviewProductRes, ProductResponse } from "@/types/product-type";
+import { IAddProduct, IReviewProductRes, ProductResponse } from "@/types/product-type";
 
 interface IProductResponse {
   success: boolean;
@@ -17,8 +17,9 @@ export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     // getUserOrders
-    getAllProducts: builder.query<ProductResponse, void>({
-      query: () => `/api/product/all`,
+    getAllProducts: builder.query<ProductResponse, string | void>({
+      query: (searchTerm) =>
+        searchTerm ? `/api/product/all?searchTerm=${searchTerm}` : `/api/product/all`,
       providesTags: ["AllProducts"],
       keepUnusedDataFor: 600,
     }),
@@ -61,8 +62,8 @@ export const authApi = apiSlice.injectEndpoints({
       query: () => `/api/product/stock-out`,
       providesTags: ["StockOutProducts"]
     }),
-     // delete category
-     deleteProduct: builder.mutation<{message:string}, string>({
+    // delete category
+    deleteProduct: builder.mutation<{ message: string }, string>({
       query(id: string) {
         return {
           url: `/api/product/${id}`,

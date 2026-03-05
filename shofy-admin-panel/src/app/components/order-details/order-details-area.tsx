@@ -72,88 +72,65 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
           <h1 className="my-6 text-lg font-bold text-gray-700 dark:text-gray-300">
             Invoice
           </h1>
-          <div ref={printRef} className="bg-white mb-4 p-6 lg:p-8 rounded-xl shadow-sm overflow-hidden">
-            <div className=" mb-7">
-              <div className="flex lg:flex-row md:flex-row flex-col lg:items-center justify-between pb-4 border-b border-slate-200">
-                <h1 className="font-bold font-heading text-xl uppercase">
-                  Invoice
-                  <p className="text-base mt-1 text-gray-500">
-                    Status
-                    <span className="pl-2 font-medium text-base capitalize">
-                      {" "}
-                      <span className="font-heading">
-                        <span className={`inline-flex px-3 py-1 text-xs font-bold leading-5 rounded-full uppercase tracking-wider ${orderData.status === "pending"
-                          ? "text-amber-700 bg-amber-50 border border-amber-200"
-                          : orderData.status === "delivered"
-                            ? "text-emerald-700 bg-emerald-50 border border-emerald-200"
-                            : orderData.status === "processing"
-                              ? "text-indigo-700 bg-indigo-50 border border-indigo-200"
-                              : orderData.status === "cancel" || orderData.status === "canceled"
-                                ? "text-rose-700 bg-rose-50 border border-rose-200"
-                                : "text-slate-700 bg-slate-50 border border-slate-200"
-                          }`}>
-                          {orderData.status}
-                        </span>
-                      </span>
-                    </span>
-                  </p>
-                </h1>
-                <div className="lg:text-right text-left">
-                  <h2 className="lg:flex lg:justify-end text-lg font-semibold mt-4 lg:mt-0 lg:ml-0 md:mt-0">
-                    {/* <img
-                      src="/static/media/logo-dark.acf69e90.svg"
-                      alt="dashtar"
-                      width="110"
-                    /> */}
-                  </h2>
-                  {/* <p className="text-base text-gray-500 dark:text-gray-400 mt-2">
-                    Dhaka, Bangladesh
-                  </p> */}
-                </div>
-              </div>
-              <div className="flex lg:flex-row md:flex-row flex-col justify-between pt-4">
-                <div className="mb-3 md:mb-0 lg:mb-0 flex flex-col">
-                  <span className="font-bold text-base uppercase block">
-                    DATE
-                  </span>
-                  <span className="text-base block">
-                    <span>
-                      {dayjs(orderData.createdAt).format("MMMM D, YYYY")}
-                    </span>
-                  </span>
-                </div>
-                <div className="mb-3 md:mb-0 lg:mb-0 flex flex-col">
-                  <span className="font-bold text-base uppercase block">
-                    INVOICE NO
-                  </span>
-                  <span className="text-base block">#{orderData?.invoice}</span>
-                </div>
-                <div className="flex flex-col lg:text-right text-left">
-                  <span className="font-bold text-base uppercase block">
+          <div ref={printRef} className="bg-white mb-4 p-6 rounded-xl shadow-sm overflow-hidden tp-invoice-print-wrapper">
+            {/* Invoice Header Banner */}
+            <div className="border-2 border-slate-900 text-slate-900 p-5 mb-6 text-center rounded-lg">
+              <h1 className="text-xl font-bold tracking-widest uppercase m-0">LookFame Official Invoice</h1>
+              <p className="text-xs font-medium mt-1 uppercase tracking-widest">Premium Quality Fashion</p>
+            </div>
+
+            <div className="mb-8">
+              <div className="grid grid-cols-2 gap-6 border-b border-slate-100 pb-6">
+                {/* Left Side: Invoice To */}
+                <div className="border border-slate-200 p-4 rounded-lg bg-slate-50/50">
+                  <span className="font-bold text-[10px] uppercase text-slate-500 block mb-2 tracking-wider">
                     INVOICE TO
                   </span>
-                  <span className="text-base text-gray-500 block">
-                    {orderData?.user?.name} <br />
-                    <span className="ml-2">{orderData?.contact}</span>
-                    <br />
-                    {orderData?.address}
-                    <br />
-                    {orderData?.city}
+                  <div className="text-slate-900">
+                    <h4 className="font-bold text-base mb-1">{orderData?.user?.name || "Customer"}</h4>
+                    <p className="text-sm mb-1 font-bold text-slate-600">{orderData?.contact}</p>
+                    <p className="text-xs leading-relaxed opacity-80 italic">
+                      {orderData?.address}<br />
+                      {orderData?.city}, {orderData?.zipCode}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Right Side: Order Info */}
+                <div className="border border-slate-200 p-4 rounded-lg bg-slate-50/50 flex flex-col justify-center">
+                  <span className="font-bold text-[10px] uppercase text-slate-500 block mb-2 tracking-wider">
+                    ORDER DETAILS
                   </span>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center border-b border-white pb-1">
+                      <span className="text-xs font-semibold text-slate-600">DATE:</span>
+                      <span className="text-sm font-bold text-slate-900">
+                        {dayjs(orderData.createdAt).format("MMMM D, YYYY")}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center border-b border-white pb-1">
+                      <span className="text-xs font-semibold text-slate-600">INVOICE NO:</span>
+                      <span className="text-sm font-bold text-slate-900">#{orderData?.invoice}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs font-semibold text-slate-600">ORDER ID:</span>
+                      <span className="text-xs text-slate-500 font-mono">#{id.slice(-8).toUpperCase()}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="mb-12">
+            <div className="mb-6">
               <div className="relative rounded-b-md bg-white">
                 <div className="w-full overflow-x-auto">
                   <table className="w-full text-base text-left text-gray-500 whitespace-no-wrap">
                     <thead className="bg-white">
-                      <tr className="border-b border-gray6 text-tiny text-center">
-                        <td className="pl-3 py-3 text-tiny text-textBody uppercase font-semibold text-start">SR.</td>
-                        <td className="pr-8 py-3 text-tiny text-textBody uppercase font-semibold text-start">Product Title</td>
-                        <td className="pr-8 py-3 text-tiny text-textBody uppercase font-semibold">QUANTITY</td>
-                        <td className="pr-3 py-3 text-tiny text-textBody uppercase font-semibold">ITEM PRICE</td>
-                        <td className="pr-3 py-3 text-tiny text-textBody uppercase font-semibold text-right">AMOUNT</td>
+                      <tr className="border-b border-gray6 text-center">
+                        <td className="pl-3 py-2 text-[10px] text-textBody uppercase font-bold text-start tracking-wider">SR.</td>
+                        <td className="pr-8 py-2 text-[10px] text-textBody uppercase font-bold text-start tracking-wider">Product Title</td>
+                        <td className="pr-8 py-2 text-[10px] text-textBody uppercase font-bold tracking-wider">QUANTITY</td>
+                        <td className="pr-3 py-2 text-[10px] text-textBody uppercase font-bold tracking-wider">ITEM PRICE</td>
+                        <td className="pr-3 py-2 text-[10px] text-textBody uppercase font-bold text-right tracking-wider">AMOUNT</td>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y text-base ">
@@ -163,84 +140,61 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                         const exchangeItem = orderData.exchangeItems?.find((ei: any) => ei.originalProductId === item._id);
 
                         return (
-                          <tr key={item._id} className={returnItem || exchangeItem ? "bg-yellow-50" : ""}>
-                            <td className="bg-white border-b border-gray6 px-3 py-3 text-start">
+                          <tr key={item._id} className={`${returnItem || exchangeItem ? "bg-yellow-50" : ""} border-b border-slate-100`}>
+                            <td className="px-3 py-2 text-start text-sm">
                               {i + 1}
                               {(returnItem || exchangeItem) && (
-                                <span className="ml-2 text-xs px-2 py-1 rounded bg-blue-100 text-blue-800">
+                                <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 font-bold">
                                   {returnItem ? "RETURN" : "EXCHANGE"}
                                 </span>
                               )}
                             </td>
-                            <td className="bg-white border-b border-gray6 px-3 pl-0 py-3 text-start">
+                            <td className="px-3 pl-0 py-2 text-start">
                               <div className="flex items-center gap-3">
                                 {(item.img || item?.imageURLs?.[0]?.img) && (
                                   <Image
                                     src={formatImageUrl(item?.imageURLs?.[0]?.img || item.img)}
                                     alt={item.title}
-                                    width={50}
-                                    height={50}
+                                    width={40}
+                                    height={40}
                                     className="rounded"
                                     style={{ objectFit: 'cover' }}
                                   />
                                 )}
                                 <div>
-                                  <div className="font-medium text-heading">{item.title}</div>
-
+                                  <div className="font-bold text-sm text-heading">{item.title}</div>
                                   {/* Combo Items Display */}
                                   {item.isCombo && item.comboItems && (
-                                    <div className="mt-2 flex flex-wrap gap-2">
+                                    <div className="mt-1 flex flex-wrap gap-1">
                                       {item.comboItems.map((combo, idx) => (
-                                        <div key={idx} className="text-[11px] bg-slate-50 px-2 py-1 rounded text-slate-600 border border-slate-200 flex items-center gap-1">
-                                          <span className="opacity-70">Item {idx + 1}:</span>
-                                          <span className="font-bold text-slate-900">{combo.color}</span>
-                                          <span className="text-slate-300">|</span>
-                                          <span className="font-bold text-slate-900">{combo.size}</span>
+                                        <div key={idx} className="text-[9px] bg-slate-50 px-1.5 py-0.5 rounded text-slate-600 border border-slate-200 flex items-center gap-1">
+                                          <span className="opacity-70 font-bold uppercase">#{idx + 1}:</span>
+                                          <span className="font-bold text-slate-900">{combo.color}/{combo.size}</span>
                                         </div>
                                       ))}
                                     </div>
                                   )}
-
                                   {/* Individual Product Selection Display */}
                                   {!item.isCombo && (item.selectedColor || item.selectedSize) && (
-                                    <div className="text-xs text-slate-500 mt-1 flex items-center gap-3">
+                                    <div className="text-[9px] text-slate-500 mt-0.5 flex items-center gap-2 font-bold uppercase">
                                       {item.selectedColor && (
-                                        <span className="flex items-center gap-1.5">
-                                          <span>Color:</span>
-                                          <span className="font-semibold text-slate-800">
-                                            {typeof item.selectedColor === 'object' ? item.selectedColor.name : item.selectedColor}
-                                          </span>
-                                        </span>
+                                        <span>Color: {typeof item.selectedColor === 'object' ? item.selectedColor.name : item.selectedColor}</span>
                                       )}
                                       {item.selectedSize && (
-                                        <span className="flex items-center gap-1.5">
-                                          <span>Size:</span>
-                                          <span className="font-semibold text-slate-800">{item.selectedSize}</span>
-                                        </span>
+                                        <span> | Size: {item.selectedSize}</span>
                                       )}
-                                    </div>
-                                  )}
-
-                                  {returnItem && (
-                                    <div className="text-xs text-blue-600 mt-2 bg-blue-50/50 p-1.5 rounded inline-block border border-blue-100">
-                                      Return Qty: {returnItem.quantity} | Status: {returnItem.status} | Refund: ₹{returnItem.refundAmount?.toFixed(2)}
-                                    </div>
-                                  )}
-                                  {exchangeItem && (
-                                    <div className="text-xs text-green-600 mt-2 bg-green-50/50 p-1.5 rounded inline-block border border-green-100">
-                                      Exchange Qty: {exchangeItem.originalQuantity} | Status: {exchangeItem.status}
                                     </div>
                                   )}
                                 </div>
                               </div>
                             </td>
-                            <td className="bg-white border-b border-gray6 px-3 py-3 font-bold text-center">
+                            <td className="px-3 py-2 font-bold text-center text-sm">
                               {item.orderQuantity}
                             </td>
-                            <td className="bg-white border-b border-gray6 px-3 py-3 font-bold text-center">
+                            <td className="px-3 py-2 font-bold text-center text-sm">
                               ₹{item.price.toFixed(2)}
                             </td>
-                            <td className="bg-white border-b border-gray6 px-3 py-3 text-right font-bold">
+                            <td className="px-3 py-2 text-right font-bold text-sm">
                               ₹{(item.price * item.orderQuantity).toFixed(2)}
                             </td>
                           </tr>
@@ -251,40 +205,33 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                 </div>
               </div>
             </div>
-            <div className="border border-slate-200 rounded-xl p-8 py-6">
-              <div className="flex lg:flex-row md:flex-row flex-col justify-between">
-                <div className="mb-3 md:mb-0 lg:mb-0  flex flex-col sm:flex-wrap">
-                  <span className="mb-1 font-bold text-base uppercase block">
-                    PAYMENT METHOD
-                  </span>
-                  <span className="text-base font-semibold block">
-                    {orderData.paymentMethod}
-                  </span>
+            <div className="border border-slate-200 rounded-xl overflow-hidden mt-6">
+              <div className="grid grid-cols-4 divide-x divide-slate-100 bg-slate-50/30">
+                <div className="p-4 text-center">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">PAYMENT</span>
+                  <span className="text-sm font-bold text-slate-900 uppercase">{orderData.paymentMethod}</span>
                 </div>
-                <div className="mb-3 md:mb-0 lg:mb-0  flex flex-col sm:flex-wrap">
-                  <span className="mb-1 font-bold text-base uppercase block">
-                    SHIPPING
-                  </span>
-                  <span className="text-base font-semibold font-heading block">
-                    Free
-                  </span>
+                <div className="p-4 text-center">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">SHIPPING</span>
+                  <span className="text-sm font-bold text-slate-900 italic uppercase">Free Shipping</span>
                 </div>
-                <div className="mb-3 md:mb-0 lg:mb-0  flex flex-col sm:flex-wrap">
-                  <span className="mb-1 font-bold font-heading text-base uppercase block">
-                    DISCOUNT
-                  </span>
-                  <span className="text-base text-gray-500 font-semibold font-heading block">
-                    ₹{orderData?.discount}
-                  </span>
+                <div className="p-4 text-center">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">DISCOUNT</span>
+                  <span className="text-sm font-bold text-slate-400">₹{orderData?.discount || 0}</span>
                 </div>
-                <div className="flex flex-col sm:flex-wrap">
-                  <span className="mb-1 font-bold text-base uppercase block">
-                    TOTAL AMOUNT
-                  </span>
-                  <span className="text-xl font-bold block">
-                    ₹{grand_total.toFixed(2)}
-                  </span>
+                <div className="p-4 text-center bg-slate-900 flex flex-col justify-center">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">GRAND TOTAL</span>
+                  <span className="text-xl font-black text-white">₹{grand_total.toFixed(2)}</span>
                 </div>
+              </div>
+            </div>
+
+            <div className="mt-8 text-center border-t border-slate-100 pt-6 pb-2">
+              <p className="text-slate-400 text-xs italic mb-4">Thank you for choosing LookFame. We hope to see you again soon!</p>
+              <div className="flex justify-center items-center gap-6 mt-2 opacity-30 font-bold uppercase tracking-widest">
+                <span className="text-[9px] text-slate-400">www.lookfame.com</span>
+                <span className="text-slate-200">|</span>
+                <span className="text-[9px] text-slate-400">support@lookfame.com</span>
               </div>
             </div>
 

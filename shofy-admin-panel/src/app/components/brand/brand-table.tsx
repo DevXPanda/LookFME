@@ -2,15 +2,11 @@
 import React, { useState } from "react";
 import ErrorMsg from "../common/error-msg";
 import Image from "next/image";
-import Pagination from "../ui/Pagination";
 import { useGetAllBrandsQuery } from "@/redux/brand/brandApi";
 import BrandEditDelete from "./brand-edit-del";
-import usePagination from "@/hooks/use-pagination";
 
 const BrandTables = () => {
   const { data: brands, isError, isLoading } = useGetAllBrandsQuery();
-  const paginationData = usePagination(brands?.result || [], 5);
-  const { currentItems, handlePageClick, pageCount } = paginationData;
   // decide what to render
   let content = null;
 
@@ -20,11 +16,12 @@ const BrandTables = () => {
   if (!isLoading && isError) {
     content = <ErrorMsg msg="There was an error" />;
   }
-  if (!isLoading && !isError && brands?.result.length === 0) {
-    content = <ErrorMsg msg="No Category Found" />;
+  if (!isLoading && !isError && (!brands?.result || brands?.result.length === 0)) {
+    content = <ErrorMsg msg="No Brands Found" />;
   }
 
-  if (!isLoading && !isError && currentItems) {
+  if (!isLoading && !isError && brands?.success && brands?.result && brands.result.length > 0) {
+    const allBrands = [...brands.result].reverse();
 
     content = (
       <>
@@ -72,62 +69,54 @@ const BrandTables = () => {
                 </tr>
               </thead>
               <tbody>
-                {[...currentItems.reverse()].map((item) => (
-                    <tr
-                      key={item._id}
-                      className="bg-white border-b border-gray6 last:border-0 text-start mx-9"
-                    >
-                      <td className="px-3 py-3 pl-0 font-normal text-[#55585B]">
-                        #{item._id.slice(2, 10)}
-                      </td>
-                      <td className="pr-8 py-5 whitespace-nowrap">
-                        <a href="#" className="flex items-center space-x-5">
-                          {item.logo && (
-                            <Image
-                              className="w-10 h-10 rounded-full object-contain"
-                              src={item.logo}
-                              alt="image"
-                              width={40}
-                              height={40}
-                            />
-                          )}
-                          <span className="font-medium text-heading text-hover-primary transition">
-                            {item.name}
-                          </span>
-                        </a>
-                      </td>
-                      <td className="px-3 py-3 font-normal text-[#55585B] text-end">
-                        {item.email}
-                      </td>
-                      <td className="px-3 py-3 font-normal text-[#55585B] text-end">
-                        {item.website}
-                      </td>
-                      <td className="px-3 py-3 font-normal text-[#55585B] text-end">
-                        {item.location}
-                      </td>
-                      <td className="px-9 py-3 text-end">
-                        <div className="flex items-center justify-end space-x-2">
-                          <BrandEditDelete id={item._id}/>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                {allBrands.map((item: any) => (
+                  <tr
+                    key={item._id}
+                    className="bg-white border-b border-gray6 last:border-0 text-start mx-9"
+                  >
+                    <td className="px-3 py-3 pl-0 font-normal text-[#55585B]">
+                      #{item._id.slice(2, 10)}
+                    </td>
+                    <td className="pr-8 py-5 whitespace-nowrap">
+                      <a href="#" className="flex items-center space-x-5">
+                        {item.logo && (
+                          <Image
+                            className="w-10 h-10 rounded-full object-contain"
+                            src={item.logo}
+                            alt="image"
+                            width={40}
+                            height={40}
+                          />
+                        )}
+                        <span className="font-medium text-heading text-hover-primary transition">
+                          {item.name}
+                        </span>
+                      </a>
+                    </td>
+                    <td className="px-3 py-3 font-normal text-[#55585B] text-end">
+                      {item.email}
+                    </td>
+                    <td className="px-3 py-3 font-normal text-[#55585B] text-end">
+                      {item.website}
+                    </td>
+                    <td className="px-3 py-3 font-normal text-[#55585B] text-end">
+                      {item.location}
+                    </td>
+                    <td className="px-9 py-3 text-end">
+                      <div className="flex items-center justify-end space-x-2">
+                        <BrandEditDelete id={item._id} />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </div>
         <div className="flex justify-between items-center flex-wrap">
           <p className="mb-0 text-tiny">
-            Showing 1-
-            {currentItems.length} of{" "}
-            {brands?.result.length}
+            Showing all {brands?.result.length} Brands
           </p>
-          <div className="pagination py-3 flex justify-end items-center pagination">
-            <Pagination
-              handlePageClick={handlePageClick}
-              pageCount={pageCount}
-            />
-          </div>
         </div>
       </>
     );

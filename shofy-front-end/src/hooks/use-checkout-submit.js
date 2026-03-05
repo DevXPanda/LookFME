@@ -65,7 +65,12 @@ const useCheckoutSubmit = () => {
   const stripe = useStripe();
   const elements = useElements();
 
-  const { register, handleSubmit, setValue, control, formState: { errors } } = useForm();
+  const { register, handleSubmit, setValue, trigger, control, formState: { errors } } = useForm({
+    defaultValues: {
+      payment: 'COD',
+      shippingOption: 'free',
+    }
+  });
 
   let couponRef = useRef("");
 
@@ -194,23 +199,26 @@ const useCheckoutSubmit = () => {
     setShippingCost(value);
   };
 
-  //set values
+  //set values from shipping_info (Redux)
   useEffect(() => {
-    setValue("firstName", shipping_info.firstName);
-    setValue("lastName", shipping_info.lastName);
-    setValue("country", shipping_info.country);
-    setValue("address", shipping_info.address);
-    setValue("city", shipping_info.city);
-    setValue("state", shipping_info.state);
-    setValue("zipCode", shipping_info.zipCode);
-    setValue("contactNo", shipping_info.contactNo);
-    setValue("email", shipping_info.email);
-    setValue("orderNote", shipping_info.orderNote);
+    if (shipping_info && Object.keys(shipping_info).length > 0) {
+      if (shipping_info.firstName) setValue("firstName", shipping_info.firstName);
+      if (shipping_info.lastName) setValue("lastName", shipping_info.lastName);
+      if (shipping_info.country) setValue("country", shipping_info.country);
+      if (shipping_info.address) setValue("address", shipping_info.address);
+      if (shipping_info.city) setValue("city", shipping_info.city);
+      if (shipping_info.state) setValue("state", shipping_info.state);
+      if (shipping_info.zipCode) setValue("zipCode", shipping_info.zipCode);
+      if (shipping_info.contactNo) setValue("contactNo", shipping_info.contactNo);
+      if (shipping_info.email) setValue("email", shipping_info.email);
+      if (shipping_info.orderNote) setValue("orderNote", shipping_info.orderNote);
+    }
   }, [user, setValue, shipping_info, router]);
 
 
   // submitHandler
   const submitHandler = async (data) => {
+    console.log("Submit Handler Data:", data);
     // Save address to user profile
     if (user?._id) {
       // Save to localStorage for multiple addresses
@@ -311,6 +319,8 @@ const useCheckoutSubmit = () => {
         ...orderInfo
       }).then(res => {
         if (res?.error) {
+          setIsCheckoutSubmit(false);
+          notifyError(res?.error?.data?.message || "Failed to create order");
         }
         else {
           localStorage.removeItem("cart_products")
@@ -319,6 +329,9 @@ const useCheckoutSubmit = () => {
           notifySuccess("Your Order Confirmed!");
           router.push(`/order/${res.data?.order?._id}`);
         }
+      }).catch(err => {
+        setIsCheckoutSubmit(false);
+        notifyError("An unexpected error occurred");
       })
     }
   };
@@ -367,6 +380,11 @@ const useCheckoutSubmit = () => {
     }
   };
 
+  const handleError = (errors) => {
+    console.log("Checkout Validation Errors:", errors);
+    notifyError("Please complete the billing details correctly.");
+  };
+
   return {
     handleCouponCode,
     couponRef,
@@ -382,6 +400,7 @@ const useCheckoutSubmit = () => {
     errors,
     cardError,
     submitHandler,
+    handleError,
     stripe,
     handleSubmit,
     clientSecret,
@@ -392,6 +411,7 @@ const useCheckoutSubmit = () => {
     setShowCard,
     control,
     setValue,
+    trigger,
   };
 };
 

@@ -196,7 +196,7 @@ const productsSchema = mongoose.Schema({
   }],
   showInLayout: {
     type: String,
-    enum: ["Popular on LookFame", "This Week’s Featured", "New Arrivals", "All Sections"],
+    enum: ["Popular on LookFame", "This Week’s Featured", "New Arrivals", "All Sections", "designer_embroidery"],
     default: "All Sections"
   }
 }, {
