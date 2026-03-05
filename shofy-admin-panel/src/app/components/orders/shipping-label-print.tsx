@@ -1,8 +1,7 @@
 import React from "react";
 import { Order } from "@/types/order-amount-type";
 import dayjs from "dayjs";
-import BarcodeRaw from "react-barcode";
-const Barcode = BarcodeRaw as any;
+import Barcode from "react-barcode";
 import { QRCodeSVG } from "qrcode.react";
 
 // prop type
