@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "bwip-js": "^4.8.0",
-    "qrcode.react": "^4.2.0",
-    "react-barcode": "^1.6.1",
-    "react-qr-code": "^2.0.18"
-  }
-}
