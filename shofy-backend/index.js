@@ -3,11 +3,12 @@ require("dotenv").config();
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
-const app = express();
-const server = http.createServer(app);
 const path = require("path");
 const cors = require("cors");
 const morgan = require("morgan");
+
+const app = express();
+const server = http.createServer(app);
 
 // DB
 const connectDB = require("./config/db");
@@ -15,78 +16,55 @@ const connectDB = require("./config/db");
 // Global error handler
 const globalErrorHandler = require("./middleware/global-error-handler");
 
-// Socket.io setup
+// =========================
+// ✅ ALLOWED ORIGINS
+// =========================
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "https://lookfameadmin.vercel.app",
+  "https://look-fme-five.vercel.app",
+  "https://lookfame.com",
+  "https://www.lookfame.com"
+];
+
+// =========================
+// ✅ CORS CONFIG (FIXED)
+// =========================
+const corsOptions = {
+  origin: allowedOrigins,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+
+// =========================
+// ✅ SOCKET.IO
+// =========================
 const io = new Server(server, {
   cors: {
-    origin: [
-      "http://localhost:3000",
-      "http://localhost:3001",
-      "https://lookfameadmin.vercel.app",
-      "https://look-fme-five.vercel.app",
-      "https://lookfame.com",
-      "https://www.lookfame.com"
-    ],
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true
   }
 });
 
-// Store io instance globally for use in controllers
 app.set("io", io);
 
-// Socket.io connection handling
 io.on("connection", (socket) => {
-  // console.log("Admin client connected:", socket.id);
+  console.log("Socket connected:", socket.id);
 
   socket.on("disconnect", () => {
-    // console.log("Admin client disconnected:", socket.id);
+    console.log("Socket disconnected:", socket.id);
   });
 });
 
-// Routes
-const userRoutes = require("./routes/user.routes");
-const categoryRoutes = require("./routes/category.routes");
-const brandRoutes = require("./routes/brand.routes");
-const userOrderRoutes = require("./routes/user.order.routes");
-const productRoutes = require("./routes/product.routes");
-const orderRoutes = require("./routes/order.routes");
-const couponRoutes = require("./routes/coupon.routes");
-const reviewRoutes = require("./routes/review.routes");
-const adminRoutes = require("./routes/admin.routes");
-const cloudinaryRoutes = require("./routes/cloudinary.routes");
-
-// PORT
-const PORT = process.env.PORT || 7000;
-
-
-
-const allowedOrigins = [
-  "http://localhost:3000",
-  "http://localhost:3001",
-  "https://look-fme.vercel.app",
-  "https://look-fme-a675.vercel.app",
-  "https://lookfame.com",
-  "https://www.lookfame.com"
-];
-
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
-
-app.options("*", cors());
-
-
-
+// =========================
+// MIDDLEWARES
+// =========================
 app.use(express.json());
 
 if (process.env.NODE_ENV !== "production") {
@@ -95,22 +73,24 @@ if (process.env.NODE_ENV !== "production") {
 
 app.use(express.static(path.join(__dirname, "public")));
 
-
-
+// =========================
+// DB CONNECT
+// =========================
 connectDB();
 
-
-
-app.use("/api/user", userRoutes);
-app.use("/api/category", categoryRoutes);
-app.use("/api/brand", brandRoutes);
-app.use("/api/product", productRoutes);
-app.use("/api/order", orderRoutes);
-app.use("/api/coupon", couponRoutes);
-app.use("/api/user-order", userOrderRoutes);
-app.use("/api/review", reviewRoutes);
-app.use("/api/cloudinary", cloudinaryRoutes);
-app.use("/api/admin", adminRoutes);
+// =========================
+// ROUTES
+// =========================
+app.use("/api/user", require("./routes/user.routes"));
+app.use("/api/category", require("./routes/category.routes"));
+app.use("/api/brand", require("./routes/brand.routes"));
+app.use("/api/product", require("./routes/product.routes"));
+app.use("/api/order", require("./routes/order.routes"));
+app.use("/api/coupon", require("./routes/coupon.routes"));
+app.use("/api/user-order", require("./routes/user.order.routes"));
+app.use("/api/review", require("./routes/review.routes"));
+app.use("/api/cloudinary", require("./routes/cloudinary.routes"));
+app.use("/api/admin", require("./routes/admin.routes"));
 app.use("/api/inventory", require("./routes/inventory.routes"));
 app.use("/api/report", require("./routes/report.routes"));
 app.use("/api/user-management", require("./routes/user-management.routes"));
@@ -121,13 +101,16 @@ app.use("/api/refunds", require("./routes/refundRequest.routes"));
 app.use("/api/notifications", require("./routes/notification.routes"));
 app.use("/api/career", require("./routes/career.routes"));
 
-
-
+// =========================
+// ROOT
+// =========================
 app.get("/", (req, res) => {
   res.send("API running successfully 🚀");
 });
 
-
+// =========================
+// ERROR HANDLING
+// =========================
 app.use(globalErrorHandler);
 
 app.use((req, res) => {
@@ -143,9 +126,13 @@ app.use((req, res) => {
   });
 });
 
+// =========================
+// SERVER
+// =========================
+const PORT = process.env.PORT || 7000;
+
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
 module.exports = { app, io };
-
