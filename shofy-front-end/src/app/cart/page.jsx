@@ -5,7 +5,7 @@ import CommonBreadcrumb from "@/components/breadcrumb/common-breadcrumb";
 import CartArea from "@/components/cart-wishlist/cart-area";
 
 export const metadata = {
-  title: "Shofy - Cart Page",
+  title: "LookFame - Cart Page",
 };
 
 export default function CartPage() {

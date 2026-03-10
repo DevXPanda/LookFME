@@ -12,6 +12,7 @@ const {
   processExchange,
   downloadSingleShippingLabel,
   downloadBulkShippingLabels,
+  bulkUpdateOrderStatus,
 } = require("../controller/order.controller");
 
 // router
@@ -41,5 +42,7 @@ router.patch("/process-exchange/:id", processExchange);
 router.get("/download-shipping-label/:id", downloadSingleShippingLabel);
 // download bulk shipping labels
 router.post("/download-bulk-shipping-labels", downloadBulkShippingLabels);
+// bulk update status
+router.patch("/bulk-update-status", bulkUpdateOrderStatus);
 
 module.exports = router;

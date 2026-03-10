@@ -15,7 +15,7 @@
 
 
 // export const metadata = {
-//   title: 'Shofy - Home Two',
+//   title: 'LookFame - Home Two',
 // }
 
 // export default function HomePageTwo() {

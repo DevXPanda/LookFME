@@ -8,14 +8,16 @@ import { Search, Orders, DownArrow } from "@/svg";
 import ErrorMsg from "../common/error-msg";
 import Pagination from "../ui/Pagination";
 import OrderStatusChange from "./status-change";
-import { useGetAllOrdersQuery, useDownloadBulkShippingLabelsMutation } from "@/redux/order/orderApi";
+import { useGetAllOrdersQuery, useDownloadBulkShippingLabelsMutation, useBulkUpdateStatusMutation } from "@/redux/order/orderApi";
 import usePagination from "@/hooks/use-pagination";
 import { notifyError, notifySuccess } from "@/utils/toast";
+import Swal from "sweetalert2";
 
 
 const OrderTable = () => {
   const { data: orders, isError, isLoading, error } = useGetAllOrdersQuery();
   const [downloadBulkLabels, { isLoading: isDownloading }] = useDownloadBulkShippingLabelsMutation();
+  const [bulkUpdateStatus, { isLoading: isBulkUpdating }] = useBulkUpdateStatusMutation();
   const searchParams = useSearchParams();
   const router = useRouter();
   const urlStatus = searchParams.get("status") || "";
@@ -83,7 +85,22 @@ const OrderTable = () => {
 
     // Apply search filter
     if (searchVal) {
-      filtered = filtered.filter(v => v.invoice.toString().includes(searchVal));
+      const lowerSearch = searchVal.toLowerCase();
+      // Handle '#' prefix for invoice search
+      const searchValForInvoice = lowerSearch.startsWith("#") ? lowerSearch.slice(1) : lowerSearch;
+
+      filtered = filtered.filter(v => {
+        // Search by Invoice ID
+        const invoiceMatch = v.invoice.toString().toLowerCase().includes(searchValForInvoice);
+        
+        // Search by SKU in cart items
+        const skuMatch = v.cart.some((item: any) => {
+          const sku = item.selectedVariation?.sku || item.sku;
+          return sku && sku.toLowerCase().includes(lowerSearch);
+        });
+
+        return invoiceMatch || skuMatch;
+      });
     }
 
     // Apply status filter
@@ -492,82 +509,133 @@ const OrderTable = () => {
             <input
               className="input h-[44px] w-full pl-14"
               type="text"
-              placeholder="Search by invoice no"
+              placeholder="Search by invoice or SKU"
               onChange={handleSearchChange}
             />
             <button className="absolute top-1/2 left-5 translate-y-[-50%] hover:text-theme">
               <Search />
             </button>
           </div>
-          {selectedOrders.size > 0 && (
-            <button
-              onClick={handleBulkDownload}
-              disabled={isDownloading}
-              className="px-4 py-2 bg-theme text-white rounded-md hover:bg-theme/90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
-            >
-              {isDownloading ? (
-                <>
+
+          {selectedOrders.size > 0 ? (
+            <div className="flex items-center space-x-3 transition-all duration-300 transform scale-100">
+              <button
+                onClick={handleBulkDownload}
+                disabled={isDownloading}
+                className="px-4 py-2 bg-theme text-white rounded-md hover:bg-theme/90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 h-[44px]"
+              >
+                {isDownloading ? (
                   <span>Downloading...</span>
-                </>
-              ) : (
+                ) : (
+                  <span>Download Labels ({selectedOrders.size})</span>
+                )}
+              </button>
+              
+              <div className="relative">
+                <select
+                  onChange={async (e) => {
+                    const status = e.target.value;
+                    if (!status) return;
+                    
+                    Swal.fire({
+                      title: 'Change Orders Status?',
+                      text: `Are you sure you want to change status to "${status}" for ${selectedOrders.size} selected orders?`,
+                      icon: 'question',
+                      showCancelButton: true,
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: 'Yes, update now!',
+                      background: '#fff',
+                      customClass: {
+                        title: 'text-heading font-bold',
+                        htmlContainer: 'text-textBody',
+                        confirmButton: 'bg-theme text-white border-0 shadow-none px-6 py-2 rounded-md',
+                        cancelButton: 'bg-rose-500 text-white border-0 shadow-none px-6 py-2 rounded-md'
+                      }
+                    }).then(async (result) => {
+                      if (result.isConfirmed) {
+                        try {
+                          const res = await bulkUpdateStatus({
+                            orderIds: Array.from(selectedOrders),
+                            status: status
+                          }).unwrap();
+                          notifySuccess(res.message || "Statuses updated successfully");
+                          setSelectedOrders(new Set());
+                        } catch (err: any) {
+                          notifyError(err?.data?.message || "Failed to update statuses");
+                        }
+                      }
+                    });
+                    e.target.value = ""; // Reset select
+                  }}
+                  disabled={isBulkUpdating}
+                  className="input h-[44px] px-4 pr-10 rounded-md border border-gray-300 bg-white text-sm font-medium focus:ring-theme focus:border-theme disabled:opacity-50 cursor-pointer hover:border-theme transition-colors shadow-sm appearance-none"
+                >
+                  <option value="">Bulk Action: Change Status</option>
+                  <option value="pending">Pending</option>
+                  <option value="processing">Processing</option>
+                  <option value="delivered">Delivered</option>
+                  <option value="cancel">Canceled</option>
+                  <option value="returned">Returned</option>
+                </select>
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <DownArrow />
+                </div>
+              </div>
+
+              <button 
+                onClick={() => setSelectedOrders(new Set())}
+                className="text-sm text-theme hover:underline px-2 font-medium"
+              >
+                Clear
+              </button>
+            </div>
+          ) : (
+            <div className="relative">
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 min-w-[150px] h-[44px] justify-between shadow-sm transition-all"
+              >
+                <div className="flex items-center space-x-2">
+                  <Orders />
+                  <span className="text-sm font-medium">{getCurrentStatusLabel()}</span>
+                </div>
+                <DownArrow />
+              </button>
+
+              {isDropdownOpen && (
                 <>
-                  <span>Download Shipping Labels ({selectedOrders.size})</span>
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setIsDropdownOpen(false)}
+                  />
+                  <div className="absolute left-0 mt-2 w-[280px] bg-white rounded-lg shadow-xl z-20 overflow-hidden border border-gray6">
+                    <div className="px-4 py-3 border-b border-gray6 flex items-center justify-between bg-gray-50/50">
+                      <div className="flex items-center space-x-2">
+                        <Orders />
+                        <span className="text-heading font-semibold">Filter by Status</span>
+                      </div>
+                    </div>
+                    <div className="max-h-[400px] overflow-y-auto">
+                      {statusOptions.map((option) => (
+                        <button
+                          key={option.key}
+                          onClick={() => handleStatusSelect(option.key)}
+                          className={`w-full px-4 py-3 text-left hover:bg-gray transition-colors flex items-center justify-between ${(selectVal === option.key || (!selectVal && option.key === "all")) ? "bg-themeLight" : ""
+                            }`}
+                        >
+                          <span className="text-heading text-sm">{option.label}</span>
+                          <span className={`px-2 py-1 rounded text-xs font-bold ${getBadgeColor()}`}>
+                            {statusCounts[option.key as keyof typeof statusCounts] || 0}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </>
               )}
-            </button>
+            </div>
           )}
-        </div>
-        <div className="flex justify-end space-x-6">
-          <div className="relative">
-            <button
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 min-w-[200px] justify-between"
-            >
-              <div className="flex items-center space-x-2">
-                <Orders />
-                <span className="text-sm font-medium">{getCurrentStatusLabel()}</span>
-              </div>
-              {/* <DownArrow className={`transition-transform ${isDropdownOpen ? "rotate-180" : ""}`} /> */}
-            </button>
-
-            {isDropdownOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-10"
-                  onClick={() => setIsDropdownOpen(false)}
-                />
-                <div className="absolute right-0 mt-2 w-[280px] bg-white rounded-lg shadow-lg z-20 overflow-hidden border border-gray6">
-                  <div className="px-4 py-3 border-b border-gray6 flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <Orders />
-                      <span className="text-heading font-semibold">Orders</span>
-                    </div>
-                    <button
-                      onClick={() => setIsDropdownOpen(false)}
-                      className="text-textBody hover:text-heading"
-                    >
-                      {/* <DownArrow className="rotate-180" /> */}
-                    </button>
-                  </div>
-                  <div className="max-h-[400px] overflow-y-auto">
-                    {statusOptions.map((option) => (
-                      <button
-                        key={option.key}
-                        onClick={() => handleStatusSelect(option.key)}
-                        className={`w-full px-4 py-3 text-left hover:bg-gray transition-colors flex items-center justify-between ${(selectVal === option.key || (!selectVal && option.key === "all")) ? "bg-themeLight" : ""
-                          }`}
-                      >
-                        <span className="text-heading text-sm">{option.label}</span>
-                        <span className={`px-2 py-1 rounded text-xs font-medium ${getBadgeColor()}`}>
-                          {statusCounts[option.key as keyof typeof statusCounts] || 0}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
         </div>
       </div>
 

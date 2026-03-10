@@ -13,6 +13,17 @@ exports.createProductService = async (data) => {
       throw new Error("Duplicate SKUs found in variations. Each variation must have a unique SKU.");
     }
 
+    // Check if any of these SKUs already exist in DB
+    const existingSkuProduct = await Product.findOne({ 
+      $or: [
+        { sku: { $in: skus } },
+        { "variations.sku": { $in: skus } }
+      ]
+    });
+    if (existingSkuProduct) {
+      throw new Error("This SKU is already in use, please enter a different SKU");
+    }
+
     // Validate all variations have required fields
     for (const variation of data.variations) {
       if (!variation.sku || !variation.sku.trim()) {
@@ -29,6 +40,17 @@ exports.createProductService = async (data) => {
     // If variations exist, set quantity to sum of variation stocks
     if (data.variations.length > 0) {
       data.quantity = data.variations.reduce((sum, v) => sum + (v.stock || 0), 0);
+    }
+  } else if (data.sku) {
+    // Check main product SKU uniqueness
+    const existingSkuProduct = await Product.findOne({ 
+      $or: [
+        { sku: data.sku },
+        { "variations.sku": data.sku }
+      ]
+    });
+    if (existingSkuProduct) {
+      throw new Error("This SKU is already in use, please enter a different SKU");
     }
   }
 

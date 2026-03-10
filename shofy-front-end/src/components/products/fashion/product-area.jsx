@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import ErrorMsg from '@/components/common/error-msg';
 import { useGetProductTypeQuery } from '@/redux/features/productApi';
 import { useGetProductTypeCategoryQuery } from '@/redux/features/categoryApi';
@@ -27,6 +27,15 @@ const ProductArea = () => {
   // Fetch categories from backend
   const { data: categoriesData } = useGetProductTypeCategoryQuery('fashion');
   const { data: products, isError, isLoading } = useGetProductTypeQuery({ type: 'fashion', query: '' });
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile view
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Build tabs dynamically: Priority to featured categories, else show top 6 by product count
   const tabs = useMemo(() => {
@@ -172,6 +181,13 @@ const ProductArea = () => {
                 width: 100%;
                 margin: 0 auto;
               }
+              .tp-category-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+                padding: 0 10px;
+                margin-top: 20px;
+              }
               .tp-category-slider-button-prev,
               .tp-category-slider-button-next {
                 position: absolute;
@@ -218,23 +234,41 @@ const ProductArea = () => {
                   padding: 0 4px;
                 }
               }
+              @media (max-width: 480px) {
+                .tp-category-grid {
+                  grid-template-columns: repeat(2, 1fr);
+                  gap: 14px;
+                }
+              }
             `}</style>
 
-            <button className="tp-category-slider-button-prev">←</button>
-            <Swiper
-              {...slider_setting}
-              modules={[Scrollbar, Mousewheel, Navigation]}
-              className="tp-category-slider-active-2 swiper-container mb-50"
-            >
-              {display_items.map((prd) => (
-                <SwiperSlide key={prd._id}>
-                  <div className="popular-product-slide h-full">
+            {isMobile ? (
+              <div className="tp-category-grid mb-50">
+                {display_items.map((prd, index) => (
+                  <div key={`${prd._id}-${index}`} className="tp-category-item">
                     <ProductItem product={prd} />
                   </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-            <button className="tp-category-slider-button-next">→</button>
+                ))}
+              </div>
+            ) : (
+              <>
+                <button className="tp-category-slider-button-prev">←</button>
+                <Swiper
+                  {...slider_setting}
+                  modules={[Scrollbar, Mousewheel, Navigation]}
+                  className="tp-category-slider-active-2 swiper-container mb-50"
+                >
+                  {display_items.map((prd, index) => (
+                    <SwiperSlide key={`${prd._id}-${index}`}>
+                      <div className="popular-product-slide h-full">
+                        <ProductItem product={prd} />
+                      </div>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+                <button className="tp-category-slider-button-next">→</button>
+              </>
+            )}
           </div>
         )}
       </div>

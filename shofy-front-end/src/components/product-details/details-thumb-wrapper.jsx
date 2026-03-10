@@ -50,6 +50,11 @@ const DetailsThumbWrapper = ({
   // Create a unique array of thumbnails based on URL
   const uniqueThumbnails = Array.from(new Map(allThumbnails.map(item => [item.img, item])).values());
 
+  // Add video thumbnail if videoId exists
+  if (videoId) {
+    uniqueThumbnails.push({ img: "video", isVideo: true });
+  }
+
   return (
     <>
       <div className="tp-product-details-thumb-wrapper tp-tab d-sm-flex">
@@ -58,16 +63,28 @@ const DetailsThumbWrapper = ({
             {uniqueThumbnails.map((item, i) => (
               <button
                 key={i}
-                className={`nav-link ${formatImageUrl(item.img) === activeImg ? "active" : ""}`}
-                onClick={() => handleImageActive(item)}
+                className={`nav-link ${item.img === "video" ? (activeImg === "video" ? "active" : "") : (formatImageUrl(item.img) === activeImg ? "active" : "")}`}
+                onClick={() => {
+                  if (item.img === "video") {
+                    handleImageActive({ img: "video" });
+                  } else {
+                    handleImageActive(item);
+                  }
+                }}
               >
-                <Image
-                  src={formatImageUrl(item.img)}
-                  alt="image"
-                  width={78}
-                  height={100}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
+                {item.img === "video" ? (
+                  <div className="video-thumb-placeholder flex items-center justify-center bg-gray-100 w-full h-full">
+                    <i className="fas fa-play"></i>
+                  </div>
+                ) : (
+                  <Image
+                    src={formatImageUrl(item.img)}
+                    alt="image"
+                    width={78}
+                    height={100}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                )}
               </button>
             ))}
           </div>
@@ -75,24 +92,30 @@ const DetailsThumbWrapper = ({
         <div className="tab-content m-img">
           <div className="tab-pane fade show active">
             <div className="tp-product-details-nav-main-thumb p-relative">
-              <Image
-                src={activeImg}
-                alt="product img"
-                width={imgWidth}
-                height={imgHeight}
-              />
-              <div className="tp-product-badge">
-                {status === 'out-of-stock' && <span className="product-hot">out-stock</span>}
-              </div>
-              {videoId && (
-                <div
-                  onClick={() => setIsVideoOpen(true)}
-                  className="tp-product-details-thumb-video"
-                >
-                  <a className="tp-product-details-thumb-video-btn cursor-pointer popup-video">
-                    <i className="fas fa-play"></i>
-                  </a>
+              {videoId && activeImg === "video" ? (
+                <div className="tp-product-details-video-iframe">
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
                 </div>
+              ) : (
+                <>
+                  <Image
+                    src={activeImg}
+                    alt="product img"
+                    width={imgWidth}
+                    height={imgHeight}
+                  />
+                  <div className="tp-product-badge">
+                    {status === 'out-of-stock' && <span className="product-hot">out-stock</span>}
+                  </div>
+                </>
               )}
             </div>
           </div>

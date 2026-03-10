@@ -6,7 +6,7 @@ import { Poppins } from "next/font/google";
 import { Providers } from "@/redux/provider";
 
 export const metadata: Metadata = {
-  title: "Lookfame - Admin Dashboard",
+  title: "LookFame - Admin Dashboard",
   icons: {
     icon: "/assets/img/logo/logo.svg",
     shortcut: "/assets/img/logo/logo.svg",

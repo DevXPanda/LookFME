@@ -53,7 +53,8 @@ const BestSellerProducts = () => {
           @media (max-width: 576px) {
             .custom-grid-layout {
               grid-template-columns: repeat(2, 1fr);
-              gap: 12px;
+              gap: 16px;
+              padding: 0 10px;
             }
           }
         `}</style>

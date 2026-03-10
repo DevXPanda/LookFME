@@ -67,7 +67,7 @@ body {
 /* Mobile */
 @media (max-width: 768px) {
   .tp-slider-item-2 {
-    aspect-ratio: 4 / 5 !important;
+    aspect-ratio: 3 / 1 !important;
   }
 }
 
@@ -86,6 +86,10 @@ body {
   aspect-ratio: 3 / 1;
   position: relative;
   overflow: hidden;
+  
+  @media (max-width: 768px) {
+    aspect-ratio: 3 / 1 !important;
+  }
 }
 
 /* =========================================================
@@ -103,6 +107,10 @@ body {
   aspect-ratio: 3 / 1;
   position: relative;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    aspect-ratio: 3 / 1 !important;
+  }
 }
 
 /* =========================================================

@@ -10,7 +10,7 @@ const nextConfig = {
     ]
   },
   images: {
-    domains: ['localhost', 'i.ibb.co', 'res.cloudinary.com', 'lh3.googleusercontent.com', 'placehold.co'],
+    domains: ['localhost', 'i.ibb.co', 'res.cloudinary.com', 'lh3.googleusercontent.com', 'placehold.co', 'lookfme.onrender.com'],
   },
 }
 

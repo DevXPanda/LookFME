@@ -114,6 +114,17 @@ export const authApi = apiSlice.injectEndpoints({
         };
       },
     }),
+    // bulk update status
+    bulkUpdateStatus: builder.mutation<any, { orderIds: string[], status: string }>({
+      query({ orderIds, status }) {
+        return {
+          url: `/api/order/bulk-update-status`,
+          method: "PATCH",
+          body: { orderIds, status },
+        };
+      },
+      invalidatesTags: ["AllOrders", "DashboardRecentOrders"],
+    }),
   }),
 });
 
@@ -129,4 +140,5 @@ export const {
   useProcessExchangeMutation,
   useDownloadBulkShippingLabelsMutation,
   useDownloadSingleShippingLabelMutation,
+  useBulkUpdateStatusMutation,
 } = authApi;

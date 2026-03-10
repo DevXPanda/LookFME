@@ -27,7 +27,11 @@ const ProductDetailsContent = ({ productItem }) => {
 
   // handle image active
   const handleImageActive = (item) => {
-    setActiveImg(formatImageUrl(item.img));
+    if (item.img === "video") {
+      setActiveImg("video");
+    } else {
+      setActiveImg(formatImageUrl(item.img));
+    }
   };
   return (
     <section className="tp-product-details-area">

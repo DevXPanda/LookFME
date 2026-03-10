@@ -174,9 +174,9 @@ const ProductItem = ({ product }) => {
            height: 18px;
         }
         @media (max-width: 576px) {
-           .custom-image-wrapper {
-              height: 200px; /* Shorter image for mobile 2-grid */
-           }
+          .custom-image-wrapper {
+             /* Maintain 1/1 aspect ratio automatically */
+          }
            .custom-product-title {
               font-size: 13px;
               height: 38px;
@@ -207,11 +207,11 @@ const ProductItem = ({ product }) => {
         <div className="custom-image-wrapper">
           <Link href={`/product-details/${_id}`}>
             <Image
-              src={product?.imageURLs?.[0]?.img || img || "https://placehold.co/300x300?text=No+Image"}
+              src={product?.imageURLs?.[0]?.img || img || "https://placehold.co/400x400?text=No+Image"}
               alt={title || "product img"}
-              width={300}
-              height={300}
+              fill
               priority
+              className="object-cover"
             />
           </Link>
 

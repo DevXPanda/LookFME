@@ -672,3 +672,51 @@ exports.downloadBulkShippingLabels = async (req, res, next) => {
     next(error);
   }
 };
+
+// bulk update order status
+exports.bulkUpdateOrderStatus = async (req, res, next) => {
+  const { orderIds, status } = req.body;
+  if (!orderIds || !Array.isArray(orderIds) || orderIds.length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'Order IDs array is required',
+    });
+  }
+  if (!status) {
+    return res.status(400).json({
+      success: false,
+      message: 'Status is required',
+    });
+  }
+
+  let newStatus = status;
+  const normalized = status.toLowerCase();
+  if (normalized === 'exchanging' || normalized === 'preparing-for-exchanging') {
+    newStatus = 'exchanged';
+  }
+
+  try {
+    const ordersBeforeUpdate = await Order.find({ _id: { $in: orderIds } });
+    
+    await Order.updateMany(
+      { _id: { $in: orderIds } },
+      { $set: { status: newStatus } }
+    );
+
+    // Create refund requests if needed for each order
+    const normalizedNewStatus = typeof newStatus === 'string' ? newStatus.toLowerCase() : '';
+    if (normalizedNewStatus === 'cancel' || normalizedNewStatus === 'return_requested' || normalizedNewStatus === 'returned') {
+      for (const order of ordersBeforeUpdate) {
+        await createRefundRequestIfNeeded(order, `Bulk order status changed to ${newStatus}`);
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Statuses updated successfully',
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};

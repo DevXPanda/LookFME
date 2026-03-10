@@ -30,6 +30,7 @@ export default function FashionBanner() {
   const router = useRouter();
   const { data, isLoading } = useGetBannersQuery();
   const banners = (data?.data ?? []).filter(b => b.bannerType === 'homepage_hero');
+  const isSingleBanner = banners.length === 1;
 
   const handleBannerClick = (redirectLink) => {
     if (redirectLink) router.push(redirectLink);
@@ -95,7 +96,7 @@ export default function FashionBanner() {
         
         @media (max-width: 768px) {
           .tp-slider-item-2 {
-            aspect-ratio: 4 / 5 !important;
+            aspect-ratio: 3 / 1 !important;
             min-height: 0 !important;
           }
         }
@@ -110,6 +111,8 @@ export default function FashionBanner() {
       <section className="tp-slider-area">
         <Swiper
           {...sliderSettings}
+          loop={!isSingleBanner}
+          pagination={isSingleBanner ? false : sliderSettings.pagination}
           modules={[Pagination, EffectFade, Autoplay]}
           className="tp-slider-active-2"
         >

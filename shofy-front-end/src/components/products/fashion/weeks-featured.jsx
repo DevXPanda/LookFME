@@ -1,123 +1,3 @@
-// 'use client';
-// import React from 'react';
-// import { Swiper, SwiperSlide } from 'swiper/react';
-// import { Navigation } from 'swiper/modules';
-// import { Rating } from 'react-simple-star-rating';
-// import Link from 'next/link';
-// // internal
-// import { useGetProductTypeQuery } from '@/redux/features/productApi';
-// import { ArrowRightLong, NextLongArr, PrevLongArr, TextShapeLine } from '@/svg';
-// import ErrorMsg from '@/components/common/error-msg';
-// import { HomeTwoFeaturedPrdLoader } from '@/components/loader';
-
-// // slider setting 
-// const slider_setting = {
-//   slidesPerView: 3,
-//   spaceBetween: 12,
-//   navigation: {
-//     nextEl: ".tp-featured-slider-button-next",
-//     prevEl: ".tp-featured-slider-button-prev",
-//   },
-//   breakpoints: {
-//     '1200': {
-//       slidesPerView: 3,
-//     },
-//     '992': {
-//       slidesPerView: 3,
-//     },
-//     '768': {
-//       slidesPerView: 2,
-//     },
-//     '576': {
-//       slidesPerView: 1,
-//     },
-//     '0': {
-//       slidesPerView: 1,
-//     },
-//   }
-// }
-
-// const WeeksFeatured = () => {
-//   const { data: products, isError, isLoading } =
-//     useGetProductTypeQuery({ type: 'fashion', query: `featured=true` });
-//   // decide what to render
-//   let content = null;
-
-//   if (isLoading) {
-//     content = (
-//       <HomeTwoFeaturedPrdLoader loading={isLoading} />
-//     );
-//   }
-//   if (!isLoading && isError) {
-//     content = <ErrorMsg msg="There was an error" />;
-//   }
-//   if (!isLoading && !isError && products?.data?.length === 0) {
-//     content = <ErrorMsg msg="No Products found!" />;
-//   }
-//   if (!isLoading && !isError && products?.data?.length > 0) {
-//     const product_items = products.data;
-//     content = (
-//       <Swiper {...slider_setting} modules={[Navigation]} className="tp-featured-slider-active swiper-container">
-//         {product_items.map((item) => {
-//           const { _id, img, title, price, discount, reviews } = item || {};
-//           return (
-//             <SwiperSlide key={item._id} className="tp-featured-item white-bg p-relative z-index-1" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, padding: '24px 12px' }}>
-//               <div className="tp-featured-thumb include-bg" style={{ backgroundImage: `url(${img})`, backgroundSize: 'cover', backgroundPosition: 'center' }} data-background="assets/img/product/slider/product-slider-1.jpg"></div>
-//               <div className="tp-featured-content" style={{ padding: 0 }}>
-//                 <h3 className="tp-featured-title">
-//                   <Link href={`/product-details/${_id}`}>{title}</Link>
-//                 </h3>
-//                 <div className="tp-featured-price-wrapper">
-//                   <span className="tp-featured-price new-price">₹{price}</span>
-//                 </div>
-//                 <div className="tp-product-rating-icon tp-product-rating-icon-2">
-//                   <Rating allowFraction size={16} initialValue={reviews && reviews.length > 0 ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length : 0} readonly={true} />
-//                 </div>
-//                 <div className="tp-featured-btn">
-//                   <Link href={`/product-details/${_id}`} className="tp-btn tp-btn-border tp-btn-border-sm">Shop Now
-//                     {" "}<ArrowRightLong />
-//                   </Link>
-//                 </div>
-//               </div>
-//             </SwiperSlide>
-//           )
-//         })}
-//       </Swiper>
-//     )
-//   }
-//   return (
-//     <section className="tp-featured-slider-area grey-bg-6 fix pt-95 pb-120">
-//       <div className="container-fluid" style={{ paddingLeft: 0 }}>
-//         <div className="row gx-0">
-//           <div className="col-xl-12">
-//             <div className="tp-section-title-wrapper-2 mb-50 text-center">
-//               <span className="tp-section-title-pre-2">
-//                 Shop by Featured
-//                 <TextShapeLine />
-//               </span>
-//               <h3 className="tp-section-title-2 text-center">This {"Week's"} Featured</h3>
-//             </div>
-//           </div>
-//         </div>
-//         <div className="row gx-0">
-//           <div className="col-xl-12">
-//             <div className="tp-featured-slider" style={{ paddingLeft: 24, paddingRight: 0 }}>
-//               {content}
-//               <div className="tp-featured-slider-arrow mt-45" style={{ paddingLeft: 24 }}>
-//                 <button className="tp-featured-slider-button-prev">
-//                   <PrevLongArr />
-//                 </button>
-//                 <button className="tp-featured-slider-button-next">
-//                   <NextLongArr />
-//                 </button>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// };
 'use client';
 
 import React, { useRef, useState, useEffect, useMemo } from 'react';
@@ -126,10 +6,15 @@ import Link from 'next/link';
 import { Rating } from 'react-simple-star-rating';
 
 import { useGetProductTypeQuery } from '@/redux/features/productApi';
-import { PrevLongArr, NextLongArr, ArrowRightLong, TextShapeLine } from '@/svg';
+import { TextShapeLine } from '@/svg';
+import ProductItem from './product-item';
 import ErrorMsg from '@/components/common/error-msg';
 import { HomeTwoFeaturedPrdLoader } from '@/components/loader';
 import { getProductPrice } from '@/utils/price-utils';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Mousewheel } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
 
 const WeeksFeatured = () => {
   const { data, isLoading, isError } =
@@ -137,60 +22,35 @@ const WeeksFeatured = () => {
 
 
 
-  const scrollRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-  const [hasMoved, setHasMoved] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
+  // Detect mobile view
   useEffect(() => {
-    if (!isDragging && hasMoved) {
-      const timeout = setTimeout(() => setHasMoved(false), 120);
-      return () => clearTimeout(timeout);
-    }
-  }, [isDragging, hasMoved]);
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
-  // Handle button scroll
-  const handleScroll = (direction) => {
-    if (!scrollRef.current) return;
-    // Calculate scroll amount based on card width + gap
-    const containerWidth = scrollRef.current.offsetWidth;
-    const cardWidth = containerWidth / 2 - 12; // Account for gap
-    const scrollAmount = cardWidth + 24; // Card width + gap
-    scrollRef.current.scrollBy({
-      left: direction === "left" ? -scrollAmount : scrollAmount,
-      behavior: "smooth",
-    });
-  };
-
-  // Drag handlers (same as Super Saving Combos)
-  const beginDrag = (clientX, currentScroll) => {
-    setIsDragging(true);
-    setStartX(clientX);
-    setScrollLeft(currentScroll);
-    setHasMoved(false);
-  };
-
-  const dragMove = (clientX) => {
-    if (!isDragging || !scrollRef.current) return;
-    const delta = clientX - startX;
-    if (Math.abs(delta) > 2 && !hasMoved) {
-      setHasMoved(true);
-    }
-    const walk = delta * 1.5;
-    scrollRef.current.scrollLeft = scrollLeft - walk;
-  };
-
-  const stopDragging = () => setIsDragging(false);
-
-  // Handle wheel event for mouse wheel scrolling
-  const handleWheel = (e) => {
-    if (!scrollRef.current) return;
-    // Convert vertical wheel scrolling to horizontal
-    if (e.deltaY !== 0) {
-      e.preventDefault();
-      scrollRef.current.scrollLeft += e.deltaY;
-    }
+  const slider_setting = {
+    slidesPerView: 4,
+    spaceBetween: 24,
+    loop: false,
+    mousewheel: {
+      forceToAxis: true,
+      sensitivity: 1,
+    },
+    navigation: {
+      nextEl: ".featured-next",
+      prevEl: ".featured-prev",
+    },
+    breakpoints: {
+      1200: { slidesPerView: 4 },
+      992: { slidesPerView: 3 },
+      768: { slidesPerView: 2 },
+      576: { slidesPerView: 2 },
+      0: { slidesPerView: 1 },
+    },
   };
 
   if (isLoading) return <HomeTwoFeaturedPrdLoader loading />;
@@ -198,305 +58,100 @@ const WeeksFeatured = () => {
   if (!isLoading && !isError && data?.data?.length === 0) return <ErrorMsg msg="No Products found!" />;
 
   return (
-    <section className="featured-area">
-      <div className="container-fluid">
-
+    <section className="featured-area pb-50 bg-white">
+      <div className="container">
         {/* Heading */}
         <div className="text-center mb-50">
-          <span className="tp-section-title-pre-2">
+          <span className="tp-section-title-pre-2 pt-40">
             Shop by Featured <TextShapeLine />
           </span>
           <h3 className="tp-section-title-2">Designer Embroidery T-Shirts</h3>
         </div>
 
         <div className="featured-wrapper">
-          <div className="featured-scroll-container-wrapper p-relative">
-            {/* Scroll Buttons */}
-            <button
-              className="featured-prev"
-              onClick={() => handleScroll("left")}
-            >
-              <PrevLongArr />
-            </button>
-            <button
-              className="featured-next"
-              onClick={() => handleScroll("right")}
-            >
-              <NextLongArr />
-            </button>
+          <style>{`
+            .featured-wrapper {
+              position: relative;
+              width: 100%;
+            }
+            .featured-grid {
+              display: grid;
+              grid-template-columns: repeat(2, 1fr);
+              gap: 16px;
+              padding: 0 10px;
+            }
+            .featured-prev,
+            .featured-next {
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+              width: 45px;
+              height: 45px;
+              border-radius: 50%;
+              border: 1px solid rgba(0, 0, 0, 0.1);
+              background-color: #ffffff;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              cursor: pointer;
+              transition: all 0.3s ease;
+              z-index: 10;
+              box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+              font-size: 24px;
+              color: rgb(190, 89, 133);
+            }
+            .featured-prev:hover,
+            .featured-next:hover {
+              background-color: rgb(190, 89, 133);
+              border-color: rgb(190, 89, 133);
+              box-shadow: 0px 6px 16px rgba(190, 89, 133, 0.3);
+              color: #ffffff;
+            }
+            .featured-prev { left: -25px; }
+            .featured-next { right: -25px; }
 
-            {/* Scrollable Container */}
-            <div
-              ref={scrollRef}
-              className="featured-scroll-container"
-              onMouseDown={(e) =>
-                beginDrag(e.clientX, scrollRef.current.scrollLeft)
+            @media (max-width: 768px) {
+              .featured-prev,
+              .featured-next {
+                display: none;
               }
-              onMouseMove={(e) => {
-                if (isDragging) {
-                  e.preventDefault();
-                  dragMove(e.clientX);
-                }
-              }}
-              onMouseUp={stopDragging}
-              onMouseLeave={stopDragging}
-              onTouchStart={(e) =>
-                beginDrag(e.touches[0].clientX, scrollRef.current.scrollLeft)
+            }
+            @media (max-width: 480px) {
+              .featured-grid {
+                gap: 16px;
               }
-              onTouchMove={(e) => {
-                dragMove(e.touches[0].clientX);
-              }}
-              onTouchEnd={stopDragging}
-              onTouchCancel={stopDragging}
-              onWheel={handleWheel}
-              style={{
-                overflowX: "auto",
-                overflowY: "hidden",
-                whiteSpace: "nowrap",
-                cursor: isDragging ? "grabbing" : "grab",
-                padding: "0 20px",
-                scrollbarWidth: "none",
-                msOverflowStyle: "none",
-                userSelect: "none",
-                WebkitUserSelect: "none",
-              }}
-            >
-              <div
-                style={{
-                  display: "inline-flex",
-                  gap: "24px",
-                  padding: "0 12px",
-                  minWidth: "100%",
-                }}
-              >
-                {data?.data?.map((item) => (
-                  <div
-                    key={item._id}
-                    className="featured-card"
-                    style={{
-                      flexShrink: 0,
-                      width: "calc((100% - 48px) / 2)",
-                      minWidth: "calc((100% - 48px) / 2)",
-                      maxWidth: "calc((100% - 48px) / 2)",
-                    }}
-                  >
-                    {/* IMAGE */}
-                    <div className="featured-image">
-                      <Image
-                        src={item.imageURLs && item.imageURLs.length > 0 ? item.imageURLs[0].img : (item.img || "https://placehold.co/400x500?text=No+Image")}
-                        alt={item.title || "featured product"}
-                        fill
-                        priority
-                      />
-                    </div>
+            }
+          `}</style>
 
-                    {/* CONTENT */}
-                    <div className="featured-content">
-                      <div className="mb-2">
-                        <Rating
-                          allowFraction
-                          size={14}
-                          readonly
-                          initialValue={
-                            item.reviews?.length
-                              ? item.reviews.reduce((a, b) => a + b.rating, 0) /
-                              item.reviews.length
-                              : 0
-                          }
-                        />
-                      </div>
-                      <h3>{item.title}</h3>
-                      <div className="tp-featured-price-wrapper">
-                        {getProductPrice(item).isDiscountActive ? (
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}>
-                            <span className="price">₹{(getProductPrice(item).currentPrice || 0).toFixed(2)}</span>
-                            <span className="old-price" style={{ textDecoration: 'line-through', color: '#888', fontSize: '13px' }}>
-                              ₹{(getProductPrice(item).originalPrice || 0).toFixed(2)}
-                            </span>
-                            <span className="discount-text" style={{ fontSize: '12px', fontWeight: '600', color: '#38a169' }}>
-                              ({item.discount}% off)
-                            </span>
-                          </div>
-                        ) : (
-                          <span className="price">₹{(item.price || 0).toFixed(2)}</span>
-                        )}
-                      </div>
-
-                      <Link
-                        href={`/product-details/${item._id}`}
-                        className="tp-btn tp-btn-border"
-                      >
-                        Shop Now <ArrowRightLong />
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
+          {isMobile ? (
+            <div className="featured-grid mb-50">
+              {data?.data?.map((prd, index) => (
+                <div key={`${prd._id}-${index}`} className="featured-item">
+                  <ProductItem product={prd} />
+                </div>
+              ))}
             </div>
-          </div>
+          ) : (
+            <div className="p-relative">
+              <button className="featured-prev">←</button>
+              <Swiper
+                {...slider_setting}
+                modules={[Navigation, Mousewheel]}
+                className="featured-slider-active swiper-container mb-50"
+              >
+                {data?.data?.map((prd, index) => (
+                  <SwiperSlide key={`${prd._id}-${index}`}>
+                    <div className="h-full px-2">
+                      <ProductItem product={prd} />
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+              <button className="featured-next">→</button>
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Styles */}
-      <style jsx>{`
-        .featured-area {
-          background: #f4f5f7;
-          padding: 80px 0;
-        }
-
-        .featured-wrapper {
-          position: relative;
-          padding: 0 80px;
-        }
-
-        .featured-scroll-container-wrapper {
-          position: relative;
-        }
-
-        .featured-scroll-container::-webkit-scrollbar {
-          display: none;
-        }
-
-        .featured-card {
-          background: #fff;
-          display: flex;
-          align-items: center;
-          gap: 32px;
-          padding: 40px;
-          height: 360px;
-          box-sizing: border-box;
-          overflow: hidden;
-        }
-
-        .featured-image {
-          position: relative;
-          width: 55%;
-          height: 100%;
-        }
-
-        .featured-image :global(img) {
-          object-fit: contain;
-        }
-
-        .featured-content {
-          width: 45%;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          height: 100%;
-          box-sizing: border-box;
-        }
-
-        .featured-content h3 {
-          font-size: 22px;
-          margin-bottom: 8px;
-          line-height: 1.3;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          line-clamp: 2;
-        }
-
-        .tp-product-description {
-           display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          line-clamp: 2;
-          overflow: hidden;
-        }
-
-        .tp-product-see-more:hover {
-          text-decoration: underline;
-        }
-
-        .price {
-          font-weight: 600;
-          margin-bottom: 8px;
-          display: block;
-        }
-
-        .featured-content :global(.tp-btn) {
-          margin-top: auto;
-          align-self: flex-start;
-        }
-
-        .featured-prev,
-        .featured-next {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 44px;
-          height: 44px;
-          border-radius: 50%;
-          background: #fff;
-          box-shadow: 0 10px 25px rgba(0,0,0,.15);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          z-index: 10;
-          border: none;
-          transition: all 0.3s ease;
-        }
-
-        .featured-prev:hover,
-        .featured-next:hover {
-          transform: translateY(-50%) scale(1.1);
-          background: rgba(255, 255, 255, 1);
-        }
-
-        .featured-prev { left: 16px; }
-        .featured-next { right: 16px; }
-
-        @media (max-width: 1199px) {
-          .featured-wrapper {
-            padding: 0 60px;
-          }
-        }
-
-        @media (max-width: 991px) {
-          .featured-wrapper {
-            padding: 0 40px;
-          }
-          .featured-card {
-            width: calc((100% - 24px) / 2) !important;
-            min-width: calc((100% - 24px) / 2) !important;
-            max-width: calc((100% - 24px) / 2) !important;
-            padding: 32px;
-            height: 340px;
-          }
-        }
-
-        @media (max-width: 767px) {
-          .featured-wrapper {
-            padding: 0 20px;
-          }
-          .featured-card {
-            flex-direction: column;
-            height: auto;
-            width: 300px !important;
-            min-width: 300px !important;
-            max-width: 300px !important;
-            padding: 24px;
-          }
-          .featured-image,
-          .featured-content {
-            width: 100%;
-          }
-          .featured-image {
-            height: 240px;
-          }
-          .featured-content {
-            height: auto;
-          }
-          .featured-prev,
-          .featured-next {
-            display: none;
-          }
-        }
-      `}</style>
     </section>
   );
 };

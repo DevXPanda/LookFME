@@ -3,7 +3,7 @@ import HeaderTwo from "@/layout/headers/header-2";
 import Footer from "@/layout/footers/footer";
 
 export const metadata = {
-  title: "Shofy - Product Details Page",
+  title: "LookFame - Product Details Page",
 };
 
 export default function CombotDetailsPage() {
