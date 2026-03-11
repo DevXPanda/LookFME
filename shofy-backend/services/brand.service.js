@@ -46,3 +46,12 @@ exports.getSingleBrandService = async (id) => {
   const result = await Brand.findById(id);
   return result;
 }
+
+// bulk delete brands
+exports.bulkDeleteBrandsService = async (ids) => {
+  if (!ids || !Array.isArray(ids) || ids.length === 0) {
+    throw new ApiError(400, 'Brand ids are required');
+  }
+  const result = await Brand.deleteMany({ _id: { $in: ids } });
+  return result;
+}

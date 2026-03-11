@@ -11,6 +11,8 @@ router.post('/add-all',brandController.addAllBrand);
 router.get('/active',brandController.getActiveBrands);
 // get all Brands
 router.get('/all',brandController.getAllBrands);
+// bulk delete brands
+router.post('/delete-bulk', brandController.bulkDeleteBrands);
 // delete brand
 router.delete('/delete/:id',brandController.deleteBrand);
 // get single

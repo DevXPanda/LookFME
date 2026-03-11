@@ -47,12 +47,24 @@ export const authApi = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["AllBrands"],
     }),
+    // bulk delete brands
+    bulkDeleteBrands: builder.mutation<{ success: boolean; message: string }, string[]>({
+      query(ids: string[]) {
+        return {
+          url: `/api/brand/delete-bulk`,
+          method: "POST",
+          body: { ids },
+        };
+      },
+      invalidatesTags: ["AllBrands"],
+    }),
   }),
 });
 
 export const {
   useGetAllBrandsQuery,
   useDeleteBrandMutation,
+  useBulkDeleteBrandsMutation,
   useAddBrandMutation,
   useEditBrandMutation,
   useGetBrandQuery,

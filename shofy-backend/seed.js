@@ -1,6 +1,16 @@
 require('dotenv').config();
 
+/**
+ * WARNING: This seed script DELETES all existing records in the database
+ * and reinserts only the static demo data from utils/*.js.
+ * Any products, categories, or brands added from the admin panel will be LOST.
+ *
+ * A backup of current products, categories, and brands is created automatically
+ * before wiping (in backups/data-*.json). To restore them later, run:
+ *   node scripts/restore-data.js
+ */
 const connectDB = require('./config/db');
+const { backup } = require('./scripts/backup-data');
 
 const Brand = require('./model/Brand');
 const brandData = require('./utils/brands');
@@ -29,6 +39,10 @@ const adminData = require('./utils/admin');
 connectDB();
 const importData = async () => {
   try {
+    // Backup current products, categories, and brands before wiping (so you can restore later)
+    console.log('Creating backup of current data before seed...');
+    await backup();
+
     await Brand.deleteMany();
     await Brand.insertMany(brandData);
 

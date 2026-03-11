@@ -67,6 +67,17 @@ exports.deleteBrand = async (req,res,next) => {
   }
 }
 
+// bulk delete brands
+exports.bulkDeleteBrands = async (req, res, next) => {
+  try {
+    const { ids } = req.body;
+    await brandService.bulkDeleteBrandsService(ids);
+    res.status(200).json({ success: true, message: 'Brands deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+}
+
 // update category
 exports.updateBrand = async (req,res,next) => {
   try {

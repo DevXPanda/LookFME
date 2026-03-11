@@ -16,8 +16,6 @@ const Brand = require('../model/Brand');
 const BACKUPS_DIR = path.join(__dirname, '..', 'backups');
 
 async function backup() {
-  await connectDB();
-
   const [products, categories, brands] = await Promise.all([
     Product.find({}).lean(),
     Category.find({}).lean(),
@@ -44,10 +42,20 @@ async function backup() {
   fs.writeFileSync(filepath, JSON.stringify(payload, null, 2), 'utf8');
   console.log(`Backup saved: ${filepath}`);
   console.log(`  Products: ${products.length}, Categories: ${categories.length}, Brands: ${brands.length}`);
+  return filepath;
+}
+
+async function runStandalone() {
+  await connectDB();
+  await backup();
   process.exit(0);
 }
 
-backup().catch((err) => {
-  console.error('Backup failed:', err);
-  process.exit(1);
-});
+if (require.main === module) {
+  runStandalone().catch((err) => {
+    console.error('Backup failed:', err);
+    process.exit(1);
+  });
+}
+
+module.exports = { backup };

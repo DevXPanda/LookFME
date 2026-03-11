@@ -10,6 +10,8 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "data:import": "node seed.js",
+    "data:backup": "node scripts/backup-data.js",
+    "data:restore": "node scripts/restore-data.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
