@@ -1,6 +1,31 @@
+const mongoose = require("mongoose");
 const Brand = require("../model/Brand");
 const Category = require("../model/Category");
 const Product = require("../model/Products");
+const Order = require("../model/Order");
+
+function extractYoutubeVideoId(urlOrId) {
+  if (!urlOrId || typeof urlOrId !== "string") return null;
+  const s = urlOrId.trim();
+  if (!s) return null;
+  if (/^[\w-]{10,12}$/.test(s) && !s.includes("/") && !s.includes("=")) return s;
+  try {
+    const beMatch = s.match(/(?:youtu\.be\/)([\w-]{10,12})(?:\?|$)/i);
+    if (beMatch) return beMatch[1];
+    const url = new URL(s.startsWith("http") ? s : `https://${s}`);
+    if (url.hostname.replace("www.", "") === "youtube.com") {
+      const v = url.searchParams.get("v");
+      if (v) return v;
+      const embedMatch = url.pathname.match(/\/embed\/([\w-]{10,12})/);
+      if (embedMatch) return embedMatch[1];
+    }
+    if (url.hostname === "youtu.be") {
+      const id = url.pathname.slice(1).split("?")[0];
+      if (id) return id;
+    }
+  } catch (_) {}
+  return null;
+}
 
 // create product service
 exports.createProductService = async (data) => {
@@ -54,6 +79,10 @@ exports.createProductService = async (data) => {
     }
   }
 
+  if (data.videoId) {
+    const normalized = extractYoutubeVideoId(data.videoId);
+    data.videoId = normalized || data.videoId;
+  }
   const product = await Product.create(data);
   const { _id: productId, brand, category } = product;
   //update Brand
@@ -328,7 +357,7 @@ exports.getTopRatedProductService = async () => {
 };
 
 // get product data
-exports.getProductService = async (id) => {
+exports.getProductService = async (id, userId = null) => {
   const product = await Product.findById(id).populate({
     path: "reviews",
     match: { visible: { $ne: false } }, // Only show visible reviews
@@ -347,6 +376,20 @@ exports.getProductService = async (id) => {
       review.userId &&
       review.userId.reviewBlocked !== true
     );
+  }
+
+  // canReview: true if user has a delivered order containing this product
+  if (product) {
+    if (userId) {
+      const deliveredOrder = await Order.findOne({
+        user: new mongoose.Types.ObjectId(userId),
+        status: "delivered",
+        "cart._id": product._id,
+      });
+      product.canReview = !!deliveredOrder;
+    } else {
+      product.canReview = false;
+    }
   }
 
   return product;
@@ -449,7 +492,10 @@ exports.updateProductService = async (id, currProduct) => {
     if (currProduct.status !== undefined) product.status = currProduct.status;
     if (currProduct.productType !== undefined) product.productType = currProduct.productType;
     if (currProduct.description !== undefined) product.description = currProduct.description;
-    if (currProduct.videoId !== undefined) product.videoId = currProduct.videoId;
+    if (currProduct.videoId !== undefined) {
+      const normalized = extractYoutubeVideoId(currProduct.videoId);
+      product.videoId = normalized || (currProduct.videoId || "");
+    }
     if (currProduct.additionalInformation !== undefined) product.additionalInformation = currProduct.additionalInformation;
 
     if (currProduct.offerDate) {

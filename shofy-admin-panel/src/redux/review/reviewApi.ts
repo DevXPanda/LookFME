@@ -4,7 +4,7 @@ import { IDelReviewsRes } from "@/types/product-type";
 export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    // delete review product
+    // delete review product (all reviews for a product)
     deleteReviews: builder.mutation<IDelReviewsRes, string>({
       query(id) {
         return {
@@ -13,6 +13,44 @@ export const authApi = apiSlice.injectEndpoints({
         };
       },
       invalidatesTags: ["ReviewProducts", "AllReviews"],
+    }),
+    // delete a single review by id
+    deleteReviewById: builder.mutation<{ success: boolean; message: string }, string>({
+      query(reviewId) {
+        return {
+          url: `/api/review/one/${reviewId}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["AllReviews", "ReviewProducts"],
+    }),
+    // bulk delete reviews
+    bulkDeleteReviews: builder.mutation<
+      { success: boolean; message: string; deletedCount: number },
+      { reviewIds: string[] }
+    >({
+      query({ reviewIds }) {
+        return {
+          url: `/api/review/bulk-delete`,
+          method: "POST",
+          body: { reviewIds },
+        };
+      },
+      invalidatesTags: ["AllReviews", "ReviewProducts"],
+    }),
+    // bulk toggle visibility
+    bulkToggleVisibility: builder.mutation<
+      { success: boolean; message: string; modifiedCount: number },
+      { reviewIds: string[]; visible: boolean }
+    >({
+      query({ reviewIds, visible }) {
+        return {
+          url: `/api/review/bulk-visibility`,
+          method: "PATCH",
+          body: { reviewIds, visible },
+        };
+      },
+      invalidatesTags: ["AllReviews", "ReviewProducts"],
     }),
     // get all reviews for admin
     getAllReviews: builder.query<any, void>({
@@ -46,6 +84,9 @@ export const authApi = apiSlice.injectEndpoints({
 
 export const {
   useDeleteReviewsMutation,
+  useDeleteReviewByIdMutation,
+  useBulkDeleteReviewsMutation,
+  useBulkToggleVisibilityMutation,
   useGetAllReviewsQuery,
   useToggleReviewVisibilityMutation,
   useBlockCustomerReviewsMutation,

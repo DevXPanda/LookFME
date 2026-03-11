@@ -1,7 +1,8 @@
 'use client';
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import PopupVideo from "../common/popup-video";
+import { getYoutubeVideoId } from "@/utils/youtube";
 
 const formatImageUrl = (url) => {
   if (!url || typeof url !== "string") return "https://placehold.co/200x200?text=No+Image";
@@ -20,10 +21,15 @@ const DetailsThumbWrapper = ({
   activeImg,
   imgWidth = 416,
   imgHeight = 480,
-  videoId = false,
+  videoId: videoIdProp = false,
   status
 }) => {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
+  const videoId = useMemo(() => {
+    if (!videoIdProp) return false;
+    const id = getYoutubeVideoId(videoIdProp);
+    return id || false;
+  }, [videoIdProp]);
 
   // Combine all images
   const allThumbnails = [];

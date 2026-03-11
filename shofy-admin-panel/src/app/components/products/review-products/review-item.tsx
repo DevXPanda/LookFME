@@ -5,8 +5,10 @@ import { Rating } from "react-simple-star-rating";
 import {
   useToggleReviewVisibilityMutation,
   useBlockCustomerReviewsMutation,
+  useDeleteReviewByIdMutation,
 } from "@/redux/review/reviewApi";
 import { notifySuccess, notifyError } from "@/utils/toast";
+import Swal from "sweetalert2";
 
 type Review = {
   _id: string;
@@ -30,20 +32,29 @@ type Review = {
   updatedAt: string;
 };
 
-const ReviewItem = ({ review }: { review: Review }) => {
+type ReviewItemProps = {
+  review: Review;
+  selected?: boolean;
+  onSelectChange?: (checked: boolean) => void;
+};
+
+const ReviewItem = ({ review, selected = false, onSelectChange }: ReviewItemProps) => {
   const [toggleVisibility, { isLoading: isToggling }] =
     useToggleReviewVisibilityMutation();
   const [blockCustomer, { isLoading: isBlocking }] =
     useBlockCustomerReviewsMutation();
+  const [deleteReview, { isLoading: isDeleting }] = useDeleteReviewByIdMutation();
 
   const handleToggleVisibility = async () => {
     try {
+      const reviewId = String(review._id);
       const res = await toggleVisibility({
-        reviewId: review._id,
+        reviewId,
         visible: !review.visible,
       });
       if ("error" in res) {
-        notifyError("Failed to update review visibility");
+        const err = res as { error?: { data?: { message?: string } } };
+        notifyError(err?.error?.data?.message ?? "Failed to update review visibility");
       } else {
         notifySuccess(
           `Review ${!review.visible ? "shown" : "hidden"} successfully`
@@ -51,6 +62,34 @@ const ReviewItem = ({ review }: { review: Review }) => {
       }
     } catch (error) {
       notifyError("Failed to update review visibility");
+    }
+  };
+
+  const handleDelete = async () => {
+    const result = await Swal.fire({
+      title: "Delete review?",
+      text: "This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete",
+      cancelButtonText: "Cancel",
+      customClass: {
+        confirmButton: "swal-confirm-btn",
+        cancelButton: "swal-cancel-btn",
+      },
+      buttonsStyling: false,
+    });
+    if (!result.isConfirmed) return;
+    try {
+      const res = await deleteReview(String(review._id));
+      if ("error" in res) {
+        const err = res as { error?: { data?: { message?: string } } };
+        notifyError(err?.error?.data?.message ?? "Failed to delete review");
+      } else {
+        notifySuccess("Review deleted successfully");
+      }
+    } catch (error) {
+      notifyError("Failed to delete review");
     }
   };
 
@@ -79,6 +118,16 @@ const ReviewItem = ({ review }: { review: Review }) => {
 
   return (
     <tr className="bg-white border-b border-gray6 last:border-0 text-start">
+      {onSelectChange && (
+        <td className="pr-4 py-5 whitespace-nowrap w-10">
+          <input
+            type="checkbox"
+            checked={selected}
+            onChange={(e) => onSelectChange(e.target.checked)}
+            className="w-4 h-4 rounded border-gray3"
+          />
+        </td>
+      )}
       <td className="pr-8 py-5 whitespace-nowrap">
         <div className="flex items-center space-x-3">
           {review.userId?.imageURL && (
@@ -144,7 +193,7 @@ const ReviewItem = ({ review }: { review: Review }) => {
         )}
       </td>
       <td className="px-9 py-3 text-end">
-        <div className="flex items-center justify-end space-x-2">
+        <div className="flex items-center justify-end space-x-2 flex-wrap">
           <button
             onClick={handleToggleVisibility}
             disabled={isToggling}
@@ -156,6 +205,14 @@ const ReviewItem = ({ review }: { review: Review }) => {
             title={review.visible ? "Hide Review" : "Show Review"}
           >
             {review.visible ? "Hide" : "Show"}
+          </button>
+          <button
+            onClick={handleDelete}
+            disabled={isDeleting}
+            className="text-xs px-3 py-1 rounded-md font-medium bg-danger/10 text-danger hover:bg-danger/20 disabled:opacity-50"
+            title="Delete review"
+          >
+            Delete
           </button>
           <button
             onClick={handleBlockCustomer}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { ChevronRight } from "lucide-react";
 import { CompareTwo } from "@/svg";
 import Wishlist from "@/svg/wishlist";
@@ -12,19 +12,88 @@ import { notifyError, notifySuccess } from "@/utils/toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Cookies from "js-cookie";
+import { useGetComboProductByIdQuery } from "@/redux/features/comboProductApi";
 
-const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
+const DEFAULT_COLORS = [
+  "Charcoal Grey", "White", "Black", "Sky Blue", "Sage Green", "Bottle Green",
+  "Emerald Green", "Brown", "Maroon", "Baby Pink", "Red", "Navy Blue",
+];
+const DEFAULT_SIZES = ["S", "M", "L", "XL", "XXL"];
+
+function getColorsAndSizesFromCombo(combo) {
+  const colorSet = new Set();
+  const sizeSet = new Set();
+  const products = combo?.products ?? [];
+  products.forEach((p) => {
+    const product = p.productId || p;
+    if (!product) return;
+    if (product.variations?.length) {
+      product.variations.forEach((v) => {
+        if (v.colorName) colorSet.add(v.colorName);
+        if (v.attributeValue) sizeSet.add(v.attributeValue);
+      });
+    }
+    if (product.imageURLs?.length) {
+      product.imageURLs.forEach((img) => {
+        if (img.color?.name) colorSet.add(img.color.name);
+        (img.sizes || []).forEach((s) => sizeSet.add(s));
+      });
+    }
+  });
+  return {
+    colors: colorSet.size ? Array.from(colorSet) : DEFAULT_COLORS,
+    sizes: sizeSet.size ? Array.from(sizeSet) : DEFAULT_SIZES,
+  };
+}
+
+const ComboDetailsPage = ({ comboId, mainImage, thumbnails = [] }) => {
+  const { data: comboResponse, isLoading: comboLoading, isError: comboError } = useGetComboProductByIdQuery(comboId, { skip: !comboId });
+  const combo = comboResponse?.data;
+  const comboNotFound = comboId && !comboLoading && (comboError || !combo);
+
+  const isDynamicCombo = Boolean(comboId && combo);
+  const comboCount = combo?.combo_count ?? 3;
+
+  const { colors: derivedColors, sizes: derivedSizes } = useMemo(
+    () => (combo ? getColorsAndSizesFromCombo(combo) : { colors: DEFAULT_COLORS, sizes: DEFAULT_SIZES }),
+    [combo]
+  );
+  const colors = isDynamicCombo ? derivedColors : DEFAULT_COLORS;
+  const sizes = isDynamicCombo ? derivedSizes : DEFAULT_SIZES;
+
+  const [selections, setSelections] = useState(() =>
+    Array.from({ length: comboCount }, () => ({ color: "", size: "" }))
+  );
+  const setSelection = (index, field, value) => {
+    setSelections((prev) => {
+      const next = [...prev];
+      next[index] = { ...next[index], [field]: value };
+      return next;
+    });
+  };
+
   const [selectedColor1, setSelectedColor1] = useState("");
   const [selectedSize1, setSelectedSize1] = useState("");
   const [selectedColor2, setSelectedColor2] = useState("");
   const [selectedSize2, setSelectedSize2] = useState("");
-  const [selectedColor3, setSelectedColor3] = useState("");
   const [selectedSize3, setSelectedSize3] = useState("");
+  const [selectedColor3, setSelectedColor3] = useState("");
 
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
 
-  const [mainImageState, setMainImageState] = useState(mainImage);
+  const [mainImageState, setMainImageState] = useState(mainImage || "");
+
+  useEffect(() => {
+    if (isDynamicCombo && combo?.img) setMainImageState(combo.img);
+    else if (mainImage) setMainImageState(mainImage);
+  }, [isDynamicCombo, combo?.img, mainImage]);
+
+  useEffect(() => {
+    if (isDynamicCombo && comboCount) {
+      setSelections(Array.from({ length: comboCount }, () => ({ color: "", size: "" })));
+    }
+  }, [comboCount, isDynamicCombo]);
 
   const tabStyle = (tab) =>
     `px-6 py-3 text-xl font-medium cursor-pointer 
@@ -32,25 +101,6 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
       ? "border-pink-500 text-pink-600"
       : "border-transparent text-gray-500 hover:text-gray-700"
     }`;
-
-  useEffect(() => {
-    setMainImageState(mainImage);
-  }, [mainImage]);
-
-  const colors = [
-    "Charcoal Grey",
-    "White",
-    "Black",
-    "Sky Blue",
-    "Sage Green",
-    "Bottle Green",
-    "Emerald Green",
-    "Brown",
-    "Maroon",
-    "Baby Pink",
-    "Red",
-    "Navy Blue",
-  ];
 
   const handleIncrement = (e) => {
     e.preventDefault();
@@ -67,9 +117,29 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
   const { handleAddToCart: addToCartHook } = useAddToCart();
   const { user } = useSelector((state) => state.auth);
 
-  // Create combo product object
   const createComboProduct = () => {
-    // Validate that all colors and sizes are selected
+    if (isDynamicCombo && combo) {
+      const allFilled = selections.every((s) => s.color && s.size);
+      if (!allFilled) {
+        const firstMissing = selections.findIndex((s) => !s.color || !s.size);
+        notifyError(`Please select Color and Size for item ${firstMissing + 1}`);
+        return null;
+      }
+      return {
+        _id: combo._id,
+        title: combo.title,
+        price: combo.price,
+        img: mainImageState || combo.img || "/placeholder.jpg",
+        quantity: 100,
+        status: "in-stock",
+        category: combo.category || { name: "Combo" },
+        tags: ["Combo"],
+        sku: combo.sku || "",
+        isCombo: true,
+        comboItems: selections.map((s) => ({ color: s.color, size: s.size })),
+      };
+    }
+
     if (!selectedColor1 || !selectedSize1) {
       notifyError("Please select Color 1 and Size 1");
       return null;
@@ -82,15 +152,13 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
       notifyError("Please select Color 3 and Size 3");
       return null;
     }
-
-    // Create combo product object with unique ID based on selections
-    const comboId = `combo-${selectedColor1}-${selectedSize1}-${selectedColor2}-${selectedSize2}-${selectedColor3}-${selectedSize3}`;
+    const legacyId = `combo-${selectedColor1}-${selectedSize1}-${selectedColor2}-${selectedSize2}-${selectedColor3}-${selectedSize3}`;
     return {
-      _id: comboId,
+      _id: legacyId,
       title: "Pick Any 3 - Plain T-shirt Combo 3.0",
       price: 1099,
       img: mainImageState || "/placeholder.jpg",
-      quantity: 100, // Available quantity
+      quantity: 100,
       status: "in-stock",
       category: { name: "Plain T-shirt" },
       tags: ["T-shirt", "Combo"],
@@ -229,7 +297,9 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
     }
   };
 
-  const sizes = ["S", "M", "L", "XL", "XXL"];
+  const canCheckout = isDynamicCombo
+    ? selections.every((s) => s.color && s.size)
+    : selectedColor1 && selectedSize1 && selectedColor2 && selectedSize2 && selectedColor3 && selectedSize3;
 
   return (
     <div>
@@ -238,10 +308,17 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             {/* Product Images */}
             <div className="space-y-4 lg:sticky lg:top-4 lg:self-start">
-              {/* Main Image */}
+              {comboId && comboLoading && (
+                <div className="bg-white rounded-2xl p-12 text-center text-gray-500">Loading combo...</div>
+              )}
+              {comboNotFound && (
+                <div className="bg-white rounded-2xl p-12 text-center text-gray-600">Combo not found.</div>
+              )}
+              {(!comboId || combo) && !comboNotFound && (
+              <>
               <div className="bg-white rounded-2xl overflow-hidden relative shadow-xl group">
                 <img
-                  src={mainImageState || "/placeholder.jpg"}
+                  src={mainImageState || combo?.img || "/placeholder.jpg"}
                   alt="T-shirts collection"
                   className="w-full max-w-[1000px] h-auto max-h-[1200px] object-cover mx-auto 
              transform group-hover:scale-105 transition-transform duration-500"
@@ -286,170 +363,139 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
                   ))}
                 </div>
               </div>
+            </>
+              )}
             </div>
 
             {/* Product Details */}
             <div className="space-y-6">
-              {/* Product Title */}
-              <h1 className="text-xl md:text-4xl  text-gray-900 leading-tight font-[var(--tp-ff-roboto)]">
-                Pick Any 3 - Plain T-shirt Combo 3.0
+              {comboId && comboLoading && <p className="text-gray-500">Loading...</p>}
+              {comboNotFound && <p className="text-gray-600">Combo not found.</p>}
+              {(!comboId || combo) && !comboNotFound && (
+              <>
+              <h1 className="text-xl md:text-4xl text-gray-900 leading-tight font-[var(--tp-ff-roboto)]">
+                {isDynamicCombo && combo ? combo.title : "Pick Any 3 - Plain T-shirt Combo 3.0"}
               </h1>
               <p>
-                This is comabo tshirt, in this combo you can choose any three
-                color of tshirt with diffrent color and diffrent size.
+                {isDynamicCombo && combo?.description ? combo.description : "This is comabo tshirt, in this combo you can choose any three color of tshirt with diffrent color and diffrent size."}
               </p>
-              {/* Pricing */}
               <div>
                 <div className="flex items-baseline gap-4 flex-wrap">
                   <span className="text-xl font-black text-gray-900">
-                    ₹1,099
+                    ₹{isDynamicCombo && combo ? combo.price : 1099}
                   </span>
-                  <span className="text-xl text-gray-400 line-through">
-                    ₹1,516
-                  </span>
-                  <span className="bg-[#F875AA] text-white px-4 py-2 rounded-lg font-bold shadow-md">
-                    SAVE ₹417
-                  </span>
+                  {(isDynamicCombo && combo?.original_price) || !isDynamicCombo ? (
+                    <span className="text-xl text-gray-400 line-through">
+                      ₹{isDynamicCombo && combo ? combo.original_price : 1516}
+                    </span>
+                  ) : null}
+                  {((isDynamicCombo && combo?.discount) || !isDynamicCombo) && (
+                    <span className="bg-[#F875AA] text-white px-4 py-2 rounded-lg font-bold shadow-md">
+                      SAVE ₹{isDynamicCombo && combo ? combo.discount : 417}
+                    </span>
+                  )}
                 </div>
                 <div className="text-lg text-gray-600 mt-2 font-medium">
-                  ₹274.75/T-shirt
+                  ₹{((isDynamicCombo && combo ? combo.price : 1099) / (isDynamicCombo ? comboCount : 3)).toFixed(2)}/item
                 </div>
               </div>
 
-              {/* Select Combo */}
               <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 space-y-4">
                 <div className="flex justify-between items-center">
-                  <h3 className="font-bold text-xl text-gray-900">
-                    Select Your Combo
-                  </h3>
+                  <h3 className="font-bold text-xl text-gray-900">Select Your Combo</h3>
                   <button className="text-[#F875AA] flex items-center gap-1 text-sm hover:underline font-semibold hover:gap-2 transition-all">
                     Size Guide <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
 
-                {/* Combo 1 */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold mb-2 text-gray-700">
-                      Color 1
-                    </label>
-
-                    <ColorDropdown
-                      colors={colors}
-                      selectedColor={selectedColor1}
-                      setSelectedColor={setSelectedColor1}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold mb-2 text-gray-700">
-                      Size 1
-                    </label>
-                    <select
-                      className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-gray-400 transition-all bg-white text-gray-700 appearance-none bg-no-repeat bg-right pr-10"
-                      style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
-                        backgroundPosition: "right 1rem center",
-                      }}
-                      value={selectedSize1}
-                      onChange={(e) => setSelectedSize1(e.target.value)}
-                    >
-                      <option value="">Select Size</option>
-                      {sizes.map((size) => (
-                        <option
-                          key={size}
-                          className="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-[#F875AA] transition-colors"
-                          value={size}
+                {isDynamicCombo ? (
+                  selections.map((sel, index) => (
+                    <div key={index} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-semibold mb-2 text-gray-700">Color {index + 1}</label>
+                        <ColorDropdown
+                          colors={colors}
+                          selectedColor={sel.color}
+                          setSelectedColor={(c) => setSelection(index, "color", c)}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold mb-2 text-gray-700">Size {index + 1}</label>
+                        <select
+                          className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-gray-400 transition-all bg-white text-gray-700 appearance-none bg-no-repeat bg-right pr-10"
+                          style={{
+                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
+                            backgroundPosition: "right 1rem center",
+                          }}
+                          value={sel.size}
+                          onChange={(e) => setSelection(index, "size", e.target.value)}
                         >
-                          {size}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                {/* Combo 2 */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold mb-2 text-gray-700">
-                      Color 2
-                    </label>
-                    <ColorDropdown
-                      colors={colors}
-                      selectedColor={selectedColor2}
-                      setSelectedColor={setSelectedColor2}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold mb-2 text-gray-700">
-                      Size 2
-                    </label>
-                    <select
-                      className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-gray-400 transition-all bg-white text-gray-700 appearance-none bg-no-repeat bg-right pr-10"
-                      style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
-                        backgroundPosition: "right 1rem center",
-                      }}
-                      value={selectedSize2}
-                      onChange={(e) => setSelectedSize2(e.target.value)}
-                    >
-                      <option value="">Select Size</option>
-                      {sizes.map((size) => (
-                        <option key={size} value={size}>
-                          {size}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                {/* Combo 3 */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold mb-2 text-gray-700">
-                      Color 3
-                    </label>
-                    <ColorDropdown
-                      colors={colors}
-                      selectedColor={selectedColor3}
-                      setSelectedColor={setSelectedColor3}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold mb-2 text-gray-700">
-                      Size 3
-                    </label>
-                    <select
-                      className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-gray-400 transition-all bg-white text-gray-700 appearance-none bg-no-repeat bg-right pr-10"
-                      style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
-                        backgroundPosition: "right 1rem center",
-                      }}
-                      value={selectedSize3}
-                      onChange={(e) => setSelectedSize3(e.target.value)}
-                    >
-                      <option value="">Select Size</option>
-                      {sizes.map((size) => (
-                        <option key={size} value={size}>
-                          {size}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
+                          <option value="">Select Size</option>
+                          {sizes.map((size) => (
+                            <option key={size} value={size}>{size}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-semibold mb-2 text-gray-700">Color 1</label>
+                        <ColorDropdown colors={colors} selectedColor={selectedColor1} setSelectedColor={setSelectedColor1} />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold mb-2 text-gray-700">Size 1</label>
+                        <select className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-gray-400 transition-all bg-white text-gray-700 appearance-none bg-no-repeat bg-right pr-10" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`, backgroundPosition: "right 1rem center" }} value={selectedSize1} onChange={(e) => setSelectedSize1(e.target.value)}>
+                          <option value="">Select Size</option>
+                          {sizes.map((size) => <option key={size} value={size}>{size}</option>)}
+                        </select>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-semibold mb-2 text-gray-700">Color 2</label>
+                        <ColorDropdown colors={colors} selectedColor={selectedColor2} setSelectedColor={setSelectedColor2} />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold mb-2 text-gray-700">Size 2</label>
+                        <select className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-gray-400 transition-all bg-white text-gray-700 appearance-none bg-no-repeat bg-right pr-10" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`, backgroundPosition: "right 1rem center" }} value={selectedSize2} onChange={(e) => setSelectedSize2(e.target.value)}>
+                          <option value="">Select Size</option>
+                          {sizes.map((size) => <option key={size} value={size}>{size}</option>)}
+                        </select>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-semibold mb-2 text-gray-700">Color 3</label>
+                        <ColorDropdown colors={colors} selectedColor={selectedColor3} setSelectedColor={setSelectedColor3} />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold mb-2 text-gray-700">Size 3</label>
+                        <select className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:border-gray-400 transition-all bg-white text-gray-700 appearance-none bg-no-repeat bg-right pr-10" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`, backgroundPosition: "right 1rem center" }} value={selectedSize3} onChange={(e) => setSelectedSize3(e.target.value)}>
+                          <option value="">Select Size</option>
+                          {sizes.map((size) => <option key={size} value={size}>{size}</option>)}
+                        </select>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
 
-              {/* product-details-query */}
               <div className="tp-product-details-query">
                 <div className="tp-product-details-query-item d-flex align-items-center">
-                  <span>SKU: 4786 </span>
+                  <span>SKU: {isDynamicCombo && combo?.sku ? combo.sku : "4786"}</span>
                 </div>
                 <div className="tp-product-details-query-item d-flex align-items-center">
-                  <span>Category: Plain T-shirt </span>
+                  <span>Category: {isDynamicCombo && combo?.category?.name ? combo.category.name : "Plain T-shirt"}</span>
                 </div>
                 <div className="tp-product-details-query-item d-flex align-items-center">
-                  <span>Tag: T-shirt </span>
+                  <span>Tag: Combo</span>
                 </div>
               </div>
+              </>
+              )}
 
               {/* social media icons for share a product */}
               <div className="tp-product-details-social">
@@ -493,7 +539,8 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
                   {/* Add to Cart Button */}
                   <button
                     onClick={handleAddToCartClick}
-                    className="flex-1 bg-white border border-[#F875AA] text-[#F875AA] font-bold py-2 rounded-lg text-lg transition-all hover:bg-[#F875AA] hover:text-white"
+                    disabled={!canCheckout}
+                    className={`flex-1 border font-bold py-2 rounded-lg text-lg transition-all ${canCheckout ? "bg-white border-[#F875AA] text-[#F875AA] hover:bg-[#F875AA] hover:text-white" : "bg-gray-200 border-gray-300 text-gray-500 cursor-not-allowed"}`}
                   >
                     Add To Cart
                   </button>
@@ -502,7 +549,7 @@ const ComboDetailsPage = ({ mainImage, thumbnails = [] }) => {
                 {/* Buy Now Button */}
                 <button
                   onClick={handleBuyNow}
-                  disabled={isBuyNowProcessing}
+                  disabled={isBuyNowProcessing || !canCheckout}
                   className="w-full bg-[#F875AA] text-white font-bold py-2 rounded-lg text-lg transition-all hover:bg-[#e6669a] disabled:opacity-50 disabled:cursor-wait"
                   type="button"
                   style={{

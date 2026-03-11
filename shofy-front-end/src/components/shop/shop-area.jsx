@@ -25,7 +25,7 @@ const ShopArea = ({shop_right=false,hidden_sidebar=false}) => {
   const brand = searchParams.get('brand');
   const minPrice = searchParams.get('minPrice');
   const maxPrice = searchParams.get('maxPrice');
-  const subCategory = searchParams.get('subCategory');
+  const subCategory = searchParams.get('subCategory') || searchParams.get('type');
   const filterColor = searchParams.get('color');
   const status = searchParams.get('status');
   const { data: products, isError, isLoading } = useGetAllProductsQuery();

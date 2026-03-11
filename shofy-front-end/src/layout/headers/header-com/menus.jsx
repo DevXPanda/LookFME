@@ -42,21 +42,26 @@ const Menus = () => {
     }
   }
 
-  // Helper function to convert menu links to shop grid format
-  const getShopLink = (link, title) => {
-    // If link starts with /shop-category/, convert to /shop?subCategory=...
+  // Build shop link for mega menu items (Men, Women, Junior: category + type; others: legacy)
+  const getShopLink = (item, menu) => {
+    const link = item.link;
+    const title = item.title;
+    const sectionSlug = menu.categorySlug || (menu.title && menu.title.toLowerCase());
+    // Top Wear / Bottom Wear: use category (section) + type for filtering
+    if (menu.categorySlug && item.type) {
+      return `/shop?category=${sectionSlug}&type=${item.type}`;
+    }
+    // Legacy: link starts with /shop-category/
     if (link && link.startsWith('/shop-category/')) {
-      // Use the title as the subcategory name, normalized (same as shop-area.jsx normalization)
       const normalizedSubCategory = title
         .toLowerCase()
         .replace(/&/g, '')
-        .replace(/[-\s\/]+/g, '-')  // Replace spaces, hyphens, and slashes with single hyphen
-        .replace(/-+/g, '-')  // Replace multiple hyphens with single hyphen
-        .replace(/^-|-$/g, '')  // Remove leading/trailing hyphens
+        .replace(/[-\s\/]+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '')
         .trim();
       return `/shop?subCategory=${normalizedSubCategory}`;
     }
-    // If link is just '/shop', add category/subcategory if title is provided
     if (link === '/shop' && title) {
       const normalizedCategory = title
         .toLowerCase()
@@ -67,7 +72,7 @@ const Menus = () => {
         .trim();
       return `/shop?subCategory=${normalizedCategory}`;
     }
-    return link;
+    return link || '/shop';
   }
 
   return (
@@ -85,54 +90,49 @@ const Menus = () => {
             >
               <Link href={menu.link}>{menu.title}</Link>
               <div className="tp-submenu tp-mega-menu jockey-mega-menu">
-                <div className="jockey-mega-wrapper">
+                <div className={`jockey-mega-wrapper ${menu.product_pages?.length === 2 ? 'jockey-mega-cols-4' : 'jockey-mega-cols-5'}`}>
 
-                  {/* Left Section: Categories Only */}
-                  <div className="jockey-left-section">
-                    <div className="jockey-categories-section">
-                      {menu.product_pages.map((category, i) => (
-                        <div key={i} className="jockey-category-column">
-                          <h4 className="jockey-category-title">{category.title}</h4>
-                          <ul className="jockey-category-items">
-                            {category.mega_menus &&
-                              category.mega_menus.map((item, j) => (
-                                <li key={j}>
-                                  <Link
-                                    href={getShopLink(item.link, item.title)}
-                                    onClick={(e) => handleLinkClick(menu.id, e)}
-                                  >
-                                    {item.title}
-                                  </Link>
-                                </li>
-                              ))}
-                          </ul>
-                        </div>
-                      ))}
+                  {/* Column 1 & 2: Category columns (Top Wear, Bottom Wear, etc.) */}
+                  {menu.product_pages.map((category, i) => (
+                    <div key={i} className="jockey-category-column">
+                      <h4 className="jockey-category-title">{category.title}</h4>
+                      <ul className="jockey-category-items">
+                        {category.mega_menus &&
+                          category.mega_menus.map((item, j) => (
+                            <li key={j}>
+                              <Link
+                                href={getShopLink(item, menu)}
+                                onClick={(e) => handleLinkClick(menu.id, e)}
+                              >
+                                {item.title}
+                              </Link>
+                            </li>
+                          ))}
+                      </ul>
                     </div>
-                  </div>
+                  ))}
 
-                  {/* Right Section: Banner + (Offers + Trending) */}
-                  <div className="jockey-right-section">
-                    {/* Banner Image */}
-                    {menu.banner && (
-                      <div className="jockey-banner-column">
-                        <div className="jockey-banner-container">
-                          <div className="jockey-banner-image">
-                            <button onClick={() => handleMenuItemClick(menu)}>
-                              <Image
-                                src={menu.banner.image}
-                                alt={menu.banner.title}
-                                width={400}
-                                height={600}
-                                className="banner-img"
-                              />
-                            </button>
-                          </div>
+                  {/* Column 3: Promotional banner */}
+                  {menu.banner && (
+                    <div className="jockey-banner-column">
+                      <div className="jockey-banner-container">
+                        <div className="jockey-banner-image">
+                          <button onClick={() => handleMenuItemClick(menu)}>
+                            <Image
+                              src={menu.banner.image}
+                              alt={menu.banner.title}
+                              width={400}
+                              height={600}
+                              className="banner-img"
+                            />
+                          </button>
                         </div>
                       </div>
-                    )}
+                    </div>
+                  )}
 
-                    <div className="jockey-offers-section">
+                  {/* Column 4: Featured collections (offers + trending) */}
+                  <div className="jockey-offers-section">
                       {menu.special_offerings && (
                         <div className="jockey-special-offerings">
                           <h4 className="jockey-section-title">OUR SPECIAL OFFERINGS</h4>
@@ -192,7 +192,6 @@ const Menus = () => {
                           </div>
                         </div>
                       )}
-                    </div>
                   </div>
                 </div>
               </div>

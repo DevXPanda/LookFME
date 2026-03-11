@@ -31,18 +31,16 @@ import ComboDetailsArea from "@/components/combo-details/ComboDetailPage";
 import Footer from "@/layout/footers/footer";
 
 export const metadata = {
-  title: "Shofy - Product Details Page",
+  title: "Combo Details - LookFame",
 };
 
 export default async function ComboDetailById({ params }) {
   const { id } = await params;
 
-  const imagePath = `/assets/img/combos/${id}.jpg`;
-
   return (
     <Wrapper>
       <HeaderTwo style_2={true} />
-      <ComboDetailsArea mainImage={imagePath} thumbnails={[]} />
+      <ComboDetailsArea comboId={id} />
       <Footer primary_style={true} />
     </Wrapper>
   );

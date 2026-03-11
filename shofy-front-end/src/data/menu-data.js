@@ -3,6 +3,31 @@ import home_2 from '@assets/img/menu/menu-home-2.jpg';
 // import home_3 from '@assets/img/menu/menu-home-3.jpg';
 // import home_4 from '@assets/img/menu/menu-home-4.jpg';
 
+// Shared category structure: Top Wear & Bottom Wear (used for Men, Women, Junior)
+const TOP_WEAR_MENU = [
+  { title: 'Plain T-Shirts', type: 'plain-tshirt' },
+  { title: 'Printed T-Shirts', type: 'printed-tshirt' },
+  { title: 'Polo T-Shirts', type: 'polo-tshirt' },
+  { title: 'Full Sleeve T-Shirts', type: 'full-sleeve-tshirts' },
+  { title: 'Oversized T-Shirts', type: 'oversized-tshirts' },
+  { title: 'Casual Shirts', type: 'casual-shirts' },
+  { title: 'Formal Shirts', type: 'formal-shirts' },
+  { title: 'Checked Shirts', type: 'checked-shirts' },
+  { title: 'Floral Shirts', type: 'floral-shirts' },
+  { title: 'Sweatshirts', type: 'sweatshirts' },
+  { title: 'Hoodies', type: 'hoodies' },
+];
+
+const BOTTOM_WEAR_MENU = [
+  { title: 'Jeans', type: 'jeans' },
+  { title: 'Cargo Pants', type: 'cargo-pants' },
+  { title: 'Trousers', type: 'trousers' },
+  { title: 'Track Pants', type: 'track-pants' },
+  { title: 'Joggers', type: 'joggers' },
+  { title: 'Shorts', type: 'shorts' },
+  { title: 'Boxers', type: 'boxers' },
+];
+
 const menu_data = [
   {
     id: 1,
@@ -15,43 +40,10 @@ const menu_data = [
     products: true,
     title: 'Men',
     link: '/shop',
+    categorySlug: 'men',
     product_pages: [
-      {
-        title: 'TSHIRTS',
-        link: '/shop',
-        mega_menus: [
-          { title: 'Plain T-shirts', link: '/shop' },
-          { title: 'Printed T-shirts', link: '/shop' },
-          { title: 'Regular Fit T-shirt', link: '/shop' },
-          { title: 'Polo T-shirts', link: '/shop' },
-          { title: 'Full Sleeve Tshirts', link: '/shop' },
-          { title: 'OverSized Tshirts', link: 'shop' },
-        ]
-      },
-      {
-        title: 'SHIRTS',
-        link: '/product-details',
-        mega_menus: [
-          { title: 'Formal Shirts', link: '/shop' },
-          { title: 'Casual Shirts', link: '/shop' },
-          { title: 'Polo Shirts', link: '/shop' },
-          { title: 'Full Sleeve Tshirts', link: '/shop' },
-          { title: 'Checked Formal Shirts', link: 'shop' },
-          { title: 'Floral Shirts', link: '/shop' },
-        ],
-      },
-      {
-        title: 'BOTTOM WEAR',
-        link: '/shop',
-        mega_menus: [
-          { title: 'Cargo Joggers', link: '/shop' },
-          { title: 'Cargo Pants', link: '/shop' },
-          { title: 'Trousers', link: '/shop' },
-          { title: 'Jeans', link: '/shop' },
-          { title: 'Boxers', link: '/shop' },
-          { title: 'Shorts', link: 'shop' },
-        ]
-      },
+      { title: 'TOP WEAR', mega_menus: TOP_WEAR_MENU },
+      { title: 'BOTTOM WEAR', mega_menus: BOTTOM_WEAR_MENU },
     ],
     // Special sections for the new layout
     special_offerings: [
@@ -82,55 +74,10 @@ const menu_data = [
     products: true,
     title: 'Women',
     link: '/shop',
+    categorySlug: 'women',
     product_pages: [
-      {
-        title: 'Tshirts',
-        link: '/shop',
-        mega_menus: [
-          { title: 'Plain T-shirts', link: '/shop' },
-          { title: 'Printed T-shirts', link: '/shop' },
-          { title: 'Regular Fit T-shirt', link: '/shop' },
-          { title: 'Polo T-shirts', link: '/shop' },
-          { title: 'Full Sleeve Tshirts', link: '/shop' },
-          { title: 'OverSized Tshirts', link: 'shop' },
-        ]
-      },
-      {
-        title: 'Shirts',
-        link: '/product-details',
-        mega_menus: [
-          { title: 'Formal Shirts', link: '/shop' },
-          { title: 'Casual Shirts', link: '/shop' },
-          { title: 'Polo Shirts', link: '/shop' },
-          { title: 'Full Sleeve Tshirts', link: '/shop' },
-          { title: 'Checked Formal Shirts', link: 'shop' },
-          { title: 'Floral Shirts', link: '/shop' },
-        ],
-      },
-      {
-        title: 'Bottom Wear',
-        link: '/shop',
-        mega_menus: [
-          { title: 'Cargo Joggers', link: '/shop' },
-          { title: 'Cargo Pants', link: '/shop' },
-          { title: 'Trousers', link: '/shop' },
-          { title: 'Jeans', link: '/shop' },
-          { title: 'Boxers', link: '/shop' },
-          { title: 'Shorts', link: 'shop' },
-        ]
-      },
-      {
-        title: 'Athleisure Mode',
-        link: '/shop',
-        mega_menus: [
-          { title: 'Track Pants', link: '/shop' },
-          { title: 'Track Suits', link: '/shop' },
-          { title: 'Joggers', link: '/shop' },
-          { title: 'Sweatshirts', link: '/shop' },
-          { title: 'Yoga Pants', link: '/shop' },
-          { title: 'Zip-Up Jackets ', link: 'shop' },
-        ]
-      },
+      { title: 'TOP WEAR', mega_menus: TOP_WEAR_MENU },
+      { title: 'BOTTOM WEAR', mega_menus: BOTTOM_WEAR_MENU },
     ],
     // Special sections for Women layout
     special_offerings: [
@@ -163,31 +110,10 @@ const menu_data = [
     products: true,
     title: 'Junior',
     link: '/shop',
+    categorySlug: 'junior',
     product_pages: [
-      {
-        title: 'Boys',
-        link: '/shop',
-        mega_menus: [
-          { title: 'T-shirts', link: '/shop' },
-          { title: 'Shirts', link: '/shop' },
-          { title: 'Jeans & Trousers', link: '/shop' },
-          { title: 'Sweatshirts & Hoodies', link: '/shop' },
-          { title: 'Ethnic Wear (Kurta, Sherwani)', link: '/shop' },
-          { title: 'Shorts', link: 'shop' },
-        ]
-      },
-      {
-        title: 'Girls',
-        link: '/product-details',
-        mega_menus: [
-          { title: 'Tops & T-Shirts', link: '/shop' },
-          { title: 'Dresses & Frocks', link: '/shop' },
-          { title: 'Skirts & Shorts', link: '/shop' },
-          { title: 'Jeans & Leggings', link: '/shop' },
-          { title: 'Sweatshirts & Hoodies', link: 'shop' },
-          { title: 'Ethnic Wear (Lehenga, Kurti)', link: '/shop' },
-        ],
-      },
+      { title: 'TOP WEAR', mega_menus: TOP_WEAR_MENU },
+      { title: 'BOTTOM WEAR', mega_menus: BOTTOM_WEAR_MENU },
     ],
 
     special_offerings: [
@@ -217,39 +143,32 @@ const menu_data = [
     products: true,
     title: 'Accessories',
     link: '/shop',
+    categorySlug: 'accessories',
     product_pages: [
       {
-        title: 'Headwear',
+        title: 'Fashion Accessories',
         link: '/shop',
         mega_menus: [
-          { title: 'Caps & Hats', link: '/shop' },
-          { title: 'Bandanas', link: '/shop' },
-          { title: 'Regular Fit T-shirt', link: '/shop' },
-          { title: 'Headbands', link: '/shop' },
-        ]
-      },
-      {
-        title: 'Fashion Accessories',
-        link: '/product-details',
-        mega_menus: [
-          { title: 'Belts', link: '/shop' },
-          { title: 'Cufflinks & Brooches', link: '/shop' },
-          { title: 'Wallets & Card Holders', link: '/shop' },
-          { title: 'Ties & Bow Ties', link: '/shop' },
-          { title: 'Socks', link: '/shop' },
+          { title: 'Caps & Hats', type: 'caps-hats' },
+          { title: 'Bandanas', type: 'bandanas' },
+          { title: 'Headbands', type: 'headbands' },
+          { title: 'Belts', type: 'belts' },
+          { title: 'Cufflinks & Brooches', type: 'cufflinks-brooches' },
+          { title: 'Wallets & Card Holders', type: 'wallets-card-holders' },
+          { title: 'Ties & Bow Ties', type: 'ties-bow-ties' },
+          { title: 'Socks', type: 'socks' },
         ],
       },
       {
         title: 'Bags & Carriers',
         link: '/shop',
         mega_menus: [
-          { title: 'Backpacks', link: '/shop' },
-          { title: 'Sling Bags', link: '/shop' },
-          { title: 'Laptop Bags', link: '/shop' },
-          { title: 'Tote Bags', link: '/shop' },
-        ]
+          { title: 'Backpacks', type: 'backpacks' },
+          { title: 'Sling Bags', type: 'sling-bags' },
+          { title: 'Laptop Bags', type: 'laptop-bags' },
+          { title: 'Tote Bags', type: 'tote-bags' },
+        ],
       },
-
     ],
     // Special Offerings
     special_offerings: [

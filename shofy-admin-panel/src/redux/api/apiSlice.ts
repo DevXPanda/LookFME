@@ -61,5 +61,7 @@ export const apiSlice = createApi({
     "Notifications",
     "CareerApplications",
     "CareerApplication",
+    "ComboProducts",
+    "ComboProduct",
   ],
 });

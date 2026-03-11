@@ -37,21 +37,24 @@ const ReviewForm = ({ product_id }) => {
       notifyError("Please login first");
       return;
     }
-    else {
-      addReview({
-        userId: user?._id,
-        productId: product_id,
-        rating: rating,
-        comment: data.comment,
-      }).then((result) => {
-        if (result?.error) {
-          notifyError(result?.error?.data?.message);
-        } else {
-          notifySuccess(result?.data?.message);
-        }
-      });
+    if (!rating || rating < 0.5) {
+      notifyError("Please select a star rating");
+      return;
     }
-    reset();
+    addReview({
+      userId: user?._id,
+      productId: product_id,
+      rating: rating,
+      comment: data.comment,
+    }).then((result) => {
+      if (result?.error) {
+        notifyError(result?.error?.data?.message || "Failed to submit review");
+      } else {
+        notifySuccess(result?.data?.message || "Review submitted successfully");
+        reset();
+        setRating(0);
+      }
+    });
   };
 
   return (
@@ -75,7 +78,7 @@ const ReviewForm = ({ product_id }) => {
           <div className="tp-product-details-review-input-title">
             <label htmlFor="msg">Your Review</label>
           </div>
-          <ErrorMsg msg={errors.name?.comment} />
+          <ErrorMsg msg={errors.comment?.message} />
         </div>
         <div className="tp-product-details-review-input-box">
           <div className="tp-product-details-review-input">
@@ -90,7 +93,7 @@ const ReviewForm = ({ product_id }) => {
           <div className="tp-product-details-review-input-title">
             <label htmlFor="name">Your Name</label>
           </div>
-          <ErrorMsg msg={errors.name?.name} />
+          <ErrorMsg msg={errors.name?.message} />
         </div>
         <div className="tp-product-details-review-input-box">
           <div className="tp-product-details-review-input">
@@ -105,7 +108,7 @@ const ReviewForm = ({ product_id }) => {
           <div className="tp-product-details-review-input-title">
             <label htmlFor="email">Your Email</label>
           </div>
-          <ErrorMsg msg={errors.name?.email} />
+          <ErrorMsg msg={errors.email?.message} />
         </div>
       </div>
       <div className="tp-product-details-review-btn-wrapper">

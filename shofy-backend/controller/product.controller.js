@@ -1,7 +1,9 @@
+const jwt = require("jsonwebtoken");
+const { promisify } = require("util");
 const Brand = require("../model/Brand");
 const productServices = require("../services/product.service");
 const Product = require("../model/Products");
-
+const { secret } = require("../config/secret");
 
 // add product
 exports.addProduct = async (req, res, next) => {
@@ -111,15 +113,23 @@ module.exports.getTopRatedProducts = async (req, res, next) => {
   }
 }
 
-// getSingleProduct
+// getSingleProduct (optional auth: if token present, adds canReview for user)
 exports.getSingleProduct = async (req, res, next) => {
   try {
-    const product = await productServices.getProductService(req.params.id)
-    res.json(product)
+    let userId = null;
+    const token = req.headers?.authorization?.split(" ")?.[1];
+    if (token) {
+      try {
+        const decoded = await promisify(jwt.verify)(token, secret.token_secret);
+        userId = decoded?._id || null;
+      } catch (_) {}
+    }
+    const product = await productServices.getProductService(req.params.id, userId);
+    res.json(product);
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
 // get Related Product
 exports.getRelatedProducts = async (req, res, next) => {
