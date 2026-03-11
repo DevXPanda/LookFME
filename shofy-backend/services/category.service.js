@@ -102,3 +102,27 @@ exports.getSingleCategoryService = async (id) => {
   const result = await Category.findById(id);
   return result;
 }
+
+// bulk delete categories
+exports.bulkDeleteCategoryService = async (ids) => {
+  if (!ids || !Array.isArray(ids) || ids.length === 0) {
+    throw new ApiError(400, 'Category ids are required');
+  }
+  const result = await Category.deleteMany({ _id: { $in: ids } });
+  return result;
+}
+
+// bulk update category status (Show / Hide)
+exports.bulkUpdateStatusService = async (ids, status) => {
+  if (!ids || !Array.isArray(ids) || ids.length === 0) {
+    throw new ApiError(400, 'Category ids are required');
+  }
+  if (!['Show', 'Hide'].includes(status)) {
+    throw new ApiError(400, 'Status must be Show or Hide');
+  }
+  const result = await Category.updateMany(
+    { _id: { $in: ids } },
+    { $set: { status } }
+  );
+  return result;
+}

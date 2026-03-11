@@ -36,6 +36,31 @@ export const authApi = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["AllCategory"],
     }),
+    // bulk delete categories
+    bulkDeleteCategories: builder.mutation<{ success: boolean; message: string }, string[]>({
+      query(ids: string[]) {
+        return {
+          url: `/api/category/delete-bulk`,
+          method: "POST",
+          body: { ids },
+        };
+      },
+      invalidatesTags: ["AllCategory"],
+    }),
+    // bulk update category status (Show / Hide)
+    bulkUpdateCategoryStatus: builder.mutation<
+      { success: boolean; message: string },
+      { ids: string[]; status: "Show" | "Hide" }
+    >({
+      query({ ids, status }) {
+        return {
+          url: `/api/category/bulk-status`,
+          method: "PATCH",
+          body: { ids, status },
+        };
+      },
+      invalidatesTags: ["AllCategory"],
+    }),
     // editCategory
     editCategory: builder.mutation<IAddCategoryResponse, { id: string; data: Partial<IAddCategory> }>({
       query({ id, data }) {
@@ -59,6 +84,8 @@ export const {
   useGetAllCategoriesQuery,
   useAddCategoryMutation,
   useDeleteCategoryMutation,
+  useBulkDeleteCategoriesMutation,
+  useBulkUpdateCategoryStatusMutation,
   useEditCategoryMutation,
-  useGetCategoryQuery, 
+  useGetCategoryQuery,
 } = authApi;

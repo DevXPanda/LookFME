@@ -62,12 +62,37 @@ export const authApi = apiSlice.injectEndpoints({
       query: () => `/api/product/stock-out`,
       providesTags: ["StockOutProducts"]
     }),
-    // delete category
+    // delete product
     deleteProduct: builder.mutation<{ message: string }, string>({
       query(id: string) {
         return {
           url: `/api/product/${id}`,
           method: "DELETE",
+        };
+      },
+      invalidatesTags: ["AllProducts"],
+    }),
+    // bulk delete products
+    bulkDeleteProducts: builder.mutation<{ success: boolean; message: string }, string[]>({
+      query(ids: string[]) {
+        return {
+          url: `/api/product/delete-bulk`,
+          method: "POST",
+          body: { ids },
+        };
+      },
+      invalidatesTags: ["AllProducts"],
+    }),
+    // bulk update product status (in-stock, out-of-stock, discontinued)
+    bulkUpdateProductStatus: builder.mutation<
+      { success: boolean; message: string },
+      { ids: string[]; status: "in-stock" | "out-of-stock" | "discontinued" }
+    >({
+      query({ ids, status }) {
+        return {
+          url: `/api/product/bulk-status`,
+          method: "PATCH",
+          body: { ids, status },
         };
       },
       invalidatesTags: ["AllProducts"],
@@ -83,4 +108,6 @@ export const {
   useGetReviewProductsQuery,
   useGetStockOutProductsQuery,
   useDeleteProductMutation,
+  useBulkDeleteProductsMutation,
+  useBulkUpdateProductStatusMutation,
 } = authApi;

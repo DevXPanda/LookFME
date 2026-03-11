@@ -1,6 +1,6 @@
 'use client'
-import React, { useState,useEffect } from "react";
-import {useSearchParams, useRouter} from 'next/navigation';
+import React, { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from 'next/navigation';
 import ShopLoader from "../loader/shop/shop-loader";
 import ErrorMsg from "../common/error-msg";
 import ShopFilterOffCanvas from "../common/shop-filter-offcanvas";
@@ -18,7 +18,7 @@ const normalizeCategoryName = (name) => {
     .trim();
 };
 
-const ShopArea = ({shop_right=false,hidden_sidebar=false}) => {
+const ShopArea = ({ shop_right = false, hidden_sidebar = false }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const category = searchParams.get('category');
@@ -69,7 +69,7 @@ const ShopArea = ({shop_right=false,hidden_sidebar=false}) => {
   let content = null;
 
   if (isLoading) {
-    content = <ShopLoader loading={isLoading}/>;
+    content = <ShopLoader loading={isLoading} />;
   }
   if (!isLoading && isError) {
     content = <div className="pb-80 text-center">
@@ -114,27 +114,31 @@ const ShopArea = ({shop_right=false,hidden_sidebar=false}) => {
       }
     }
 
-    // category filter - match by parent, category.name, or children field (data-driven with normalized comparison)
+    // category filter - match by parent, category.name, or children (normalized; allow prefix match e.g. men vs Men's)
     if (category) {
-      const normalizedFilterCategory = normalizeCategoryName(category);
+      const normalizedFilter = normalizeCategoryName(category);
       product_items = product_items.filter((p) => {
-        // Normalize all product category fields and compare (check parent, category.name, and children)
         const normalizedParent = normalizeCategoryName(p.parent);
         const normalizedCategoryName = normalizeCategoryName(p.category?.name);
         const normalizedChildren = normalizeCategoryName(p.children);
-        return normalizedParent === normalizedFilterCategory || 
-               normalizedCategoryName === normalizedFilterCategory ||
-               normalizedChildren === normalizedFilterCategory;
+        const match = (a, b) => a === b || (a && b && (a.startsWith(b) || b.startsWith(a)));
+        return match(normalizedParent, normalizedFilter) ||
+          match(normalizedCategoryName, normalizedFilter) ||
+          match(normalizedChildren, normalizedFilter);
       });
     }
 
-    // subcategory filter - match by children field (data-driven with normalized comparison)
+    // subcategory/type filter - match by children field (normalized; allow singular/plural and hyphenated)
     if (subCategory) {
-      const normalizedFilterSubCategory = normalizeCategoryName(subCategory);
+      const normalizedFilter = normalizeCategoryName(subCategory);
       product_items = product_items.filter((p) => {
-        // Normalize product children field and compare
         const normalizedChildren = normalizeCategoryName(p.children);
-        return normalizedChildren === normalizedFilterSubCategory;
+        if (normalizedChildren === normalizedFilter) return true;
+        // Match when one contains the other (e.g. "plaintshirt" vs "plaintshirts", or "plain-tshirts" vs "plain-tshirt")
+        if (normalizedChildren.length >= 3 && normalizedFilter.length >= 3) {
+          return normalizedChildren.includes(normalizedFilter) || normalizedFilter.includes(normalizedChildren);
+        }
+        return false;
       });
     }
 
@@ -163,34 +167,34 @@ const ShopArea = ({shop_right=false,hidden_sidebar=false}) => {
       );
     }
 
-    if(minPrice && maxPrice){
-      product_items = product_items.filter((p) => Number(p.price) >= Number(minPrice) && 
-      Number(p.price) <= Number(maxPrice))
+    if (minPrice && maxPrice) {
+      product_items = product_items.filter((p) => Number(p.price) >= Number(minPrice) &&
+        Number(p.price) <= Number(maxPrice))
     }
-    
+
 
     content = (
       <>
 
-      <ShopContent 
-        all_products={products.data}
-        products={product_items}
-        otherProps={otherProps}
-        shop_right={shop_right}
-        hidden_sidebar={hidden_sidebar}
-      />
-        
-         <ShopFilterOffCanvas
+        <ShopContent
+          all_products={products.data}
+          products={product_items}
+          otherProps={otherProps}
+          shop_right={shop_right}
+          hidden_sidebar={hidden_sidebar}
+        />
+
+        <ShopFilterOffCanvas
           all_products={products.data}
           otherProps={otherProps}
-        /> 
+        />
       </>
     );
   }
 
 
 
- 
+
 
 
   return (

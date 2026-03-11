@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const ApiError = require("../errors/api-error");
 const Brand = require("../model/Brand");
 const Category = require("../model/Category");
 const Product = require("../model/Products");
@@ -562,5 +563,30 @@ exports.getStockOutProducts = async () => {
 // get Reviews Products
 exports.deleteProduct = async (id) => {
   const result = await Product.findByIdAndDelete(id)
+  return result;
+};
+
+// bulk delete products
+exports.bulkDeleteProductService = async (ids) => {
+  if (!ids || !Array.isArray(ids) || ids.length === 0) {
+    throw new ApiError(400, 'Product ids are required');
+  }
+  const result = await Product.deleteMany({ _id: { $in: ids } });
+  return result;
+};
+
+// bulk update product status (in-stock, out-of-stock, discontinued)
+exports.bulkUpdateProductStatusService = async (ids, status) => {
+  if (!ids || !Array.isArray(ids) || ids.length === 0) {
+    throw new ApiError(400, 'Product ids are required');
+  }
+  const allowed = ['in-stock', 'out-of-stock', 'discontinued'];
+  if (!allowed.includes(status)) {
+    throw new ApiError(400, `Status must be one of: ${allowed.join(', ')}`);
+  }
+  const result = await Product.updateMany(
+    { _id: { $in: ids } },
+    { $set: { status } }
+  );
   return result;
 };

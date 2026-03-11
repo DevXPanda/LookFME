@@ -180,7 +180,7 @@ exports.stockOutProducts = async (req, res, next) => {
   }
 };
 
-// update product
+// delete product
 exports.deleteProduct = async (req, res, next) => {
   try {
     await productServices.deleteProduct(req.params.id);
@@ -189,6 +189,28 @@ exports.deleteProduct = async (req, res, next) => {
     })
   } catch (error) {
     next(error)
+  }
+};
+
+// bulk delete products
+exports.bulkDeleteProducts = async (req, res, next) => {
+  try {
+    const { ids } = req.body;
+    const result = await productServices.bulkDeleteProductService(ids);
+    res.status(200).json({ success: true, message: 'Products deleted successfully', result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// bulk update product status (in-stock, out-of-stock, discontinued)
+exports.bulkUpdateProductStatus = async (req, res, next) => {
+  try {
+    const { ids, status } = req.body;
+    const result = await productServices.bulkUpdateProductStatusService(ids, status);
+    res.status(200).json({ success: true, message: `Products status updated to ${status}`, result });
+  } catch (error) {
+    next(error);
   }
 };
 

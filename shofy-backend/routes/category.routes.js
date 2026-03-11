@@ -17,7 +17,11 @@ router.get('/show/:type', categoryController.getProductTypeCategory);
 router.get('/show', categoryController.getShowCategory);
 // delete category
 router.delete('/delete/:id', categoryController.deleteCategory);
-// delete product
+// bulk delete categories
+router.post('/delete-bulk', categoryController.bulkDeleteCategory);
+// bulk update status (Show / Hide)
+router.patch('/bulk-status', categoryController.bulkUpdateStatus);
+// edit category
 router.patch('/edit/:id', categoryController.updateCategory);
 
 module.exports = router;

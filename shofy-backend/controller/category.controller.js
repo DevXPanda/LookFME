@@ -105,3 +105,25 @@ exports.getSingleCategory = async (req,res,next) => {
     next(error)
   }
 }
+
+// bulk delete categories
+exports.bulkDeleteCategory = async (req, res, next) => {
+  try {
+    const { ids } = req.body;
+    const result = await categoryServices.bulkDeleteCategoryService(ids);
+    res.status(200).json({ success: true, message: 'Categories deleted successfully', result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// bulk update category status (Show / Hide)
+exports.bulkUpdateStatus = async (req, res, next) => {
+  try {
+    const { ids, status } = req.body;
+    const result = await categoryServices.bulkUpdateStatusService(ids, status);
+    res.status(200).json({ success: true, message: `Categories ${status === 'Hide' ? 'hidden' : 'shown'} successfully`, result });
+  } catch (error) {
+    next(error);
+  }
+};

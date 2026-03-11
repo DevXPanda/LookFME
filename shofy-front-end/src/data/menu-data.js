@@ -200,6 +200,7 @@ const menu_data = [
     // sub_menu: true,
     title: 'Cosmetic',
     link: '/shop',
+    categorySlug: 'cosmetic',
     product_pages: [
       {
         title: 'Skincare',
@@ -213,7 +214,7 @@ const menu_data = [
           { title: 'Face Wash/Cleanser', link: '/shop' },
           { title: 'Face Mask', link: '/shop' },
           { title: 'Sheet Mask', link: '/shop' },
-          { title: 'Face Pack', link: '/shoP' },
+          { title: 'Face Pack', link: '/shop' },
           { title: 'Lip Balm', link: '/shop' },
           { title: 'Wet Tissue', link: '/shop' },
           { title: 'Makeup Remover', link: '/shop' },

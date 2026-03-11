@@ -25,9 +25,13 @@ router.get("/single-product/:id", productController.getSingleProduct);
 router.get("/stock-out", productController.stockOutProducts);
 // get Single Product
 router.patch("/edit-product/:id", productController.updateProduct);
+// bulk delete products
+router.post('/delete-bulk', productController.bulkDeleteProducts);
+// bulk update product status
+router.patch('/bulk-status', productController.bulkUpdateProductStatus);
 // get Products ByType
 router.get('/:type', productController.getProductsByType);
-// get Products ByType 
+// delete product
 router.delete('/:id', productController.deleteProduct);
 
 module.exports = router;

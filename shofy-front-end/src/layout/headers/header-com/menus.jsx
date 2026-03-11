@@ -42,35 +42,41 @@ const Menus = () => {
     }
   }
 
-  // Build shop link for mega menu items (Men, Women, Junior: category + type; others: legacy)
+  // Normalize title/slug for URL query (spaces and special chars to single hyphen, lowercase)
+  const toQuerySlug = (str) => {
+    if (!str) return '';
+    return str
+      .toLowerCase()
+      .replace(/&/g, '')
+      .replace(/[-\s\/]+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '')
+      .trim();
+  };
+
+  // Build shop link for mega menu items (Men, Women, Junior, Accessories, Cosmetic)
   const getShopLink = (item, menu) => {
     const link = item.link;
     const title = item.title;
-    const sectionSlug = menu.categorySlug || (menu.title && menu.title.toLowerCase());
-    // Top Wear / Bottom Wear: use category (section) + type for filtering
-    if (menu.categorySlug && item.type) {
+    const sectionSlug = menu.categorySlug || (menu.title && menu.title.toLowerCase().replace(/\s+/g, '-'));
+    // Category + type (e.g. Men > Plain T-Shirts -> ?category=men&type=plain-tshirt)
+    if (sectionSlug && item.type) {
       return `/shop?category=${sectionSlug}&type=${item.type}`;
     }
-    // Legacy: link starts with /shop-category/
+    // Legacy: link starts with /shop-category/ -> use subCategory only
     if (link && link.startsWith('/shop-category/')) {
-      const normalizedSubCategory = title
-        .toLowerCase()
-        .replace(/&/g, '')
-        .replace(/[-\s\/]+/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '')
-        .trim();
+      const normalizedSubCategory = toQuerySlug(title);
       return `/shop?subCategory=${normalizedSubCategory}`;
     }
+    // Category + subCategory when menu has categorySlug but item has no type (e.g. Cosmetic > Primer)
+    if (sectionSlug && (link === '/shop' || !link) && title) {
+      const normalizedSubCategory = toQuerySlug(title);
+      return `/shop?category=${sectionSlug}&subCategory=${normalizedSubCategory}`;
+    }
+    // Fallback: subCategory only from title
     if (link === '/shop' && title) {
-      const normalizedCategory = title
-        .toLowerCase()
-        .replace(/&/g, '')
-        .replace(/[-\s\/]+/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '')
-        .trim();
-      return `/shop?subCategory=${normalizedCategory}`;
+      const normalizedSubCategory = toQuerySlug(title);
+      return `/shop?subCategory=${normalizedSubCategory}`;
     }
     return link || '/shop';
   }
@@ -133,65 +139,65 @@ const Menus = () => {
 
                   {/* Column 4: Featured collections (offers + trending) */}
                   <div className="jockey-offers-section">
-                      {menu.special_offerings && (
-                        <div className="jockey-special-offerings">
-                          <h4 className="jockey-section-title">OUR SPECIAL OFFERINGS</h4>
-                          <div className="jockey-offerings-grid">
-                            {menu.special_offerings.map((offering, i) => (
-                              <Link
-                                key={i}
-                                href={offering.link}
-                                className="jockey-offering-item"
-                                onClick={(e) => handleLinkClick(menu.id, e)}
-                              >
-                                <div className="jockey-offering-image">
-                                  <Image
-                                    src={offering.image}
-                                    alt={offering.title}
-                                    width={300}
-                                    height={300}
-                                    quality={100}
-                                    unoptimized={false}
-                                    className="offering-img"
-                                    priority={false}
-                                  />
-                                </div>
-                                <span className="jockey-offering-text">{offering.title}</span>
-                              </Link>
-                            ))}
-                          </div>
+                    {menu.special_offerings && (
+                      <div className="jockey-special-offerings">
+                        <h4 className="jockey-section-title">OUR SPECIAL OFFERINGS</h4>
+                        <div className="jockey-offerings-grid">
+                          {menu.special_offerings.map((offering, i) => (
+                            <Link
+                              key={i}
+                              href={offering.link}
+                              className="jockey-offering-item"
+                              onClick={(e) => handleLinkClick(menu.id, e)}
+                            >
+                              <div className="jockey-offering-image">
+                                <Image
+                                  src={offering.image}
+                                  alt={offering.title}
+                                  width={300}
+                                  height={300}
+                                  quality={100}
+                                  unoptimized={false}
+                                  className="offering-img"
+                                  priority={false}
+                                />
+                              </div>
+                              <span className="jockey-offering-text">{offering.title}</span>
+                            </Link>
+                          ))}
                         </div>
-                      )}
+                      </div>
+                    )}
 
-                      {menu.trending_collections && (
-                        <div className="jockey-trending-collections">
-                          <h4 className="jockey-section-title">TRENDING COLLECTIONS</h4>
-                          <div className="jockey-trending-grid">
-                            {menu.trending_collections.map((trend, i) => (
-                              <Link
-                                key={i}
-                                href={trend.link}
-                                className="jockey-trending-item"
-                                onClick={(e) => handleLinkClick(menu.id, e)}
-                              >
-                                <div className="jockey-trending-image">
-                                  <Image
-                                    src={trend.image}
-                                    alt={trend.title}
-                                    width={300}
-                                    height={300}
-                                    quality={100}
-                                    unoptimized={false}
-                                    className="trending-img"
-                                    priority={false}
-                                  />
-                                </div>
-                                <span className="jockey-trending-text">{trend.title}</span>
-                              </Link>
-                            ))}
-                          </div>
+                    {menu.trending_collections && (
+                      <div className="jockey-trending-collections">
+                        <h4 className="jockey-section-title">TRENDING COLLECTIONS</h4>
+                        <div className="jockey-trending-grid">
+                          {menu.trending_collections.map((trend, i) => (
+                            <Link
+                              key={i}
+                              href={trend.link}
+                              className="jockey-trending-item"
+                              onClick={(e) => handleLinkClick(menu.id, e)}
+                            >
+                              <div className="jockey-trending-image">
+                                <Image
+                                  src={trend.image}
+                                  alt={trend.title}
+                                  width={300}
+                                  height={300}
+                                  quality={100}
+                                  unoptimized={false}
+                                  className="trending-img"
+                                  priority={false}
+                                />
+                              </div>
+                              <span className="jockey-trending-text">{trend.title}</span>
+                            </Link>
+                          ))}
                         </div>
-                      )}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
