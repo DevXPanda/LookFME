@@ -36,7 +36,7 @@ const ComboProductSelector = ({
     selectedProductIds.includes(opt.value)
   );
 
-  const handleChange = (selected: ProductOption[] | null) => {
+  const handleChange = (selected: readonly ProductOption[] | null) => {
     const ids = selected ? selected.map((s) => s.value) : [];
     setSelectedProductIds(ids);
   };

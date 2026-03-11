@@ -187,8 +187,14 @@ const ComboForm = ({ comboId, isEdit = false }: ComboFormProps) => {
             <p className="mb-5 text-base text-black">Category</p>
             <ProductCategory
               setCategory={setCategory}
-              setParent={(name) => setCategory((prev) => ({ ...prev, name }))}
-              setChildren={(child) => setCategory((prev) => ({ ...prev, name: child }))}
+              setParent={(nameOrUpdater) => setCategory((prev) => {
+                const name = typeof nameOrUpdater === "function" ? nameOrUpdater(prev.name) : nameOrUpdater;
+                return { ...prev, name };
+              })}
+              setChildren={(childOrUpdater) => setCategory((prev) => {
+                const name = typeof childOrUpdater === "function" ? childOrUpdater(prev.name) : childOrUpdater;
+                return { ...prev, name };
+              })}
               default_value={isEdit && category?.name ? { parent: category.name, id: category.id, children: category.name } : undefined}
             />
           </div>
