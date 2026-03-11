@@ -86,25 +86,25 @@ const OrderActions = ({ id, cls }: { id: string, cls?: string }) => {
         )}
       </td>
 
-      <td className={`${cls ? cls : 'px-9 py-3 text-end'}`}>
-        <div className="flex items-center justify-end space-x-2">
+      <td className={`${cls ? cls : 'px-8 py-6 text-end'}`}>
+        <div className="flex items-center justify-end space-x-3">
           <div className="relative">
             <button
               onMouseEnter={() => setShowInvoice(true)}
               onMouseLeave={() => setShowInvoice(false)}
               onClick={handlePrintReceipt}
-              className="w-auto px-3 h-10 leading-10 text-tiny bg-gray text-black rounded-md hover:bg-theme hover:text-white"
+              className="w-10 h-10 flex items-center justify-center text-gray-500 bg-[#f8fafc] border border-[#e2e8f0] rounded-xl hover:bg-theme hover:text-white hover:border-theme transition-all duration-300 shadow-sm"
             >
               <Invoice />
             </button>
             <div
               className={`${showInvoice ? "flex" : "hidden"
-                } flex-col items-center z-50 absolute left-1/2 -translate-x-1/2 bottom-full mb-1`}
+                } flex-col items-center z-50 absolute left-1/2 -translate-x-1/2 bottom-full mb-2`}
             >
-              <span className="relative z-10 p-2 text-tiny leading-none font-medium text-white whitespace-no-wrap w-max bg-slate-800 rounded py-1 px-2 inline-block">
-                Print
+              <span className="relative z-10 px-3 py-1.5 text-[11px] font-bold text-white bg-slate-900 rounded-lg shadow-xl whitespace-nowrap">
+                Print Invoice
               </span>
-              <div className="w-3 h-3 -mt-2 rotate-45 bg-black"></div>
+              <div className="w-2.5 h-2.5 -mt-1.5 rotate-45 bg-slate-900"></div>
             </div>
           </div>
           <div className="relative">
@@ -112,18 +112,18 @@ const OrderActions = ({ id, cls }: { id: string, cls?: string }) => {
               onMouseEnter={() => setShowView(true)}
               onMouseLeave={() => setShowView(false)}
               href={`/orders/${id}`}
-              className="inline-block w-auto px-3 h-10 leading-10 text-tiny bg-gray text-black rounded-md hover:bg-theme hover:text-white"
+              className="w-10 h-10 flex items-center justify-center text-gray-500 bg-[#f8fafc] border border-[#e2e8f0] rounded-xl hover:bg-theme hover:text-white hover:border-theme transition-all duration-300 shadow-sm"
             >
               <View />
             </Link>
             <div
               className={`${showView ? "flex" : "hidden"
-                } flex-col items-center z-50 absolute left-1/2 -translate-x-1/2 bottom-full mb-1`}
+                } flex-col items-center z-50 absolute left-1/2 -translate-x-1/2 bottom-full mb-2`}
             >
-              <span className="relative z-10 p-2 text-tiny leading-none font-medium text-white whitespace-no-wrap w-max bg-slate-800 rounded py-1 px-2 inline-block">
-                View
+              <span className="relative z-10 px-3 py-1.5 text-[11px] font-bold text-white bg-slate-900 rounded-lg shadow-xl whitespace-nowrap">
+                View Details
               </span>
-              <div className="w-3 h-3 -mt-2 rotate-45 bg-black"></div>
+              <div className="w-2.5 h-2.5 -mt-1.5 rotate-45 bg-slate-900"></div>
             </div>
           </div>
           <div className="relative">
@@ -132,19 +132,18 @@ const OrderActions = ({ id, cls }: { id: string, cls?: string }) => {
               onMouseLeave={() => setShowLabel(false)}
               onClick={handleDownloadLabel}
               disabled={isDownloadingLabel}
-              className="inline-block w-auto px-3 h-10 leading-10 text-tiny bg-gray text-black rounded-md hover:bg-theme hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
-              title="Download Shipping Label"
+              className="w-10 h-10 flex items-center justify-center text-gray-500 bg-[#f8fafc] border border-[#e2e8f0] rounded-xl hover:bg-theme hover:text-white hover:border-theme transition-all duration-300 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              📦
+              <span className="text-lg">📦</span>
             </button>
             <div
               className={`${showLabel ? "flex" : "hidden"
-                } flex-col items-center z-50 absolute left-1/2 -translate-x-1/2 bottom-full mb-1`}
+                } flex-col items-center z-50 absolute left-1/2 -translate-x-1/2 bottom-full mb-2`}
             >
-              <span className="relative z-10 p-2 text-tiny leading-none font-medium text-white whitespace-no-wrap w-max bg-slate-800 rounded py-1 px-2 inline-block">
-                {isDownloadingLabel ? "Downloading..." : "Download Label PDF"}
+              <span className="relative z-10 px-3 py-1.5 text-[11px] font-bold text-white bg-slate-900 rounded-lg shadow-xl whitespace-nowrap">
+                {isDownloadingLabel ? "Downloading..." : "Ship Label"}
               </span>
-              <div className="w-3 h-3 -mt-2 rotate-45 bg-black"></div>
+              <div className="w-2.5 h-2.5 -mt-1.5 rotate-45 bg-slate-900"></div>
             </div>
           </div>
           <div className="relative">
@@ -152,19 +151,18 @@ const OrderActions = ({ id, cls }: { id: string, cls?: string }) => {
               onMouseEnter={() => setShowShipPrint(true)}
               onMouseLeave={() => setShowShipPrint(false)}
               onClick={handlePrintLabelUI}
-              className="inline-block w-auto px-3 h-10 leading-10 text-tiny bg-gray text-black rounded-md hover:bg-theme hover:text-white"
-              title="Print Shipping Label"
+              className="w-auto px-4 h-10 flex items-center justify-center text-[11px] font-bold uppercase tracking-wider text-gray-600 bg-[#f8fafc] border border-[#e2e8f0] rounded-xl hover:bg-theme hover:text-white hover:border-theme transition-all duration-300 shadow-sm"
             >
-              Print
+              Label
             </button>
             <div
               className={`${showShipPrint ? "flex" : "hidden"
-                } flex-col items-center z-50 absolute left-1/2 -translate-x-1/2 bottom-full mb-1`}
+                } flex-col items-center z-50 absolute left-1/2 -translate-x-1/2 bottom-full mb-2`}
             >
-              <span className="relative z-10 p-2 text-tiny leading-none font-medium text-white whitespace-no-wrap w-max bg-slate-800 rounded py-1 px-2 inline-block">
+              <span className="relative z-10 px-3 py-1.5 text-[11px] font-bold text-white bg-slate-900 rounded-lg shadow-xl whitespace-nowrap">
                 Print Label
               </span>
-              <div className="w-3 h-3 -mt-2 rotate-45 bg-black"></div>
+              <div className="w-2.5 h-2.5 -mt-1.5 rotate-45 bg-slate-900"></div>
             </div>
           </div>
         </div>

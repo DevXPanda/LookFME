@@ -32,7 +32,7 @@ const OrderTable = () => {
     if (!url || typeof url !== "string") return "https://placehold.co/200x200?text=No+Image";
     if (url.startsWith("http")) return url;
     if (url.startsWith("/")) {
-      const baseUrl = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:7000";
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:7000";
       return `${baseUrl}${url}`;
     }
     return url;
@@ -209,12 +209,12 @@ const OrderTable = () => {
   if (!isLoading && !isError && orders?.success) {
     content = (
       <>
-        <table className="w-[1500px] 2xl:w-full text-base text-left text-gray-500">
-          <thead className="bg-white">
-            <tr className="border-b border-gray6 text-tiny">
+        <table className="w-[1500px] 2xl:w-full text-sm text-left text-gray-500 border-separate border-spacing-0">
+          <thead className="bg-[#f8fafa]">
+            <tr className="text-xs text-[#8e959c] uppercase tracking-wider font-bold">
               <th
                 scope="col"
-                className="pr-8 py-3 text-tiny text-text2 uppercase font-semibold w-[50px]"
+                className="pl-8 pr-4 py-4 w-[50px] border-b border-gray-100"
               >
                 <input
                   type="checkbox"
@@ -231,67 +231,67 @@ const OrderTable = () => {
               </th>
               <th
                 scope="col"
-                className="pr-8 py-3 text-tiny text-text2 uppercase font-semibold w-[170px]"
+                className="pr-8 py-4 w-[170px] border-b border-gray-100"
               >
                 INVOICE NO
               </th>
               <th
                 scope="col"
-                className="px-3 py-3 text-tiny text-text2 uppercase font-semibold w-[120px]"
+                className="px-4 py-4 w-[120px] border-b border-gray-100"
               >
                 Product Image
               </th>
               <th
                 scope="col"
-                className="px-3 py-3 text-tiny text-text2 uppercase font-semibold w-[150px]"
+                className="px-4 py-4 w-[150px] border-b border-gray-100"
               >
                 SKU
               </th>
               <th
                 scope="col"
-                className="px-3 py-3 text-tiny text-text2 uppercase font-semibold"
+                className="px-4 py-4 border-b border-gray-100"
               >
                 Customer
               </th>
               <th
                 scope="col"
-                className="px-3 py-3 text-tiny text-text2 uppercase font-semibold w-[150px] text-end"
+                className="px-4 py-4 w-[150px] text-end border-b border-gray-100"
               >
                 Size
               </th>
               <th
                 scope="col"
-                className="px-3 py-3 text-tiny text-text2 uppercase font-semibold w-[170px] text-end"
+                className="px-4 py-4 w-[170px] text-end border-b border-gray-100"
               >
                 QTY
               </th>
               <th
                 scope="col"
-                className="px-3 py-3 text-tiny text-text2 uppercase font-semibold w-[170px] text-end"
+                className="px-4 py-4 w-[170px] text-end border-b border-gray-100"
               >
                 Total
               </th>
               <th
                 scope="col"
-                className="px-3 py-3 text-tiny text-text2 uppercase font-semibold w-[170px] text-end"
+                className="px-4 py-4 w-[170px] text-end border-b border-gray-100"
               >
                 Status
               </th>
               <th
                 scope="col"
-                className="px-3 py-3 text-tiny text-text2 uppercase font-semibold w-[170px] text-end"
+                className="px-4 py-4 w-[170px] text-end border-b border-gray-100"
               >
                 Date
               </th>
               <th
                 scope="col"
-                className="px-9 py-3 text-tiny text-text2 uppercase  font-semibold w-[14%] text-end"
+                className="px-8 py-4 w-[14%] text-end border-b border-gray-100"
               >
                 Action
               </th>
               <th
                 scope="col"
-                className="px-9 py-3 text-tiny text-text2 uppercase  font-semibold w-[4%] text-end"
+                className="px-8 py-4 w-[4%] text-end border-b border-gray-100"
               >
                 Invoice
               </th>
@@ -301,9 +301,9 @@ const OrderTable = () => {
             {filteredOrders.map((item) => (
               <tr
                 key={item._id}
-                className="bg-white border-b border-gray6 last:border-0 text-start mx-9"
+                className="bg-white border-b border-gray-50 hover:bg-[#fcfdfe] transition-colors group"
               >
-                <td className="px-3 py-3">
+                <td className="pl-8 pr-4 py-6">
                   <input
                     type="checkbox"
                     checked={selectedOrders.has(item._id)}
@@ -319,13 +319,13 @@ const OrderTable = () => {
                     className="w-4 h-4 text-theme bg-gray-100 border-gray-300 rounded focus:ring-theme"
                   />
                 </td>
-                <td className="px-3 py-3 font-normal text-[#55585B]">
+                <td className="pr-4 py-6 font-semibold text-[#1a1c1d]">
                   #{item.invoice}
                 </td>
-                <td className="px-3 py-3">
+                <td className="px-4 py-6">
                   <div className="flex flex-col items-center">
                     {item.cart && item.cart[0] && (
-                      <div className="w-[40px] h-[40px] relative rounded overflow-hidden border border-gray6">
+                      <div className="w-[44px] h-[48px] relative rounded-lg overflow-hidden border border-gray-100 shadow-sm group-hover:border-theme/20 transition-colors bg-white">
                         <Image
                           src={formatImageUrl(item.cart[0].img || item.cart[0].imageURLs?.[0]?.img)}
                           alt="product"
@@ -348,7 +348,7 @@ const OrderTable = () => {
                     )}
                   </div>
                 </td>
-                <td className="px-3 py-3 font-normal text-[#55585B]">
+                <td className="px-4 py-6 font-medium text-[#4a5056] text-sm group-hover:text-theme transition-colors">
                   {(() => {
                     // Extract SKUs from cart items
                     const skus = item.cart
@@ -370,7 +370,7 @@ const OrderTable = () => {
                     return skus.length > 0 ? skus.join(", ") : "N/A";
                   })()}
                 </td>
-                <td className="pr-8 py-5 whitespace-nowrap">
+                <td className="pr-4 py-6 whitespace-nowrap">
                   <a
                     href="#"
                     className="flex items-center space-x-5 text-hover-primary text-heading"
@@ -384,11 +384,11 @@ const OrderTable = () => {
                         height={50}
                       />
                     )}
-                    <span className="font-medium">{item?.user?.name}</span>
+                    <span className="font-semibold text-[#1a1c1d]">{item?.user?.name}</span>
                   </a>
                 </td>
 
-                <td className="px-3 py-3 font-normal text-[#55585B] text-end">
+                <td className="px-4 py-6 font-medium text-[#55585B] text-end">
                   {(() => {
                     const sizes = item.cart
                       .map((cartItem: any) => cartItem.selectedSize)
@@ -396,39 +396,39 @@ const OrderTable = () => {
                     return sizes.length > 0 ? Array.from(new Set(sizes)).join(", ") : "-";
                   })()}
                 </td>
-                <td className="px-3 py-3 font-normal text-[#55585B] text-end">
+                <td className="px-4 py-6 font-medium text-[#55585B] text-end">
                   {item.cart.reduce(
                     (acc, curr) => acc + curr.orderQuantity,
                     0
                   )}
                 </td>
-                <td className="px-3 py-3 font-normal text-[#55585B] text-end">
+                <td className="px-4 py-6 font-bold text-[#1a1c1d] text-end text-[15px]">
                   ₹
                   {item.cart
                     .reduce((acc, curr) => acc + curr.price, 0)
                     .toFixed(2)}
                 </td>
-                <td className="px-3 py-3 text-end">
+                <td className="px-4 py-6 text-end">
                   <span
-                    className={`text-[10px] uppercase tracking-wider ${item.status === "pending"
-                      ? "text-amber-700 bg-amber-50 border border-amber-200"
+                    className={`text-[11px] uppercase tracking-wide inline-flex items-center justify-center min-w-[100px] h-[28px] ${item.status === "pending"
+                      ? "text-amber-700 bg-amber-50/80 border border-amber-100"
                       : item.status === "delivered"
-                        ? "text-emerald-700 bg-emerald-50 border border-emerald-200"
+                        ? "text-emerald-700 bg-emerald-50/80 border border-emerald-100"
                         : item.status === "processing"
-                          ? "text-indigo-700 bg-indigo-50 border border-indigo-200"
+                          ? "text-blue-700 bg-blue-50/80 border border-blue-100"
                           : item.status === "cancel" || item.status === "canceled"
-                            ? "text-rose-700 bg-rose-50 border border-rose-200"
-                            : "text-slate-700 bg-slate-50 border border-slate-200"
-                      } px-2.5 py-1 rounded-full leading-none font-bold text-end`}
+                            ? "text-rose-700 bg-rose-50/80 border border-rose-100"
+                            : "text-slate-700 bg-slate-50/80 border border-slate-100"
+                      } px-3 py-1 rounded-full leading-none font-bold`}
                   >
                     {item.status}
                   </span>
                 </td>
-                <td className="px-3 py-3 font-normal text-[#55585B] text-end">
+                <td className="px-4 py-6 font-medium text-[#8e959c] text-end text-sm">
                   {dayjs(item.createdAt).format("MMM D, YYYY")}
                 </td>
 
-                <td className="px-9 py-3 text-end">
+                <td className="px-8 py-6 text-end">
                   <div className="flex items-center justify-end space-x-2">
                     <OrderStatusChange
                       id={item._id}
@@ -503,16 +503,16 @@ const OrderTable = () => {
 
   return (
     <>
-      <div className="tp-search-box flex items-center justify-between px-8 py-8 flex-wrap">
-        <div className="flex items-center space-x-4">
-          <div className="search-input relative">
+      <div className="tp-search-box flex items-center justify-between px-10 py-10 flex-wrap bg-white rounded-t-2xl shadow-[0_-1px_3px_rgba(0,0,0,0.02)]">
+        <div className="flex items-center space-x-5">
+          <div className="search-input relative group">
             <input
-              className="input h-[44px] w-full pl-14"
+              className="input h-[48px] w-[320px] pl-14 pr-6 rounded-xl border border-[#e2e8f0] bg-[#f8fafc] focus:bg-white focus:ring-2 focus:ring-theme/20 focus:border-theme transition-all duration-300 text-sm placeholder:text-gray-400"
               type="text"
-              placeholder="Search by invoice or SKU"
+              placeholder="Search by invoice or SKU..."
               onChange={handleSearchChange}
             />
-            <button className="absolute top-1/2 left-5 translate-y-[-50%] hover:text-theme">
+            <button className="absolute top-1/2 left-6 translate-y-[-50%] text-gray-400 group-focus-within:text-theme transition-colors">
               <Search />
             </button>
           </div>
@@ -569,16 +569,16 @@ const OrderTable = () => {
                     e.target.value = ""; // Reset select
                   }}
                   disabled={isBulkUpdating}
-                  className="input h-[44px] px-4 pr-10 rounded-md border border-gray-300 bg-white text-sm font-medium focus:ring-theme focus:border-theme disabled:opacity-50 cursor-pointer hover:border-theme transition-colors shadow-sm appearance-none"
+                  className="input h-[48px] px-6 pr-12 rounded-xl border border-[#e2e8f0] bg-white text-sm font-semibold text-[#1a1c1d] focus:ring-4 focus:ring-theme/10 focus:border-theme disabled:opacity-50 cursor-pointer hover:border-theme transition-all shadow-sm appearance-none min-w-[240px]"
                 >
-                  <option value="">Bulk Action: Change Status</option>
-                  <option value="pending">Pending</option>
-                  <option value="processing">Processing</option>
-                  <option value="delivered">Delivered</option>
-                  <option value="cancel">Canceled</option>
-                  <option value="returned">Returned</option>
+                  <option value="">Bulk Status Action</option>
+                  <option value="pending">Mark as Pending</option>
+                  <option value="processing">Mark as Processing</option>
+                  <option value="delivered">Mark as Delivered</option>
+                  <option value="cancel">Mark as Canceled</option>
+                  <option value="returned">Mark as Returned</option>
                 </select>
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
                   <DownArrow />
                 </div>
               </div>
@@ -594,13 +594,17 @@ const OrderTable = () => {
             <div className="relative">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 min-w-[150px] h-[44px] justify-between shadow-sm transition-all"
+                className="flex items-center space-x-3 px-6 py-2 bg-white border border-[#e2e8f0] rounded-xl hover:border-theme/40 hover:bg-gray-50 min-w-[180px] h-[48px] justify-between shadow-sm transition-all group"
               >
-                <div className="flex items-center space-x-2">
-                  <Orders />
-                  <span className="text-sm font-medium">{getCurrentStatusLabel()}</span>
+                <div className="flex items-center space-x-3">
+                  <div className="text-gray-400 group-hover:text-theme transition-colors">
+                    <Orders />
+                  </div>
+                  <span className="text-sm font-semibold text-[#1a1c1d]">{getCurrentStatusLabel()}</span>
                 </div>
-                <DownArrow />
+                <div className="text-gray-400">
+                  <DownArrow />
+                </div>
               </button>
 
               {isDropdownOpen && (

@@ -88,7 +88,7 @@ const PopularProducts = () => {
             @media (max-width: 480px) {
               .tp-popular-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 14px;
+                gap: 16px;
               }
             }
           `}</style>

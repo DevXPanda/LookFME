@@ -118,6 +118,7 @@ const TrendingProducts = () => {
              grid-template-columns: repeat(4, 1fr);
              gap: 24px;
              margin-top: 40px;
+             align-items: stretch;
           }
           @media (max-width: 1200px) {
             .custom-grid-layout {
@@ -132,7 +133,8 @@ const TrendingProducts = () => {
           @media (max-width: 576px) {
             .custom-grid-layout {
               grid-template-columns: repeat(2, 1fr);
-              gap: 12px;
+              gap: 16px;
+              padding: 0 10px;
             }
           }
         `}</style>

@@ -61,15 +61,16 @@ const ProductItem = ({ product }) => {
         }
         .custom-image-wrapper {
            position: relative;
-           height: 300px;
+           aspect-ratio: 4 / 5;
            width: 100%;
            background: #f8f8f8;
            overflow: hidden;
         }
         .custom-image-wrapper img {
-           width: 100%;
-           height: 100%;
-           object-fit: cover;
+           width: 100% !important;
+           height: 100% !important;
+           object-fit: cover !important;
+           object-position: top;
            transition: transform 0.3s ease;
         }
         .custom-product-card:hover .custom-image-wrapper img {
@@ -175,7 +176,7 @@ const ProductItem = ({ product }) => {
         }
         @media (max-width: 576px) {
           .custom-image-wrapper {
-             /* Maintain 1/1 aspect ratio automatically */
+             /* Aspect ratio 4/5 persists from desktop */
           }
            .custom-product-title {
               font-size: 13px;
@@ -207,7 +208,7 @@ const ProductItem = ({ product }) => {
         <div className="custom-image-wrapper">
           <Link href={`/product-details/${_id}`}>
             <Image
-              src={product?.imageURLs?.[0]?.img || img || "https://placehold.co/400x400?text=No+Image"}
+              src={product?.imageURLs?.[0]?.img || img || "https://placehold.co/400x500?text=No+Image"}
               alt={title || "product img"}
               fill
               priority

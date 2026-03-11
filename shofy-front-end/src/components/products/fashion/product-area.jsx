@@ -187,6 +187,7 @@ const ProductArea = () => {
                 gap: 16px;
                 padding: 0 10px;
                 margin-top: 20px;
+                align-items: stretch;
               }
               .tp-category-slider-button-prev,
               .tp-category-slider-button-next {
@@ -237,7 +238,7 @@ const ProductArea = () => {
               @media (max-width: 480px) {
                 .tp-category-grid {
                   grid-template-columns: repeat(2, 1fr);
-                  gap: 14px;
+                  gap: 16px;
                 }
               }
             `}</style>

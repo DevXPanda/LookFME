@@ -71,13 +71,18 @@ const OrderStatusChange = ({ id, currentStatus }: OrderStatusChangeProps) => {
   const customStyles = {
     control: (provided: any, state: any) => ({
       ...provided,
-      minHeight: "38px",
-      height: "38px",
-      border: "1px solid #EFF2F5",
-      borderRadius: "6px",
-      boxShadow: state.isFocused ? "0 0 0 1px #3B82F6" : "none",
+      minHeight: "40px",
+      height: "40px",
+      border: "1px solid #e2e8f0",
+      backgroundColor: "#f8fafc",
+      borderRadius: "10px",
+      boxShadow: state.isFocused ? "0 0 0 4px rgba(190, 89, 133, 0.1)" : "none",
+      fontSize: "13px",
+      fontWeight: "600",
+      transition: "all 0.3s ease",
       "&:hover": {
-        border: "1px solid #EFF2F5",
+        border: "1px solid #be5985",
+        backgroundColor: "#fff",
       },
     }),
     indicatorSeparator: () => ({
@@ -95,27 +100,31 @@ const OrderStatusChange = ({ id, currentStatus }: OrderStatusChangeProps) => {
     option: (provided: any, state: any) => ({
       ...provided,
       backgroundColor: state.isSelected
-        ? "#E3F2FD"
+        ? "#be5985"
         : state.isFocused
-          ? "#F5F5F5"
+          ? "#fdeff4"
           : "white",
-      color: state.isSelected ? "#1976D2" : "#333",
-      padding: "8px 12px",
+      color: state.isSelected ? "white" : "#1a1c1d",
+      padding: "10px 16px",
       cursor: "pointer",
+      fontSize: "13px",
+      fontWeight: state.isSelected ? "700" : "500",
       "&:active": {
-        backgroundColor: "#E3F2FD",
+        backgroundColor: "#be5985",
       },
     }),
     menu: (provided: any) => ({
       ...provided,
-      borderRadius: "6px",
-      border: "1px solid #EFF2F5",
-      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+      borderRadius: "12px",
+      border: "1px solid #e2e8f0",
+      boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
       zIndex: 9999,
+      overflow: "hidden",
+      marginTop: "8px",
     }),
     singleValue: (provided: any) => ({
       ...provided,
-      color: "#333",
+      color: "#1a1c1d",
       display: "flex",
       alignItems: "center",
     }),
