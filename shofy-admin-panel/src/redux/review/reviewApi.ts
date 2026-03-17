@@ -66,6 +66,25 @@ export const authApi = apiSlice.injectEndpoints({
           body: { visible },
         };
       },
+      async onQueryStarted({ reviewId, visible }, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            apiSlice.util.updateQueryData("getAllReviews", undefined, (draft) => {
+              const list = draft?.data;
+              if (Array.isArray(list)) {
+                const review = list.find((r: { _id: string }) => String(r._id) === String(reviewId));
+                if (review) {
+                  review.visible = visible;
+                  review.isHiddenByAdmin = !visible;
+                }
+              }
+            })
+          );
+        } catch {
+          // invalidation will refetch on error
+        }
+      },
       invalidatesTags: ["AllReviews", "ReviewProducts"],
     }),
     // block/unblock customer reviews
