@@ -1,0 +1,13 @@
+const mongoose = require("mongoose");
+
+const bulkProductSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, trim: true },
+    description: { type: String, default: "" },
+    isActive: { type: Boolean, default: true },
+  },
+  { timestamps: true }
+);
+
+const BulkProduct = mongoose.models.BulkProduct || mongoose.model("BulkProduct", bulkProductSchema);
+module.exports = BulkProduct;

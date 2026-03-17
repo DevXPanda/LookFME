@@ -102,7 +102,9 @@ const HeaderTopRight = () => {
       <Language active={active} handleActive={handleActive} />
       <Currency active={active} handleActive={handleActive} />
       <ProfileSetting />
-      <span className="d-none d-sm-inline">Bulk Order</span>
+      <Link href="/bulk-order" className="tp-header-setting-toggle">
+        Bulk Order
+      </Link>
     </div>
   );
 };

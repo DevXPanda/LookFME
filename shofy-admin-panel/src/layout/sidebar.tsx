@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { userLoggedOut } from "@/redux/auth/authSlice";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import OrdersDropdown from "@/app/components/sidebar/orders-dropdown";
+import BulkOrdersDropdown from "@/app/components/sidebar/bulk-orders-dropdown";
 
 // prop type
 type IProps = {
@@ -41,6 +42,10 @@ const Sidebar = React.memo(function Sidebar({ sideMenu, setSideMenu }: IProps) {
         if (menu.title === "Refund Requests" && pathname.startsWith("/refund-requests")) {
           return true;
         }
+        // For bulk orders, check if pathname starts with /bulk-orders
+        if (menu.title === "Bulk Orders" && pathname.startsWith("/bulk-orders")) {
+          return true;
+        }
         // For other menus, check exact match or starts with
         return pathname === sub.link || pathname.startsWith(sub.link + "/");
       });
@@ -62,6 +67,14 @@ const Sidebar = React.memo(function Sidebar({ sideMenu, setSideMenu }: IProps) {
     
     // For refund requests, check query params
     if (parentTitle === "Refund Requests" && pathname.startsWith("/refund-requests")) {
+      const currentStatus = searchParams?.get("status") || "all";
+      const linkStatus = subLink.split("status=")[1]?.split("&")[0] || "all";
+      return currentStatus === linkStatus;
+    }
+    
+    // For bulk orders, check query params or products page
+    if (parentTitle === "Bulk Orders" && pathname.startsWith("/bulk-orders")) {
+      if (subLink === "/bulk-orders/products") return pathname === "/bulk-orders/products";
       const currentStatus = searchParams?.get("status") || "all";
       const linkStatus = subLink.split("status=")[1]?.split("&")[0] || "all";
       return currentStatus === linkStatus;
@@ -179,6 +192,10 @@ const Sidebar = React.memo(function Sidebar({ sideMenu, setSideMenu }: IProps) {
                   {menu.title === "Orders" ? (
                     <React.Suspense fallback={<li className="text-tiny text-text3 px-4 py-2">Loading...</li>}>
                       <OrdersDropdown />
+                    </React.Suspense>
+                  ) : menu.title === "Bulk Orders" ? (
+                    <React.Suspense fallback={<li className="text-tiny text-text3 px-4 py-2">Loading...</li>}>
+                      <BulkOrdersDropdown />
                     </React.Suspense>
                   ) : (
                     menu.subMenus.map((sub, i) => {

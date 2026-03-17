@@ -101,6 +101,8 @@ app.use("/api/refunds", require("./routes/refundRequest.routes"));
 app.use("/api/notifications", require("./routes/notification.routes"));
 app.use("/api/career", require("./routes/career.routes"));
 app.use("/api/combo-products", require("./routes/comboProduct.routes"));
+app.use("/api/bulk-order", require("./routes/bulkOrder.routes"));
+app.use("/api/bulk-products", require("./routes/bulkProduct.routes"));
 
 // =========================
 // ROOT

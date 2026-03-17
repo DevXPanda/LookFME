@@ -84,6 +84,19 @@ const sidebar_menu: Array<ISidebarMenus> = [
     ],
   },
   {
+    id: 19,
+    icon: Products,
+    link: "/bulk-orders",
+    title: "Bulk Orders",
+    subMenus: [
+      { title: "All Requests", link: "/bulk-orders?status=all" },
+      { title: "Pending", link: "/bulk-orders?status=pending" },
+      { title: "Accepted", link: "/bulk-orders?status=accepted" },
+      { title: "Rejected", link: "/bulk-orders?status=rejected" },
+      { title: "Bulk Products", link: "/bulk-orders/products" },
+    ],
+  },
+  {
     id: 5,
     icon: Leaf,
     link: "/brands",
