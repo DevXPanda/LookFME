@@ -11,123 +11,96 @@ type IPropType = {
 
 const ShippingLabelPrint = ({ orderData }: IPropType) => {
     const totalItems = orderData.cart.reduce((acc, curr) => acc + curr.orderQuantity, 0);
-
-    // Base URL for tracking (adjust as needed, using a placeholder for now)
+    const displayOrderId = orderData.orderId ? String(orderData.orderId).replace(/-/g, '') : String(orderData.invoice);
     const trackingUrl = `https://lookfame.com/track-order/${orderData._id}`;
 
     return (
-        <div className="shipping-label-container p-4 bg-white text-black" style={{ width: '100%', maxWidth: '800px', margin: '0 auto', fontFamily: 'Inter, system-ui, sans-serif' }}>
-            {/* Header Banner */}
-            <div className="header-banner border-2 border-black p-3 mb-6 flex flex-col items-center justify-center">
-                <h1 className="text-2xl font-bold tracking-widest text-center">LOOKFAME SHIPPING LABEL</h1>
+        <div className="shipping-label-container bg-white text-black" style={{ width: '100%', maxWidth: '400px', margin: '0 auto', fontFamily: 'Inter, system-ui, sans-serif', padding: '8px', fontSize: '12px' }}>
+            {/* Header Banner - compact */}
+            <div className="header-banner border border-black py-1.5 mb-2 flex flex-col items-center justify-center">
+                <h1 className="text-sm font-bold tracking-wider text-center uppercase">LookFame Shipping Label</h1>
             </div>
 
-            {/* Top Info Row */}
-            <div className="flex justify-between items-start mb-6 border-b-2 border-dashed border-gray-300 pb-4">
-                <div className="flex-1">
-                    <p className="text-sm font-semibold uppercase text-gray-600">Order ID:</p>
-                    <p className="text-lg font-bold">{orderData.invoice}</p>
+            {/* Top Info Row - compact */}
+            <div className="flex justify-between items-center mb-2 border-b border-dashed border-gray-400 pb-2 text-[10px]">
+                <div>
+                    <p className="text-[9px] font-semibold uppercase text-gray-500">Order ID</p>
+                    <p className="font-bold text-xs">{displayOrderId}</p>
                 </div>
-                <div className="flex-1 text-center">
-                    <p className="text-sm font-semibold uppercase text-gray-600">Date:</p>
-                    <p className="text-lg font-bold">{dayjs(orderData.createdAt).format('DD/MM/YYYY')}</p>
+                <div className="text-center">
+                    <p className="text-[9px] font-semibold uppercase text-gray-500">Date</p>
+                    <p className="font-bold text-xs">{dayjs(orderData.createdAt).format('DD/MM/YYYY')}</p>
                 </div>
-                <div className="flex-1 text-right">
-                    <p className="text-sm font-semibold uppercase text-gray-600">Payment Status:</p>
-                    <p className="text-lg font-bold uppercase">{orderData.paymentMethod === 'cod' ? 'COD - ₹' + orderData.totalAmount.toFixed(2) : 'PREPAID'}</p>
+                <div className="text-right">
+                    <p className="text-[9px] font-semibold uppercase text-gray-500">Payment</p>
+                    <p className="font-bold text-xs uppercase">{orderData.paymentMethod === 'cod' ? 'COD ₹' + orderData.totalAmount.toFixed(0) : 'PREPAID'}</p>
                 </div>
             </div>
 
-            {/* Main Content Sections */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
-                {/* Delivery Information Box */}
-                <div className="border-2 border-black p-4 rounded-none h-full">
-                    <h3 className="text-sm font-bold uppercase bg-black text-white px-2 py-1 mb-3 inline-block">Delivery Information</h3>
-                    <div className="space-y-1">
-                        <p className="text-lg font-bold">{orderData.name}</p>
-                        <p className="text-sm leading-tight text-gray-800">{orderData.address}</p>
-                        <p className="text-sm font-bold">{orderData.city}, {orderData.zipCode}</p>
-                        <p className="text-sm">{orderData.country}</p>
-                        <div className="pt-2">
-                            <p className="text-sm"><span className="font-semibold text-gray-600">Phone:</span> {orderData.contact}</p>
-                            <p className="text-sm italic text-gray-500 overflow-hidden text-ellipsis">{orderData.email}</p>
-                        </div>
-                    </div>
+            {/* Main Content - compact */}
+            <div className="grid grid-cols-2 gap-2 mb-2">
+                <div className="border border-black p-2">
+                    <h3 className="text-[9px] font-bold uppercase bg-black text-white px-1.5 py-0.5 mb-1.5 inline-block">Delivery</h3>
+                    <p className="font-bold text-[10px]">{orderData.name}</p>
+                    <p className="text-[9px] leading-tight">{orderData.address}</p>
+                    <p className="text-[9px]">{orderData.city}, {orderData.zipCode} {orderData.country}</p>
+                    <p className="text-[9px]">Ph: {orderData.contact}</p>
                 </div>
-
-                <div className="flex flex-col gap-4">
-                    {/* Order Details & QR Box */}
-                    <div className="border-2 border-black p-4 rounded-none flex justify-between items-center">
-                        <div className="flex-1 pr-2">
-                            <h3 className="text-sm font-bold uppercase bg-black text-white px-2 py-1 mb-2 inline-block">Tracking</h3>
-                            <p className="text-[10px] text-gray-500 mb-2">Scan QR code to track your order status in real-time.</p>
-                            <p className="text-xs font-mono break-all">{orderData._id}</p>
+                <div className="flex flex-col gap-1.5">
+                    <div className="border border-black p-1.5 flex justify-between items-center">
+                        <div className="min-w-0 flex-1 pr-1">
+                            <h3 className="text-[9px] font-bold uppercase bg-black text-white px-1 py-0.5 mb-0.5 inline-block">Tracking</h3>
+                            <p className="text-[8px] text-gray-500">Scan QR to track</p>
+                            <p className="text-[8px] font-mono truncate">{displayOrderId}</p>
                         </div>
-                        <div className="qr-container bg-white p-1 border border-gray-200">
-                            <QRCodeSVG value={trackingUrl} size={80} level="H" />
-                        </div>
+                        <QRCodeSVG value={trackingUrl} size={44} level="M" />
                     </div>
-
-                    {/* Item Summary Box */}
-                    <div className="border-2 border-black p-4 rounded-none flex-grow">
-                        <h3 className="text-sm font-bold uppercase bg-black text-white px-2 py-1 mb-3 inline-block">Item Summary</h3>
-                        <div className="flex justify-between items-center mb-2 border-b border-gray-200 pb-1">
-                            <span className="text-xs font-semibold">Total Items</span>
-                            <span className="text-sm font-bold">{totalItems}</span>
-                        </div>
-                        <div className="max-h-[120px] overflow-hidden">
-                            <ul className="text-xs space-y-1">
-                                {orderData.cart.map((item, idx) => (
-                                    <li key={idx} className="flex justify-between border-b border-gray-100 last:border-0 pb-1">
-                                        <span className="truncate pr-2">{item.title}</span>
-                                        <span className="font-medium whitespace-nowrap">x{item.orderQuantity}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                    <div className="border border-black p-1.5 flex-grow">
+                        <h3 className="text-[9px] font-bold uppercase bg-black text-white px-1 py-0.5 mb-1 inline-block">Items</h3>
+                        <p className="text-[9px] font-semibold">Total: {totalItems}</p>
+                        <ul className="text-[8px] space-y-0.5 max-h-14 overflow-hidden">
+                            {orderData.cart.slice(0, 2).map((item, idx) => (
+                                <li key={idx} className="flex justify-between">
+                                    <span className="truncate pr-1">{item.title}</span>
+                                    <span className="whitespace-nowrap">x{item.orderQuantity}</span>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 </div>
             </div>
 
-            {/* Barcode Footer */}
-            <div className="footer-section border-t-2 border-black pt-6 flex flex-col items-center justify-center">
-                <div className="barcode-container mb-2">
-                    <Barcode
-                        value={orderData.invoice.toString()}
-                        width={2}
-                        height={60}
-                        fontSize={14}
-                        background="#ffffff"
-                        lineColor="#000000"
-                        margin={0}
-                    />
-                </div>
-                <p className="text-xs font-bold uppercase tracking-widest mt-1">LookFame Shipping Services</p>
+            {/* Barcode - same Order ID as header */}
+            <div className="border-t border-black pt-2 flex flex-col items-center">
+                <Barcode
+                    value={displayOrderId}
+                    width={1.2}
+                    height={36}
+                    fontSize={10}
+                    background="#ffffff"
+                    lineColor="#000000"
+                    margin={0}
+                />
+                <p className="text-[8px] font-bold uppercase mt-0.5">LookFame Shipping</p>
             </div>
 
-            {/* Print styles */}
             <style jsx global>{`
-        @media print {
-          body * {
-            visibility: hidden;
-          }
-          .shipping-label-container, .shipping-label-container * {
-            visibility: visible;
-          }
-          .shipping-label-container {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            padding: 0;
-            margin: 0;
-          }
-          @page {
-            size: auto;
-            margin: 0mm;
-          }
-        }
-      `}</style>
+                @media print {
+                    body * { visibility: hidden; }
+                    .shipping-label-container, .shipping-label-container * { visibility: visible; }
+                    .shipping-label-container {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 400px !important;
+                        max-width: 400px !important;
+                        padding: 4px !important;
+                        margin: 0 !important;
+                        font-size: 11px;
+                    }
+                    @page { size: 105mm 148mm; margin: 4mm; }
+                }
+            `}</style>
         </div>
     );
 };

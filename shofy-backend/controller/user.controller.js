@@ -342,33 +342,30 @@ exports.changePassword = async (req, res, next) => {
   }
 };
 
-// update a profile
+// update a profile (only updates fields that are present in req.body to allow partial updates)
 exports.updateUser = async (req, res, next) => {
   try {
-    const userId = req.params.id
+    const userId = req.params.id;
     const user = await User.findById(userId);
-    if (user) {
-      user.name = req.body.name;
-      user.lastName = req.body.lastName;
-      user.email = req.body.email;
-      user.phone = req.body.phone;
-      user.address = req.body.address;
-      user.city = req.body.city;
-      user.state = req.body.state;
-      user.zipCode = req.body.zipCode;
-      user.locality = req.body.locality;
-      user.bio = req.body.bio;
-      const updatedUser = await user.save();
-      const token = generateToken(updatedUser);
-      res.status(200).json({
-        status: "success",
-        message: "Successfully updated profile",
-        data: {
-          user: updatedUser,
-          token,
-        },
-      });
+    if (!user) {
+      return res.status(404).json({ status: "fail", message: "User not found" });
     }
+    const allowed = ["name", "lastName", "email", "phone", "address", "city", "state", "zipCode", "locality", "bio"];
+    for (const key of allowed) {
+      if (req.body[key] !== undefined) {
+        user[key] = req.body[key];
+      }
+    }
+    const updatedUser = await user.save();
+    const token = generateToken(updatedUser);
+    res.status(200).json({
+      status: "success",
+      message: "Successfully updated profile",
+      data: {
+        user: updatedUser,
+        token,
+      },
+    });
   } catch (error) {
     next(error)
   }

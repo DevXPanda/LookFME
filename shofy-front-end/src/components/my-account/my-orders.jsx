@@ -205,24 +205,32 @@ const MyOrders = ({ orderData }) => {
                     </td>
                   );
                 })()}
-                <td>
-                  <div className="d-flex gap-2 flex-wrap align-items-center">
+                <td style={{ whiteSpace: 'nowrap' }}>
+                  <div className="d-flex gap-1 flex-nowrap align-items-center justify-content-start">
                     <button
                       type="button"
                       onClick={() => setShowViewModal(item._id)}
                       title="View Order Details"
                       style={{
                         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                        width: '34px', height: '34px', borderRadius: '6px',
+                        width: '26px', height: '26px', minWidth: '26px', borderRadius: '4px',
                         border: '1px solid #F875AA', background: '#fff0f6', color: '#F875AA',
-                        cursor: 'pointer', transition: 'all 0.2s'
+                        cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0
                       }}
                       onMouseEnter={e => { e.currentTarget.style.background = '#F875AA'; e.currentTarget.style.color = '#fff'; }}
                       onMouseLeave={e => { e.currentTarget.style.background = '#fff0f6'; e.currentTarget.style.color = '#F875AA'; }}
                     >
                       <QuickView />
                     </button>
-                    <Link href={`/order/${item._id}`} className="tp-logout-btn" style={{ fontSize: '12px', padding: '5px 10px' }}>
+                    <Link
+                      href={`/order/${item._id}`}
+                      className="tp-logout-btn"
+                      style={{
+                        fontSize: '11px', padding: '4px 8px', minWidth: 'auto', flexShrink: 0,
+                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                        borderRadius: '4px', textDecoration: 'none'
+                      }}
+                    >
                       Invoice
                     </Link>
                     {(() => {
@@ -233,7 +241,7 @@ const MyOrders = ({ orderData }) => {
                           type="button"
                           onClick={() => setShowCancelModal(item._id)}
                           className="tp-btn tp-btn-border"
-                          style={{ fontSize: '12px', padding: '5px 10px', background: '#fff', color: '#dc3545', borderColor: '#dc3545' }}
+                          style={{ fontSize: '11px', padding: '4px 8px', background: '#fff', color: '#dc3545', borderColor: '#dc3545', flexShrink: 0 }}
                         >
                           Cancel
                         </button>
@@ -246,7 +254,7 @@ const MyOrders = ({ orderData }) => {
                           type="button"
                           onClick={() => setShowReturnModal({ id: item._id, type: 'returned' })}
                           className="tp-btn tp-btn-border"
-                          style={{ fontSize: '12px', padding: '5px 10px', background: '#fff', color: '#0d6efd', borderColor: '#0d6efd' }}
+                          style={{ fontSize: '11px', padding: '4px 8px', background: '#fff', color: '#0d6efd', borderColor: '#0d6efd', flexShrink: 0 }}
                         >
                           Return
                         </button>
@@ -259,7 +267,7 @@ const MyOrders = ({ orderData }) => {
                           type="button"
                           onClick={() => setShowReturnModal({ id: item._id, type: 'exchanged' })}
                           className="tp-btn tp-btn-border"
-                          style={{ fontSize: '12px', padding: '5px 10px', background: '#fff', color: '#198754', borderColor: '#198754' }}
+                          style={{ fontSize: '11px', padding: '4px 8px', background: '#fff', color: '#198754', borderColor: '#198754', flexShrink: 0 }}
                         >
                           Exchange
                         </button>

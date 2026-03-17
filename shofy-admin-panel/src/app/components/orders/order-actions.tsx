@@ -2,40 +2,22 @@ import Link from "next/link";
 import React, { useState, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useGetSingleOrderQuery, useDownloadSingleShippingLabelMutation } from "@/redux/order/orderApi";
-import { Invoice, View } from "@/svg";
+import { View } from "@/svg";
 import { notifyError, notifySuccess } from "@/utils/toast";
-import InvoicePrint from "./invoice-print";
 import ShippingLabelPrint from "./shipping-label-print";
 
 const OrderActions = ({ id, cls }: { id: string, cls?: string }) => {
-  const [showInvoice, setShowInvoice] = useState<boolean>(false);
   const [showView, setShowView] = useState<boolean>(false);
   const [showLabel, setShowLabel] = useState<boolean>(false);
   const [showShipPrint, setShowShipPrint] = useState<boolean>(false);
-  const printRefTwo = useRef<HTMLDivElement | null>(null);
   const printRefThree = useRef<HTMLDivElement | null>(null);
   const { data: orderData, isLoading, isError } = useGetSingleOrderQuery(id);
   const [downloadLabel, { isLoading: isDownloadingLabel }] = useDownloadSingleShippingLabelMutation();
-
-  const handlePrint = useReactToPrint({
-    content: () => printRefTwo?.current,
-    documentTitle: "Invoice",
-  });
 
   const handlePrintShippingLabel = useReactToPrint({
     content: () => printRefThree?.current,
     documentTitle: "Shipping-Label",
   });
-
-  const handlePrintReceipt = async () => {
-    try {
-      handlePrint();
-    } catch (err) {
-      console.log("order by user id error", err);
-      notifyError("Failed to print");
-    }
-    // console.log('id', id);
-  };
 
   const handlePrintLabelUI = async () => {
     try {
@@ -75,11 +57,6 @@ const OrderActions = ({ id, cls }: { id: string, cls?: string }) => {
     <>
       <td style={{ display: "none" }}>
         {orderData && (
-          <div ref={printRefTwo}>
-            <InvoicePrint orderData={orderData} />
-          </div>
-        )}
-        {orderData && (
           <div ref={printRefThree}>
             <ShippingLabelPrint orderData={orderData} />
           </div>
@@ -88,25 +65,6 @@ const OrderActions = ({ id, cls }: { id: string, cls?: string }) => {
 
       <td className={`${cls ? cls : 'px-8 py-6 text-end'}`}>
         <div className="flex items-center justify-end space-x-3">
-          <div className="relative">
-            <button
-              onMouseEnter={() => setShowInvoice(true)}
-              onMouseLeave={() => setShowInvoice(false)}
-              onClick={handlePrintReceipt}
-              className="w-10 h-10 flex items-center justify-center text-gray-500 bg-[#f8fafc] border border-[#e2e8f0] rounded-xl hover:bg-theme hover:text-white hover:border-theme transition-all duration-300 shadow-sm"
-            >
-              <Invoice />
-            </button>
-            <div
-              className={`${showInvoice ? "flex" : "hidden"
-                } flex-col items-center z-50 absolute left-1/2 -translate-x-1/2 bottom-full mb-2`}
-            >
-              <span className="relative z-10 px-3 py-1.5 text-[11px] font-bold text-white bg-slate-900 rounded-lg shadow-xl whitespace-nowrap">
-                Print Invoice
-              </span>
-              <div className="w-2.5 h-2.5 -mt-1.5 rotate-45 bg-slate-900"></div>
-            </div>
-          </div>
           <div className="relative">
             <Link
               onMouseEnter={() => setShowView(true)}

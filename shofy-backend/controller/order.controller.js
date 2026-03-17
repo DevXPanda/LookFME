@@ -723,3 +723,26 @@ exports.bulkUpdateOrderStatus = async (req, res, next) => {
     next(error);
   }
 };
+
+// bulk delete orders
+exports.bulkDeleteOrders = async (req, res, next) => {
+  const { orderIds } = req.body;
+  if (!orderIds || !Array.isArray(orderIds) || orderIds.length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'Order IDs array is required',
+    });
+  }
+
+  try {
+    const result = await Order.deleteMany({ _id: { $in: orderIds } });
+    res.status(200).json({
+      success: true,
+      message: `${result.deletedCount} order(s) deleted successfully`,
+      deletedCount: result.deletedCount,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};

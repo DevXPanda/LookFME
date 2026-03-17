@@ -1,4 +1,5 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import dayjs from "dayjs";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -8,7 +9,7 @@ import { Search, Orders, DownArrow } from "@/svg";
 import ErrorMsg from "../common/error-msg";
 import Pagination from "../ui/Pagination";
 import OrderStatusChange from "./status-change";
-import { useGetAllOrdersQuery, useDownloadBulkShippingLabelsMutation, useBulkUpdateStatusMutation } from "@/redux/order/orderApi";
+import { useGetAllOrdersQuery, useDownloadBulkShippingLabelsMutation, useBulkUpdateStatusMutation, useBulkDeleteOrdersMutation } from "@/redux/order/orderApi";
 import usePagination from "@/hooks/use-pagination";
 import { notifyError, notifySuccess } from "@/utils/toast";
 import Swal from "sweetalert2";
@@ -18,6 +19,7 @@ const OrderTable = () => {
   const { data: orders, isError, isLoading, error } = useGetAllOrdersQuery();
   const [downloadBulkLabels, { isLoading: isDownloading }] = useDownloadBulkShippingLabelsMutation();
   const [bulkUpdateStatus, { isLoading: isBulkUpdating }] = useBulkUpdateStatusMutation();
+  const [bulkDeleteOrders, { isLoading: isBulkDeleting }] = useBulkDeleteOrdersMutation();
   const searchParams = useSearchParams();
   const router = useRouter();
   const urlStatus = searchParams.get("status") || "";
@@ -28,6 +30,8 @@ const OrderTable = () => {
   const [selectedOrders, setSelectedOrders] = useState<Set<string>>(new Set());
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const statusDropdownRef = useRef<HTMLButtonElement>(null);
+  const [statusDropdownRect, setStatusDropdownRect] = useState<{ top: number; left: number } | null>(null);
 
   const formatImageUrl = (url: any) => {
     if (!url || typeof url !== "string") return "https://placehold.co/200x200?text=No+Image";
@@ -52,6 +56,24 @@ const OrderTable = () => {
   useEffect(() => {
     setSearchVal(urlSearch);
   }, [urlSearch]);
+
+  // Update status dropdown position when open (for portal; fixed = viewport coords)
+  useEffect(() => {
+    if (!isDropdownOpen || !statusDropdownRef.current) return;
+    const updateRect = () => {
+      if (statusDropdownRef.current) {
+        const rect = statusDropdownRef.current.getBoundingClientRect();
+        setStatusDropdownRect({ top: rect.bottom, left: rect.left });
+      }
+    };
+    updateRect();
+    window.addEventListener("scroll", updateRect, true);
+    window.addEventListener("resize", updateRect);
+    return () => {
+      window.removeEventListener("scroll", updateRect, true);
+      window.removeEventListener("resize", updateRect);
+    };
+  }, [isDropdownOpen]);
 
   // Map dropdown status to actual order status
   const mapStatusToOrderStatus = (status: string): string => {
@@ -145,6 +167,7 @@ const OrderTable = () => {
   const handleStatusSelect = (status: string) => {
     setSelectVal(status);
     setIsDropdownOpen(false);
+    setStatusDropdownRect(null);
     // Update URL to sync with sidebar
     if (status === "all" || !status) {
       router.push("/orders");
@@ -526,9 +549,39 @@ const OrderTable = () => {
     }
   };
 
+  const handleBulkDelete = () => {
+    if (selectedOrders.size === 0) return;
+    Swal.fire({
+      title: "Delete selected orders?",
+      text: `This will permanently delete ${selectedOrders.size} order(s). This action cannot be undone.`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, delete",
+      background: "#fff",
+      customClass: {
+        title: "text-heading font-bold",
+        htmlContainer: "text-textBody",
+        confirmButton: "bg-rose-600 text-white border-0 shadow-none px-6 py-2 rounded-md",
+        cancelButton: "bg-gray-500 text-white border-0 shadow-none px-6 py-2 rounded-md",
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await bulkDeleteOrders({ orderIds: Array.from(selectedOrders) }).unwrap();
+          notifySuccess(res.message || "Orders deleted successfully");
+          setSelectedOrders(new Set());
+        } catch (err: any) {
+          notifyError(err?.data?.message || err?.message || "Failed to delete orders");
+        }
+      }
+    });
+  };
+
   return (
     <>
-      <div className="tp-search-box flex items-center justify-between px-10 py-10 flex-wrap bg-white rounded-t-2xl shadow-[0_-1px_3px_rgba(0,0,0,0.02)]">
+      <div className="tp-search-box flex items-center justify-between px-10 py-10 flex-wrap bg-white rounded-t-2xl shadow-[0_-1px_3px_rgba(0,0,0,0.02)] overflow-visible">
         <div className="flex items-center space-x-5">
           <div className="search-input relative group">
             <input
@@ -556,13 +609,13 @@ const OrderTable = () => {
                   <span>Download Labels ({selectedOrders.size})</span>
                 )}
               </button>
-              
+
               <div className="relative">
                 <select
                   onChange={async (e) => {
                     const status = e.target.value;
                     if (!status) return;
-                    
+
                     Swal.fire({
                       title: 'Change Orders Status?',
                       text: `Are you sure you want to change status to "${status}" for ${selectedOrders.size} selected orders?`,
@@ -609,7 +662,19 @@ const OrderTable = () => {
                 </div>
               </div>
 
-              <button 
+              <button
+                onClick={handleBulkDelete}
+                disabled={isBulkDeleting}
+                className="px-4 py-2 bg-rose-600 text-white rounded-md hover:bg-rose-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 h-[44px] font-medium text-sm"
+              >
+                {isBulkDeleting ? (
+                  <span>Deleting...</span>
+                ) : (
+                  <span>Delete ({selectedOrders.size})</span>
+                )}
+              </button>
+
+              <button
                 onClick={() => setSelectedOrders(new Set())}
                 className="text-sm text-theme hover:underline px-2 font-medium"
               >
@@ -617,9 +682,18 @@ const OrderTable = () => {
               </button>
             </div>
           ) : (
-            <div className="relative">
+            <div className="relative overflow-visible">
               <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                ref={statusDropdownRef}
+                onClick={() => {
+                  if (!isDropdownOpen && statusDropdownRef.current) {
+                    const rect = statusDropdownRef.current.getBoundingClientRect();
+                    setStatusDropdownRect({ top: rect.bottom, left: rect.left });
+                  } else if (!isDropdownOpen) {
+                    setStatusDropdownRect(null);
+                  }
+                  setIsDropdownOpen(!isDropdownOpen);
+                }}
                 className="flex items-center space-x-3 px-6 py-2 bg-white border border-[#e2e8f0] rounded-xl hover:border-theme/40 hover:bg-gray-50 min-w-[180px] h-[48px] justify-between shadow-sm transition-all group"
               >
                 <div className="flex items-center space-x-3">
@@ -633,13 +707,17 @@ const OrderTable = () => {
                 </div>
               </button>
 
-              {isDropdownOpen && (
+              {isDropdownOpen && typeof document !== "undefined" && statusDropdownRect && createPortal(
                 <>
                   <div
-                    className="fixed inset-0 z-10"
-                    onClick={() => setIsDropdownOpen(false)}
+                    className="fixed inset-0 z-[9998]"
+                    onClick={() => { setIsDropdownOpen(false); setStatusDropdownRect(null); }}
+                    aria-hidden
                   />
-                  <div className="absolute left-0 mt-2 w-[280px] bg-white rounded-lg shadow-xl z-20 overflow-hidden border border-gray6">
+                  <div
+                    className="fixed w-[280px] bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-[9999]"
+                    style={{ top: statusDropdownRect.top + 8, left: statusDropdownRect.left }}
+                  >
                     <div className="px-4 py-3 border-b border-gray6 flex items-center justify-between bg-gray-50/50">
                       <div className="flex items-center space-x-2">
                         <Orders />
@@ -662,7 +740,8 @@ const OrderTable = () => {
                       ))}
                     </div>
                   </div>
-                </>
+                </>,
+                document.body
               )}
             </div>
           )}

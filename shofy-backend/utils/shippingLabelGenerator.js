@@ -38,8 +38,9 @@ function generateShippingLabelPDF(order) {
         .moveDown(2);
 
       const startY = 65;
+      const displayOrderId = order.orderId ? String(order.orderId).replace(/-/g, '') : String(order.invoice);
       doc.fontSize(8).font('Helvetica-Bold').text('ORDER ID:', 15, startY);
-      doc.fontSize(10).text(String(order.invoice), 15, startY + 10);
+      doc.fontSize(10).text(displayOrderId, 15, startY + 10);
 
       doc.fontSize(8).text('DATE:', 150, startY);
       doc.fontSize(10).font('Helvetica').text(`${new Date(order.createdAt || Date.now()).toLocaleDateString()}`, 150, startY + 10);
@@ -129,21 +130,20 @@ function generateShippingLabelPDF(order) {
         .strokeColor('#000000')
         .stroke();
 
-      // Barcode Integration - Adjusted scale and height for better fit
+      // Barcode uses same Order ID as top of label
       try {
         const barcodeBuffer = await bwipjs.toBuffer({
           bcid: 'code128',
-          text: order.invoice.toString(),
+          text: displayOrderId,
           scale: 2,
           height: 10,
           includetext: true,
           textxalign: 'center',
         });
-        // Center the barcode
         doc.image(barcodeBuffer, (400 - 150) / 2, footerY + 10, { width: 150, height: 40 });
       } catch (err) {
         console.error('Barcode generation failed:', err);
-        doc.fontSize(10).font('Helvetica-Bold').text(`*${order.invoice}*`, 15, footerY + 15, { align: 'center', width: width });
+        doc.fontSize(10).font('Helvetica-Bold').text(`*${displayOrderId}*`, 15, footerY + 15, { align: 'center', width: width });
       }
 
       doc.fontSize(7).font('Helvetica').text('LOOKFAME SHIPPING SERVICES', 15, footerY + 60, { align: 'center', width: width });

@@ -13,6 +13,7 @@ const {
   downloadSingleShippingLabel,
   downloadBulkShippingLabels,
   bulkUpdateOrderStatus,
+  bulkDeleteOrders,
 } = require("../controller/order.controller");
 
 // router
@@ -44,5 +45,7 @@ router.get("/download-shipping-label/:id", downloadSingleShippingLabel);
 router.post("/download-bulk-shipping-labels", downloadBulkShippingLabels);
 // bulk update status
 router.patch("/bulk-update-status", bulkUpdateOrderStatus);
+// bulk delete orders
+router.post("/bulk-delete", bulkDeleteOrders);
 
 module.exports = router;

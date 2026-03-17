@@ -125,6 +125,17 @@ export const authApi = apiSlice.injectEndpoints({
       },
       invalidatesTags: ["AllOrders", "DashboardRecentOrders"],
     }),
+    // bulk delete orders
+    bulkDeleteOrders: builder.mutation<{ message: string; deletedCount: number }, { orderIds: string[] }>({
+      query({ orderIds }) {
+        return {
+          url: `/api/order/bulk-delete`,
+          method: "POST",
+          body: { orderIds },
+        };
+      },
+      invalidatesTags: ["AllOrders", "DashboardRecentOrders"],
+    }),
   }),
 });
 
@@ -141,4 +152,5 @@ export const {
   useDownloadBulkShippingLabelsMutation,
   useDownloadSingleShippingLabelMutation,
   useBulkUpdateStatusMutation,
+  useBulkDeleteOrdersMutation,
 } = authApi;

@@ -138,6 +138,8 @@ const OrderStatusChange = ({ id, currentStatus }: OrderStatusChangeProps) => {
       placeholder="Select..."
       isSearchable={false}
       styles={customStyles}
+      menuPortalTarget={typeof document !== "undefined" ? document.body : undefined}
+      menuPosition="fixed"
     />
   );
 };
