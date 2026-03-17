@@ -43,6 +43,7 @@ export interface IReview {
 
 export interface IOrder {
   _id: string;
+  orderId?: string;
   invoice?: number;
   totalAmount?: number;
   status?: string;
