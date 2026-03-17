@@ -150,13 +150,15 @@ exports.deleteReview = async (req, res, next) => {
 exports.toggleReviewVisibility = async (req, res, next) => {
   try {
     const { reviewId } = req.params;
-    const { visible } = req.body;
-    
-    if (visible === undefined) {
-      return res.status(400).json({
-        success: false,
-        message: "Visible parameter is required",
-      });
+    const rawVisible = req.body?.visible;
+
+    // Support missing body in production (e.g. proxy/parsing issues): treat as toggle
+    let visible;
+    if (rawVisible === undefined) {
+      const current = await userManagementService.getReviewByIdService(reviewId);
+      visible = !current.visible;
+    } else {
+      visible = Boolean(rawVisible);
     }
 
     const review = await userManagementService.toggleReviewVisibilityService(reviewId, visible);

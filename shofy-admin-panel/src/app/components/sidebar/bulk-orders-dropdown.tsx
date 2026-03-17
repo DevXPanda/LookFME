@@ -15,7 +15,7 @@ const BulkOrdersDropdown = () => {
     { key: "rejected", label: "Rejected" },
   ];
 
-  const isOrdersListActive = pathname === "/bulk-orders" && pathname !== "/bulk-orders/products";
+  const isOrdersListActive = pathname === "/bulk-orders";
 
   return (
     <>

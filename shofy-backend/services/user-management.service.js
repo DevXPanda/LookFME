@@ -227,6 +227,15 @@ exports.deleteReviewService = async (reviewId) => {
   return { message: "Review deleted successfully" };
 };
 
+// Get review by ID (for toggle when visible not in body)
+exports.getReviewByIdService = async (reviewId) => {
+  const review = await Review.findById(reviewId).lean();
+  if (!review) {
+    throw new Error("Review not found");
+  }
+  return review;
+};
+
 // Hide/Show review
 exports.toggleReviewVisibilityService = async (reviewId, visible) => {
   const review = await Review.findById(reviewId);
