@@ -1,8 +1,9 @@
 import dayjs from "dayjs";
 import Image from "next/image";
-import React from "react";
+import React, { useRef } from "react";
 import { Rating } from "react-simple-star-rating";
 import {
+  useGetAllReviewsQuery,
   useToggleReviewVisibilityMutation,
   useBlockCustomerReviewsMutation,
   useDeleteReviewByIdMutation,
@@ -39,6 +40,10 @@ type ReviewItemProps = {
 };
 
 const ReviewItem = ({ review, selected = false, onSelectChange }: ReviewItemProps) => {
+  const toggleInProgressRef = useRef(false);
+  const { refetch: refetchReviews } = useGetAllReviewsQuery(undefined, {
+    skip: true,
+  });
   const [toggleVisibility, { isLoading: isToggling }] =
     useToggleReviewVisibilityMutation();
   const [blockCustomer, { isLoading: isBlocking }] =
@@ -46,6 +51,9 @@ const ReviewItem = ({ review, selected = false, onSelectChange }: ReviewItemProp
   const [deleteReview, { isLoading: isDeleting }] = useDeleteReviewByIdMutation();
 
   const handleToggleVisibility = async () => {
+    if (toggleInProgressRef.current) return;
+    toggleInProgressRef.current = true;
+    let didSucceed = false;
     try {
       const reviewId = String(review._id);
       const res = await toggleVisibility({
@@ -56,12 +64,18 @@ const ReviewItem = ({ review, selected = false, onSelectChange }: ReviewItemProp
         const err = res as { error?: { data?: { message?: string } } };
         notifyError(err?.error?.data?.message ?? "Failed to update review visibility");
       } else {
+        didSucceed = true;
         notifySuccess(
           `Review ${!review.visible ? "shown" : "hidden"} successfully`
         );
+        refetchReviews().catch(() => {});
       }
     } catch (error) {
-      notifyError("Failed to update review visibility");
+      if (!didSucceed) {
+        notifyError("Failed to update review visibility");
+      }
+    } finally {
+      toggleInProgressRef.current = false;
     }
   };
 
@@ -87,6 +101,7 @@ const ReviewItem = ({ review, selected = false, onSelectChange }: ReviewItemProp
         notifyError(err?.error?.data?.message ?? "Failed to delete review");
       } else {
         notifySuccess("Review deleted successfully");
+        refetchReviews().catch(() => {});
       }
     } catch (error) {
       notifyError("Failed to delete review");
@@ -110,6 +125,7 @@ const ReviewItem = ({ review, selected = false, onSelectChange }: ReviewItemProp
         notifySuccess(
           `Customer reviews ${!isBlocked ? "blocked" : "unblocked"} successfully`
         );
+        refetchReviews().catch(() => {});
       }
     } catch (error) {
       notifyError("Failed to update customer review status");

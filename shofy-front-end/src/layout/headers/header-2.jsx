@@ -23,11 +23,13 @@ import {
 import useSearchFormSubmit from "@/hooks/use-search-form-submit";
 import OffCanvas from "@/components/common/off-canvas";
 import MobileNavbar from "./header-com/mobile_navbar";
+import SearchBar from "./header-com/search-bar";
 import { usePathname } from "next/navigation";
 
 const HeaderTwo = ({ style_2 = false }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const [isOffCanvasOpen, setIsCanvasOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { setSearchText, handleSubmit, searchText } = useSearchFormSubmit();
   const { quantity } = useCartInfo();
   const { sticky } = useSticky();
@@ -82,19 +84,22 @@ const HeaderTwo = ({ style_2 = false }) => {
                 <div className="row align-items-center">
                   <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6">
                     <div className="logo d-flex align-items-center">
-                      <Link href="/">
+                      <Link href="/" className="d-flex align-items-center">
                         <Image
                           src={logo}
                           alt="logo"
                           priority
                           className="h-10 w-auto"
                         />
-                      </Link>
-                      <Link
-                        href="/"
-                        className="text-2xl font-bold text-black d-none d-md-inline-block ms-3"
-                      >
-                        LookFame
+                        <span
+                          className="ms-2 ms-md-3 text-lg md:text-2xl font-semibold d-inline-block"
+                          style={{
+                            fontFamily: "var(--tp-ff-heading, var(--tp-ff-body))",
+                            color: "#1a1a1a",
+                          }}
+                        >
+                          LookFame
+                        </span>
                       </Link>
                     </div>
                   </div>
@@ -119,6 +124,16 @@ const HeaderTwo = ({ style_2 = false }) => {
                             <Search />
                           </button>
                         </form>
+                      </div>
+                      <div className="tp-header-action-item d-sm-none mr-10">
+                        <button
+                          type="button"
+                          onClick={() => setIsSearchOpen(true)}
+                          className="tp-header-action-btn"
+                          aria-label="Open search"
+                        >
+                          <Search />
+                        </button>
                       </div>
                       <div className="tp-header-action d-flex align-items-center ml-30">
                         <div className="tp-header-action-item d-none d-lg-block">
@@ -188,6 +203,9 @@ const HeaderTwo = ({ style_2 = false }) => {
         categoryType="fashion"
       />
       {/* off canvas end */}
+
+      {/* search overlay (mobile) */}
+      <SearchBar isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} />
     </>
   );
 };
