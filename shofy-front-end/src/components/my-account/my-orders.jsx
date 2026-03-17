@@ -190,7 +190,7 @@ const MyOrders = ({ orderData }) => {
           <tbody>
             {order_items.map((item, i) => (
               <tr key={i}>
-                <th scope="row">#{item._id.substring(20, 25)}</th>
+                <th scope="row">{(item.orderId || (item._id ? String(item._id).slice(-6) : '')).replace(/-/g, '')}</th>
                 <td data-info="title">
                   {dayjs(item.createdAt).format("MMMM D, YYYY")}
                 </td>
@@ -214,11 +214,11 @@ const MyOrders = ({ orderData }) => {
                       style={{
                         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                         width: '34px', height: '34px', borderRadius: '6px',
-                        border: '1px solid #6c5ce7', background: '#f8f7ff', color: '#6c5ce7',
+                        border: '1px solid #F875AA', background: '#fff0f6', color: '#F875AA',
                         cursor: 'pointer', transition: 'all 0.2s'
                       }}
-                      onMouseEnter={e => { e.currentTarget.style.background = '#6c5ce7'; e.currentTarget.style.color = '#fff'; }}
-                      onMouseLeave={e => { e.currentTarget.style.background = '#f8f7ff'; e.currentTarget.style.color = '#6c5ce7'; }}
+                      onMouseEnter={e => { e.currentTarget.style.background = '#F875AA'; e.currentTarget.style.color = '#fff'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = '#fff0f6'; e.currentTarget.style.color = '#F875AA'; }}
                     >
                       <QuickView />
                     </button>
@@ -617,16 +617,16 @@ const MyOrders = ({ orderData }) => {
               overflowY: 'auto', position: 'relative', padding: '0',
               boxShadow: '0 20px 60px rgba(0,0,0,0.15)'
             }} onClick={e => e.stopPropagation()}>
-              {/* Header */}
+              {/* Header — global UI color #F875AA */}
               <div style={{
                 padding: '20px 28px', borderBottom: '1px solid #eee',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                background: 'linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%)',
+                background: 'linear-gradient(135deg, #F875AA 0%, #ff9ec5 100%)',
                 borderRadius: '12px 12px 0 0', color: '#fff'
               }}>
                 <div>
                   <h4 style={{ margin: 0, fontSize: '18px', fontWeight: 700 }}>Order Details</h4>
-                  {vd && <p style={{ margin: '4px 0 0', fontSize: '13px', opacity: 0.9 }}>#{vd._id?.substring(20, 25)}</p>}
+                  {vd && <p style={{ margin: '4px 0 0', fontSize: '13px', opacity: 0.9 }}>{(vd.orderId || (vd._id ? String(vd._id).slice(-6) : '')).replace(/-/g, '')}</p>}
                 </div>
                 <button onClick={() => setShowViewModal(null)} style={{
                   background: 'rgba(255,255,255,0.2)', border: 'none', color: '#fff',
@@ -648,7 +648,7 @@ const MyOrders = ({ orderData }) => {
                   }}>
                     <div style={{ padding: '14px 16px', background: '#f8f9fa', borderRadius: '8px' }}>
                       <p style={{ margin: 0, fontSize: '11px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Order ID</p>
-                      <p style={{ margin: '4px 0 0', fontWeight: 600, fontSize: '14px' }}>#{vd._id?.substring(20, 25)}</p>
+                      <p style={{ margin: '4px 0 0', fontWeight: 600, fontSize: '14px' }}>{(vd.orderId || (vd._id ? String(vd._id).slice(-6) : '')).replace(/-/g, '')}</p>
                     </div>
                     <div style={{ padding: '14px 16px', background: '#f8f9fa', borderRadius: '8px' }}>
                       <p style={{ margin: 0, fontSize: '11px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Order Date</p>
@@ -660,7 +660,7 @@ const MyOrders = ({ orderData }) => {
                         margin: '4px 0 0', fontWeight: 600, fontSize: '14px',
                         color: getDisplayStatus(vd).key === 'delivered' ? '#198754'
                           : getDisplayStatus(vd).key === 'cancel' ? '#dc3545'
-                            : getDisplayStatus(vd).key === 'processing' ? '#fd7e14' : '#6c5ce7'
+                            : getDisplayStatus(vd).key === 'processing' ? '#fd7e14' : '#F875AA'
                       }}>{getDisplayStatus(vd).label}</p>
                     </div>
                     <div style={{ padding: '14px 16px', background: '#f8f9fa', borderRadius: '8px' }}>
@@ -701,7 +701,7 @@ const MyOrders = ({ orderData }) => {
                           <p style={{ margin: 0, fontWeight: 600, fontSize: '14px', color: '#222' }}>{cartItem.title}</p>
                           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '6px' }}>
                             {cartItem.sku && (
-                              <span style={{ fontSize: '12px', color: '#666', background: '#f5f5f5', padding: '2px 8px', borderRadius: '4px' }}>SKU: #{cartItem.sku}</span>
+                              <span style={{ fontSize: '12px', color: '#666', background: '#f5f5f5', padding: '2px 8px', borderRadius: '4px' }}>SKU: {cartItem.sku}</span>
                             )}
                             {cartItem.color && cartItem.color.name && (
                               <span style={{ fontSize: '12px', color: '#666', background: '#f5f5f5', padding: '2px 8px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
@@ -715,7 +715,7 @@ const MyOrders = ({ orderData }) => {
                           </div>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
                             <span style={{ fontSize: '13px', color: '#888' }}>Qty: {cartItem.orderQuantity || 1}</span>
-                            <span style={{ fontWeight: 700, fontSize: '14px', color: '#6c5ce7' }}>₹{((cartItem.price || 0) * (cartItem.orderQuantity || 1)).toFixed(2)}</span>
+                            <span style={{ fontWeight: 700, fontSize: '14px', color: '#F875AA' }}>₹{((cartItem.price || 0) * (cartItem.orderQuantity || 1)).toFixed(2)}</span>
                           </div>
                         </div>
                       </div>
@@ -724,11 +724,11 @@ const MyOrders = ({ orderData }) => {
 
                   {/* Order Total */}
                   <div style={{
-                    padding: '16px', background: 'linear-gradient(135deg, #f8f7ff 0%, #f0eeff 100%)',
+                    padding: '16px', background: 'linear-gradient(135deg, #fff0f6 0%, #ffe4ef 100%)',
                     borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center'
                   }}>
                     <span style={{ fontSize: '14px', fontWeight: 600, color: '#555' }}>Order Total</span>
-                    <span style={{ fontSize: '20px', fontWeight: 700, color: '#6c5ce7' }}>₹{(vd.totalAmount || vd.subTotal || 0).toFixed(2)}</span>
+                    <span style={{ fontSize: '20px', fontWeight: 700, color: '#F875AA' }}>₹{(vd.totalAmount || vd.subTotal || 0).toFixed(2)}</span>
                   </div>
                 </div>
               ) : (

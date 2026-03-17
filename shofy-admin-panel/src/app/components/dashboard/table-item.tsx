@@ -16,7 +16,7 @@ const TableItem = (props: { order: IOrder }) => {
       : order.paymentMethod;
   return (
     <tr className="bg-white border-b border-gray6 last:border-0 text-start">
-      <td className="px-3 py-3">#{order.invoice}</td>
+      <td className="px-3 py-3">{order.invoice}</td>
       <td className="px-3 py-3">
         {dayjs(order.updatedAt).format("MMMM D, YYYY h:mm A")}
       </td>

@@ -26,7 +26,7 @@ const ShippingLabelPrint = ({ orderData }: IPropType) => {
             <div className="flex justify-between items-start mb-6 border-b-2 border-dashed border-gray-300 pb-4">
                 <div className="flex-1">
                     <p className="text-sm font-semibold uppercase text-gray-600">Order ID:</p>
-                    <p className="text-lg font-bold">#{orderData.invoice}</p>
+                    <p className="text-lg font-bold">{orderData.invoice}</p>
                 </div>
                 <div className="flex-1 text-center">
                     <p className="text-sm font-semibold uppercase text-gray-600">Date:</p>

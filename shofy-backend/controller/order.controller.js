@@ -58,10 +58,13 @@ exports.paymentIntent = async (req, res, next) => {
     next(error)
   }
 };
-// addOrder
+// addOrder - orderId is always generated in DB (Order model pre-save), never from client
 exports.addOrder = async (req, res, next) => {
   try {
-    const orderItems = await Order.create(req.body);
+    const body = { ...req.body };
+    delete body.orderId;
+    delete body.invoice;
+    const orderItems = await Order.create(body);
     const userId = req.body.user;
     if (userId) {
       await User.findByIdAndUpdate(userId, { $inc: { totalOrders: 1 } });

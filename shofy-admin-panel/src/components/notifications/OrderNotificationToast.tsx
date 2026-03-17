@@ -18,7 +18,7 @@ const OrderNotificationToast: React.FC<OrderNotificationToastProps> = ({ notific
     <div className="flex flex-col gap-2 p-2">
       <div className="font-semibold text-sm text-gray-900">{notification.title}</div>
       <div className="text-xs text-gray-600">
-        Order #{invoice} • {customerName}
+        Order {invoice} • {customerName}
       </div>
       <div className="text-sm font-medium text-gray-900">
         Amount: ₹{amount.toFixed(2)}

@@ -78,6 +78,12 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       unique: true,
     },
+    orderId: {
+      type: String,
+      unique: true,
+      sparse: true,
+      index: true,
+    },
     status: {
       type: String,
       enum: ["pending", "processing", "delivered", 'cancel', 'returned', 'exchanged'],
@@ -189,18 +195,49 @@ const orderSchema = new mongoose.Schema(
 
 const { getNextInvoice } = require("./OrderCounter");
 
-// define pre-save middleware to generate the invoice number (atomic to avoid E11000 duplicate key)
+// generate SKU-like suffix (uppercase alphanumeric, 6 chars) for orderId
+function generateSkuSuffix() {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let suffix = "";
+  for (let i = 0; i < 6; i++) {
+    suffix += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return suffix;
+}
+
+// generate unique orderId: YYYYMMDD + SKU-like suffix (no hyphen, no #) for display on both invoices
+function generateOrderId() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, "0");
+  const d = String(now.getDate()).padStart(2, "0");
+  const datePart = `${y}${m}${d}`;
+  const skuPart = generateSkuSuffix();
+  return `${datePart}${skuPart}`;
+}
+
+// define pre-save middleware to generate invoice and orderId
 orderSchema.pre("save", async function (next) {
   const order = this;
-  if (!order.invoice) {
-    try {
+  try {
+    if (!order.invoice) {
       order.invoice = await getNextInvoice();
-      next();
-    } catch (error) {
-      next(error);
     }
-  } else {
+    if (!order.orderId) {
+      const Order = this.constructor;
+      for (let attempt = 0; attempt < 10; attempt++) {
+        const candidate = generateOrderId();
+        const existing = await Order.findOne({ orderId: candidate });
+        if (!existing) {
+          order.orderId = candidate;
+          break;
+        }
+      }
+      if (!order.orderId) order.orderId = generateOrderId();
+    }
     next();
+  } catch (error) {
+    next(error);
   }
 });
 

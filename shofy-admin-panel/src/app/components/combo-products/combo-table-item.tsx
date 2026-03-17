@@ -21,7 +21,7 @@ const ComboTableItem = ({ combo }: { combo: IComboProduct }) => {
           <span className="font-medium text-heading">{title}</span>
         </div>
       </td>
-      <td className="px-3 py-3 font-normal text-[#55585B] text-end">{sku ? `#${sku}` : "-"}</td>
+      <td className="px-3 py-3 font-normal text-[#55585B] text-end">{sku || "-"}</td>
       <td className="px-3 py-3 font-normal text-[#55585B] text-end">Pick Any {combo_count}</td>
       <td className="px-3 py-3 font-normal text-[#55585B] text-end">₹{price?.toFixed(2)}</td>
       <td className="px-9 py-3 text-end">

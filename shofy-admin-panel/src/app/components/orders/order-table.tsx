@@ -21,7 +21,8 @@ const OrderTable = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const urlStatus = searchParams.get("status") || "";
-  const [searchVal, setSearchVal] = useState<string>("");
+  const urlSearch = searchParams.get("search") ?? "";
+  const [searchVal, setSearchVal] = useState<string>(urlSearch);
   const [selectVal, setSelectVal] = useState<string>(urlStatus);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [selectedOrders, setSelectedOrders] = useState<Set<string>>(new Set());
@@ -46,6 +47,11 @@ const OrderTable = () => {
       setSelectVal("");
     }
   }, [urlStatus]);
+
+  // Sync search from URL (e.g. when main header search navigates to /orders?search=...)
+  useEffect(() => {
+    setSearchVal(urlSearch);
+  }, [urlSearch]);
 
   // Map dropdown status to actual order status
   const mapStatusToOrderStatus = (status: string): string => {
@@ -84,22 +90,32 @@ const OrderTable = () => {
     });
 
     // Apply search filter
-    if (searchVal) {
-      const lowerSearch = searchVal.toLowerCase();
-      // Handle '#' prefix for invoice search
-      const searchValForInvoice = lowerSearch.startsWith("#") ? lowerSearch.slice(1) : lowerSearch;
+    if (searchVal.trim()) {
+      const lowerSearch = searchVal.toLowerCase().trim();
+      const searchValForMatch = lowerSearch.startsWith("#") ? lowerSearch.slice(1) : lowerSearch;
 
-      filtered = filtered.filter(v => {
-        // Search by Invoice ID
-        const invoiceMatch = v.invoice.toString().toLowerCase().includes(searchValForInvoice);
-        
+      filtered = filtered.filter((v: any) => {
+        // Search by Invoice (numeric) - safe when invoice is missing
+        const invoiceStr = v.invoice != null ? String(v.invoice) : "";
+        const invoiceMatch = invoiceStr.toLowerCase().includes(searchValForMatch);
+
+        // Search by backend orderId (single short ID used in both panels)
+        const orderIdMatch = v.orderId && String(v.orderId).toLowerCase().includes(searchValForMatch);
+        // Search by Order _id (fallback for legacy)
+        const idMatch = v._id && String(v._id).toLowerCase().includes(searchValForMatch);
+
+        // Search by customer name or email
+        const customerName = (v.user?.name || "").toLowerCase();
+        const customerEmail = (v.user?.email || "").toLowerCase();
+        const customerMatch = customerName.includes(searchValForMatch) || customerEmail.includes(searchValForMatch);
+
         // Search by SKU in cart items
-        const skuMatch = v.cart.some((item: any) => {
+        const skuMatch = v.cart?.some((item: any) => {
           const sku = item.selectedVariation?.sku || item.sku;
-          return sku && sku.toLowerCase().includes(lowerSearch);
+          return sku && String(sku).toLowerCase().includes(searchValForMatch);
         });
 
-        return invoiceMatch || skuMatch;
+        return invoiceMatch || orderIdMatch || idMatch || customerMatch || skuMatch;
       });
     }
 
@@ -114,9 +130,15 @@ const OrderTable = () => {
     return filtered;
   }, [orders?.data, searchVal, selectVal]);
 
-  // handle change input 
+  // handle change input — update state and URL so main header search can sync
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchVal(e.target.value);
+    const value = e.target.value;
+    setSearchVal(value);
+    const params = new URLSearchParams(searchParams.toString());
+    if (value.trim()) params.set("search", value.trim());
+    else params.delete("search");
+    const query = params.toString();
+    router.replace("/orders" + (query ? "?" + query : ""), { scroll: false });
   };
 
   // handle status selection
@@ -320,7 +342,10 @@ const OrderTable = () => {
                   />
                 </td>
                 <td className="pr-4 py-6 font-semibold text-[#1a1c1d]">
-                  #{item.invoice}
+                  <span className="block">{item.invoice}</span>
+                  {item.orderId && (
+                    <span className="text-xs text-slate-500 font-normal block">ID {String(item.orderId).replace(/-/g, '')}</span>
+                  )}
                 </td>
                 <td className="px-4 py-6">
                   <div className="flex flex-col items-center">
@@ -509,7 +534,8 @@ const OrderTable = () => {
             <input
               className="input h-[48px] w-[320px] pl-14 pr-6 rounded-xl border border-[#e2e8f0] bg-[#f8fafc] focus:bg-white focus:ring-2 focus:ring-theme/20 focus:border-theme transition-all duration-300 text-sm placeholder:text-gray-400"
               type="text"
-              placeholder="Search by invoice or SKU..."
+              placeholder="Search by invoice, order ID, customer or SKU..."
+              value={searchVal}
               onChange={handleSearchChange}
             />
             <button className="absolute top-1/2 left-6 translate-y-[-50%] text-gray-400 group-focus-within:text-theme transition-colors">

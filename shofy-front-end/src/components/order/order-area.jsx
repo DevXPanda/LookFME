@@ -57,7 +57,7 @@ const OrderArea = ({ orderId }) => {
     content = <ErrorMsg msg="There was an error" />;
   }
   if (!isLoading && !isError && order?.order) {
-    const { name, country, city, contact, invoice, createdAt, cart, shippingCost, discount, totalAmount, paymentMethod, address, zipCode, status } = order.order;
+    const { name, country, city, contact, invoice, orderId: orderOrderId, createdAt, cart, shippingCost, discount, totalAmount, paymentMethod, address, zipCode, status } = order.order;
 
     const getDisplayStatus = (o) => {
       const base = (o?.status || '').toLowerCase();
@@ -160,11 +160,11 @@ const OrderArea = ({ orderId }) => {
                       </div>
                       <div className="flex justify-between items-center border-b border-white pb-1">
                         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">INVOICE NO:</span>
-                        <span className="text-sm font-black text-slate-900">#{invoice}</span>
+                        <span className="text-sm font-black text-slate-900">{invoice}</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">ORDER ID:</span>
-                        <span className="text-xs text-slate-500 font-mono font-bold tracking-tighter">#{orderId.slice(-8).toUpperCase()}</span>
+                        <span className="text-xs text-slate-500 font-mono font-bold tracking-tighter">{(orderOrderId ? String(orderOrderId) : (order.order._id ? String(order.order._id).slice(-6) : '')).replace(/-/g, '').toUpperCase()}</span>
                       </div>
                     </div>
                   </div>

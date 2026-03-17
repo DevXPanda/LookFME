@@ -33,6 +33,7 @@ export interface Order {
   paymentMethod: string;
   orderNote?: string;
   invoice: number;
+  orderId?: string;
   status: string;
   cancelReason?: string;
   returnReason?: string;

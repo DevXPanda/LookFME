@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -35,8 +34,6 @@ const AuthModal = ({ isOpen, onClose, redirectTo }) => {
   const [showConfirmPass, setShowConfirmPass] = useState(false);
   const [loginUser] = useLoginUserMutation();
   const [registerUser] = useRegisterUserMutation();
-  const router = useRouter();
-  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
   // Login form
@@ -69,14 +66,9 @@ const AuthModal = ({ isOpen, onClose, redirectTo }) => {
         notifySuccess("Login successfully");
         resetLogin();
         onClose();
-        // Clear session storage to allow modal to show again if needed
         if (typeof window !== 'undefined') {
           sessionStorage.removeItem('authModalShown');
-        }
-        if (redirectTo && redirectTo !== '/') {
-          router.push(redirectTo);
-        } else {
-          router.push("/");
+          window.location.href = (redirectTo && redirectTo !== '/') ? redirectTo : "/";
         }
       } else {
         notifyError(
@@ -108,11 +100,7 @@ const AuthModal = ({ isOpen, onClose, redirectTo }) => {
               onClose();
               if (typeof window !== 'undefined') {
                 sessionStorage.removeItem('authModalShown');
-              }
-              if (redirectTo && redirectTo !== '/') {
-                router.push(redirectTo);
-              } else {
-                router.push("/");
+                window.location.href = (redirectTo && redirectTo !== '/') ? redirectTo : "/";
               }
             }
           });

@@ -206,7 +206,7 @@ const RefundTable = () => {
                   className="bg-white border-b border-gray6 last:border-0 text-start"
                 >
                   <td className="px-6 py-4 font-normal text-[#55585B]">
-                    #{item.orderId?.invoice || "N/A"}
+                    {item.orderId?.invoice ?? "N/A"}
                   </td>
                   <td className="px-6 py-4 font-medium text-heading">
                     {item.userId?.name || "N/A"}

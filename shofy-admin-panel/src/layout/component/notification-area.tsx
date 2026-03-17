@@ -159,7 +159,7 @@ const NotificationArea = ({ nRef, notificationOpen, handleNotificationOpen }: IP
                       <div className="flex items-center gap-2">
                         {notification.orderId && (
                           <span className="text-[10px] px-2 py-0.5 rounded-md leading-none text-theme bg-theme/10 font-medium">
-                            Order #{notification.orderId.invoice}
+                            Order {notification.orderId.invoice}
                           </span>
                         )}
                         <span className="text-[10px] text-gray-500">

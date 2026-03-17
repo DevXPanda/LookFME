@@ -44,7 +44,7 @@ const ProductTableItem = ({ product, selected, onToggle }: ProductTableItemProps
           </span>
         </a>
       </td>
-      <td className="px-3 py-3 font-normal text-[#55585B] text-end">#{sku}</td>
+      <td className="px-3 py-3 font-normal text-[#55585B] text-end">{sku}</td>
       <td className="px-3 py-3 font-normal text-[#55585B] text-end">
         {quantity}
       </td>

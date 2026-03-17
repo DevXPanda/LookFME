@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import logo from "@/../public/assets/img/logo/logo.svg";
-import { redirect, useRouter } from "next/navigation";
+import { redirect, useRouter, usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useRef, useState, useEffect } from "react";
@@ -21,11 +21,14 @@ const Header = ({ setSideMenu }: IProps) => {
   const [searchOverlay, setSearchOverlay] = useState<boolean>(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
+  const [headerSearch, setHeaderSearch] = useState<string>("");
   const pRef = useRef<HTMLDivElement>(null);
   const nRef = useRef<HTMLDivElement>(null);
 
   const dispatch = useDispatch();
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   // handle logout
   const handleLogOut = () => {
@@ -54,6 +57,27 @@ const Header = ({ setSideMenu }: IProps) => {
     setNotificationOpen(false);
   };
 
+  // Sync header search from URL when on orders page
+  useEffect(() => {
+    if (pathname === "/orders") {
+      setHeaderSearch(searchParams.get("search") ?? "");
+    }
+  }, [pathname, searchParams]);
+
+  const handleHeaderSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = headerSearch.trim();
+    if (pathname === "/orders") {
+      const params = new URLSearchParams(searchParams.toString());
+      if (q) params.set("search", q);
+      else params.delete("search");
+      const query = params.toString();
+      router.push("/orders" + (query ? "?" + query : ""));
+    } else {
+      router.push(q ? "/orders?search=" + encodeURIComponent(q) : "/orders");
+    }
+  };
+
   return (
     <>
       <header className="relative z-10 bg-white border-b border-gray border-solid py-5 px-8 pr-8">
@@ -67,14 +91,16 @@ const Header = ({ setSideMenu }: IProps) => {
               <Menu />
             </button>
             <div className="w-[30%] hidden md:block">
-              <form action="#">
+              <form onSubmit={handleHeaderSearchSubmit}>
                 <div className="w-[250px] relative">
                   <input
                     className="input h-12 w-full pr-[45px]"
                     type="text"
                     placeholder="Search Here..."
+                    value={headerSearch}
+                    onChange={(e) => setHeaderSearch(e.target.value)}
                   />
-                  <button className="absolute top-1/2 right-6 translate-y-[-50%] hover:text-theme">
+                  <button type="submit" className="absolute top-1/2 right-6 translate-y-[-50%] hover:text-theme">
                     <Search />
                   </button>
                 </div>
@@ -188,14 +214,16 @@ const Header = ({ setSideMenu }: IProps) => {
               : " -translate-y-[230px] lg:translate-y-[0]"
           }`}
         >
-          <form action="#">
+          <form onSubmit={handleHeaderSearchSubmit}>
             <div className="relative mb-3">
               <input
                 className="input h-12 w-full pr-[45px]"
                 type="text"
                 placeholder="Search Here..."
+                value={headerSearch}
+                onChange={(e) => setHeaderSearch(e.target.value)}
               />
-              <button className="absolute top-1/2 right-6 translate-y-[-50%] hover:text-theme">
+              <button type="submit" className="absolute top-1/2 right-6 translate-y-[-50%] hover:text-theme">
                 <Search />
               </button>
             </div>

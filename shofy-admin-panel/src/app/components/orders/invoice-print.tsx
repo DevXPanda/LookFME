@@ -49,7 +49,11 @@ const InvoicePrint = ({ orderData }: IPropType) => {
               </div>
               <div className="flex justify-between items-center border-b border-white pb-1">
                 <span className="text-xs font-semibold text-slate-600">INVOICE NO:</span>
-                <span className="text-sm font-bold text-slate-900">#{orderData?.invoice}</span>
+                <span className="text-sm font-bold text-slate-900">{orderData?.invoice}</span>
+              </div>
+              <div className="flex justify-between items-center border-b border-white pb-1">
+                <span className="text-xs font-semibold text-slate-600">ORDER ID:</span>
+                <span className="text-sm font-bold text-slate-900">{(orderData?.orderId ? String(orderData.orderId) : (orderData?._id ? String(orderData._id).slice(-6) : '')).replace(/-/g, '').toUpperCase()}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-xs font-semibold text-slate-600">PAYMENT:</span>

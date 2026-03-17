@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { useRouter, redirect } from "next/navigation";
 import Link from "next/link";
 // internal
 import { CloseEye, OpenEye } from "@/svg";
@@ -18,8 +17,7 @@ const schema = Yup.object().shape({
 });
 const LoginForm = () => {
   const [showPass, setShowPass] = useState(false);
-  const [loginUser, { }] = useLoginUserMutation();
-  const router = useRouter();
+  const [loginUser] = useLoginUserMutation();
   // react hook form
   const {
     register,
@@ -34,29 +32,21 @@ const LoginForm = () => {
     loginUser({
       email: data.email,
       password: data.password,
-    }).then((data) => {
-      // if (data?.data) {
-      //   notifySuccess("Login successfully");
-      //   router.push('/checkout' || "/");
-      // }
-      // else {
-      //   notifyError(data?.error?.data?.error)
-      // }
-
+    }).then((result) => {
       // SUCCESS ONLY IF STATUS = "success"
-      if (data?.data?.status === "success") {
+      if (result?.data?.status === "success") {
         notifySuccess("Login successfully");
-        router.push("/"); // redirect to home page
+        reset();
+        // Full page redirect so auth cookie is sent and user leaves login page
+        window.location.href = "/";
+        return;
       }
 
       // ERROR HANDLING
-      else {
-        notifyError(
-          data?.error?.data?.error || data?.data?.error || "Login failed"
-        );
-      }
+      notifyError(
+        result?.error?.data?.error || result?.data?.error || "Login failed"
+      );
     });
-    reset();
   };
 
   return (

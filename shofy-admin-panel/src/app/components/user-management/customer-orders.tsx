@@ -57,7 +57,7 @@ const CustomerOrders = ({ customerId }: CustomerOrdersProps) => {
         <tbody>
           {orders.map((order) => (
             <tr key={order._id} className="bg-white border-b border-gray6 last:border-0">
-              <td className="px-3 py-3 font-normal text-[#55585B]">#{order.invoice || order._id.slice(-8)}</td>
+              <td className="px-3 py-3 font-normal text-[#55585B]">{(order.orderId || (order._id ? String(order._id).slice(-6) : '')).replace(/-/g, '')}</td>
               <td className="px-3 py-3 font-normal text-[#55585B]">
                 {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : "N/A"}
               </td>

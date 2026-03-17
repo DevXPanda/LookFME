@@ -39,7 +39,7 @@ function generateShippingLabelPDF(order) {
 
       const startY = 65;
       doc.fontSize(8).font('Helvetica-Bold').text('ORDER ID:', 15, startY);
-      doc.fontSize(10).text(`#${order.invoice}`, 15, startY + 10);
+      doc.fontSize(10).text(String(order.invoice), 15, startY + 10);
 
       doc.fontSize(8).text('DATE:', 150, startY);
       doc.fontSize(10).font('Helvetica').text(`${new Date(order.createdAt || Date.now()).toLocaleDateString()}`, 150, startY + 10);
