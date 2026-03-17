@@ -69,11 +69,12 @@ export const authApi = apiSlice.injectEndpoints({
       async onQueryStarted({ reviewId, visible }, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
+          // Update cache so UI reflects new visibility without refetch (works in production)
           dispatch(
-            (apiSlice.util.updateQueryData as (name: string, arg: void, update: (draft: { data?: Array<{ _id: string; visible?: boolean; isHiddenByAdmin?: boolean }> }) => void) => void)("getAllReviews", undefined, (draft) => {
+            (apiSlice.util.updateQueryData as any)("getAllReviews", undefined, (draft: any) => {
               const list = draft?.data;
               if (Array.isArray(list)) {
-                const review = list.find((r) => String(r._id) === String(reviewId));
+                const review = list.find((r: { _id: string }) => String(r._id) === String(reviewId));
                 if (review) {
                   review.visible = visible;
                   review.isHiddenByAdmin = !visible;
